@@ -1,0 +1,3 @@
+.text-mark-rule {
+ @apply inline-block bg-cyan-100 text-cyan-500 rounded-md px-1 mr-1 mt-1;
+}

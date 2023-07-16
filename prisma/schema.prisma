@@ -1,0 +1,108 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum VoteValue {
+  POSITIVE
+  NEGATIVE
+  NEUTRAL
+}
+
+enum GameplayClassification {
+  FIRST_POSITIVE
+  FIRST_NEGATIVE
+  SECOND_POSITIVE
+  SECOND_NEGATIVE
+}
+
+enum GameType {
+  NCV
+  WOF
+}
+
+enum GameClassification {
+  MATERIALISTIC
+  TACTICAL
+  DYNAMIC
+  POSITIONAL
+  STRATEGIC
+  FORTUNE
+}
+
+enum GameStatus {
+  ACCEPTED
+  DECLINED
+  PENDING_REPLY
+  UNDER_REVIEW
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String?
+  isTester Boolean   @default(false)
+  posts    Post[]
+  comments Comment[]
+  Voice    Voice[]
+}
+
+model TimeControlRule {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model GameRule {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model Voice {
+  id     Int        @id @default(autoincrement())
+  value  VoteValue
+  tester User       @relation(fields: [userId], references: [id])
+  post   Post       @relation(fields: [postId], references: [id])
+  userId Int
+  postId Int
+}
+
+model Post {
+  id                     Int                    @id @default(autoincrement())
+  title                  String
+  likes                  Int                    @default(0)
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @default(now())
+  timecontrol            TimeControlRule        @relation(fields: [timeControlRuleId], references: [id])
+  timeControlRuleId      Int
+  gamerules              GameRule[]
+  promotion              String
+  type                   GameType
+  status                 GameStatus
+  verdict                String
+  notes                  String
+  gameClassification     GameClassification
+  gameplayClassification GameplayClassification
+  User                   User                   @relation(fields: [userId], references: [id])
+  userId                 Int
+  Comment                Comment[]
+  Voice                  Voice[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  Post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
+
+  Children  Comment[] @relation("Comment_Children")
+  parent    Comment?  @relation("Comment_Children", fields: [parent_id], references: [id])
+  parent_id Int?
+}

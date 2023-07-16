@@ -1,8 +1,57 @@
 ---
+import Search from '../components/Search';
+import PostCard from '../components/PostCard';
 import Layout from '../layouts/Layout.astro'
+import { GameStatus } from '../components/PostCard'
 
+const posts = [
+	{
+			title: 'Depressing chees',
+			type: 'WoF',
+			user: 'glebchanskiy',
+			status: GameStatus.ACCEPTED,
+			likesCount: 12,
+			commentsCount: 9,
+			isLiked: true
+	},
+	{
+			title: 'Zombie Land',
+			type: 'NCV',
+			user: 'glebchanskiy',
+			status: GameStatus.DECLINED,
+			likesCount: 11,
+			commentsCount: 5,
+			isLiked: false
+	},
+	{
+			title: 'Ice on the Clock',
+			type: 'WoF',
+			user: 'glebchanskiy',
+			status: GameStatus.PENDING_REPLY,
+			likesCount: 4,
+			commentsCount: 9,
+			isLiked: false
+	},
+	{
+			title: 'Ice on the Clock',
+			type: 'WoF',
+			user: 'glebchanskiy',
+			status: GameStatus.UNDER_REVIEW,
+			likesCount: 12,
+			commentsCount: 0,
+			isLiked: false
+	}
+]
 ---
 
+
 <Layout>
-	<h1>test</h1>
+	
+		<Search />
+
+		<div class="flex flex-col gap-[30px] mt-[55px]">
+			{posts.map(post => <PostCard type={post.type} title={post.title} user={post.user} status={post.status} likesCount={post.likesCount} commentsCount={post.commentsCount} isLiked={post.isLiked}/>)}
+		</div>
+
 </Layout>
+

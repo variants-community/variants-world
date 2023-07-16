@@ -10,7 +10,7 @@ const { title } = Astro.props as LayoutProps
  
 ---
 
-<html lang="en">
+<html lang="en" class="bg-dark text-text">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -18,7 +18,7 @@ const { title } = Astro.props as LayoutProps
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body>
+	<body class="container mx-auto my-[50px]">
 		<slot />
 	</body>
 </html>

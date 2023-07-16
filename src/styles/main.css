@@ -1,3 +1,25 @@
-.text-mark-rule {
- @apply inline-block bg-cyan-100 text-cyan-500 rounded-md px-1 mr-1 mt-1;
+@import url('https://fonts.googleapis.com/css2?family=Glory:wght@400;500;600&display=swap');
+
+.shadow-dark {
+ box-shadow: 2px 4px 20px -5px rgba(0, 0, 0, 0.80);
 }
+
+.shadow-light {
+ box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.10);
+}
+
+.miror {
+ transform: scaleX(-1)
+}
+
+.parent {  
+ pointer-events: none;
+}
+
+.child {
+ pointer-events: auto;
+}
+
+.parent:hover {
+ @apply text-red 
+}    

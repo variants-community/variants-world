@@ -1,0 +1,10 @@
+{
+ "editor.codeActionsOnSave": {
+     "source.fixAll.eslint": true
+ },
+ "eslint.validate": ["javascript"],
+ "prettier.semi": false,
+
+ // remove trailing commas
+ "prettier.trailingComma": "none"
+}

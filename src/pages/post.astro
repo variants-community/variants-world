@@ -1,0 +1,30 @@
+---
+import GameInfo from "../components/GameInfo"
+import GamePicture from "../components/GamePicture"
+import AcceptedCard from "../components/AcceptedCard"
+import AdminSettings from "../components/AdminSettings"
+import CommentInput from "../components/CommentInput"
+import Layout from "../layouts/Layout.astro"
+---
+
+<Layout>
+ <div class='flex flex-col mb-[39px] gap-[17px]'>
+  <div class="flex flex-row gap-[10px]">
+   <GamePicture  />
+   <GameInfo
+    title="Depressing chess"
+    type="WoF"
+    rules={["3min", "Points", "5-check", "8th=QBRN"]}
+    user="glebchanskiy"
+    createdAt={new Date("07/10/2023")}
+    description="This position is a revision of an old one, as I already submitted “Quasars” a while ago and it was declined. There is a new concept: the Red pieces in the center blow up material with an atomic capture at random, though it can mate others a lot. To mate Red himself, you have to give one check to his royal, which can swap sides, by invoking one of the other regular pawns to blow up themselves by capturing one of your pieces and clear the road. Archbishops are most useful for checkmating Red because they can cover both the squares Red’s royal can move to from both sides. Yellow has a larger army to stop Blue and Green from teaming in most cases and try to prevent them from checkmating Red. Checkmating Red is a big thing because Play-4-Mate makes checkmates stand over other moves, it is harder to catch up on points when a 48-point mate is already taken, and ..."
+    variantLink="#"
+   />
+  </div>
+  <AdminSettings />
+  <AcceptedCard
+   verdict="Nice work on the variant! Quite a good amount of correct design choices allows for much more advanced zombie manipulation as well as for complex tactics implying unwinding is more than a good strategy and sometimes it is good to give up space to get it back a few moves later. Overall, the only thing that does not fit is the time control, so we're proposing to change it to 2|7 as to allow players to calculate more advanced zombie manipulation."
+  />
+ </div>
+ <CommentInput />
+</Layout>

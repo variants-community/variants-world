@@ -40,7 +40,7 @@ const PostCard = (props: PostCardProps) => {
         </div>
         <div className={'flex flex-row justify-between'}>
           <PostUser user={props.user} />
-          <div className={'flex flex-row gap-[15px] text-[22px]'}>
+          <div className={'w-[150px] flex flex-row justify-between text-[22px]'}>
             <Status status={props.status} />
             <Comments count={props.commentsCount} />
             <Likes count={props.likesCount} isLiked={props.isLiked} />

@@ -42,55 +42,53 @@ enum GameStatus {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String?
-  isTester Boolean   @default(false)
-  posts    Post[]
-  comments Comment[]
-  Voice    Voice[]
+  id         Int       @id @default(autoincrement())
+  name       String    
+  isTester   Boolean   @default(false)
+  likedPosts Post[]    @relation("LikedPosts")
+  comments   Comment[]
+  voices     Voice[]
+  posts      Post[]    @relation("UserPosts")
 }
 
-model TimeControlRule {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  posts Post[]
+enum RuleType {
+  GAMEPLAY
+  TIMECONTROL
 }
 
 model GameRule {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+  id    Int      @id @default(autoincrement())
+  name  String   @unique
+  type  RuleType
   posts Post[]
 }
 
 model Voice {
-  id     Int        @id @default(autoincrement())
+  id     Int       @id @default(autoincrement())
   value  VoteValue
-  tester User       @relation(fields: [userId], references: [id])
-  post   Post       @relation(fields: [postId], references: [id])
+  tester User      @relation(fields: [userId], references: [id])
+  post   Post      @relation(fields: [postId], references: [id])
   userId Int
   postId Int
 }
 
 model Post {
-  id                     Int                    @id @default(autoincrement())
+  id                     Int                     @id @default(autoincrement())
   title                  String
-  likes                  Int                    @default(0)
-  createdAt              DateTime               @default(now())
-  updatedAt              DateTime               @default(now())
-  timecontrol            TimeControlRule        @relation(fields: [timeControlRuleId], references: [id])
-  timeControlRuleId      Int
+  likes                  User[]                  @relation("LikedPosts")
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @default(now())
   gamerules              GameRule[]
-  promotion              String
   type                   GameType
   status                 GameStatus
-  verdict                String
-  notes                  String
-  gameClassification     GameClassification
-  gameplayClassification GameplayClassification
-  User                   User                   @relation(fields: [userId], references: [id])
-  userId                 Int
-  Comment                Comment[]
-  Voice                  Voice[]
+  verdict                String?
+  notes                  String?
+  gameClassification     GameClassification?
+  gameplayClassification GameplayClassification?
+  author                 User                    @relation("UserPosts", fields: [authorUserId], references: [id])
+  authorUserId           Int
+  comments               Comment[]
+  voices                 Voice[]
 }
 
 model Comment {

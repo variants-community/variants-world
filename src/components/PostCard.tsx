@@ -4,22 +4,11 @@ import PostUser from './PostUser'
 import CommentIcon from './icons/CommentIcon'
 import LikeIcon from './icons/LikeIcon'
 import StatusIcon from './icons/StatusIcon'
-import type { PostWithDetails } from '../db/queries'
+import type { PostWithDetailsForCard } from '../db/prisma/queries'
 import type { GameStatus } from '@prisma/client'
 
 type PostCardProps = {
-  post: PostWithDetails;
-  // type: string;
-  // title: string;
-  // status: GameStatus;
-  // // rules: string[];
-  // user: string;
-  // likesCount: number;
-  // isLiked: boolean
-  // commentsCount: number;
-  // // createdAt: Date
-  // // description: string
-  // // variantLink: string
+  post: PostWithDetailsForCard;
 };
 
 const PostCard = (props: PostCardProps) => {
@@ -35,12 +24,13 @@ const PostCard = (props: PostCardProps) => {
       <div className={'w-full flex flex-col justify-between p-[20px] '}>
         <div className={'flex flex-col gap-[10px]'}>
           <PostTitle
-            linkTo="/post"
+            linkTo={`/posts/${props.post.id}`}
             type={props.post.type}
             title={props.post.title}
           />
           <PostTags
-            rules={['3min', 'Points', '5-check', '8th=QBRN']}
+            // rules={['3min', 'Points', '5-check', '8th=QBRN']}
+            rules={props.post.gamerules.map(rule => rule.name)}
             className="text-text bg-dark border border-[0.4px] border-border-dark"
             iconsClassName="fill-text"
           />

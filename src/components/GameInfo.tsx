@@ -21,7 +21,7 @@ const daysLeft = (date: Date) => {
 
 const GameInfo = (props: DescriptionProps) => (
   <div
-    className={'flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'}
+    className={'w-full flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'}
   >
     <div className={'flex flex-col gap-[10px]'}>
       <div className={'flex flex-row items-center justify-between'}>

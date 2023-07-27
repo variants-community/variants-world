@@ -41,11 +41,16 @@ enum GameStatus {
   UNDER_REVIEW
 }
 
+enum UserRole {
+  TESTER
+  MEMBER
+}
+
 model User {
   id         Int       @id @default(autoincrement())
-  name       String    
-  isTester   Boolean   @default(false)
-  likedPosts Post[]    @relation("LikedPosts")
+  name       String
+  role       UserRole  @default(MEMBER)
+  likedPosts Post[]    @relation("UserLikedPosts")
   comments   Comment[]
   voices     Voice[]
   posts      Post[]    @relation("UserPosts")
@@ -63,32 +68,21 @@ model GameRule {
   posts Post[]
 }
 
-model Voice {
-  id     Int       @id @default(autoincrement())
-  value  VoteValue
-  tester User      @relation(fields: [userId], references: [id])
-  post   Post      @relation(fields: [postId], references: [id])
-  userId Int
-  postId Int
-}
-
 model Post {
-  id                     Int                     @id @default(autoincrement())
-  title                  String
-  likes                  User[]                  @relation("LikedPosts")
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @default(now())
-  gamerules              GameRule[]
-  type                   GameType
-  status                 GameStatus
-  verdict                String?
-  notes                  String?
-  gameClassification     GameClassification?
-  gameplayClassification GameplayClassification?
-  author                 User                    @relation("UserPosts", fields: [authorUserId], references: [id])
-  authorUserId           Int
-  comments               Comment[]
-  voices                 Voice[]
+  id           Int          @id @default(autoincrement())
+  title        String
+  description  String
+  likes        User[]       @relation("UserLikedPosts")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+  gamerules    GameRule[]
+  type         GameType
+  status       GameStatus
+  verdict      String?
+  author       User         @relation("UserPosts", fields: [authorUserId], references: [id])
+  authorUserId Int
+  comments     Comment[]
+  PostDetails  PostDetails?
 }
 
 model Comment {
@@ -103,4 +97,23 @@ model Comment {
   Children  Comment[] @relation("Comment_Children")
   parent    Comment?  @relation("Comment_Children", fields: [parent_id], references: [id])
   parent_id Int?
+}
+
+model PostDetails {
+  id                     Int                     @id @default(autoincrement())
+  Post                   Post                    @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId                 Int                     @unique 
+  notes                  String?
+  voices                 Voice[]
+  gameClassification     GameClassification?
+  gameplayClassification GameplayClassification?
+}
+
+model Voice {
+  id       Int         @id @default(autoincrement())
+  value    VoteValue
+  tester   User        @relation(fields: [testerId], references: [id])
+  post     PostDetails @relation(fields: [postId], references: [id])
+  testerId Int
+  postId   Int
 }

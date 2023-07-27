@@ -2,7 +2,7 @@ const CommentInput = () => (
   <div>
     <textarea
       placeholder={'Please be nice when you chat'}
-      type="text"
+      // type="text"
       rows={4}
       className={'bg-dark border border-[2px] text-[16px] resize-none border-border-dark shadow-light rounded-[12px] w-full bg-dark p-[20px] outline-none'}
     />

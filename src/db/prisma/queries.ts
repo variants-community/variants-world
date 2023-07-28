@@ -28,7 +28,12 @@ export const getPostDetailsById = async (postId: number) => {
       id: postId
     },
     include: {
-      voices: true
+      voices: {
+        include: {
+          tester: true
+        }
+      }
+      
     }
   })
 

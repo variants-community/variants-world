@@ -13,6 +13,7 @@ const postId = parseInt(id!)
 const post = await getPostById(postId)
 const details = await getPostDetailsById(postId)
 const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
+// isLiked={post.likes.find(liker => liker.id === user.id) ? true : false} likesCount={post.likes.length}
 ---
 
 <Layout>
@@ -21,7 +22,8 @@ const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
       <>
         <div class="flex flex-col mb-[39px] gap-[17px]">
           <div class="flex flex-row gap-[10px]">
-            <GamePicture isLiked={false} likesCount={post.likes.length} />
+            
+            <GamePicture postId={post.id} userId={user.id} likes={post.likes} client:load />
             <GameInfo
               title={post.title}
               type={post.type}

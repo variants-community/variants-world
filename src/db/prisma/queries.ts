@@ -13,7 +13,8 @@ export const getPostById = async (postId: number) => {
 
       likes: {
         select: {
-          _count: true
+          _count: true,
+          id: true
         }
       }
     }

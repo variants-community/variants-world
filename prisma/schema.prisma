@@ -116,4 +116,5 @@ model Voice {
   post     PostDetails @relation(fields: [postId], references: [id])
   testerId Int
   postId   Int
+  @@unique([testerId, postId])
 }

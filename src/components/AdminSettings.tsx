@@ -10,8 +10,6 @@ import { supabase } from '../db/supabase/supabase'
 import type { PostDetails } from '../db/prisma/queries'
 import { getValueFromEvent } from '../hepers'
 
-// import { client } from '../client'
-
 const gameClassification = [
   { label: 'Undefined', value: undefined },
   { label: 'Materialistic', value: GameClassification.MATERIALISTIC },
@@ -201,7 +199,6 @@ const ClassificationCard = (props: ClassificationProps) => {
   const [secondRule, setSecondRule] = useState<boolean>(false)
 
   useEffect(() => {
-    console.log('rules: ', firstRule, ' ', secondRule)
     if (!firstRule && secondRule) {
       props.setGameplayClassification('FIRST_NEGATIVE')
     } else if (firstRule && !secondRule) {
@@ -214,83 +211,82 @@ const ClassificationCard = (props: ClassificationProps) => {
   }, [firstRule, secondRule])
 
   const handlerFirstRule = (e: Event) => {
-    const isChecked  = (e.target as HTMLInputElement).checked
+    const isChecked = (e.target as HTMLInputElement).checked
     setFirstRule(isChecked)
   }
 
   const handlerSecondRule = (e: Event) => {
-    const isChecked  = (e.target as HTMLInputElement).checked
+    const isChecked = (e.target as HTMLInputElement).checked
     setSecondRule(isChecked)
   }
 
   return (
-  <div className={'flex flex-col text-[16px] font-semibold'}>
-    <label htmlFor="game-clsfc" className={'text-secondary'}>
-      Game Classification
-    </label>
-    <select
-      value={props.gameClassification || 'None'}
-      onChange={props.onChangeGameClassification}
-      id="game-clsfc"
-      className="w-[200px] text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
-    >
-      {gameClassification.map((cl) => (
-        <option key={cl.value} value={cl.value}>{cl.label}</option>
-      ))}
-    </select>
-
-    <label htmlFor="gameplay-clsfc" className={'text-secondary pt-[21px]'}>
-      Gameplay Classification
-    </label>
-    <select
-      disabled={true}
-      
-      value={props.gameplayClassification || 'None'}
-      // onChange={props.onChangeGameplayClassification}
-      id="gameplay-clsfc"
-      className="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
-    >
-      {gameplayClassification.map((cl) => (
-        <option key={cl.value} value={cl.value}>
-          {cl.label}
-        </option>
-      ))}
-    </select>
-
-    <div className="flex items-center mt-[8px]">
-      <input
-        onChange={handlerFirstRule}
-        checked={firstRule}
-        // checked={props.gameplayClassification === 'FIRST_POSITIVE'
-        //   ? true
-        //   : props.gameplayClassification === 'SECOND_POSITIVE'}
-        id="checkbox1"
-        type="checkbox"
-        className="h-[14px] w-[14px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
-      />
-      <label htmlFor="checkbox1" className="ml-[6px] text-white">
-        waiting and shuffling can be optimal
+    <div className={'flex flex-col text-[16px] font-semibold'}>
+      <label htmlFor="game-clsfc" className={'text-secondary'}>
+        Game Classification
       </label>
-    </div>
+      <select
+        value={props.gameClassification || 'None'}
+        onChange={props.onChangeGameClassification}
+        id="game-clsfc"
+        className="w-[200px] text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
+      >
+        {gameClassification.map((cl) => (
+          <option key={cl.value} value={cl.value}>{cl.label}</option>
+        ))}
+      </select>
 
-    <div className="flex mt-[8px] mt-[13px]">
-      <input
-        id="checkbox2"
-        type="checkbox"
-        onChange={handlerSecondRule}
-        checked={secondRule}
-        // checked={props.gameplayClassification === 'SECOND_NEGATIVE'
-        //   ? true
-        //   : props.gameplayClassification === 'FIRST_NEGATIVE'}
-        className="h-[14px] w-[14px] mt-[1px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
-      />
-      <label htmlFor="checkbox2" className="ml-[6px] text-white">
-        attacking the other player directly by aggressively<br />developing
-        one’s own ideas is viable
+      <label htmlFor="gameplay-clsfc" className={'text-secondary pt-[21px]'}>
+        Gameplay Classification
       </label>
+      <select
+        disabled={true}
+        value={props.gameplayClassification || 'None'}
+        // onChange={props.onChangeGameplayClassification}
+        id="gameplay-clsfc"
+        className="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
+      >
+        {gameplayClassification.map((cl) => (
+          <option key={cl.value} value={cl.value}>
+            {cl.label}
+          </option>
+        ))}
+      </select>
+
+      <div className="flex items-center mt-[8px]">
+        <input
+          onChange={handlerFirstRule}
+          checked={firstRule}
+          // checked={props.gameplayClassification === 'FIRST_POSITIVE'
+          //   ? true
+          //   : props.gameplayClassification === 'SECOND_POSITIVE'}
+          id="checkbox1"
+          type="checkbox"
+          className="h-[14px] w-[14px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
+        />
+        <label htmlFor="checkbox1" className="ml-[6px] text-white">
+          waiting and shuffling can be optimal
+        </label>
+      </div>
+
+      <div className="flex mt-[8px] mt-[13px]">
+        <input
+          id="checkbox2"
+          type="checkbox"
+          onChange={handlerSecondRule}
+          checked={secondRule}
+          // checked={props.gameplayClassification === 'SECOND_NEGATIVE'
+          //   ? true
+          //   : props.gameplayClassification === 'FIRST_NEGATIVE'}
+          className="h-[14px] w-[14px] mt-[1px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
+        />
+        <label htmlFor="checkbox2" className="ml-[6px] text-white">
+          attacking the other player directly by aggressively<br />developing
+          one’s own ideas is viable
+        </label>
+      </div>
     </div>
-  </div>
-)
+  )
 }
 
 type VoicesProps = {

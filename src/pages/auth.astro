@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro"
-import { isLoggedIn, supabase } from "../supabase/supabase"
+import { isLoggedIn, supabase } from "../db/supabase/supabase"
 
 const email = Astro.url.searchParams.get("email") || undefined
 const password = Astro.url.searchParams.get("password") || undefined
@@ -24,10 +24,6 @@ if (email && password) {
   } else {
     console.log("successfully created user!")
     console.log("accepted: ", data)
-    // Astro.response.headers.set(
-    //   "Set-Cookie",
-    //   `sbat=${data.session.access_token}; Path=/;`
-    // )
 
     const headers = new Headers()
     headers.append("Set-Cookie", `sbat=${data.session.access_token}; Path=/;`)
@@ -36,7 +32,6 @@ if (email && password) {
       status: 303,
       headers
     })
-    // return Astro.redirect('/');
   }
 }
 ---
@@ -134,4 +129,3 @@ if (email && password) {
     </div>
   </section>
 </Layout>
-../db/supabase/supabase

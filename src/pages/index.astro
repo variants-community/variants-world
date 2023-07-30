@@ -3,12 +3,6 @@ import Search from "../components/Search"
 import PostCard from "../components/PostCard"
 import Layout from "../layouts/Layout.astro"
 import { getPosts } from "../db/prisma/queries"
-import { getPostsByPage } from "../supabase/supaReuquests"
-import { supabase } from "../supabase/supabase"
-import type { only } from "node:test"
-
-// const posts2 = await getPostsByPage(0)
-// console.log(posts2)
 
 const posts = await getPosts(0)
 
@@ -24,5 +18,4 @@ posts.forEach((post) =>
   <div class="flex flex-col gap-[30px] mt-[55px]">
     {posts.map((post) => <PostCard post={post} />)}
   </div>
-
 </Layout>

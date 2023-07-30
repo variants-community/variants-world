@@ -122,7 +122,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
           const voiceWithUser = { ...updated, tester: user.data }
           console.log('before votes: ', votes)
           console.log('voiceWithUser: ', voiceWithUser)
-          
+
           // const test = [...votes, voiceWithUser as VoiceExtended] as VoiceExtended[]
           // console.log('test: ', [...votes, voiceWithUser as VoiceExtended] as VoiceExtended[])
 

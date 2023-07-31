@@ -30,7 +30,7 @@ const PostCard = (props: PostCardProps) => {
           />
           <PostTags
             // rules={['3min', 'Points', '5-check', '8th=QBRN']}
-            rules={props.post.gamerules.map(rule => rule.name)}
+            rules={props.post.gamerules.map(rule => rule.ruleType.name)}
             className="text-text bg-dark border border-[0.4px] border-border-dark"
             iconsClassName="fill-text"
           />

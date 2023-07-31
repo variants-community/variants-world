@@ -9,7 +9,11 @@ export const getPostById = async (postId: number) => {
     include: {
       author: true,
       comments: true,
-      gamerules: true,
+      gamerules: { 
+        include: {
+          ruleType: true
+        }
+      },
 
       likes: {
         select: {
@@ -86,7 +90,11 @@ export const getPosts = async (skip: number, take: number = 10) => {
     skip,
     take,
     include: {
-      gamerules: true,
+      gamerules: {
+        include: {
+          ruleType: true
+        }
+      },
       author: {
         include: {
           likedPosts: {

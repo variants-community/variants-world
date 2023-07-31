@@ -28,7 +28,7 @@ const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
               title={post.title}
               type={post.type}
               rules={["3min", "Points", "5-check", "8th=QBRN"]}
-              rules={post.gamerules.map((rule) => rule.name)}
+              rules={post.gamerules.map((rule) => rule.ruleType.name)}
               user={post.author.name}
               createdAt={post.createdAt}
               description={post.description}

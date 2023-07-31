@@ -1,6 +1,6 @@
 ---
-import Search from "../components/Search"
-import PostCard from "../components/PostCard"
+
+import PostsList from "../components/PostsList"
 import Layout from "../layouts/Layout.astro"
 import { getPosts } from "../db/prisma/queries"
 
@@ -10,12 +10,12 @@ console.log("[index] load:")
 posts.forEach((post) =>
   console.log(`\t${post.title}:${post.author}:${post.id}`)
 )
+
+
 ---
 
 <Layout>
-  <Search />
 
-  <div class="flex flex-col gap-[30px] mt-[55px]">
-    {posts.map((post) => <PostCard post={post} />)}
-  </div>
+  <PostsList posts={posts} client:load />
+  
 </Layout>

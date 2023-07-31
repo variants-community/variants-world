@@ -56,18 +56,6 @@ model User {
   posts      Post[]    @relation("UserPosts")
 }
 
-enum RuleType {
-  GAMEPLAY
-  TIMECONTROL
-}
-
-model GameRule {
-  id    Int      @id @default(autoincrement())
-  name  String   @unique
-  type  RuleType
-  posts Post[]
-}
-
 model Post {
   id           Int          @id @default(autoincrement())
   title        String
@@ -102,7 +90,7 @@ model Comment {
 model PostDetails {
   id                     Int                     @id @default(autoincrement())
   Post                   Post                    @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  postId                 Int                     @unique 
+  postId                 Int                     @unique
   notes                  String?
   voices                 Voice[]
   gameClassification     GameClassification?
@@ -116,5 +104,62 @@ model Voice {
   post     PostDetails @relation(fields: [postId], references: [id])
   testerId Int
   postId   Int
+
   @@unique([testerId, postId])
 }
+
+model RuleType {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  GameRule GameRule[]
+}
+
+model GameRule {
+  id         Int      @id @default(autoincrement())
+  Post       Post     @relation(fields: [postId], references: [id])
+  postId     Int
+  ruleType   RuleType @relation(fields: [ruleTypeId], references: [id])
+  ruleTypeId Int
+  value      String?
+
+  @@unique([postId, ruleTypeId])
+}
+
+// Passing | allowPassing | true
+// Anonymous | anonymous | true
+// Any Capture | anyCapture | true
+// Atomic | atomic | true
+// Bare Piece | barePieceLoses | true
+// Blindfold | blindfold | true
+// Regicide | captureTheKing | true
+// Crazyhouse | crazyhouse | true
+// Crazywan | crazywan | true
+// DeadWall | deadWall | true
+// Diplomacy | diplomacy | true
+// Duck | duckChess | true
+// Fatal | fatalCapture | true
+// Fog | fogOfWar | true
+// Points | gameOfPoints
+// Ghost | ghostBoard | true
+// Giveaway | giveaway | true
+// KotH | koth | true или список координат типа f3,g5,h2,b8,b7
+// N-check | nCheck | N или [N, N, N, N] ([3,7,5,5] группируется как 3-5-7)
+// No Zombies | noDkw | true
+// No EnP | noEnPassant | true
+// No Opp Castling | oppositeSideCastling | true
+// OxN | oppX | N
+// Play for Mate | play4mate | true
+// +N | pointsForMate | N
+// =KDSD | promoteTo | список букв 
+// Nth | promotionRank | N
+// Seirawan | seirawanSetup | true
+// Self Check | selfCheck | true
+// Self Partner | selfPartner | true
+// Semianon | semiAnonymous | true
+// Setup | setup | N
+// Sideways | sideways | true
+// Stalemate ... | stalemate | Win or Lose
+// Taboo | taboo | true
+// Takeover | takeover | true
+// Alt Teams (RB or RG) |  teammate | 1 or 3
+// Torpedo | torpedo | true

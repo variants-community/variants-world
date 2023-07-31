@@ -9,34 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      _GameRuleToPost: {
-        Row: {
-          A: number
-          B: number
-        }
-        Insert: {
-          A: number
-          B: number
-        }
-        Update: {
-          A?: number
-          B?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: '_GameRuleToPost_A_fkey'
-            columns: ['A']
-            referencedRelation: 'GameRule'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: '_GameRuleToPost_B_fkey'
-            columns: ['B']
-            referencedRelation: 'Post'
-            referencedColumns: ['id']
-          }
-        ]
-      }
       _prisma_migrations: {
         Row: {
           applied_steps_count: number
@@ -147,20 +119,36 @@ export interface Database {
       GameRule: {
         Row: {
           id: number
-          name: string
-          type: Database['public']['Enums']['RuleType']
+          postId: number
+          ruleTypeId: number
+          value: string | null
         }
         Insert: {
           id?: number
-          name: string
-          type: Database['public']['Enums']['RuleType']
+          postId: number
+          ruleTypeId: number
+          value?: string | null
         }
         Update: {
           id?: number
-          name?: string
-          type?: Database['public']['Enums']['RuleType']
+          postId?: number
+          ruleTypeId?: number
+          value?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'GameRule_postId_fkey'
+            columns: ['postId']
+            referencedRelation: 'Post'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'GameRule_ruleTypeId_fkey'
+            columns: ['ruleTypeId']
+            referencedRelation: 'RuleType'
+            referencedColumns: ['id']
+          }
+        ]
       }
       Post: {
         Row: {
@@ -248,6 +236,21 @@ export interface Database {
           }
         ]
       }
+      RuleType: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       User: {
         Row: {
           id: number
@@ -322,7 +325,6 @@ export interface Database {
         | 'SECOND_NEGATIVE'
       GameStatus: 'ACCEPTED' | 'DECLINED' | 'PENDING_REPLY' | 'UNDER_REVIEW'
       GameType: 'NCV' | 'WOF'
-      RuleType: 'GAMEPLAY' | 'TIMECONTROL'
       UserRole: 'TESTER' | 'MEMBER'
       VoteValue: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL'
     }

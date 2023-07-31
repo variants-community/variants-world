@@ -1,54 +1,55 @@
 import {
   GameClassification,
-  // GameStatus,
-  // GameType,
+  GameStatus,
+  GameType,
   GameplayClassification,
   RuleType,
-  UserRole
+  UserRole,
+  VoteValue
 } from '@prisma/client'
 import prisma from './prisma'
 
 export async function main() {
   console.log('start')
 
-  const rules = [
-    { name: '4 min', type: RuleType.TIMECONTROL },
-    { name: '3 min', type: RuleType.TIMECONTROL },
-    { name: '2 min', type: RuleType.TIMECONTROL },
-    { name: '1 min', type: RuleType.TIMECONTROL },
-    { name: '3|2 min', type: RuleType.TIMECONTROL },
-    { name: '5-check', type: RuleType.GAMEPLAY },
-    { name: '7-check', type: RuleType.GAMEPLAY },
-    { name: 'Points', type: RuleType.GAMEPLAY }
-    // { name: '1 min', type: RuleType.TIMECONTROL },
-    // { name: '3|2 min', type: RuleType.TIMECONTROL }
-  ]
+  // const rules = [
+  //   { name: '4 min', type: RuleType.TIMECONTROL },
+  //   { name: '3 min', type: RuleType.TIMECONTROL },
+  //   { name: '2 min', type: RuleType.TIMECONTROL },
+  //   { name: '1 min', type: RuleType.TIMECONTROL },
+  //   { name: '3|2 min', type: RuleType.TIMECONTROL },
+  //   { name: '5-check', type: RuleType.GAMEPLAY },
+  //   { name: '7-check', type: RuleType.GAMEPLAY },
+  //   { name: 'Points', type: RuleType.GAMEPLAY }
+  //   // { name: '1 min', type: RuleType.TIMECONTROL },
+  //   // { name: '3|2 min', type: RuleType.TIMECONTROL }
+  // ]
 
-  rules.forEach(
-    async (rule) =>
-      await prisma.gameRule.upsert({
-        where: { name: rule.name },
-        update: { ...rule },
-        create: { ...rule }
-      })
-  )
+  // rules.forEach(
+  //   async (rule) =>
+  //     await prisma.gameRule.upsert({
+  //       where: { name: rule.name },
+  //       update: { ...rule },
+  //       create: { ...rule }
+  //     })
+  // )
 
-  const users = [
-    { id: 1, name: 'glebchanskiy', role: UserRole.MEMBER },
-    { id: 2, name: 'ardonplay', role: UserRole.MEMBER },
-    { id: 3, name: 'badmoon', role: UserRole.MEMBER },
-    { id: 4, name: 'chubrik', role: UserRole.MEMBER },
-    { id: 5, name: 'admin12', role: UserRole.MEMBER }
-  ]
+  // const users = [
+  //   { id: 1, name: 'glebchanskiy', role: UserRole.MEMBER },
+  //   { id: 2, name: 'ardonplay', role: UserRole.MEMBER },
+  //   { id: 3, name: 'badmoon', role: UserRole.MEMBER },
+  //   { id: 4, name: 'chubrik', role: UserRole.MEMBER },
+  //   { id: 5, name: 'admin12', role: UserRole.MEMBER }
+  // ]
 
-  users.forEach(
-    async (user) =>
-      await prisma.user.upsert({
-        where: { id: user.id },
-        update: { ...user },
-        create: { ...user }
-      })
-  )
+  // users.forEach(
+  //   async (user) =>
+  //     await prisma.user.upsert({
+  //       where: { id: user.id },
+  //       update: { ...user },
+  //       create: { ...user }
+  //     })
+  // )
 
   // const posts = [
   //   {
@@ -78,24 +79,24 @@ export async function main() {
   //   }
   // ]
 
-  const details = [
-    {
-      id: 1,
-      postId: 1,
-      notes: '',
-      gameClassification: GameClassification.FORTUNE,
-      gameplayClassification: GameplayClassification.FIRST_POSITIVE
-    },
-    {
-      id: 2,
-      postId: 2,
-      notes: '',
-      gameClassification: GameClassification.DYNAMIC,
-      gameplayClassification: GameplayClassification.SECOND_NEGATIVE
-    }
-  ]
+  // const details = [
+  //   {
+  //     id: 1,
+  //     postId: 1,
+  //     notes: '',
+  //     gameClassification: GameClassification.FORTUNE,
+  //     gameplayClassification: GameplayClassification.FIRST_POSITIVE
+  //   },
+  //   {
+  //     id: 2,
+  //     postId: 2,
+  //     notes: '',
+  //     gameClassification: GameClassification.DYNAMIC,
+  //     gameplayClassification: GameplayClassification.SECOND_NEGATIVE
+  //   }
+  // ]
 
-  // posts.forEach(
+    // posts.forEach(
   //   async (post) =>
   //     await prisma.post.upsert({
   //       where: { id: post.id },
@@ -104,14 +105,18 @@ export async function main() {
   //     })
   // )
 
-  details.forEach(
-    async (detail) =>
-      await prisma.postDetails.upsert({
-        where: { id: detail.id },
-        update: { ...detail },
-        create: { ...detail }
-      })
-  )
+  // details.forEach(
+  //   async (detail) =>
+  //     await prisma.postDetails.upsert({
+  //       where: { id: detail.id },
+  //       update: { ...detail },
+  //       create: { ...detail }
+  //     })
+  // )
+
+
+
+
 
   // const voces = [
   //   {
@@ -143,8 +148,90 @@ export async function main() {
   //     })
   // )
 
+  // const ruleTypes = [
+  //   {
+  //     id: 1,
+  //     name: 'Passing'
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Anonymous'
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Atomic'
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'Bare Piece'
+  //   },
+
+  // ]
+
+  // const gameRules = [
+  //   { 
+  //     id: 1,
+  //     postId: 1, 
+  //     ruleTypeId: 1,
+  //   },
+  //   {
+  //     id: 2,
+  //     postId: 1, 
+  //     ruleTypeId: 2,
+  //   },
+  //   {
+  //     id: 3,
+  //     postId: 1, 
+  //     ruleTypeId: 3,
+  //   },
+  //   {
+  //     id: 4,
+  //     postId: 1, 
+  //     ruleTypeId: 4,
+  //   },
+  //   {
+  //     id: 5,
+  //     postId: 2, 
+  //     ruleTypeId: 2,
+  //   },
+  //   {
+  //     id: 6,
+  //     postId: 2, 
+  //     ruleTypeId: 4,
+  //   },
+
+  // ]
+
+  // ruleTypes.map(async type => {
+  //   await prisma.ruleType.upsert({
+  //     where: { id: type.id},
+  //     update: {...type},
+  //     create: {...type}
+  //   })
+  // })
+
+
+  // gameRules.map(async rule => {
+  //   await prisma.gameRule.upsert({
+  //     where: { id: rule.id},
+  //     update: {...rule},
+  //     create: {...rule}
+  //   })
+  // })
+  
+
   console.log('finish')
 }
+
+// Passing | allowPassing | true
+// Anonymous | anonymous | true
+// Any Capture | anyCapture | true
+// Atomic | atomic | true
+// Bare Piece | barePieceLoses | true
+// Blindfold | blindfold | true
+// Regicide | captureTheKing | true
+// Crazyhouse | crazyhouse | true
+// Crazywan | crazywan | true
 
 // main()
 // .then(async () => {

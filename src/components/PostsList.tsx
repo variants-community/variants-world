@@ -22,9 +22,13 @@ const PostsList = (props: PostsListProps) => {
   )
 
   useEffect(() => {
-    setFilteredPosts(
-      props.posts.filter((post) => getTextForSearch(post).includes(query.toLowerCase())),
-    )
+    if (query != '') {
+      setFilteredPosts(
+        props.posts.filter((post) =>
+          getTextForSearch(post).includes(query.toLowerCase())
+        ),
+      )
+    }
   }, [query])
 
   return (

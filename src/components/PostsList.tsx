@@ -29,6 +29,8 @@ const PostsList = (props: PostsListProps) => {
           getTextForSearch(post).includes(query.toLowerCase())
         ),
       )
+    } else {
+      setFilteredPosts(props.posts)
     }
   }, [query])
 

@@ -1,17 +1,15 @@
-
 const CGABotUrl = import.meta.env.CGABOT_URL
 const CGABotToken = import.meta.env.CGABOT_API_TOKEN
 
+export const getGameDetailsById = async (gameId: string) => {
+  if (gameId.length !== 8) return undefined
 
-export const getGameDetailsById = async (gameId: number | string) => {
-  const resp = await fetch(
+  const response = await fetch(
     `${CGABotUrl}/game/${gameId}?` + new URLSearchParams({ token: CGABotToken })
   )
-  const data = await resp.json() as CGABotGameDetails
-
-  console.log('id:', data._id)
-  console.log(data.q)
-
+  if (response.status === 200)
+    return (await response.json()) as CGABotGameDetails
+  else return undefined
 }
 
 export interface CGABotGameDetails {

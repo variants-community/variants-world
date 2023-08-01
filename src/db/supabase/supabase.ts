@@ -13,7 +13,6 @@ console.log('accessToken:', accessToken)
 
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
-// supabase.auth.
 
 export async function getUser(req: Request) {
  const c = cookie.parse(req.headers.get('cookie') ?? '')
@@ -31,4 +30,3 @@ export async function getUser(req: Request) {
 export async function isLoggedIn(req: Request) {
  return await getUser(req) != null
 }
-//AdSUJrQP0JzOdOyP

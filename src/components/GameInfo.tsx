@@ -2,7 +2,7 @@ import PostTags from './PostTags'
 import PostTitle from './PostTitle'
 import PostUser from './PostUser'
 
-type DescriptionProps = {
+type GameInfoProps = {
   type: string;
   title: string;
   rules: string[];
@@ -19,14 +19,14 @@ const daysLeft = (date: Date) => {
   return totalDays
 }
 
-const GameInfo = (props: DescriptionProps) => (
+const GameInfo = (props: GameInfoProps) => (
   <div
     className={'w-full flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'}
   >
     <div className={'flex flex-col gap-[10px]'}>
       <div className={'flex flex-row items-center justify-between'}>
         <PostTitle type={props.type} title={props.title} />
-        <TimeLeft from={props.createdAt} />
+        <TimePassed from={props.createdAt} />
       </div>
 
       <PostTags
@@ -49,7 +49,7 @@ const GameInfo = (props: DescriptionProps) => (
   </div>
 )
 
-const TimeLeft = ({ from }: { from: Date }) => (
+const TimePassed = ({ from }: { from: Date }) => (
   <div className={'items-center'}>
     <span className={'text-[16px]'}>{`${daysLeft(from)} days ago`}</span>
   </div>

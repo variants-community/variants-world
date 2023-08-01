@@ -28,14 +28,6 @@ const gameplayClassification = [
   { label: 'Second Negative', value: GameplayClassification.SECOND_NEGATIVE },
 ]
 
-// const votes = [
-//   { tester: 'qilp', value: '-1' },
-//   { tester: 'bstri', value: '+1' },
-//   { tester: 'NoWellOkay', value: '+1' },
-//   { tester: 'TheCheeseDuck', value: '-1' },
-//   { tester: 'CheesMasterGS', value: '+1' },
-// ]
-
 type AdminSettingsProps = {
   details: PostDetails;
   user: User;
@@ -66,7 +58,6 @@ const AdminSettings = (props: AdminSettingsProps) => {
           filter: `id=eq.${props.details.postId}`,
         },
         (payload) => {
-          console.log('[POSTGRES_EVENT][UPDATE_POST_DETAILS]: ', payload)
           const updated = payload.new as PostDetails
           setGameClassification(updated.gameClassification)
           setGameplayClassification(updated.gameplayClassification)
@@ -81,7 +72,6 @@ const AdminSettings = (props: AdminSettingsProps) => {
           filter: `postId=eq.${props.details.postId}`,
         },
         async (payload) => {
-          console.log('[POSTGRES_EVENT][UPDATE_VOICE]: ', payload)
           const updated = payload.new as Voice
           const user = await supabase.from('User').select('*').eq(
             'id',
@@ -89,8 +79,6 @@ const AdminSettings = (props: AdminSettingsProps) => {
           ).single()
 
           const voiceWithUser = { ...updated, tester: user.data }
-
-          console.log('before votes: ', votes)
 
           if (votes.length > 0) {
             setVotes(
@@ -101,7 +89,6 @@ const AdminSettings = (props: AdminSettingsProps) => {
           } else {
             setVotes([voiceWithUser as VoiceExtended])
           }
-          console.log('after votes: ', votes)
         },
       ).on(
         'postgres_changes',
@@ -112,7 +99,6 @@ const AdminSettings = (props: AdminSettingsProps) => {
           filter: `postId=eq.${props.details.postId}`,
         },
         async (payload) => {
-          console.log('[POSTGRES_EVENT][INSERT_VOICE]: ', payload)
           const updated = payload.new as Voice
           const user = await supabase.from('User').select('*').eq(
             'id',
@@ -120,14 +106,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
           ).single()
 
           const voiceWithUser = { ...updated, tester: user.data }
-          console.log('before votes: ', votes)
-          console.log('voiceWithUser: ', voiceWithUser)
-
-          // const test = [...votes, voiceWithUser as VoiceExtended] as VoiceExtended[]
-          // console.log('test: ', [...votes, voiceWithUser as VoiceExtended] as VoiceExtended[])
-
           setVotes([...votes, voiceWithUser as VoiceExtended])
-          console.log('after votes: ', votes)
         },
       )
       .subscribe()
@@ -144,14 +123,9 @@ const AdminSettings = (props: AdminSettingsProps) => {
     }).eq('postId', props.details.postId)
   }
 
-  const setGameplayClassification2 = async (value: GameplayClassification) => {
-    await supabase.from('PostDetails').update({
-      gameplayClassification: value,
-    }).eq('postId', props.details.postId)
-  }
-
-  const onChangeGameplayClassification = async (e: Event) => {
-    const value = getValueFromEvent<GameplayClassification>(e)
+  const setGameplayClassificationOnChange = async (
+    value: GameplayClassification,
+  ) => {
     await supabase.from('PostDetails').update({
       gameplayClassification: value,
     }).eq('postId', props.details.postId)
@@ -164,18 +138,17 @@ const AdminSettings = (props: AdminSettingsProps) => {
     await supabase.from('PostDetails').update({
       notes: value,
     }).eq('postId', props.details.postId)
-    console.log('onNotesChange')
   }
 
   return (
     <div
       className={'h-[250px] flex bg-border-light shadow-dark rounded-[12px] p-[20px] justify-between'}
     >
-      <ClassificationCard
+      <Classification
         gameClassification={gameClassification}
         onChangeGameClassification={onChangeGameClassification}
         gameplayClassification={gameplayClassification}
-        setGameplayClassification={setGameplayClassification2}
+        setGameplayClassification={setGameplayClassificationOnChange}
       />
       <Votes
         voces={votes}
@@ -194,7 +167,7 @@ type ClassificationProps = {
   setGameplayClassification: (value: GameplayClassification) => void;
 };
 
-const ClassificationCard = (props: ClassificationProps) => {
+const Classification = (props: ClassificationProps) => {
   const [firstRule, setFirstRule] = useState<boolean>(false)
   const [secondRule, setSecondRule] = useState<boolean>(false)
 
@@ -242,7 +215,6 @@ const ClassificationCard = (props: ClassificationProps) => {
       <select
         disabled={true}
         value={props.gameplayClassification || 'None'}
-        // onChange={props.onChangeGameplayClassification}
         id="gameplay-clsfc"
         className="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
       >
@@ -257,9 +229,6 @@ const ClassificationCard = (props: ClassificationProps) => {
         <input
           onChange={handlerFirstRule}
           checked={firstRule}
-          // checked={props.gameplayClassification === 'FIRST_POSITIVE'
-          //   ? true
-          //   : props.gameplayClassification === 'SECOND_POSITIVE'}
           id="checkbox1"
           type="checkbox"
           className="h-[14px] w-[14px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
@@ -275,9 +244,6 @@ const ClassificationCard = (props: ClassificationProps) => {
           type="checkbox"
           onChange={handlerSecondRule}
           checked={secondRule}
-          // checked={props.gameplayClassification === 'SECOND_NEGATIVE'
-          //   ? true
-          //   : props.gameplayClassification === 'FIRST_NEGATIVE'}
           className="h-[14px] w-[14px] mt-[1px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
         />
         <label htmlFor="checkbox2" className="ml-[6px] text-white">
@@ -298,12 +264,11 @@ type VoicesProps = {
 
 const Votes = (props: VoicesProps) => {
   const onVoice = async (value: VoteValue) => {
-    const resp = await supabase.from('Voice').upsert({
+    await supabase.from('Voice').upsert({
       value: value,
       postId: props.postId,
       testerId: props.testerId,
     }, { onConflict: 'postId, testerId' }).eq('testerId', props.testerId)
-    console.log('onVoice resp: ', resp)
   }
 
   const testerVoice = props.voces.find((voice) =>

@@ -1,5 +1,3 @@
-// import TimeIcon from './icons/TimeIcon'
-
 type PostTagsProps = {
   rules: string[];
   className?: string;
@@ -17,7 +15,6 @@ const PostTags = (props: PostTagsProps) => {
             className={`flex flex-row whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px]  ${props.className}`}
             key={rule}
           >
-            {/* <TimeIcon className={`mx-[7px] ${props.iconsClassName}`} /> */}
             <span>{rule}</span>
           </li>
         ))}

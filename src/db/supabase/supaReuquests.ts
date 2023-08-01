@@ -25,39 +25,3 @@ export const getPostsByPage = async (page: number) => {
     page
   }
 }
-
-// export const getPostById2 = async (postId: number) => {
-//   const { data, error, status, statusText } = await supabase
-//     .from('Post')
-//     .select('*')
-//     .eq('id', '1')
-//     .maybeSingle()
-
-//   console.log('supabase acepted: ', data)
-//   console.log('error: ', error)
-//   console.log('status: ', status)
-//   console.log('statusText: ', statusText)
-// }
-
-// await getPostById2(1)
-
-// export const getPostById = async (postId: number) => {
-//   const post = await prisma.post.findFirst({
-//     where: {
-//       id: postId
-//     },
-//     include: {
-//       author: true,
-//       comments: true,
-//       gamerules: true,
-//       voices: true,
-//       likes: {
-//         select: {
-//           _count: true
-//         }
-//       }
-//     }
-//   })
-
-//   return post
-// }

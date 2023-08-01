@@ -32,6 +32,24 @@ const PostsList = (props: PostsListProps) => {
     }
   }, [query])
 
+
+  useEffect(() => {
+    window.addEventListener('keydown', function (e) {
+      if (e.ctrlKey && e.key === 'k') {
+        if (document.getElementById('index-page-search') !== document.activeElement) {
+          e.preventDefault()
+          console.log('Search is not in focus')
+          document.getElementById('index-page-search')?.focus()
+        } else {
+          console.log('Default action of CtrlK')
+          return true
+        }
+      }
+    })
+  })
+
+  
+
   return (
     <>
       <Search query={query} setQuery={setQuery} />

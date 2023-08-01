@@ -17,6 +17,7 @@ const Search = (props: SearhProps) => {
     >
       <SearchIcon className="h-[20px] w-[20px] ml-[20px] my-[12px] mr-[12px]" />
       <input
+        id={'index-page-search'}
         value={props.query}
         onInput={onQueryInput}
         type="text"

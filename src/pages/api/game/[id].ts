@@ -2,8 +2,8 @@ import type { APIRoute } from 'astro'
 import { getGameDetailsById } from '../../../cgabot'
 
 export const get: APIRoute = async ({params}) => {
- console.log('on ', params.id, ' - ', /^\d{8}$/.test(params.id!))
- if (!params.id || !/^\d{8}$/.test(params.id))
+ console.log('on ', params.id, ' - ', /^\d{8,9}$/.test(params.id!))
+ if (!params.id || !/^\d{8,9}$/.test(params.id))
   return new Response(undefined, {status: 404, statusText: 'Invalid format.'})
 
  const game = await getGameDetailsById(params.id)

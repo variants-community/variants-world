@@ -22,7 +22,7 @@ const NewPost = () => {
   const [game, setGame] = useState<CGABotGameDetails>()
 
   useEffect(() => {
-    if (gameId && /^\d{8}$/.test(gameId)) {
+    if (gameId && /^\d{8,9}$/.test(gameId)) {
       setIsInvalidId(false)
       setIsLoading(true)
 

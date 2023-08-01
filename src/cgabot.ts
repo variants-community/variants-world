@@ -2,11 +2,12 @@ const CGABotUrl = import.meta.env.CGABOT_URL
 const CGABotToken = import.meta.env.CGABOT_API_TOKEN
 
 export const getGameDetailsById = async (gameId: string) => {
-  if (gameId.length !== 8) return undefined
+  if (gameId.length < 7 || gameId.length > 10) return undefined
 
   const response = await fetch(
     `${CGABotUrl}/game/${gameId}?` + new URLSearchParams({ token: CGABotToken })
   )
+
   if (response.status === 200)
     return (await response.json()) as CGABotGameDetails
   else return undefined

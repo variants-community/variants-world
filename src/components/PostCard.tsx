@@ -2,13 +2,14 @@ import PostTags from './PostTags'
 import PostTitle from './PostTitle'
 import PostUser from './PostUser'
 import CommentIcon from './icons/CommentIcon'
-import LikeIcon from './icons/LikeIcon'
 import StatusIcon from './icons/StatusIcon'
 import type { PostWithDetailsForCard } from '../db/prisma/queries'
 import type { GameStatus } from '@prisma/client'
+import Likes from './Likes'
 
 type PostCardProps = {
   post: PostWithDetailsForCard;
+  userId: number;
 };
 
 const PostCard = (props: PostCardProps) => {
@@ -29,8 +30,7 @@ const PostCard = (props: PostCardProps) => {
             title={props.post.title}
           />
           <PostTags
-            // rules={['3min', 'Points', '5-check', '8th=QBRN']}
-            rules={props.post.gamerules.map(rule => rule.ruleType.name)}
+            rules={props.post.gamerules.map((rule) => rule.ruleType.name)}
             className="text-text bg-dark border border-[0.4px] border-border-dark"
             iconsClassName="fill-text"
           />
@@ -38,16 +38,21 @@ const PostCard = (props: PostCardProps) => {
         <div className={'flex flex-row justify-between'}>
           <PostUser user={props.post.author.name} />
           <div
-            className={'w-[150px] flex flex-row justify-between text-[22px]'}
+            className={'w-[150px] flex flex-row justify-end text-[22px] gap-[15px]'}
           >
-            <Status status={props.post.status} />
-            <Comments count={props.post.comments.length} />
-            <Likes
-              count={props.post.likes.length}
-              isLiked={props.post.author.likedPosts.includes({
-                id: props.post.id,
-              })}
-            />
+            <div className={''}>
+              <Status status={props.post.status} />
+            </div>
+            <div className={'w-min-[70px]'}>
+              <Comments count={props.post.comments.length} />
+            </div>
+            <div className={'w-min-[70px]'}>
+              <Likes
+                likes={props.post.likes}
+                postId={props.post.id}
+                userId={props.userId}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -55,15 +60,8 @@ const PostCard = (props: PostCardProps) => {
   )
 }
 
-// export enum GameStatus {
-//   ACCEPTED,
-//   DECLINED,
-//   PENDING_REPLY,
-//   UNDER_REVIEW,
-// }
-
 const Status = ({ status }: { status: GameStatus }) => (
-  <div>
+  <div className={'w-auto'}>
     {status === 'ACCEPTED'
       ? <StatusIcon className="fill-green" />
       : status === 'DECLINED'
@@ -75,21 +73,9 @@ const Status = ({ status }: { status: GameStatus }) => (
 )
 
 const Comments = ({ count }: { count: number }) => (
-  <div className={'flex flex-row items-center gap-[8px]'}>
+  <div className={'flex flex-row justify-end items-center gap-[8px]'}>
     <span>{count}</span>
     <CommentIcon />
-  </div>
-)
-
-const Likes = ({ count, isLiked }: { count: number; isLiked: boolean }) => (
-  <div
-    className={'flex flex-row items-center gap-[8px] parent transition-all duration-100'}
-  >
-    <span className={`${isLiked ? 'text-red' : ''}`}>{count}</span>
-    <LikeIcon
-      className="hover:fill-[#CD2740] child  transition"
-      isLiked={isLiked}
-    />
   </div>
 )
 

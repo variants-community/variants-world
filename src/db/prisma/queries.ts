@@ -111,7 +111,8 @@ export const getPosts = async (skip: number, take: number = 10) => {
       },
       likes: {
         select: {
-          _count: true
+          _count: true,
+          id: true
         }
       }
     },

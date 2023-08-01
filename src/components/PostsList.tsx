@@ -12,6 +12,7 @@ const getTextForSearch = (post: PostWithDetailsForCard): string => {
 }
 
 type PostsListProps = {
+  userId: number
   posts: PostWithDetailsForCard[];
 };
 
@@ -36,7 +37,7 @@ const PostsList = (props: PostsListProps) => {
       <Search query={query} setQuery={setQuery} />
 
       <div className="flex flex-col gap-[30px] mt-[55px]">
-        {filteredPosts.map((post) => <PostCard key={post.id} post={post} />)}
+        {filteredPosts.map((post) => <PostCard userId={props.userId} key={post.id} post={post} />)}
       </div>
     </>
   )

@@ -3,6 +3,7 @@
 import PostsList from "../components/PostsList"
 import Layout from "../layouts/Layout.astro"
 import { getPosts } from "../db/prisma/queries"
+import type { User } from "@prisma/client"
 
 const posts = await getPosts(0)
 
@@ -11,11 +12,11 @@ posts.forEach((post) =>
   console.log(`\t${post.title}:${post.author}:${post.id}`)
 )
 
-
+const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
 ---
 
 <Layout>
 
-  <PostsList posts={posts} client:load />
+  <PostsList posts={posts} userId={user.id} client:load />
   
 </Layout>

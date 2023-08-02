@@ -1,19 +1,10 @@
 import { useEffect, useState } from 'preact/hooks'
-import { getValueFromEvent } from '../hepers'
+import { fetchGameById, getValueFromEvent, isIdValid, postAllGameIdsToCreatePost } from '../hepers'
 import type { CGABotGameDetails } from '../cgabot'
 import SpinnerIcon from './icons/SpinnerIcon'
 import CrossIcon from './icons/CrossIcon'
 import PostTags from './PostTags'
 import AcceptedIcon from './icons/AcceptedIcon'
-
-const fetchGameById = async (gameId: string) => {
-  const response = await fetch(`/api/game/${gameId}`, { method: 'get' })
-  if (response.status === 200) {
-    return await response.json() as CGABotGameDetails
-  } else {
-    return undefined
-  }
-}
 
 const NewPost = () => {
   const [isInvalidId, setIsInvalidId] = useState(false)
@@ -22,7 +13,8 @@ const NewPost = () => {
   const [game, setGame] = useState<CGABotGameDetails>()
 
   useEffect(() => {
-    if (gameId && /^\d{8,9}$/.test(gameId)) {
+    if (isIdValid(gameId)) {
+     console.log('valid')
       setIsInvalidId(false)
       setIsLoading(true)
 
@@ -54,13 +46,13 @@ const NewPost = () => {
       {game && (
         <div className={'mt-[14px]'}>
           <PostTags
-            rules={['firstRule', 'rule39', 'nextRule']}
+            rules={Object.keys(game.q.ruleVariants)}
             className="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
             iconsClassName="fill-secondary"
           />
         </div>
       )}
-      {game && <GamesInputs />}
+      {game && <GamesInputs mainGameId={game.gameNr.toString()} />}
     </div>
   )
 }
@@ -109,22 +101,34 @@ const GeneralSearch = (props: GeneralSearchProps) => (
   </div>
 )
 
-const Picture = ({ isHiden }: { isHiden?: boolean }) => (
-  <img
-    src="/src/assets/images/game.png"
-    className={`${
-      isHiden ? 'hidden' : 'flex'
-    } mt-[35px] w-[450px] h-[450px] rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
-  />
-)
-
-const GamesInputs = () => {
+const GamesInputs = (props: { mainGameId: string }) => {
   const [values, setValues] = useState<string[]>(new Array<string>(8).fill(''))
+  const [states, setStates] = useState<GameIdInputState[]>(
+    new Array<GameIdInputState>(8).fill(GameIdInputState.INPUT),
+  )
+
+  useEffect(() => {
+    console.log(states)
+    const isAllConfirmed = states.every(state => state === GameIdInputState.ACCEPTED)
+    console.log(states, isAllConfirmed)
+
+    if (isAllConfirmed) {
+      console.log('READY TO BE BORN')
+      postAllGameIdsToCreatePost([...values, props.mainGameId])
+    }
+  }, [states])
 
   const onChangeValue = (value: string, index: number) => {
     const temp = values.map((i) => i)
     temp[index] = value
     setValues(temp)
+  }
+
+  const onChangeState = (value: GameIdInputState, index: number) => {
+    const temp = states.map((i) => i)
+    temp[index] = value
+
+    setStates(temp)
   }
 
   return (
@@ -134,7 +138,10 @@ const GamesInputs = () => {
       {values.map((value, index) => {
         return (
           <GameIdInput
-            state={GameIdInputState.INPUT}
+            mainGameId={props.mainGameId}
+            state={states[index]}
+            setState={(stateValue: GameIdInputState) =>
+              onChangeState(stateValue, index)}
             key={index}
             value={value}
             setValue={(value) => {
@@ -155,22 +162,43 @@ enum GameIdInputState {
 }
 
 type GameIdInputProps = {
+  mainGameId: string;
   placeholder: string;
   value: string;
   setValue: (value: string) => void;
   state: GameIdInputState;
+  setState: (value: GameIdInputState) => void;
 };
 
 const GameIdInput = (props: GameIdInputProps) => {
+  // const [isSameGame, setIsSameGame] = useState(false)
+
+  useEffect(() => {
+    if (props.value === '') {
+     props.setState(GameIdInputState.INPUT)
+    } else {
+     fetch(`/api/game/${props.mainGameId}/same-as/${props.value}`, {
+      method: 'get',
+    }).then((response) => response.json()).then((data) => {
+      const isSame = data as boolean
+
+      if (isSame) {
+       props.setState(GameIdInputState.ACCEPTED)
+      } else {
+       props.setState(GameIdInputState.DECLINED)
+      }
+    })
+    }
+  }, [props.value])
   return (
     <div
       className={'w-[183px] flex flex-row gap-[8px] items-center text-[18px] px-[15px] py-[10px] border border-border-light rounded-full'}
     >
       {props.state === GameIdInputState.INPUT
-        ? <span className={'text-[23px]'}>#</span>
+        ? <span className={'max-w-[15px] text-[23px]'}>#</span>
         : props.state === GameIdInputState.ACCEPTED
-        ? <AcceptedIcon />
-        : <CrossIcon />}
+        ? <AcceptedIcon className="h-[15px] max-w-[15px]" />
+        : <CrossIcon className="h-[15px] max-w-[15px]" />}
 
       <input
         value={props.value}
@@ -182,5 +210,14 @@ const GameIdInput = (props: GameIdInputProps) => {
     </div>
   )
 }
+
+const Picture = ({ isHiden }: { isHiden?: boolean }) => (
+  <img
+    src="/src/assets/images/game.png"
+    className={`${
+      isHiden ? 'hidden' : 'flex'
+    } mt-[35px] w-[450px] h-[450px] rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
+  />
+)
 
 export default NewPost

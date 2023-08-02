@@ -7,13 +7,20 @@ import CommentInput from "../../components/CommentInput"
 import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
 import type { User } from "@prisma/client"
+import { getUser } from "../../db/supabase/supabase"
+
+const user = await getUser(Astro.request)
+
+console.log(user)
+
+if (!user) {
+  return Astro.redirect("/auth")
+}
 
 const { id } = Astro.params
 const postId = parseInt(id!)
 const post = await getPostById(postId)
 const details = await getPostDetailsById(postId)
-const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
-
 ---
 
 <Layout>
@@ -22,8 +29,12 @@ const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
       <>
         <div class="flex flex-col mb-[39px] gap-[17px]">
           <div class="flex flex-row gap-[10px]">
-            
-            <GamePicture postId={post.id} userId={user.id} likes={post.likes} client:load />
+            <GamePicture
+              postId={post.id}
+              userId={user.id}
+              likes={post.likes}
+              client:load
+            />
             <GameInfo
               title={post.title}
               type={post.type}
@@ -36,7 +47,9 @@ const user = {id: 1, name: 'glebchanskiy',role: "TESTER"} as User
             />
           </div>
 
-          {details && <AdminSettings user={user} details={details} client:load />}
+          {details && user.role === "TESTER" && (
+            <AdminSettings user={user} details={details} client:load />
+          )}
 
           <AcceptedCard verdict="Nice work on the variant! Quite a good amount of correct design choices allows for much more advanced zombie manipulation as well as for complex tactics implying unwinding is more than a good strategy and sometimes it is good to give up space to get it back a few moves later. Overall, the only thing that does not fit is the time control, so we're proposing to change it to 2|7 as to allow players to calculate more advanced zombie manipulation." />
         </div>

@@ -49,6 +49,7 @@ enum UserRole {
 model User {
   id         Int       @id @default(autoincrement())
   name       String
+  email      String?
   role       UserRole  @default(MEMBER)
   likedPosts Post[]    @relation("UserLikedPosts")
   comments   Comment[]

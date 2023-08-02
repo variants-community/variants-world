@@ -253,16 +253,19 @@ export interface Database {
       }
       User: {
         Row: {
+          email: string | null
           id: number
           name: string
           role: Database['public']['Enums']['UserRole']
         }
         Insert: {
+          email?: string | null
           id?: number
           name: string
           role?: Database['public']['Enums']['UserRole']
         }
         Update: {
+          email?: string | null
           id?: number
           name?: string
           role?: Database['public']['Enums']['UserRole']

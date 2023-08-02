@@ -6,7 +6,7 @@ import {
   Voice,
   VoteValue,
 } from '@prisma/client'
-import { supabase } from '../db/supabase/supabase'
+import { AuthentificatedUser, supabase } from '../db/supabase/supabase'
 import type { PostDetails } from '../db/prisma/queries'
 import { getValueFromEvent } from '../hepers'
 
@@ -30,7 +30,7 @@ const gameplayClassification = [
 
 type AdminSettingsProps = {
   details: PostDetails;
-  user: User;
+  user: AuthentificatedUser;
 };
 
 type VoiceExtended = Voice & ({ tester?: User } | undefined);

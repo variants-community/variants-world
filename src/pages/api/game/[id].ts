@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getGameDetailsById } from '../../../cgabot'
+import { getGameDetailsById } from '../../../services/cgabot'
 import { isIdValid } from '../../../hepers'
 
 export const get: APIRoute = async ({ params }) => {

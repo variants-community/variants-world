@@ -1,4 +1,4 @@
-import { LruCache } from './db/cache'
+import { LruCache } from '../db/cache'
 
 const CGABotUrl = import.meta.env.CGABOT_URL
 const CGABotToken = import.meta.env.CGABOT_API_TOKEN
@@ -95,6 +95,7 @@ export interface CGABotQ {
   ratingMode: string
   timeControlInitial: number
   increment: number
+  // ruleVariants: CGABotRuleVariants
   ruleVariants: CGABotRuleVariants
   startFen: string
   maxRating: number
@@ -130,5 +131,5 @@ export interface CGABotQ {
 }
 
 export interface CGABotRuleVariants {
-  [key: string]: string
+  [key: string]: string | boolean | number
 }

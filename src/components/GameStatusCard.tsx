@@ -6,6 +6,7 @@ import EditIcon from './icons/EditIcon'
 import { getValueFromEvent, statusToColor, statusToString } from '../hepers'
 
 type AcceptedCardProps = {
+  displayEditBotton: boolean;
   verdict: string | null;
   postId: number;
   status: GameStatus;
@@ -37,7 +38,10 @@ const GameStatusCard = (props: AcceptedCardProps) => {
           filter: `id=eq.${props.postId}`,
         },
         (payload) => {
-          const updated = payload.new as { verdict: string, status: GameStatus }
+          const updated = payload.new as {
+            verdict: string;
+            status: GameStatus;
+          }
           setVerdict(updated.verdict)
           setStatus(updated.status)
           console.log('realtime update: ', updated)
@@ -51,12 +55,18 @@ const GameStatusCard = (props: AcceptedCardProps) => {
 
   const onStatusChange = async (e: Event) => {
     const status = getValueFromEvent<GameStatus>(e)
-    await supabase.from('Post').update({ status: status }).eq('id', props.postId)
+    await supabase.from('Post').update({ status: status }).eq(
+      'id',
+      props.postId,
+    )
   }
 
   const onVerdictChange = async (e: Event) => {
     const verdict = getValueFromEvent<string>(e)
-    await supabase.from('Post').update({ verdict: verdict }).eq('id', props.postId)
+    await supabase.from('Post').update({ verdict: verdict }).eq(
+      'id',
+      props.postId,
+    )
   }
   console.log('statusToColor(status): ', statusToColor(status))
   return (
@@ -98,11 +108,12 @@ const GameStatusCard = (props: AcceptedCardProps) => {
             </p>
           )
           : (
-            <input
+            <textarea
               value={verdict}
               onChange={onVerdictChange}
               type="text"
-              className={'bg-dark rounded-[3px] text-[16px] font-semibold mt-[7px] mb-[20px] text-center outline-none'}
+              rows={5}
+              className={'w-full bg-dark rounded-[3px] text-[16px] font-semibold mt-[7px] mb-[20px] text-center outline-none'}
             />
           )}
       </div>
@@ -111,9 +122,11 @@ const GameStatusCard = (props: AcceptedCardProps) => {
         color={statusToColor(status)}
       />
 
-      <div onClick={() => toogleIsChangeable()} className={'cursor-pointer '}>
-        <EditIcon className="absolute bottom-[12px] right-[10px] text-green" />
-      </div>
+      {props.displayEditBotton && (
+        <div onClick={() => toogleIsChangeable()} className={'cursor-pointer '}>
+          <EditIcon className="absolute bottom-[12px] right-[10px] text-green" />
+        </div>
+      )}
     </div>
   )
 }

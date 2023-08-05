@@ -49,8 +49,22 @@ const details = await getPostDetailsById(postId)
           {details && user.role === "TESTER" && (
             <AdminSettings user={user} details={details} client:load />
           )}
-
-          <GameStatusCard postId={post.id} verdict={post.verdict} status={post.status} client:load />
+          {user.role == "TESTER" ? (
+            <GameStatusCard
+              displayEditBotton={true}
+              postId={post.id}
+              verdict={post.verdict}
+              status={post.status}
+              client:load
+            />
+          ) : (
+            <GameStatusCard
+              displayEditBotton={false}
+              postId={post.id}
+              verdict={post.verdict}
+              status={post.status}
+            />
+          )}
         </div>
         <CommentInput />
       </>

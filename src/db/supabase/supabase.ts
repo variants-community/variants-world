@@ -11,7 +11,9 @@ console.log('supabaseUrl:', supabaseUrl)
 console.log('supabaseAnonKey:', supabaseAnonKey)
 console.log('accessToken:', accessToken)
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: { autoRefreshToken: true }
+})
 
 export interface AuthentificatedUser {
   id: number

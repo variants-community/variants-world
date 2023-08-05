@@ -1,12 +1,11 @@
 ---
 import GameInfo from "../../components/GameInfo"
 import GamePicture from "../../components/GamePicture"
-import AcceptedCard from "../../components/AcceptedCard"
+import GameStatusCard from "../../components/GameStatusCard"
 import AdminSettings from "../../components/AdminSettings"
 import CommentInput from "../../components/CommentInput"
 import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
-import type { User } from "@prisma/client"
 import { getUser } from "../../db/supabase/supabase"
 
 const user = await getUser(Astro.request)
@@ -51,7 +50,7 @@ const details = await getPostDetailsById(postId)
             <AdminSettings user={user} details={details} client:load />
           )}
 
-          <AcceptedCard verdict="Nice work on the variant! Quite a good amount of correct design choices allows for much more advanced zombie manipulation as well as for complex tactics implying unwinding is more than a good strategy and sometimes it is good to give up space to get it back a few moves later. Overall, the only thing that does not fit is the time control, so we're proposing to change it to 2|7 as to allow players to calculate more advanced zombie manipulation." />
+          <GameStatusCard postId={post.id} verdict={post.verdict} status={post.status} client:load />
         </div>
         <CommentInput />
       </>

@@ -118,6 +118,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
 
   const onChangeGameClassification = async (e: Event) => {
     const value = getValueFromEvent<GameClassification>(e)
+    setGameClassification(value)
     await supabase.from('PostDetails').update({
       gameClassification: value,
     }).eq('postId', props.details.postId)
@@ -126,6 +127,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
   const setGameplayClassificationOnChange = async (
     value: GameplayClassification,
   ) => {
+    setGameplayClassification(value)
     await supabase.from('PostDetails').update({
       gameplayClassification: value,
     }).eq('postId', props.details.postId)
@@ -259,7 +261,6 @@ type VoicesProps = {
   postId: number;
   testerId: number;
   voces: VoiceExtended[];
-  onVoiceChange?: (e: Event) => void;
 };
 
 const Votes = (props: VoicesProps) => {

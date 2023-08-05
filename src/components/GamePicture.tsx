@@ -18,7 +18,7 @@ type GamePictureProps = {
 
 const GamePicture = ({ likes, postId, userId }: GamePictureProps) => {
   return (
-    <div className={'relative'}>
+    <div className={'relative h-[500px]'}>
       <div
         className={' w-[500px] h-[500px] flex items-center justify-center border-[2px] border-border-dark bg-border-light shadow-dark rounded-[12px] min-w-[500px] overflow-hidden'}
       >

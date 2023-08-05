@@ -21,10 +21,10 @@ const statuses = [
 const GameStatusCard = (props: AcceptedCardProps) => {
   const [verdict, setVerdict] = useState(props.verdict ?? '')
   const [status, setStatus] = useState(props.status)
-  const [isChangeable, setIsChangeable] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
 
   const toogleIsChangeable = () => {
-    setIsChangeable(!isChangeable)
+    setIsEditMode(!isEditMode)
   }
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const GameStatusCard = (props: AcceptedCardProps) => {
         color={statusToColor(status)}
       />
       <div className={'block w-full'}>
-        {!isChangeable
+        {!isEditMode
           ? (
             <h2 className={'text-[40px] font-semibold mt-[16px]'}>
               {statusToString(status)}
@@ -99,7 +99,7 @@ const GameStatusCard = (props: AcceptedCardProps) => {
             </select>
           )}
 
-        {!isChangeable
+        {!isEditMode
           ? (
             <p
               className={'text-[16px] font-semibold mt-[7px] mb-[20px] text-center'}

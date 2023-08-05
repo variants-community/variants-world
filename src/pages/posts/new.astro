@@ -1,10 +1,17 @@
 ---
 import Layout from "../../layouts/Layout.astro"
-import { getGameDetailsById } from '../../cgabot'
-import NewPost from "../../components/NewPost";
+import NewPost from "../../components/NewPost"
+import { getUser } from "../../db/supabase/supabase"
 
+const user = await getUser(Astro.request)
+
+console.log(user)
+
+if (!user) {
+  return Astro.redirect("/auth")
+}
 ---
 
 <Layout>
-  <NewPost client:load />
+  <NewPost userId={user.id}  client:load />
 </Layout>

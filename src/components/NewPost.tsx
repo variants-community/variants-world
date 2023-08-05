@@ -1,42 +1,55 @@
 import { useEffect, useState } from 'preact/hooks'
-import { fetchGameById, getValueFromEvent, isIdValid, postAllGameIdsToCreatePost } from '../hepers'
-import type { CGABotGameDetails } from '../cgabot'
+import {
+  fetchGameById,
+  getValueFromEvent,
+  isIdValid,
+  postAllGameIdsToCreatePost,
+} from '../hepers'
+import type { CGABotGameDetails } from '../services/cgabot'
 import SpinnerIcon from './icons/SpinnerIcon'
 import CrossIcon from './icons/CrossIcon'
 import PostTags from './PostTags'
 import AcceptedIcon from './icons/AcceptedIcon'
 
-const NewPost = () => {
+const NewPost = (props: { userId: number }) => {
   const [isInvalidId, setIsInvalidId] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
   const [gameId, setGameId] = useState('')
   const [game, setGame] = useState<CGABotGameDetails>()
 
   useEffect(() => {
-    if (isIdValid(gameId)) {
-     console.log('valid')
-      setIsInvalidId(false)
+    const abortController = new AbortController()
+    if (isIdValid(gameId)) { 
+
+      setIsSearching(true)
       setIsLoading(true)
 
-      fetchGameById(gameId).then((data) => {
+      fetchGameById(gameId, abortController.signal).then((data) => {
         if (data) {
+          console.log(data)
           setGame(data)
         } else {
           setIsInvalidId(true)
         }
-        console.log('game recived: ', data)
       }).finally(() => setIsLoading(false))
+    } else {
+      setIsSearching(false)
+      setGame(undefined)
+    }
+    return () => {
+     abortController.abort()
     }
   }, [gameId])
 
   return (
     <div className="flex flex-col items-center mx-auto">
-      <PageTitle isHiden={!!game} />
+      <PageTitle isSearching={isSearching} />
 
       <GeneralSearch
         value={gameId}
         onChange={setGameId}
-        isGameFound={!!game}
+        isSearching={isSearching}
         isInvalidId={isInvalidId}
         isLoading={isLoading}
       />
@@ -52,7 +65,12 @@ const NewPost = () => {
           />
         </div>
       )}
-      {game && <GamesInputs mainGameId={game.gameNr.toString()} />}
+      {game && (
+        <GamesInputs
+          mainGameId={game.gameNr.toString()}
+          userId={props.userId}
+        />
+      )}
     </div>
   )
 }
@@ -60,16 +78,16 @@ const NewPost = () => {
 type GeneralSearchProps = {
   value: string;
   onChange: (value: string) => void;
-  isGameFound: boolean;
+  isSearching: boolean;
   isLoading: boolean;
   isInvalidId: boolean;
 };
 
-const PageTitle = ({ isHiden }: { isHiden: boolean }) => (
+const PageTitle = ({ isSearching }: { isSearching: boolean }) => (
   <h1
     className={`${
-      isHiden ? 'hidden' : 'block'
-    } text-[85px] mt-[180px] text-white font-[300] tracking-[2.55px] text-center text-shadow-light transition-all duration-1000`}
+      isSearching ? '!h-[0px] !mt-[0px] !opacity-0 !mb-[0px] z-0' : 'mb-[100px]'
+    } h-[170px] text-[85px] mt-[180px] text-white font-[300] tracking-[2.55px] text-center text-shadow-light opacity-100 overflow=hidden  transition-all duration-900`}
   >
     Variants universe starts<br />with a single game
   </h1>
@@ -77,44 +95,46 @@ const PageTitle = ({ isHiden }: { isHiden: boolean }) => (
 
 const GeneralSearch = (props: GeneralSearchProps) => (
   <div
-    className={`flex flex-row mx-auto bg-dark border border-[2px] border-border-dark shadow-light text-text font-[400] rounded-full items-center transition-all duration-1000 ${
-      props.isGameFound
+    className={`z-10 flex flex-row mx-auto bg-dark border border-[2px] border-border-dark shadow-light text-text font-[400] rounded-full items-center transition-all duration-1000 ${
+      props.isSearching
         ? 'w-[492px] px-[18px] pt-[13px] pb-[12px] gap-[8px] mt-[100px]'
-        : 'w-[762px] px-[28px] pt-[16px] pb-[16px] mt-[100px] gap-[14px]'
+        : 'w-[762px] px-[28px] pt-[16px] pb-[16px] gap-[14px]'
     }`}
   >
-    <span className={`${props.isGameFound ? 'text-[23px]' : 'text-[38px]'} `}>
+    <span
+      className={`${
+        props.isSearching ? 'text-[23px]' : 'text-[38px]'
+      } transition-all duration-1000`}
+    >
       #
     </span>
     <input
-      disabled={props.isGameFound || props.isLoading}
       value={props.value}
-      onChange={(e) => props.onChange(getValueFromEvent(e))}
+      onInput={(e) => props.onChange(getValueFromEvent(e))}
       className={`w-full  bg-dark outline-none ${
-        props.isGameFound ? 'text-[18px]' : 'text-[29px]'
-      } `}
+        props.isSearching ? 'text-[18px]' : 'text-[29px]'
+      } transition-all duration-1000`}
       type="text"
       placeholder={'game number or link'}
     />
-    {props.isLoading && <SpinnerIcon />}
-    {props.isInvalidId && <CrossIcon />}
+    {props.isLoading && <SpinnerIcon className="h-[20px] w-[20px]" />}
+    {/* {props.isInvalidId && <CrossIcon />} */}
   </div>
 )
 
-const GamesInputs = (props: { mainGameId: string }) => {
+const GamesInputs = (props: { mainGameId: string; userId: number }) => {
   const [values, setValues] = useState<string[]>(new Array<string>(8).fill(''))
   const [states, setStates] = useState<GameIdInputState[]>(
     new Array<GameIdInputState>(8).fill(GameIdInputState.INPUT),
   )
 
   useEffect(() => {
-    console.log(states)
-    const isAllConfirmed = states.every(state => state === GameIdInputState.ACCEPTED)
-    console.log(states, isAllConfirmed)
+    const isAllConfirmed = states.every((state) =>
+      state === GameIdInputState.ACCEPTED
+    )
 
     if (isAllConfirmed) {
-      console.log('READY TO BE BORN')
-      postAllGameIdsToCreatePost([...values, props.mainGameId])
+      postAllGameIdsToCreatePost([...values, props.mainGameId], props.userId)
     }
   }, [states])
 
@@ -171,23 +191,21 @@ type GameIdInputProps = {
 };
 
 const GameIdInput = (props: GameIdInputProps) => {
-  // const [isSameGame, setIsSameGame] = useState(false)
-
   useEffect(() => {
     if (props.value === '') {
-     props.setState(GameIdInputState.INPUT)
+      props.setState(GameIdInputState.INPUT)
     } else {
-     fetch(`/api/game/${props.mainGameId}/same-as/${props.value}`, {
-      method: 'get',
-    }).then((response) => response.json()).then((data) => {
-      const isSame = data as boolean
+      fetch(`/api/game/${props.mainGameId}/same-as/${props.value}`, {
+        method: 'get',
+      }).then((response) => response.json()).then((data) => {
+        const isSame = data as boolean
 
-      if (isSame) {
-       props.setState(GameIdInputState.ACCEPTED)
-      } else {
-       props.setState(GameIdInputState.DECLINED)
-      }
-    })
+        if (isSame) {
+          props.setState(GameIdInputState.ACCEPTED)
+        } else {
+          props.setState(GameIdInputState.DECLINED)
+        }
+      })
     }
   }, [props.value])
   return (

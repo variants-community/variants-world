@@ -1,6 +1,7 @@
-import type { CGABotGameDetails } from './services/cgabot'
+import type { CGABotGameDetails, CGABotRuleVariants } from './services/cgabot'
 import type { CreatePostDTO } from './pages/api/game/create'
 import type { GameStatus } from '@prisma/client'
+import { ruleMapper } from './services/ruleMapper'
 
 export const getValueFromEvent = <Type = string>(e: Event) =>
   (e.target as HTMLInputElement).value as Type
@@ -64,3 +65,9 @@ export const statusToColor = (status: GameStatus): string => {
       return 'blue'
   }
 }
+
+export const mapRuleVariantsToString = (rules: CGABotRuleVariants) => {
+  const mappedRules = Object.keys(rules).map(key => ruleMapper.makeRule(key, rules[key]))
+  return mappedRules
+}
+

@@ -3,6 +3,7 @@ import {
   fetchGameById,
   getValueFromEvent,
   isIdValid,
+  mapRuleVariantsToString,
   postAllGameIdsToCreatePost,
 } from '../hepers'
 import type { CGABotGameDetails } from '../services/cgabot'
@@ -59,7 +60,7 @@ const NewPost = (props: { userId: number }) => {
       {game && (
         <div className={'mt-[14px]'}>
           <PostTags
-            rules={Object.keys(game.q.ruleVariants)}
+            rules={mapRuleVariantsToString(game.q.ruleVariants)}
             className="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
             iconsClassName="fill-secondary"
           />

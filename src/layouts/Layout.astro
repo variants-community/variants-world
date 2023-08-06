@@ -1,6 +1,7 @@
 ---
 import 'virtual:windi.css'
 import '../styles/main.css';
+import Navigation from '../components/Navigation';
 
 type LayoutProps = {
   title: string
@@ -18,7 +19,7 @@ const { title } = Astro.props as LayoutProps
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="container mx-auto my-[50px]">
+	<body class="flex flex-col container mx-auto gap-[55px]">
 		<slot />
 	</body>
 </html>

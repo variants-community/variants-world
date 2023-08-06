@@ -56,7 +56,7 @@ const PostsList = (props: PostsListProps) => {
     <>
       <Search query={query} setQuery={setQuery} />
 
-      <div className="flex flex-col gap-[30px] mt-[55px]">
+      <div className="flex flex-col gap-[30px] ">
         {filteredPosts.map((post) => <PostCard userId={props.userId} key={post.id} post={post} />)}
       </div>
     </>

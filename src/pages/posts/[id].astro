@@ -7,6 +7,7 @@ import CommentInput from "../../components/CommentInput"
 import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
 import { getUser } from "../../db/supabase/supabase"
+import Navigation from "../../components/Navigation"
 
 const user = await getUser(Astro.request)
 
@@ -24,6 +25,7 @@ const userIsTester = user.role == "TESTER"
 ---
 
 <Layout>
+  <Navigation username={user.username} />
   {
     post && (
       <>

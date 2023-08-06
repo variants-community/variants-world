@@ -3,6 +3,7 @@ import PostsList from "../components/PostsList"
 import Layout from "../layouts/Layout.astro"
 import { getPosts } from "../db/prisma/queries"
 import { getUser } from "../db/supabase/supabase"
+import Navigation from "../components/Navigation"
 
 const user = await getUser(Astro.request)
 
@@ -20,6 +21,8 @@ posts.forEach((post) =>
 )
 ---
 
+
 <Layout>
+  <Navigation username={user.username} />
   <PostsList posts={posts} userId={user.id} client:load />
 </Layout>

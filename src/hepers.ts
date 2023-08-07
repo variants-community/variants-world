@@ -1,5 +1,5 @@
 import type { CGABotGameDetails, CGABotRuleVariants } from './services/cgabot'
-import type { CreatePostDTO } from './pages/api/game/create'
+import type { CreatePostDTO } from './pages/api/posts/create'
 import type { GameStatus } from '@prisma/client'
 import { ruleMapper } from './services/ruleMapper'
 
@@ -8,6 +8,14 @@ export const getValueFromEvent = <Type = string>(e: Event) =>
 
 export const isIdValid = (gameId: string): boolean => {
   return /^\d+$/.test(gameId)
+}
+
+export const isTitleValid = (title: string): boolean => {
+  return title.length > 4
+}
+
+export const isDescriptionValid = (description: string): boolean => {
+  return description.length > 4
 }
 
 export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {

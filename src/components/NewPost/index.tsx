@@ -9,7 +9,9 @@ import { useSearch } from './useSearch'
 import { PostFillingForm } from '../PostFillingForm'
 
 const NewPost = (props: { userId: number }) => {
-  const [approveIds, setApproveIds] = useState<string[]>(new Array<string>(8).fill(''))
+  const [approveIds, setApproveIds] = useState<string[]>(
+    new Array<string>(8).fill(''),
+  )
   const [isAllConfirmed, setIsAllConfirmed] = useState(false)
   const { game, gameId, setGameId, isSearching, isLoading, isInvalidId } =
     useSearch()
@@ -24,8 +26,6 @@ const NewPost = (props: { userId: number }) => {
       }
     }
   }, [isAllConfirmed])
-
-  
 
   return (
     <div className="flex flex-col items-center mx-auto">
@@ -59,10 +59,14 @@ const NewPost = (props: { userId: number }) => {
           userId={props.userId}
         />
       )}
-      {isGameFound && // isAllConfirmed &&
+      {isGameFound && isAllConfirmed &&
         (
           <div className={'w-[700px] mt-[150px] mb-[300px]'}>
-            <PostFillingForm game={game} approveIds={approveIds} />
+            <PostFillingForm
+              userId={props.userId}
+              game={game}
+              approveIds={approveIds}
+            />
           </div>
         )}
     </div>

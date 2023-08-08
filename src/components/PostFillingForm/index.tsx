@@ -4,13 +4,18 @@ import { DescriptionInput } from './DescriptionInput'
 import { LinkToVariant } from './LinkToVariant'
 import { TitleInput } from './TitleInput'
 import { TypeInput } from './TypeInput'
-import { isDescriptionValid, isTitleValid } from '../../hepers'
+import {
+  isDescriptionValid,
+  isTitleValid,
+  postGameToCreatePost,
+} from '../../hepers'
 import type { GameType } from '@prisma/client'
 import type { PostDetailsDTO } from '../../pages/api/posts/create'
 
 type PostFillingFormProps = {
+  userId: number;
   game: CGABotGameDetails;
-  approveIds: string[]
+  approveIds: string[];
 };
 
 export const PostFillingForm = (props: PostFillingFormProps) => {
@@ -51,7 +56,6 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
     console.log(e)
     const formData = new FormData(e.target as HTMLFormElement)
 
-
     const type = formData.get('type')?.toString()
     const title = formData.get('title')?.toString()
     const description = formData.get('description')?.toString()
@@ -65,9 +69,14 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         },
         gameId: props.game.gameNr.toString(),
         approveIds: props.approveIds,
+        userId: props.userId,
       }
 
-      console.log(data)
+      const code = await postGameToCreatePost(data)
+
+      if (code === 200) {
+        window.location.replace('http://localhost:3000/')
+      }
     }
   }
   return (

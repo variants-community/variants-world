@@ -109,21 +109,10 @@ model Voice {
   @@unique([testerId, postId])
 }
 
-model RuleType {
-  id       Int        @id @default(autoincrement())
-  name     String     @unique
-  GameRule GameRule[]
-}
-
 model GameRule {
-  id         Int      @id @default(autoincrement())
-  Post       Post     @relation(fields: [postId], references: [id])
-  postId     Int
-  ruleType   RuleType @relation(fields: [ruleTypeId], references: [id])
-  ruleTypeId Int
-  value      String?
-
-  @@unique([postId, ruleTypeId])
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
 }
 
 // Passing | allowPassing | true

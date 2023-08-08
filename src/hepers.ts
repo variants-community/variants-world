@@ -1,5 +1,5 @@
 import type { CGABotGameDetails, CGABotRuleVariants } from './services/cgabot'
-import type { CreatePostDTO } from './pages/api/posts/create'
+import type { CreatePostDTO, PostDetailsDTO } from './pages/api/posts/create'
 import type { GameStatus } from '@prisma/client'
 import { ruleMapper } from './services/ruleMapper'
 
@@ -25,6 +25,14 @@ export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {
   } else {
     return undefined
   }
+}
+
+export const postGameToCreatePost = async (data: PostDetailsDTO) => {
+  const response = await fetch('/api/posts/create', {
+    method: 'post',
+    body: JSON.stringify(data)
+  })
+  return response.status
 }
 
 export const postAllGameIdsToCreatePost = async (
@@ -75,7 +83,8 @@ export const statusToColor = (status: GameStatus): string => {
 }
 
 export const mapRuleVariantsToString = (rules: CGABotRuleVariants) => {
-  const mappedRules = Object.keys(rules).map(key => ruleMapper.makeRule(key, rules[key]))
+  const mappedRules = Object.keys(rules).map((key) =>
+    ruleMapper.makeRule(key, rules[key])
+  )
   return mappedRules
 }
-

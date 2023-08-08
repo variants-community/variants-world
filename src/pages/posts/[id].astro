@@ -43,7 +43,7 @@ const userIsTester = user.role == "TESTER"
                 title={post.title}
                 type={post.type}
                 rules={["3min", "Points", "5-check", "8th=QBRN"]}
-                rules={post.gamerules.map((rule) => rule.ruleType.name)}
+                rules={post.gamerules.map((rule) => rule.name)}
                 user={post.author.name}
                 createdAt={post.createdAt}
                 description={post.description}
@@ -56,7 +56,7 @@ const userIsTester = user.role == "TESTER"
                 title={post.title}
                 type={post.type}
                 rules={["3min", "Points", "5-check", "8th=QBRN"]}
-                rules={post.gamerules.map((rule) => rule.ruleType.name)}
+                rules={post.gamerules.map((rule) => rule.name)}
                 user={post.author.name}
                 createdAt={post.createdAt}
                 description={post.description}

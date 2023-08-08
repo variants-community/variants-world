@@ -8,12 +8,7 @@ export const getPostById = async (postId: number) => {
     include: {
       author: true,
       comments: true,
-      gamerules: { 
-        include: {
-          ruleType: true
-        }
-      },
-
+      gamerules: true,
       likes: {
         select: {
           _count: true,
@@ -29,7 +24,7 @@ export const getPostById = async (postId: number) => {
 export const getPostDetailsById = async (postId: number) => {
   const details = await prisma.postDetails.findFirst({
     where: {
-      id: postId
+      postId: postId
     },
     include: {
       voices: {
@@ -49,11 +44,7 @@ export const getPosts = async (skip: number, take: number = 10) => {
     skip,
     take,
     include: {
-      gamerules: {
-        include: {
-          ruleType: true
-        }
-      },
+      gamerules: true,
       author: {
         include: {
           likedPosts: {

@@ -32,7 +32,7 @@ export default defineConfig({
         blue: '#2B99EA',
         red: '#CD2740',
         gray: '#2D2D32',
-        yellow: '#cdbf27',
+        yellow: '#CDBF27',
         text: '#959595',
         white: '#F6F6F6',
         dark: '#141415',
@@ -41,5 +41,6 @@ export default defineConfig({
       }
     }
   },
-  plugins: []
+  plugins: [],
+  safelist: 'text-yellow text-blue'
 })

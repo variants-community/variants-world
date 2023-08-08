@@ -34,7 +34,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
       <Votes
         voces={votes}
         testerId={props.user.id}
-        postId={props.details.postId}
+        postId={props.details.id}
       />
       <Notes notes={notes} onChangeNotes={onChangeNotes} />
     </div>

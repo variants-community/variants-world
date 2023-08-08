@@ -51,7 +51,7 @@ const GameStatusCard = (props: AcceptedCardProps) => {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [supabase, status, verdict])
+  }, [supabase])
 
   const onStatusChange = async (e: Event) => {
     const status = getValueFromEvent<GameStatus>(e)

@@ -94,7 +94,7 @@ export const useAdminSettings = (details: PostDetails) => {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [supabase, votes])
+  }, [supabase])
 
   const onChangeGameClassification = async (e: Event) => {
     const value = getValueFromEvent<GameClassification>(e)

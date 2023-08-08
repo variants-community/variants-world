@@ -58,7 +58,7 @@ export const Classification = (props: ClassificationProps) => {
        Game Classification
      </label>
      <select
-       value={props.gameClassification || 'None'}
+       value={props.gameClassification ?? 'Undefined'}
        onChange={props.onChangeGameClassification}
        id="game-clsfc"
        className="w-[200px] text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
@@ -73,7 +73,7 @@ export const Classification = (props: ClassificationProps) => {
      </label>
      <select
        disabled={true}
-       value={props.gameplayClassification || 'None'}
+       value={props.gameplayClassification ?? 'Undefined'}
        id="gameplay-clsfc"
        className="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
      >

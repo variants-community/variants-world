@@ -3,6 +3,7 @@ import CommentsList from './CommentsList'
 import CommentInput from './CommentInput'
 import { useEffect, useState } from 'preact/hooks'
 import { supabase } from '../db/supabase/supabase'
+import { scrollTo } from '../hepers'
 
 // export type ExtendedComment =
 //   & Comment
@@ -21,6 +22,11 @@ type CommentsProps = {
 const Comments = (props: CommentsProps) => {
   const [comments, setComments] = useState(props.comments)
   const [reply, setReply] = useState<Comment | undefined>()
+
+  useEffect(() => {
+    if (reply)
+      scrollTo('comment-input')
+  }, [reply])
 
   useEffect(() => {
     const channel = supabase

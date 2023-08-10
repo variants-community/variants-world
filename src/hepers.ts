@@ -86,3 +86,11 @@ export const formatDate = (date: Date): string => {
   
   return `${month} ${day}, ${year}`
 }
+
+export const scrollTo = (tagId: string) => {
+  const element = document.getElementById(tagId)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+

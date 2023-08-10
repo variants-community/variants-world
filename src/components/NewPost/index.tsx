@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { mapRuleVariantsToString } from '../../hepers'
+import { mapRuleVariantsToString, scrollTo } from '../../hepers'
 import { Title } from './Title'
 import { Picture } from './Picture'
 import PostTags from '../PostTags'
@@ -19,12 +19,8 @@ const NewPost = (props: { userId: number }) => {
   const isGameFound = !!game
 
   useEffect(() => {
-    if (isAllConfirmed) {
-      const element = document.getElementById('post-details-form')
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
+    if (isAllConfirmed)
+      scrollTo('post-details-form')
   }, [isAllConfirmed])
 
   return (

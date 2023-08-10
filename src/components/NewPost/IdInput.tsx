@@ -38,7 +38,7 @@ export const IdInput = (props: IdInputProps) => {
   }, [props.value])
   return (
     <div
-      className={'w-[183px] flex flex-row gap-[8px] items-center text-[18px] px-[15px] py-[10px] border border-border-light rounded-full'}
+      className={'w-[183px] h-[45px] flex flex-row gap-[8px] items-center text-[18px] px-[15px] py-[10px] border border-border-light rounded-full'}
     >
       {props.state === IdInputState.INPUT
         ? <span className={'max-w-[15px] text-[23px]'}>#</span>

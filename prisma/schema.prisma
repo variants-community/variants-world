@@ -72,6 +72,7 @@ model Post {
   authorUserId Int
   comments     Comment[]
   PostDetails  PostDetails?
+  variantLink  String       @unique
 }
 
 model Comment {

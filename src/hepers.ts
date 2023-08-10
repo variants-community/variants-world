@@ -1,10 +1,10 @@
 import type { CGABotGameDetails, CGABotRuleVariants } from './services/cgabot'
-import type { CreatePostDTO, PostDetailsDTO } from './pages/api/posts/create'
+import type { PostDetailsDTO } from './pages/api/posts/create'
 import type { GameStatus } from '@prisma/client'
 import { ruleMapper } from './services/ruleMapper'
 
 export const getValueFromEvent = <Type = string>(e: Event) =>
-  (e.target as HTMLInputElement).value as Type
+  ((e.target as HTMLInputElement).value as Type)
 
 export const isIdValid = (gameId: string): boolean => {
   return /^\d+$/.test(gameId)
@@ -32,19 +32,7 @@ export const postGameToCreatePost = async (data: PostDetailsDTO) => {
     method: 'post',
     body: JSON.stringify(data)
   })
-  return response.status
-}
-
-export const postAllGameIdsToCreatePost = async (
-  ids: string[],
-  userId: number
-) => {
-  const data: CreatePostDTO = { gameIds: ids, userId: userId }
-  const response = await fetch('/api/game/create', {
-    method: 'post',
-    body: JSON.stringify(data)
-  }).catch()
-  return response.status
+  return {status: response.status, statusText: response.statusText} 
 }
 
 export const getTextForComparing = (game: CGABotGameDetails) =>
@@ -87,4 +75,14 @@ export const mapRuleVariantsToString = (rules: CGABotRuleVariants) => {
     ruleMapper.makeRule(key, rules[key])
   )
   return mappedRules
+}
+
+export const formatDate = (date: Date): string => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const month = months[date.getMonth()]
+  const day = date.getDate()
+  const year = date.getFullYear()
+  
+  
+  return `${month} ${day}, ${year}`
 }

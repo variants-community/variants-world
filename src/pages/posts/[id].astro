@@ -3,11 +3,12 @@ import GameInfo from "../../components/GameInfo"
 import GamePicture from "../../components/GamePicture"
 import GameStatusCard from "../../components/GameStatusCard"
 import AdminSettings from "../../components/AdminSettings"
-import CommentInput from "../../components/CommentInput"
+import Comments from "../../components/Comments"
 import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
 import { getUser } from "../../db/supabase/supabase"
 import Navigation from "../../components/Navigation"
+import type { only } from "node:test"
 
 const user = await getUser(Astro.request)
 
@@ -22,6 +23,8 @@ const postId = parseInt(id!)
 const post = await getPostById(postId)
 const details = await getPostDetailsById(postId)
 const userIsTester = user.role == "TESTER"
+
+console.log(post)
 ---
 
 <Layout>
@@ -29,7 +32,7 @@ const userIsTester = user.role == "TESTER"
   {
     post && (
       <>
-        <div class="flex flex-col mb-[39px] gap-[17px]">
+        <div class="flex flex-col mb-[40px] gap-[17px]">
           <div class="flex flex-row gap-[10px]">
             <GamePicture
               postId={post.id}
@@ -48,7 +51,7 @@ const userIsTester = user.role == "TESTER"
                 createdAt={post.createdAt}
                 description={post.description}
                 variantLink={`/${post.id}`}
-                client:load
+                client:only
               />
             ) : (
               <GameInfo
@@ -60,13 +63,13 @@ const userIsTester = user.role == "TESTER"
                 user={post.author.name}
                 createdAt={post.createdAt}
                 description={post.description}
-                variantLink={`/${post.id}`}
+                variantLink={`${post.variantLink}`}
               />
             )}
           </div>
 
           {details && userIsTester && (
-            <AdminSettings user={user} details={details} client:load />
+            <AdminSettings user={user} details={details} client:only />
           )}
           {userIsTester ? (
             <GameStatusCard
@@ -74,7 +77,7 @@ const userIsTester = user.role == "TESTER"
               postId={post.id}
               verdict={post.verdict}
               status={post.status}
-              client:load
+              client:only
             />
           ) : (
             <GameStatusCard
@@ -85,7 +88,7 @@ const userIsTester = user.role == "TESTER"
             />
           )}
         </div>
-        <CommentInput />
+        <Comments userId={user.id} postId={post.id} comments={post.comments} client:only />
       </>
     )
   }

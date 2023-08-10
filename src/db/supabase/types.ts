@@ -169,6 +169,7 @@ export interface Database {
           title: string
           type: Database['public']['Enums']['GameType']
           updatedAt: string
+          variantLink: string
           verdict: string | null
         }
         Insert: {
@@ -180,6 +181,7 @@ export interface Database {
           title: string
           type: Database['public']['Enums']['GameType']
           updatedAt?: string
+          variantLink: string
           verdict?: string | null
         }
         Update: {
@@ -191,6 +193,7 @@ export interface Database {
           title?: string
           type?: Database['public']['Enums']['GameType']
           updatedAt?: string
+          variantLink?: string
           verdict?: string | null
         }
         Relationships: [

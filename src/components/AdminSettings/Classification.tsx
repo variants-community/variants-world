@@ -12,7 +12,7 @@ const gameClassification = [
 ]
 
 const gameplayClassification = [
- { label: 'Undefined', value: undefined },
+{ label: 'Undefined', value: undefined },
  { label: 'First Positive', value: GameplayClassification.FIRST_POSITIVE },
  { label: 'First Negative', value: GameplayClassification.FIRST_NEGATIVE },
  { label: 'Second Positive', value: GameplayClassification.SECOND_POSITIVE },
@@ -20,9 +20,9 @@ const gameplayClassification = [
 ]
 
 type ClassificationProps = {
- gameClassification: GameClassification | null;
+ gameClassification?: GameClassification;
  onChangeGameClassification: (e: Event) => void;
- gameplayClassification: GameplayClassification | null;
+ gameplayClassification?: GameplayClassification;
  setGameplayClassification: (value: GameplayClassification) => void;
 };
 
@@ -58,7 +58,7 @@ export const Classification = (props: ClassificationProps) => {
        Game Classification
      </label>
      <select
-       value={props.gameClassification ?? 'Undefined'}
+       value={props.gameClassification}
        onChange={props.onChangeGameClassification}
        id="game-clsfc"
        className="w-[200px] text-white bg-dark border border-2 border-border-dark rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"

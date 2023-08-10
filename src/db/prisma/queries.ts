@@ -7,7 +7,16 @@ export const getPostById = async (postId: number) => {
     },
     include: {
       author: true,
-      comments: true,
+      comments: {
+        include: {
+          parent: {
+            include: {
+              User: true
+            }
+          },
+          User: true
+        }
+      },
       gamerules: true,
       likes: {
         select: {

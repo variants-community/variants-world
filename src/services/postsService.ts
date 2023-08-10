@@ -4,8 +4,19 @@ import type { PostDetailsDTO } from '../pages/api/posts/create'
 import { supabase } from '../db/supabase/supabase'
 import { mapRuleVariantsToString } from '../hepers'
 
-const createPostDetails = async (id: number) => {
-  await supabase.from('PostDetails').insert({ postId: id })
+const createPostDetails = async (id: number, gameId: string) => {
+  await supabase
+    .from('PostDetails')
+    .insert({ postId: id })
+    .then((response) =>
+      response.status === 201
+        ? console.log(
+            `[post creation service] [${gameId}] - PostDetails successfully created`
+          )
+        : console.log(
+            `[post creation service] [${gameId}] - Failed to create post details`
+          )
+    )
 }
 
 const createRules = async (id: number, rules: string[]) => {
@@ -24,35 +35,38 @@ const createRules = async (id: number, rules: string[]) => {
   )
 }
 
-export const createPost = (game: CGABotGameDetails, post: PostDetailsDTO) => {
-  // const post = {
-  //   title: post.details.title,
-  //   authorId: post.userId,
-  //   description: post.details.description,
-  //   gamerules: mapRuleVariantsToString(game.q.ruleVariants),
-  //   status: 'PENDING_REPLY',
-  //   type: post.details.type
-  // }
-
-  supabase
+export const createPost = async (game: CGABotGameDetails, post: PostDetailsDTO) => {
+  const status = await supabase
     .from('Post')
     .insert({
       title: post.details.title,
       authorUserId: post.userId,
       description: post.details.description,
       status: 'UNDER_REVIEW',
+      variantLink: game.q.variantUrl,
       type: 'NCV'
     })
     .select()
     .then(async (response) => {
       if (response.status === 201 && response.data != null) {
+        console.log(
+          `[post creation service] [${post.gameId}] - Post successfully created\ndetails: ${response.data[0]}`
+        )
         const postId = response.data[0].id
         Promise.all([
-          await createPostDetails(postId),
-          await createRules(postId, mapRuleVariantsToString(game.q.ruleVariants))
+          await createPostDetails(postId, post.gameId),
+          await createRules(
+            postId,
+            mapRuleVariantsToString(game.q.ruleVariants)
+          )
         ])
+      } else {
+        console.log(
+          `[post creation service] [${post.gameId}] - Failed to create post - ${response.status} - ${response.statusText}`
+        )
       }
+      return response.status
     })
 
-  console.log('CREATION POST: ', post)
+    return status
 }

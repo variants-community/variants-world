@@ -27,3 +27,12 @@
 .parent:hover {
  @apply text-red 
 }    
+
+.comment-quoting::before {
+ content: "";
+ display: inline-block;
+ margin-right: 10px;
+ width: 5px;
+ border-radius: 50px;
+ background-color: gray;
+}

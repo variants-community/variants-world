@@ -72,10 +72,13 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         userId: props.userId,
       }
 
-      const code = await postGameToCreatePost(data)
+      const res = await postGameToCreatePost(data)
 
-      if (code === 200) {
+      if (res.status === 200) {
         window.location.replace('http://localhost:3000/')
+      } else {
+        console.log('status: ', res.status)
+        console.log('message: ', res.statusText)
       }
     }
   }
@@ -90,17 +93,17 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         setTitle={setTitle}
         isInvalid={errors.has('title')}
       />
-      <TypeInput
+      {/* <TypeInput
         type={type}
         setType={setType}
         isInvalid={errors.has('type')}
-      />
+      /> */}
       <DescriptionInput
         description={description}
         setDescription={setDescription}
         isInvalid={errors.has('description')}
       />
-      <LinkToVariant linkToVariant={'https://...'} />
+      {/* <LinkToVariant linkToVariant={'https://...'} /> */}
       <button
         className={'border border-border-light p-[10px] rounded-[12px] mt-[20px]'}
       >

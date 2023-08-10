@@ -6,11 +6,6 @@ import { getTextForComparing, isGame } from '../../../hepers'
 const isSameGames = (arr: string[]) =>
   arr.every((element) => element === arr[0])
 
-export interface CreatePostDTO {
-  userId: number
-  gameIds: string[] // lenght = 9
-}
-
 export interface PostDetailsDTO {
   userId: number
   gameId: string
@@ -24,7 +19,10 @@ export interface PostDetailsDTO {
 
 export const post: APIRoute = async ({ request }) => {
   const data = (await request.json()) as PostDetailsDTO
-  console.log('create post by ids: ', data)
+  console.log(
+    `[api/posts/create] [${data.gameId}] - Attempt to create a post\ndetails: `,
+    data
+  )
 
   const mainGame = await getGameDetailsById(data.gameId)
   const gamesOrUndefined = await Promise.all(
@@ -37,6 +35,9 @@ export const post: APIRoute = async ({ request }) => {
     gamesOrUndefined.some((game) => game === undefined) ||
     data.approveIds.length !== 8
   ) {
+    console.log(
+      `[api/posts/create] [${data.gameId}] - Failed - One or more games is undefined`
+    )
     return new Response(undefined, {
       status: 400,
       statusText: 'One of the games was not found'
@@ -48,11 +49,32 @@ export const post: APIRoute = async ({ request }) => {
   const isSame = isSameGames(games.map(getTextForComparing))
 
   if (isSame) {
-    createPost(mainGame!, data)
-  }
+    console.log(`[api/posts/create] [${data.gameId}] - Basic checks passed`)
+    const status = await createPost(mainGame!, data)
 
-  return new Response(undefined, {
-    status: 200,
-    statusText: 'The games are not related'
-  })
+    if (status < 400)
+      return new Response(undefined, {
+        status: status,
+        statusText: 'Post created'
+      })
+    else if (status === 209) {
+      return new Response(undefined, {
+        status: status,
+        statusText: 'The game is already registered'
+      })
+    } else {
+      return new Response(undefined, {
+        status: status,
+        statusText: 'Error'
+      })
+    }
+  } else {
+    console.log(
+      `[api/posts/create] [${data.gameId}] - Failed - Games not related`
+    )
+    return new Response(undefined, {
+      status: 422,
+      statusText: 'The games are not related'
+    })
+  }
 }

@@ -14,10 +14,10 @@ import { supabase } from '../../db/supabase/supabase'
 
 export const useAdminSettings = (details: PostDetails) => {
   const [gameClassification, setGameClassification] = useState(
-    details.gameClassification
+    details.gameClassification ?? undefined
   )
   const [gameplayClassification, setGameplayClassification] = useState(
-    details.gameplayClassification
+    details.gameplayClassification ?? undefined
   )
   const [notes, setNotes] = useState<string | null>(details.notes)
   const [votes, setVotes] = useState<VoiceExtended[] | []>(details.voices)
@@ -35,8 +35,8 @@ export const useAdminSettings = (details: PostDetails) => {
         },
         (payload) => {
           const updated = payload.new as PostDetails
-          setGameClassification(updated.gameClassification)
-          setGameplayClassification(updated.gameplayClassification)
+          setGameClassification(updated.gameClassification ?? undefined)
+          setGameplayClassification(updated.gameplayClassification ?? undefined)
           setNotes(updated.notes)
         }
       )
@@ -97,14 +97,18 @@ export const useAdminSettings = (details: PostDetails) => {
   }, [supabase])
 
   const onChangeGameClassification = async (e: Event) => {
-    const value = getValueFromEvent<GameClassification>(e)
-    setGameClassification(value)
-    await supabase
-      .from('PostDetails')
-      .update({
-        gameClassification: value
-      })
-      .eq('postId', details.postId)
+    let value = getValueFromEvent<GameClassification | undefined>(e)
+    if (value as string === 'Undefined') {
+      value = undefined
+      setGameClassification(value)
+    
+      await supabase
+        .from('PostDetails')
+        .update({
+          gameClassification: value ?? null
+        })
+        .eq('postId', details.postId)
+      }
   }
 
   const setGameplayClassificationOnChange = async (

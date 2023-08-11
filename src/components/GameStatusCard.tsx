@@ -28,7 +28,7 @@ const GameStatusCard = (props: AcceptedCardProps) => {
   }
 
   useEffect(() => {
-    const channel = supabase.channel('adminSettings channel')
+    const channel = supabase.channel('game-status-card')
       .on(
         'postgres_changes',
         {

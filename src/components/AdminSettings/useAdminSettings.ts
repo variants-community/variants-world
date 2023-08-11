@@ -24,7 +24,7 @@ export const useAdminSettings = (details: PostDetails) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel('adminSettings channel')
+      .channel('admin-settings')
       .on(
         'postgres_changes',
         {

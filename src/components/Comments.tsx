@@ -30,7 +30,7 @@ const Comments = (props: CommentsProps) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel('comments-channel')
+      .channel('comments')
       .on(
         'postgres_changes',
         {

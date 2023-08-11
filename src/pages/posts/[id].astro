@@ -37,7 +37,7 @@ console.log(post)
             <GamePicture
               postId={post.id}
               userId={user.id}
-              likes={post.likes}
+              likes={post.UserLikedPosts}
               client:load
             />
             {userIsTester ? (

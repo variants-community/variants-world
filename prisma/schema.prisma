@@ -46,33 +46,42 @@ enum UserRole {
   MEMBER
 }
 
+model PostOnUserLikes {
+  post   Post @relation(fields: [postId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
+  postId Int
+  userId Int
+
+  @@id([postId, userId])
+}
+
 model User {
-  id         Int       @id @default(autoincrement())
-  name       String
-  email      String?
-  role       UserRole  @default(MEMBER)
-  likedPosts Post[]    @relation("UserLikedPosts")
-  comments   Comment[]
-  voices     Voice[]
-  posts      Post[]    @relation("UserPosts")
+  id             Int               @id @default(autoincrement())
+  name           String
+  email          String?
+  role           UserRole          @default(MEMBER)
+  comments       Comment[]
+  voices         Voice[]
+  posts          Post[]            @relation("UserPosts")
+  UserLikedPosts PostOnUserLikes[]
 }
 
 model Post {
-  id           Int          @id @default(autoincrement())
-  title        String
-  description  String
-  likes        User[]       @relation("UserLikedPosts")
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
-  gamerules    GameRule[]
-  type         GameType
-  status       GameStatus
-  verdict      String?
-  author       User         @relation("UserPosts", fields: [authorUserId], references: [id])
-  authorUserId Int
-  comments     Comment[]
-  PostDetails  PostDetails?
-  variantLink  String       @unique
+  id             Int               @id @default(autoincrement())
+  title          String
+  description    String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @default(now())
+  gamerules      GameRule[]
+  type           GameType
+  status         GameStatus
+  verdict        String?
+  author         User              @relation("UserPosts", fields: [authorUserId], references: [id])
+  authorUserId   Int
+  comments       Comment[]
+  PostDetails    PostDetails?
+  variantLink    String            @unique
+  UserLikedPosts PostOnUserLikes[]
 }
 
 model Comment {

@@ -48,7 +48,7 @@ const PostCard = (props: PostCardProps) => {
             </div>
             <div className={'w-min-[70px]'}>
               <Likes
-                likes={props.post.likes}
+                likes={props.post.UserLikedPosts}
                 postId={props.post.id}
                 userId={props.userId}
               />

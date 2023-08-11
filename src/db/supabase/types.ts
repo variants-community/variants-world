@@ -70,34 +70,6 @@ export interface Database {
         }
         Relationships: []
       }
-      _UserLikedPosts: {
-        Row: {
-          A: number
-          B: number
-        }
-        Insert: {
-          A: number
-          B: number
-        }
-        Update: {
-          A?: number
-          B?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: '_UserLikedPosts_A_fkey'
-            columns: ['A']
-            referencedRelation: 'Post'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: '_UserLikedPosts_B_fkey'
-            columns: ['B']
-            referencedRelation: 'User'
-            referencedColumns: ['id']
-          }
-        ]
-      }
       Comment: {
         Row: {
           content: string
@@ -244,6 +216,34 @@ export interface Database {
             foreignKeyName: 'PostDetails_postId_fkey'
             columns: ['postId']
             referencedRelation: 'Post'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      PostOnUserLikes: {
+        Row: {
+          postId: number
+          userId: number
+        }
+        Insert: {
+          postId: number
+          userId: number
+        }
+        Update: {
+          postId?: number
+          userId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'PostOnUserLikes_postId_fkey'
+            columns: ['postId']
+            referencedRelation: 'Post'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'PostOnUserLikes_userId_fkey'
+            columns: ['userId']
+            referencedRelation: 'User'
             referencedColumns: ['id']
           }
         ]

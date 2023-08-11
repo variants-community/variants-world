@@ -1,17 +1,9 @@
+import type { PostOnUserLikes } from '@prisma/client'
 import Likes from './Likes'
 
-type Like = {
-  _count: {
-    likedPosts: number;
-    comments: number;
-    voices: number;
-    posts: number;
-  };
-  id: number;
-};
 
 type GamePictureProps = {
-  likes: Like[];
+  likes: PostOnUserLikes[];
   postId: number;
   userId: number;
 };

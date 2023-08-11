@@ -18,12 +18,7 @@ export const getPostById = async (postId: number) => {
         }
       },
       gamerules: true,
-      likes: {
-        select: {
-          _count: true,
-          id: true
-        }
-      }
+      UserLikedPosts: true
     }
   })
 
@@ -54,26 +49,13 @@ export const getPosts = async (skip: number, take: number = 10) => {
     take,
     include: {
       gamerules: true,
-      author: {
-        include: {
-          likedPosts: {
-            select: {
-              id: true
-            }
-          }
-        }
-      },
+      author: true,
       comments: {
         select: {
           _count: true
         }
       },
-      likes: {
-        select: {
-          _count: true,
-          id: true
-        }
-      }
+      UserLikedPosts: true
     },
     orderBy: {
       createdAt: 'asc'

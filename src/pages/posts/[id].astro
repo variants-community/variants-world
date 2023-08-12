@@ -41,6 +41,7 @@ console.log(post)
             />
             {userIsTester ? (
               <GameInfo
+                displayEditBotton
                 postId={post.id}
                 title={post.title}
                 type={post.type}
@@ -72,7 +73,7 @@ console.log(post)
           )}
           {userIsTester ? (
             <GameStatusCard
-              displayEditBotton={true}
+              displayEditBotton
               postId={post.id}
               verdict={post.verdict}
               status={post.status}
@@ -80,7 +81,6 @@ console.log(post)
             />
           ) : (
             <GameStatusCard
-              displayEditBotton={false}
               postId={post.id}
               verdict={post.verdict}
               status={post.status}

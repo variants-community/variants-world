@@ -5,12 +5,13 @@ import PostUser from '../PostUser'
 import { getValueFromEvent } from '../../hepers'
 import { supabase } from '../../db/supabase/supabase'
 import type { GameType } from '@prisma/client'
-import EditIcon from '../icons/EditIcon'
 import { Description } from './Description'
 import { LinkToVariant } from './LinkToVariant'
 import { TimePassed } from './TimePassed'
+import { EditButton } from '../EditButton'
 
 type GameInfoProps = {
+  displayEditBotton?: boolean;
   postId: number;
   type: string;
   title: string;
@@ -69,12 +70,10 @@ const GameInfo = (props: GameInfoProps) => {
               onTypeChange={onTypeChange}
               onTitleChange={onTitleChange}
             />
-            <div
-              onClick={() => toogleIsChangeable()}
-              className={'cursor-pointer '}
-            >
-              <EditIcon className="  text-green" />
-            </div>
+
+            {props.displayEditBotton && (
+              <EditButton onClick={() => toogleIsChangeable()} />
+            )}
           </div>
 
           <TimePassed from={props.createdAt} />

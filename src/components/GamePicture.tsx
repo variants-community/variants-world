@@ -8,7 +8,7 @@ type GamePictureProps = {
   userId: number;
 };
 
-const GamePicture = ({ likes, postId, userId }: GamePictureProps) => {
+const GamePicture = (props: GamePictureProps) => {
   return (
     <div className={'relative h-[500px]'}>
       <div
@@ -18,7 +18,7 @@ const GamePicture = ({ likes, postId, userId }: GamePictureProps) => {
         <div
           className={'absolute bg-border-light rounded-full bottom-[-8px] p-[13px] right-[-6px] shadow-dark'}
         >
-          <Likes likes={likes} postId={postId} userId={userId} />
+          <Likes likes={props.likes} postId={props.postId} userId={props.userId} />
         </div>
       </div>
     </div>

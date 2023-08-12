@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'preact/hooks'
 import type { CGABotGameDetails } from '../../services/cgabot'
 import { DescriptionInput } from './DescriptionInput'
-import { LinkToVariant } from './LinkToVariant'
 import { TitleInput } from './TitleInput'
-import { TypeInput } from './TypeInput'
 import {
   isDescriptionValid,
   isTitleValid,
   postGameToCreatePost,
 } from '../../hepers'
-import type { GameType } from '@prisma/client'
 import type { PostDetailsDTO } from '../../pages/api/posts/create'
 
 type PostFillingFormProps = {
@@ -21,7 +18,6 @@ type PostFillingFormProps = {
 export const PostFillingForm = (props: PostFillingFormProps) => {
   const [errors, setErrors] = useState<Set<string>>(new Set())
 
-  const [type, setType] = useState<GameType>(props.game.q.typeName as GameType)
   const [title, setTitle] = useState<string>(props.game.q.title)
   const [description, setDescription] = useState<string>('sdfsdfds')
 
@@ -93,17 +89,11 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         setTitle={setTitle}
         isInvalid={errors.has('title')}
       />
-      {/* <TypeInput
-        type={type}
-        setType={setType}
-        isInvalid={errors.has('type')}
-      /> */}
       <DescriptionInput
         description={description}
         setDescription={setDescription}
         isInvalid={errors.has('description')}
       />
-      {/* <LinkToVariant linkToVariant={'https://...'} /> */}
       <button
         className={'border border-border-light p-[10px] rounded-[12px] mt-[20px]'}
       >

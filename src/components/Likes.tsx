@@ -2,7 +2,12 @@ import { useEffect, useState } from 'preact/hooks'
 import { supabase } from '../db/supabase/supabase'
 import LikeIcon from './icons/LikeIcon'
 import type { PostOnUserLikes } from '@prisma/client'
-
+import {
+  getLikesCountQuery,
+  isPostLikedByUserQuery,
+  putLikeQuery,
+  removeLikeQuery,
+} from '../db/supabase/queries'
 
 type LikesProps = {
   likes: PostOnUserLikes[];
@@ -17,15 +22,8 @@ const Likes = (props: LikesProps) => {
   const [likesCount, setLikesCount] = useState<number>(props.likes.length)
 
   const updateLiksCount = async () => {
-    const res = await supabase.from('PostOnUserLikes').select('*', {
-      count: 'exact',
-    }).eq(
-      'postId',
-      props.postId,
-    )
-      .then((data) => setLikesCount(data.data?.length ?? 0))
-
-    console.log(res)
+    const count = await getLikesCountQuery(props.postId)
+    setLikesCount(count)
   }
 
   useEffect(() => {
@@ -59,36 +57,21 @@ const Likes = (props: LikesProps) => {
     }
   }, [supabase])
 
-
   const toogleLike = async () => {
-    // for expirience, we immediately change state 
-    // but after will be set correctly 
-    setLikesCount(isLiked ? likesCount-1 : likesCount+1)
+    // for expirience, we immediately change state
+    // but after will be set correctly
+    setLikesCount(isLiked ? likesCount - 1 : likesCount + 1)
     setIsLiked(!isLiked)
-    
-    const { data } = await supabase.from('PostOnUserLikes').select().eq(
-      'postId',
-      props.postId,
-    ).eq(
-      'userId',
-      props.userId,
-    ).single()
 
-    console.log('data: ', data)
-    if (data != null) {
-      await supabase.from('PostOnUserLikes').delete().eq('postId', props.postId)
-        .eq(
-          'userId',
-          props.userId,
-        )
-      setIsLiked(false)
+    if (await isPostLikedByUserQuery(props.postId, props.userId)) {
+      const ok = await removeLikeQuery(props.postId, props.userId)
+      setIsLiked(ok ? false : true)
     } else {
-      await supabase.from('PostOnUserLikes').insert({
-        postId: props.postId,
-        userId: props.userId,
-      }).eq('postId', props.postId)
-      setIsLiked(true)
+      const ok = await putLikeQuery(props.postId, props.userId)
+      setIsLiked(ok)
     }
+
+    await updateLiksCount()
   }
 
   return (

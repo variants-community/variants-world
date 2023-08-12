@@ -33,9 +33,25 @@ export const putLikeQuery = async (postId: number, userId: number) => {
 }
 
 export const getLikesCountQuery = async (postId: number) => {
-  const { data }  = await supabase.from('PostOnUserLikes').select('*').eq(
-    'postId',
-    postId,
-  )
+  const { data } = await supabase
+    .from('PostOnUserLikes')
+    .select('*')
+    .eq('postId', postId)
   return data ? data.length : 0
+}
+
+export const addCommentQuery = async (
+  content: string,
+  postId: number,
+  userId: number,
+  replyToCommentId?: number
+) => {
+  const { error } = await supabase.from('Comment').insert({
+    content: content,
+    postId: postId,
+    userId: userId,
+    parent_id: replyToCommentId
+  })
+
+  return error == null
 }

@@ -1,20 +1,20 @@
 import { useState } from 'preact/hooks'
-import { getValueFromEvent } from '../hepers'
+import { getValueFromEvent } from '../../hepers'
 import type { Comment } from '@prisma/client'
 
 type CommentInputProps = {
   onSendComment: (value: string, replyCommentId?: number) => void;
-  cancelReply: () => void;
-  reply?: Comment;
+  cancelReplyTo: () => void;
+  replyTo?: Comment;
 };
 
 const CommentInput = (props: CommentInputProps) => {
   const [commentText, setCommentText] = useState('')
+  
 
-  const onClick = () => {
-    props.onSendComment(commentText, props.reply?.id)
+  const sendComment = () => {
+    props.onSendComment(commentText, props.replyTo?.id)
     setCommentText('')
-    console.log('isEmpty now')
   }
 
   const onInput = (e: Event) => {
@@ -26,15 +26,15 @@ const CommentInput = (props: CommentInputProps) => {
     <div
       className={'bg-dark border border-[2px] text-[16px] border-border-dark shadow-light rounded-[12px] w-full bg-dark overflow-hidden'}
     >
-      {props.reply && (
+      {props.replyTo && (
         <div
           className={'flex flex-row justify-between border-b border-b-border-dark border-b-[2px] p-[8px]'}
         >
           <div>
             <span className={'font-font-semibold'}>reply to:</span>{' '}
-            <p>{props.reply.content}</p>
+            <p>{props.replyTo.content}</p>
           </div>
-          <button onClick={() => props.cancelReply()}>cancel</button>
+          <button onClick={() => props.cancelReplyTo()}>cancel</button>
         </div>
       )}
       <textarea
@@ -46,7 +46,7 @@ const CommentInput = (props: CommentInputProps) => {
         className={'w-full p-[20px] bg-dark resize-none outline-none'}
       />
       <button
-        onClick={onClick}
+        onClick={sendComment}
         className={'block bg-primary border border-[2px] border-border-dark rounded-[10px] px-[50px] py-[9px] text-white ml-auto m-[20px] mt-[24px]'}
       >
         Comment

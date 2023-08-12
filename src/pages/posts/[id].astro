@@ -8,7 +8,6 @@ import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
 import { getUser } from "../../db/supabase/supabase"
 import Navigation from "../../components/Navigation"
-import type { only } from "node:test"
 
 const user = await getUser(Astro.request)
 

@@ -1,11 +1,11 @@
-import PostTags from './PostTags'
-import PostTitle from './PostTitle'
-import PostUser from './PostUser'
-import CommentIcon from './icons/CommentIcon'
-import StatusIcon from './icons/StatusIcon'
-import type { PostWithDetailsForCard } from '../db/prisma/queries'
+import PostTags from '../PostTags'
+import PostTitle from '../PostTitle'
+import PostUser from '../PostUser'
+import CommentIcon from '../icons/CommentIcon'
+import StatusIcon from '../icons/StatusIcon'
+import type { PostWithDetailsForCard } from '../../db/prisma/queries'
 import type { GameStatus } from '@prisma/client'
-import Likes from './Likes'
+import Likes from '../Likes'
 
 type PostCardProps = {
   post: PostWithDetailsForCard;

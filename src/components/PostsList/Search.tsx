@@ -1,5 +1,5 @@
-import { getValueFromEvent } from '../hepers'
-import SearchIcon from './icons/SearchIcon'
+import { getValueFromEvent } from '../../hepers'
+import SearchIcon from '../icons/SearchIcon'
 
 type SearhProps = {
   query: string;

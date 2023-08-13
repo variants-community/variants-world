@@ -88,11 +88,14 @@ const GameInfo = (props: GameInfoProps) => {
 
       <PostUser user={props.user} />
 
-      <Description
-        isEditMode={isEditMode}
-        value={description}
-        onDescriptionChange={onDescriptionChange}
-      />
+      {description.length > 0 &&
+        (
+          <Description
+            isEditMode={isEditMode}
+            value={description}
+            onDescriptionChange={onDescriptionChange}
+          />
+        )}
 
       <div className={'flex flex-row justify-end mt-auto'}>
         <LinkToVariant

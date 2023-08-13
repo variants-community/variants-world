@@ -28,6 +28,10 @@
  @apply text-red 
 }    
 
+.bold-border {
+ @apply border border-[2px] border-border-dark
+}
+
 .comment-quoting::before {
  content: "";
  display: inline-block;

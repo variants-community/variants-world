@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'preact/hooks'
-import { getLikesCountQuery, isPostLikedByUserQuery, putLikeQuery, removeLikeQuery } from '../../db/supabase/queries'
+import {
+  getLikesCountQuery,
+  isPostLikedByUserQuery,
+  putLikeQuery,
+  removeLikeQuery
+} from '../../db/supabase/queries'
 import { supabase } from '../../db/supabase/supabase'
 import type { PostOnUserLikes } from '@prisma/client'
 
-
-
-export const useLikes = (likes: PostOnUserLikes[], userId: number, postId: number) => {
+export const useLikes = (
+  likes: PostOnUserLikes[],
+  userId: number,
+  postId: number
+) => {
   const [isLiked, setIsLiked] = useState<boolean>(
     likes.find((like) => like.userId === userId) ? true : false
   )
@@ -68,8 +75,8 @@ export const useLikes = (likes: PostOnUserLikes[], userId: number, postId: numbe
   }
 
   return {
-   isLiked,
-   likesCount,
-   toogleLike,
+    isLiked,
+    likesCount,
+    toogleLike
   }
 }

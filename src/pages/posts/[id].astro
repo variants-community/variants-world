@@ -6,7 +6,7 @@ import AdminSettings from "../../components/AdminSettings"
 import Comments from "../../components/Comments"
 import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
-import { getUser } from "../../db/supabase/supabase"
+import { getUser } from "../../db/supabase/auth"
 import Navigation from "../../components/Navigation"
 
 const user = await getUser(Astro.request)

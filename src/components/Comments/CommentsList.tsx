@@ -49,7 +49,9 @@ const CommentCard = (props: CommentCardProps) => (
           <div
             className={'comment-quoting flex flex-col bg-gray p-[5px] rounded mr-auto'}
           >
-            <span className={'font-bold'}>{props.comment.parent.User.name}:</span>
+            <span className={'font-bold'}>
+              {props.comment.parent.User.name}:
+            </span>
             <p className={'inline-block'}>
               {`${props.comment.parent.content}`}
             </p>

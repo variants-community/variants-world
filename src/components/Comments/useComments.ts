@@ -2,7 +2,10 @@ import { useEffect, useState } from 'preact/hooks'
 import { supabase } from '../../db/supabase/supabase'
 import type { ExtendedComment } from '.'
 
-export const useComments = (initComments: ExtendedComment[], postId: number) => {
+export const useComments = (
+  initComments: ExtendedComment[],
+  postId: number
+) => {
   const [comments, setComments] = useState(initComments)
 
   useEffect(() => {
@@ -84,6 +87,6 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
   }, [supabase, comments])
 
   return {
-   comments
+    comments
   }
 }

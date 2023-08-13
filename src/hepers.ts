@@ -4,7 +4,7 @@ import type { GameStatus } from '@prisma/client'
 import { ruleMapper } from './services/ruleMapper'
 
 export const getValueFromEvent = <Type = string>(e: Event) =>
-  ((e.target as HTMLInputElement).value as Type)
+  (e.target as HTMLInputElement).value as Type
 
 export const isIdValid = (gameId: string): boolean => {
   return /^\d+$/.test(gameId)
@@ -32,7 +32,7 @@ export const postGameToCreatePost = async (data: PostDetailsDTO) => {
     method: 'post',
     body: JSON.stringify(data)
   })
-  return {status: response.status, statusText: response.statusText} 
+  return { status: response.status, statusText: response.statusText }
 }
 
 export const getTextForComparing = (game: CGABotGameDetails) =>
@@ -78,12 +78,24 @@ export const mapRuleVariantsToString = (rules: CGABotRuleVariants) => {
 }
 
 export const formatDate = (date: Date): string => {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
   const month = months[date.getMonth()]
   const day = date.getDate()
   const year = date.getFullYear()
-  
-  
+
   return `${month} ${day}, ${year}`
 }
 
@@ -93,4 +105,3 @@ export const scrollTo = (tagId: string) => {
     element.scrollIntoView({ behavior: 'smooth' })
   }
 }
-

@@ -1,7 +1,7 @@
 import { Classification } from './Classification'
 import { Notes } from './Notes'
 import { Votes } from './Votes'
-import type { AuthentificatedUser } from '../../db/supabase/supabase'
+import type { AuthentificatedUser } from '../../db/supabase/auth'
 import type { PostDetails } from '../../db/prisma/queries'
 import { useAdminSettings } from './useAdminSettings'
 

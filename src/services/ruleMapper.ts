@@ -39,7 +39,7 @@ const map: Map<string, RuleMaker> = new Map([
   ['taboo', () => 'Taboo'],
   ['takeover', () => 'Takeover'],
   ['teammate', (value: ValueType) => `Alt Teams ${value === 1 ? 'RB' : 'RG'}`],
-  ['torpedo', () => 'Torpedo'],
+  ['torpedo', () => 'Torpedo']
 ])
 
 class RuleMapper {
@@ -51,10 +51,8 @@ class RuleMapper {
 
   public makeRule(type: string, value: ValueType): string {
     const ruleMaker = this.map.get(type)
-    if (ruleMaker)
-      return ruleMaker(value)
-    else 
-      return 'undefined'
+    if (ruleMaker) return ruleMaker(value)
+    else return 'undefined'
   }
 }
 

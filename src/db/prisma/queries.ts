@@ -36,7 +36,6 @@ export const getPostDetailsById = async (postId: number) => {
           tester: true
         }
       }
-      
     }
   })
 
@@ -69,4 +68,6 @@ export type PostWithDetailsForCard = ThenArg<
   ReturnType<typeof getPosts>
 >[number]
 
-export type PostDetails = NonNullable<ThenArg<ReturnType<typeof getPostDetailsById>>>
+export type PostDetails = NonNullable<
+  ThenArg<ReturnType<typeof getPostDetailsById>>
+>

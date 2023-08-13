@@ -10,7 +10,6 @@ type CommentInputProps = {
 
 const CommentInput = (props: CommentInputProps) => {
   const [commentText, setCommentText] = useState('')
-  
 
   const sendComment = () => {
     props.onSendComment(commentText, props.replyTo?.id)

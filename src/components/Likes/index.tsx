@@ -9,8 +9,11 @@ type LikesProps = {
 };
 
 const Likes = (props: LikesProps) => {
-  
-  const { isLiked, likesCount, toogleLike } = useLikes(props.likes, props.userId, props.postId)
+  const { isLiked, likesCount, toogleLike } = useLikes(
+    props.likes,
+    props.userId,
+    props.postId,
+  )
 
   return (
     <div

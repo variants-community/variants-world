@@ -1,5 +1,4 @@
 import type { CGABotGameDetails } from './cgabot'
-// import { mapRuleVariantsToString } from '../hepers'
 import type { PostDetailsDTO } from '../pages/api/posts/create'
 import { supabase } from '../db/supabase/supabase'
 import { mapRuleVariantsToString } from '../hepers'
@@ -35,7 +34,10 @@ const createRules = async (id: number, rules: string[]) => {
   )
 }
 
-export const createPost = async (game: CGABotGameDetails, post: PostDetailsDTO) => {
+export const createPost = async (
+  game: CGABotGameDetails,
+  post: PostDetailsDTO
+) => {
   const status = await supabase
     .from('Post')
     .insert({
@@ -68,5 +70,5 @@ export const createPost = async (game: CGABotGameDetails, post: PostDetailsDTO) 
       return response.status
     })
 
-    return status
+  return status
 }

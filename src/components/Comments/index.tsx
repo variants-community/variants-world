@@ -30,7 +30,12 @@ const Comments = (props: CommentsProps) => {
 
   const postComment = async (commentText: string, replyCommentId?: number) => {
     if (commentText.length > 0) {
-      await addCommentQuery(commentText, props.postId, props.userId, replyCommentId)
+      await addCommentQuery(
+        commentText,
+        props.postId,
+        props.userId,
+        replyCommentId,
+      )
       cancelReplyTo()
     }
   }

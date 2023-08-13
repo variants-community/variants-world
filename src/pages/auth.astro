@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro"
-import { isLoggedIn, supabase } from "../db/supabase/supabase"
+import { isLoggedIn } from "../db/supabase/auth"
 import LoginForm from "../components/LoginForm"
 
 const email = Astro.url.searchParams.get("email") || undefined

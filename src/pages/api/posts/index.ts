@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro'
-import { getPosts } from '../../../db/prisma/queries'
+import { getPosts, searchFor } from '../../../db/prisma/queries'
 
 export const get: APIRoute = async ({ url }) => {
- 
+
   const page = Number(url.searchParams.get('page'))
   const limit = Number(url.searchParams.get('limit'))
+  const searchText = url.searchParams.get('searchText')
 
   if (isNaN(page) || isNaN(limit)) {
     console.log('[api/posts] Invalid request')
@@ -13,8 +14,16 @@ export const get: APIRoute = async ({ url }) => {
       statusText: 'Invalid format.'
     })
   }
-  console.log('[api/posts] page=', page, ' limit=', limit)
-  const posts = await getPosts(page * limit, limit)
 
-  return new Response(JSON.stringify(posts), { status: 200 })
+  if (searchText != null) {
+    console.log('query: ', searchText)
+    const posts = await searchFor(searchText) //split(' ')
+    console.log('details: ', posts)
+    return new Response(JSON.stringify(posts), { status: 200 })
+  } else {
+    console.log('[api/posts] page=', page, ' limit=', limit)
+    const posts = await getPosts(page * limit, limit)
+  
+    return new Response(JSON.stringify(posts), { status: 200 })
+  }
 }

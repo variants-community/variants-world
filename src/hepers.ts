@@ -2,6 +2,7 @@ import type { CGABotGameDetails, CGABotRuleVariants } from './services/cgabot'
 import type { PostDetailsDTO } from './pages/api/posts/create'
 import type { GameStatus } from '@prisma/client'
 import { ruleMapper } from './services/ruleMapper'
+import type { PostForCard } from './db/prisma/queries'
 
 export const getValueFromEvent = <Type = string>(e: Event) =>
   (e.target as HTMLInputElement).value as Type
@@ -33,6 +34,39 @@ export const postGameToCreatePost = async (data: PostDetailsDTO) => {
     body: JSON.stringify(data)
   })
   return { status: response.status, statusText: response.statusText }
+}
+
+type Query = {
+  page?: number
+  limit?: number
+  searchText?: string
+}
+
+export const fetchPosts = async (query: Query) => {
+  console.log('fetch')
+  console.log('query: ', query)
+  let response = null
+  if (query.page != undefined && query.limit != undefined) {
+    console.log(1)
+    response = await fetch(
+      `/api/posts?page=${query.page}&limit=${query.limit}`,
+      { method: 'get' }
+    )
+  } else if (query.searchText) {
+    console.log(2)
+    response = await fetch(`/api/posts?searchText=${query.searchText}`, {
+      method: 'get'
+    })
+  } else {
+    console.log(3)
+    return []
+  }
+
+  if (response.status === 200) {
+    return (await response.json()) as PostForCard[]
+  } else {
+    return []
+  }
 }
 
 export const getTextForComparing = (game: CGABotGameDetails) =>

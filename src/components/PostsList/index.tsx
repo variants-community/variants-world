@@ -1,18 +1,14 @@
 import PostCard from './PostCard'
 import Search from './Search'
-import type { PostForCard } from '../../db/prisma/queries'
 import { useSearch } from './useSearch'
 import { useCtrlKFocus } from './useCtrlKFocus'
 
 type PostsListProps = {
   userId: number;
-  posts: PostForCard[];
 };
 
 const PostsList = (props: PostsListProps) => {
-  const { posts, query, setQuery } = useSearch(
-    props.posts,
-  )
+  const { posts, query, setQuery } = useSearch()
 
   useCtrlKFocus()
 

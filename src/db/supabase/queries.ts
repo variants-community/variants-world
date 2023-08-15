@@ -55,3 +55,11 @@ export const addCommentQuery = async (
 
   return error == null
 }
+
+export const getTotalPostsCount = async () => {
+  const { count } = await supabase
+    .from('Post')
+    .select('*', { count: 'exact', head: true })
+
+  return count ?? 0
+}

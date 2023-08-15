@@ -1,36 +1,44 @@
 import { useEffect, useState } from 'preact/hooks'
-import type { PostForCard, PostWithDetailsForCard } from '../../db/prisma/queries'
-import { supabase } from '../../db/supabase/supabase'
+import type { PostForCard } from '../../db/prisma/queries'
+import { getTotalPostsCount } from '../../db/supabase/queries'
+import { fetchPosts } from '../../hepers'
 
-const getTextForSearch = (post: PostWithDetailsForCard): string => {
-  const value = (
-    post.title +
-    post.author.name +
-    post.description +
-    post.type
-  ).toLowerCase()
-  console.log('rs: ', value)
-  return value
-}
-
-export const useSearch = (initpPosts: PostForCard[]) => {
+export const useSearch = () => {
   const [query, setQuery] = useState('')
-  const [posts, setPosts] =
-    useState<PostForCard[]>(initpPosts)
+  const [posts, setPosts] = useState<PostForCard[]>([])
 
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
   const [fetching, setFetching] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
 
   useEffect(() => {
-    supabase
-      .from('Post')
-      .select('*', { count: 'exact', head: true })
-      .then((response) => {
-        console.log('load count')
-        setTotalCount(response.count ?? 0)
-      })
+    getTotalPostsCount().then(setTotalCount)
   }, [])
+
+  useEffect(() => {
+    if (fetching && posts.length < totalCount) {
+      fetchPosts({ page: currentPage, limit: 5 }).then((posts) => {
+        setPosts((prev) => [...prev, ...posts])
+        setCurrentPage((prev) => prev + 1)
+        setFetching(false)
+      })
+    }
+  }, [fetching])
+
+  useEffect(() => {
+    if (query != '') {
+      fetchPosts({ searchText: query }).then((posts) => {
+        setPosts(posts)
+        setFetching(false)
+      })
+    } else {
+      fetchPosts({ page: 0, limit: 5 }).then((posts) => {
+        setPosts(posts)
+        setCurrentPage(1)
+        setFetching(false)
+      })
+    }
+  }, [query])
 
   const handleScroll = () => {
     const { scrollTop, scrollHeight } = document.documentElement
@@ -45,33 +53,6 @@ export const useSearch = (initpPosts: PostForCard[]) => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [totalCount])
-
-
-  useEffect(() => {
-    if (fetching && posts.length < totalCount) {
-      console.log('fetch!!!')
-      fetch(`/api/posts?page=${currentPage}&limit=${5}`, {method: 'get'})
-      .then(async response => {
-        const newPosts = await response.json() as PostForCard[]
-        setPosts(prev => [...prev, ...newPosts])
-        setCurrentPage((prev) => prev + 1)
-        setFetching(false)
-      })
-    }
-  }, [fetching])
-
-  useEffect(() => {
-    if (query != '') {
-      
-      setPosts(
-        posts.filter((post) =>
-          getTextForSearch(post).includes(query.toLowerCase())
-        )
-      )
-    } else {
-      setPosts(posts)
-    }
-  }, [query])
 
   return {
     posts,

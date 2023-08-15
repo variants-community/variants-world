@@ -13,16 +13,10 @@ if (!user) {
   return Astro.redirect("/auth")
 }
 
-const posts = await getPosts(0)
-
-console.log("[index] load:")
-posts.forEach((post) =>
-  console.log(`\t${post.title}:${post.author}:${post.id}`)
-)
 ---
 
 
 <Layout>
   <Navigation username={user.username} />
-  <PostsList posts={posts} userId={user.id} client:load />
+  <PostsList userId={user.id} client:load />
 </Layout>

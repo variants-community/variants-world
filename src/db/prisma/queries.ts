@@ -43,7 +43,52 @@ export const getPostDetailsById = async (postId: number) => {
   return details
 }
 
-export const getPosts = async (skip: number, take: number = 10) => {
+export const searchFor = async (query: string) => {
+  const posts = await prisma.post.findMany({
+    where: {
+      OR: [
+        { title: { search: query } },
+        { description: { search: query } },
+        { author: { name: { search: query } } },
+        { gamerules: { some: { name: { search: query } } } }
+      ]
+    },
+    include: {
+      gamerules: true,
+      author: true,
+      comments: {
+        select: {
+          _count: true
+        }
+      },
+      UserLikedPosts: true
+    },
+    orderBy: {
+      createdAt: 'asc'
+    }
+  })
+
+  const mapped: PostForCard[] = posts.map((p) => ({
+    id: p.id,
+    type: p.type,
+    status: p.status,
+    title: p.title,
+    variantLink: p.variantLink,
+    verdict: p.verdict ?? '',
+    gamerules: p.gamerules,
+    commentsCount: p.comments.length,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+    description: p.description,
+    likes: p.UserLikedPosts.map((l) => ({ userId: l.userId })),
+    author: p.author,
+    authorUserId: p.authorUserId
+  }))
+
+  return mapped
+}
+
+export const getPosts = async (skip: number, take: number = 5) => {
   const posts = await prisma.post.findMany({
     skip,
     take,

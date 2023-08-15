@@ -88,7 +88,7 @@ const GameInfo = (props: GameInfoProps) => {
 
       <PostUser user={props.user} />
 
-      {description.length > 0 &&
+      {(description.length > 0 || isEditMode) &&
         (
           <Description
             isEditMode={isEditMode}

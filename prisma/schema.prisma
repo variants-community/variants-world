@@ -73,7 +73,7 @@ model Post {
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @default(now())
   gamerules      GameRule[]
-  type           GameType
+  type           GameType          @default(NCV)
   status         GameStatus
   verdict        String?
   author         User              @relation("UserPosts", fields: [authorUserId], references: [id])

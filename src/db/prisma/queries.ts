@@ -1,3 +1,4 @@
+import type { GameStatus, GameType, UserRole } from '@prisma/client'
 import prisma from './prisma'
 
 export const getPostById = async (postId: number) => {
@@ -60,7 +61,47 @@ export const getPosts = async (skip: number, take: number = 10) => {
       createdAt: 'asc'
     }
   })
-  return posts
+
+  const mapped: PostForCard[] = posts.map((p) => ({
+    id: p.id,
+    type: p.type,
+    status: p.status,
+    title: p.title,
+    variantLink: p.variantLink,
+    verdict: p.verdict ?? '',
+    gamerules: p.gamerules,
+    commentsCount: p.comments.length,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+    description: p.description,
+    likes: p.UserLikedPosts.map((l) => ({ userId: l.userId })),
+    author: p.author,
+    authorUserId: p.authorUserId
+  }))
+
+  return mapped
+}
+
+export interface PostForCard {
+  id: number
+  status: GameStatus
+  type: GameType
+  variantLink: string
+  verdict: string
+  likes: { userId: number }[]
+  title: string
+  authorUserId: number
+  gamerules: { id: number; name: string }[]
+  author: {
+    id: number
+    name: string
+    email: string | null
+    role: UserRole
+  }
+  commentsCount: number
+  createdAt: Date
+  updatedAt: Date
+  description: string
 }
 
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T

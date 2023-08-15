@@ -44,11 +44,11 @@ const PostCard = (props: PostCardProps) => {
               <Status status={props.post.status} />
             </div>
             <div className={'w-min-[70px]'}>
-              <Comments count={props.post.comments.length} />
+              <Comments count={props.post.commentsCount} />
             </div>
             <div className={'w-min-[70px]'}>
               <Likes
-                likes={props.post.UserLikedPosts}
+                likes={props.post.likes}
                 postId={props.post.id}
                 userId={props.userId}
               />

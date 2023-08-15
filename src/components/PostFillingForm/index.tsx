@@ -70,7 +70,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
 
       const res = await postGameToCreatePost(data)
 
-      if (res.status === 200) {
+      if (res.status === 201) {
         window.location.replace('http://localhost:3000/')
       } else {
         console.log('status: ', res.status)

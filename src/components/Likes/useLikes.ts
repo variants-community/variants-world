@@ -6,10 +6,9 @@ import {
   removeLikeQuery
 } from '../../db/supabase/queries'
 import { supabase } from '../../db/supabase/supabase'
-import type { PostOnUserLikes } from '@prisma/client'
 
 export const useLikes = (
-  likes: PostOnUserLikes[],
+  likes: {userId: number}[],
   userId: number,
   postId: number
 ) => {

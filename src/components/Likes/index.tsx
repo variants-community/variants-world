@@ -1,9 +1,8 @@
 import LikeIcon from '../icons/LikeIcon'
-import type { PostOnUserLikes } from '@prisma/client'
 import { useLikes } from './useLikes'
 
 type LikesProps = {
-  likes: PostOnUserLikes[];
+  likes: {userId: number}[];
   userId: number;
   postId: number;
 };

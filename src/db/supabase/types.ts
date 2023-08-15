@@ -151,7 +151,7 @@ export interface Database {
           id?: number
           status: Database['public']['Enums']['GameStatus']
           title: string
-          type: Database['public']['Enums']['GameType']
+          type?: Database['public']['Enums']['GameType']
           updatedAt?: string
           variantLink: string
           verdict?: string | null

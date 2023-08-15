@@ -45,7 +45,7 @@ export const createPost = async (
       authorUserId: post.userId,
       description: post.details.description,
       status: 'UNDER_REVIEW',
-      variantLink: game.q.variantUrl,
+      variantLink: post.details.title,
       type: 'NCV'
     })
     .select()
@@ -64,7 +64,7 @@ export const createPost = async (
         ])
       } else {
         console.log(
-          `[post creation service] [${post.gameId}] - Failed to create post - ${response.status} - ${response.statusText}`
+          `[post creation service] [${post.gameId}] - Failed to create post - ${response.status} - ${response.statusText}\ndetails: `, response.error
         )
       }
       return response.status

@@ -1,16 +1,18 @@
 import PostCard from './PostCard'
 import Search from './Search'
-import type { PostWithDetailsForCard } from '../../db/prisma/queries'
-import { useSearchQuery } from './useSearchQuery'
+import type { PostForCard } from '../../db/prisma/queries'
+import { useSearch } from './useSearch'
 import { useCtrlKFocus } from './useCtrlKFocus'
 
 type PostsListProps = {
   userId: number;
-  posts: PostWithDetailsForCard[];
+  posts: PostForCard[];
 };
 
 const PostsList = (props: PostsListProps) => {
-  const { filteredPosts, query, setQuery } = useSearchQuery(props.posts)
+  const { posts, query, setQuery } = useSearch(
+    props.posts,
+  )
 
   useCtrlKFocus()
 
@@ -19,7 +21,7 @@ const PostsList = (props: PostsListProps) => {
       <Search query={query} setQuery={setQuery} />
 
       <div className="flex flex-col gap-[30px] ">
-        {filteredPosts.map((post) => (
+        {posts.map((post) => (
           <PostCard userId={props.userId} key={post.id} post={post} />
         ))}
       </div>

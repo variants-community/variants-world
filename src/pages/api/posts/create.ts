@@ -50,21 +50,21 @@ export const post: APIRoute = async ({ request }) => {
 
   if (isSame) {
     console.log(`[api/posts/create] [${data.gameId}] - Basic checks passed`)
-    const status = await createPost(mainGame!, data)
+    const response = await createPost(mainGame!, data)
 
-    if (status < 400)
-      return new Response(undefined, {
-        status: status,
+    if (response.status < 400) {
+      return new Response(JSON.stringify({ id: response.data?.id }), {
+        status: response.status,
         statusText: 'Post created'
       })
-    else if (status === 209) {
+    } else if (response.status === 209) {
       return new Response(undefined, {
-        status: status,
+        status: response.status,
         statusText: 'The game is already registered'
       })
     } else {
       return new Response(undefined, {
-        status: status,
+        status: response.status,
         statusText: 'Error'
       })
     }

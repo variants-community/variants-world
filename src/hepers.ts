@@ -33,7 +33,10 @@ export const postGameToCreatePost = async (data: PostDetailsDTO) => {
     method: 'post',
     body: JSON.stringify(data)
   })
-  return { status: response.status, statusText: response.statusText }
+
+  const id = await response.json()
+
+  return { data: id, status: response.status, statusText: response.statusText }
 }
 
 type Query = {

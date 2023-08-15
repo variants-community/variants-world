@@ -71,7 +71,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
       const res = await postGameToCreatePost(data)
 
       if (res.status === 201) {
-        window.location.replace('http://localhost:3000/')
+        window.location.replace(`http://localhost:3000/posts/${res.data.id}`)
       } else {
         console.log('status: ', res.status)
         console.log('message: ', res.statusText)

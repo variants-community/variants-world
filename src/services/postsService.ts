@@ -38,7 +38,7 @@ export const createPost = async (
   game: CGABotGameDetails,
   post: PostDetailsDTO
 ) => {
-  const status = await supabase
+  const response = await supabase
     .from('Post')
     .insert({
       title: post.details.title,
@@ -49,12 +49,13 @@ export const createPost = async (
       type: 'NCV'
     })
     .select()
+    .single()
     .then(async (response) => {
       if (response.status === 201 && response.data != null) {
         console.log(
-          `[post creation service] [${post.gameId}] - Post successfully created\ndetails: ${response.data[0]}`
+          `[post creation service] [${post.gameId}] - Post successfully created\ndetails: ${response.data}`
         )
-        const postId = response.data[0].id
+        const postId = response.data.id
         Promise.all([
           await createPostDetails(postId, post.gameId),
           await createRules(
@@ -67,8 +68,8 @@ export const createPost = async (
           `[post creation service] [${post.gameId}] - Failed to create post - ${response.status} - ${response.statusText}\ndetails: `, response.error
         )
       }
-      return response.status
+      return response
     })
 
-  return status
+  return response
 }

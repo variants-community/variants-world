@@ -4,6 +4,7 @@ import GamePicture from "../../components/GamePicture"
 import GameStatusCard from "../../components/GameStatusCard"
 import AdminSettings from "../../components/AdminSettings"
 import Comments from "../../components/Comments"
+import Presence from "../../components/Presence"
 import Layout from "../../layouts/Layout.astro"
 import { getPostById, getPostDetailsById } from "../../db/prisma/queries"
 import { getUser } from "../../db/supabase/auth"
@@ -69,6 +70,7 @@ console.log(post)
           </div>
 
           {details && userIsTester && (
+            <Presence postId={post.id} user={user} client:only />
             <AdminSettings user={user} details={details} client:only />
           )}
           {userIsTester ? (

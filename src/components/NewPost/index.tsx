@@ -38,11 +38,12 @@ const NewPost = (props: { userId: number }) => {
       {isGameFound && <Picture />}
 
       {isGameFound && (
-        <div className={'mt-[14px]'}>
+        <div className={'w-[450px] mt-[14px]'}>
           <PostTags
             rules={mapRuleVariantsToString(game.q.ruleVariants)}
             className="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
             iconsClassName="fill-secondary"
+            ulClassName="justify-center"
           />
         </div>
       )}

@@ -2,13 +2,14 @@ type PostTagsProps = {
   rules: string[];
   className?: string;
   iconsClassName?: string;
+  ulClassName?: string;
 };
 
 const PostTags = (props: PostTagsProps) => {
   return (
     <div>
       <ul
-        className={'flex flex-row items-center list-none gap-[10px] text-[14px] font-bold'}
+        className={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulClassName}`}
       >
         {props.rules.map((rule, i) => (
           <li

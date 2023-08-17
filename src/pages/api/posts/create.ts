@@ -17,6 +17,14 @@ export interface PostDetailsDTO {
   }
 }
 
+export interface ErrorMessage {
+  message: string
+  details?: string
+}
+
+const errorMessage = (errorMessage: ErrorMessage): string =>
+  JSON.stringify(errorMessage)
+
 export const post: APIRoute = async ({ request }) => {
   const data = (await request.json()) as PostDetailsDTO
   console.log(
@@ -38,10 +46,10 @@ export const post: APIRoute = async ({ request }) => {
     console.log(
       `[api/posts/create] [${data.gameId}] - Failed - One or more games is undefined`
     )
-    return new Response(undefined, {
-      status: 400,
-      statusText: 'One of the games was not found'
-    })
+    return new Response(
+      errorMessage({ message: 'One of the games was not found' }),
+      { status: 400 }
+    )
   }
 
   const games = gamesOrUndefined.filter(isGame)
@@ -54,27 +62,25 @@ export const post: APIRoute = async ({ request }) => {
 
     if (response.status < 400) {
       return new Response(JSON.stringify({ id: response.data?.id }), {
-        status: response.status,
-        statusText: 'Post created'
+        status: response.status
       })
-    } else if (response.status === 209) {
-      return new Response(undefined, {
-        status: response.status,
-        statusText: 'The game is already registered'
-      })
+    } else if (response.status === 409) {
+      return new Response(
+        errorMessage({ message: 'The game is already registered' }),
+        { status: response.status }
+      )
     } else {
-      return new Response(undefined, {
-        status: response.status,
-        statusText: 'Error'
+      return new Response(errorMessage({ message: 'Error' }), {
+        status: response.status
       })
     }
   } else {
     console.log(
       `[api/posts/create] [${data.gameId}] - Failed - Games not related`
     )
-    return new Response(undefined, {
-      status: 422,
-      statusText: 'The games are not related'
-    })
+    return new Response(
+      errorMessage({ message: 'The games are not related' }),
+      { status: 422 }
+    )
   }
 }

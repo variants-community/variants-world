@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'preact/hooks'
 import type { CGABotGameDetails } from '../../services/cgabot'
 import { DescriptionInput } from './DescriptionInput'
 import { TitleInput } from './TitleInput'
-import {
-  isDescriptionValid,
-  isTitleValid,
-  postGameToCreatePost,
-} from '../../hepers'
-import type { PostDetailsDTO } from '../../pages/api/posts/create'
+import { postGameToCreatePost } from '../../hepers'
+import type {
+  ErrorMessage,
+  PostDetailsDTO,
+} from '../../pages/api/posts/create'
+import { TypeInput } from './TypeInput'
+import { useFormData } from './useFormData'
+import { useState } from 'preact/hooks'
+import { SubmitError } from './SubmitError'
 
 type PostFillingFormProps = {
   userId: number;
@@ -16,40 +18,20 @@ type PostFillingFormProps = {
 };
 
 export const PostFillingForm = (props: PostFillingFormProps) => {
-  const [errors, setErrors] = useState<Set<string>>(new Set())
+  const [submitError, setSubmitError] = useState<ErrorMessage>()
 
-  const [title, setTitle] = useState<string>(props.game.q.title)
-  const [description, setDescription] = useState<string>('sdfsdfds')
-
-  useEffect(() => {
-    const temp = new Set(errors)
-    if (isTitleValid(title)) {
-      temp.delete('title')
-      setErrors(temp)
-    } else {
-      temp.add('title')
-      setErrors(temp)
-    }
-    console.log('tit', errors)
-  }, [title])
-
-  useEffect(() => {
-    const temp = new Set(errors)
-    if (isDescriptionValid(description)) {
-      console.log('des del')
-      temp.delete('description')
-      setErrors(temp)
-    } else {
-      console.log('des set')
-      temp.add('description')
-      setErrors(temp)
-    }
-    console.log('des', errors)
-  }, [description])
+  const {
+    errors,
+    title,
+    setTitle,
+    type,
+    setType,
+    description,
+    setDescription,
+  } = useFormData({ title: props.game.q.title })
 
   const submit = async (e: Event) => {
     e.preventDefault()
-    console.log(e)
     const formData = new FormData(e.target as HTMLFormElement)
 
     const type = formData.get('type')?.toString()
@@ -73,8 +55,9 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
       if (res.status === 201) {
         window.location.replace(`http://localhost:3000/posts/${res.data.id}`)
       } else {
+        setSubmitError(res.data)
         console.log('status: ', res.status)
-        console.log('message: ', res.statusText)
+        console.log('message: ', res.data)
       }
     }
   }
@@ -89,11 +72,17 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         setTitle={setTitle}
         isInvalid={errors.has('title')}
       />
+      <TypeInput
+        type={type}
+        setType={setType}
+        isInvalid={errors.has('type')}
+      />
       <DescriptionInput
         description={description}
         setDescription={setDescription}
         isInvalid={errors.has('description')}
       />
+      {submitError && <SubmitError error={submitError} />}
       <button
         className={'border border-border-light p-[10px] rounded-[12px] mt-[20px]'}
       >

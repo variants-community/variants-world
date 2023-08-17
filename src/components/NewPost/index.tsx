@@ -23,13 +23,18 @@ const NewPost = (props: { userId: number }) => {
       scrollTo('post-details-form')
   }, [isAllConfirmed])
 
+  const onSearch = (value: string) => {
+    setGameId(value)
+    setApproveIds(new Array<string>(8).fill(''))
+  }
+
   return (
     <div className="flex flex-col items-center mx-auto">
       <Title isSearching={isSearching} />
 
       <Search
         value={gameId}
-        onChange={setGameId}
+        onChange={onSearch}
         isSearching={isSearching}
         isInvalidId={isInvalidId}
         isLoading={isLoading}
@@ -56,7 +61,7 @@ const NewPost = (props: { userId: number }) => {
           userId={props.userId}
         />
       )}
-      {isGameFound && isAllConfirmed &&
+      {isGameFound && //isAllConfirmed &&
         (
           <div className={'w-[700px] mt-[150px] mb-[300px]'}>
             <PostFillingForm

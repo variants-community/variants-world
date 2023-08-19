@@ -42,5 +42,5 @@ export default defineConfig({
     }
   },
   plugins: [],
-  safelist: 'text-yellow text-blue'
+  safelist: 'text-yellow text-blue text-green'
 })

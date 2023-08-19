@@ -61,7 +61,7 @@ const NewPost = (props: { userId: number }) => {
           userId={props.userId}
         />
       )}
-      {isGameFound && //isAllConfirmed &&
+      {isGameFound && isAllConfirmed &&
         (
           <div className={'w-[700px] mt-[150px] mb-[300px]'}>
             <PostFillingForm

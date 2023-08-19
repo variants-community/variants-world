@@ -63,3 +63,60 @@ export const getTotalPostsCount = async () => {
 
   return count ?? 0
 }
+
+export const getGameRuleId = async (ruleName: string) => {
+  const response = await supabase
+    .from('GameRule')
+    .select()
+    .eq('name', ruleName)
+    .single()
+
+  return response.error ? undefined : response.data.id
+}
+
+export const addGameRuleAndGetId = async (
+  ruleName: string
+): Promise<number | undefined> => {
+  const response = await supabase
+    .from('GameRule')
+    .insert({ name: ruleName })
+    .select()
+    .single()
+
+  return response.error ? undefined : response.data.id
+}
+
+export const addGameRuleToPost = async (ruleId: number, postId: number) => {
+  const { error } = await supabase
+    .from('_GameRuleToPost')
+    .insert({ A: ruleId, B: postId })
+
+  return error == null
+}
+
+export const removeGameRuleFromPost = async (
+  ruleId: number,
+  postId: number
+) => {
+  const { error } = await supabase
+    .from('_GameRuleToPost')
+    .delete()
+    .eq('A', ruleId)
+    .eq('B', postId)
+
+  return error == null
+}
+
+export const updatePostGameRule = async (
+  newRuleId: number,
+  oldRuleId: number,
+  postId: number
+) => {
+  const { error } = await supabase
+    .from('_GameRuleToPost')
+    .update({ A: newRuleId })
+    .eq('A', oldRuleId)
+    .eq('B', postId)
+
+  return error == null
+}

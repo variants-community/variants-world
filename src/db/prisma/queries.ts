@@ -103,7 +103,7 @@ export const getPosts = async (skip: number, take: number = 5) => {
       UserLikedPosts: true
     },
     orderBy: {
-      createdAt: 'asc'
+      createdAt: 'desc'
     }
   })
 

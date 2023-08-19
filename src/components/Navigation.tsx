@@ -8,7 +8,7 @@ type NavigationProps = {
 
 const Navigation = (props: NavigationProps) => {
   return (
-    <nav className="flex flex-row justify-between items-center bg-border-light h-[50px] w-full border border-[2px] border-border-dark rounded-[12px] px-[20px] shadow-dark">
+    <nav className={'flex flex-row justify-between items-center bg-border-light h-[50px] w-full px-[20px] rounded-[12px] border border-[2px] border-border-dark shadow-dark'}>
       <div className={'flex flex-row gap-[30px]'}>
         <a href={'/'} className={'text-white  text-[28px]'}>Variants</a>
         {buttons.map((botton, i) => (

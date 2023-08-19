@@ -3,6 +3,7 @@ import Search from './Search'
 import { useSearch } from './useSearch'
 import { useCtrlKFocus } from './useCtrlKFocus'
 
+
 type PostsListProps = {
   userId: number;
 };

@@ -1,5 +1,6 @@
 import { getValueFromEvent } from '../../hepers'
 import SearchIcon from '../icons/SearchIcon'
+import { isMobile } from 'react-device-detect'
 
 type SearhProps = {
   query: string;
@@ -24,14 +25,17 @@ const Search = (props: SearhProps) => {
         className={'w-full bg-dark outline-none text-[20px] font-normal'}
         placeholder={'Search'}
       />
-      <div className={'flex flex-row mr-[20px] gap-[4px] text-[16px]'}>
-        <span className={'py-[3px] px-[6px] bg-border-light rounded-[3px]'}>
-          CTRL
-        </span>
-        <span className={'py-[3px] px-[7px] bg-border-light rounded-[3px]'}>
-          K
-        </span>
-      </div>
+      {!isMobile &&
+        (
+          <div className={'flex flex-row mr-[20px] gap-[4px] text-[16px]'}>
+            <span className={'py-[3px] px-[6px] bg-border-light rounded-[3px]'}>
+              CTRL
+            </span>
+            <span className={'py-[3px] px-[7px] bg-border-light rounded-[3px]'}>
+              K
+            </span>
+          </div>
+        )}
     </div>
   )
 }

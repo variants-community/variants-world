@@ -16,9 +16,7 @@ export const get: APIRoute = async ({ url }) => {
   }
 
   if (searchText != null) {
-    console.log('query: ', searchText)
     const posts = await searchFor(searchText) //split(' ')
-    console.log('details: ', posts)
     return new Response(JSON.stringify(posts), { status: 200 })
   } else {
     console.log('[api/posts] page=', page, ' limit=', limit)

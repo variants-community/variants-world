@@ -58,7 +58,7 @@ const GameInfo = (props: GameInfoProps) => {
 
   return (
     <div
-      className={'w-full flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'}
+      className={'w-full sm:w-[500px] lg:w-[474px] flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'}
     >
       <div className={'flex flex-col gap-[10px]'}>
         <div className={'flex flex-row items-center justify-between'}>
@@ -80,6 +80,8 @@ const GameInfo = (props: GameInfoProps) => {
         </div>
 
         <PostTags
+          postId={props.postId}
+          isEditMode={isEditMode}
           rules={props.rules}
           className="text-secondary"
           iconsClassName="fill-secondary"

@@ -11,7 +11,7 @@ export const Notes = (props: NotesProps) => (
       value={props.notes ?? ''}
       onChange={props.onChangeNotes}
       rows={4}
-      className={'h-full w-[375px] p-[10px] mt-[6px] font-[16px] font-semibold bg-dark bold-border rounded-[3px] outline-none resize-none'}
+      className={'h-full w-full lg:w-[375px] p-[10px] mt-[6px] font-[16px] font-semibold bg-dark bold-border rounded-[3px] outline-none resize-none'}
     />
   </div>
 )

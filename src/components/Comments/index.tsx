@@ -41,7 +41,7 @@ const Comments = (props: CommentsProps) => {
   }
 
   return (
-    <div className={'flex flex-col gap-[30px] mb-[100px]'}>
+    <div className={'sm:mx-[20px] lg:w-auto flex flex-col gap-[30px] mb-[100px]'}>
       <CommentsList comments={comments} onReply={setReplyTo} />
       <CommentInput
         onSendComment={postComment}

@@ -31,7 +31,7 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'PostDetails',
-          filter: `id=eq.${details.postId}`
+          filter: `postId=eq.${details.postId}`
         },
         (payload) => {
           const updated = payload.new as PostDetails
@@ -46,7 +46,7 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'Voice',
-          filter: `postId=eq.${details.postId}`
+          filter: `postId=eq.${details.id}`
         },
         async (payload) => {
           const updated = payload.new as Voice
@@ -75,7 +75,7 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'INSERT',
           schema: 'public',
           table: 'Voice',
-          filter: `postId=eq.${details.postId}`
+          filter: `postId=eq.${details.id}`
         },
         async (payload) => {
           const updated = payload.new as Voice
@@ -98,17 +98,18 @@ export const useAdminSettings = (details: PostDetails) => {
 
   const onChangeGameClassification = async (e: Event) => {
     let value = getValueFromEvent<GameClassification | undefined>(e)
-    if (value as string === 'Undefined') {
-      value = undefined
-      setGameClassification(value)
-    
-      await supabase
-        .from('PostDetails')
-        .update({
-          gameClassification: value ?? null
-        })
-        .eq('postId', details.postId)
-      }
+
+    if ((value as string) === 'Undefined') value = undefined
+
+    setGameClassification(value)
+
+    const result = await supabase
+      .from('PostDetails')
+      .update({
+        gameClassification: value ?? null
+      })
+      .eq('postId', details.postId)
+    console.log('game: ', result)
   }
 
   const setGameplayClassificationOnChange = async (

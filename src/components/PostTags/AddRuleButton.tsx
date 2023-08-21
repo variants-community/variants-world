@@ -3,7 +3,7 @@ import { getValueFromEvent } from '../../hepers'
 
 type AddRuleButton = {
   className?: string;
-  addRule: (rule: string) => void;
+  addRule?: (rule: string) => void;
 };
 
 export const AddRuleButton = (props: AddRuleButton) => {
@@ -37,7 +37,7 @@ export const AddRuleButton = (props: AddRuleButton) => {
                 setIsInput(false)
               }}
               onBlur={(e) => {
-                props.addRule(getValueFromEvent(e))
+                props.addRule?.(getValueFromEvent(e))
                 setNewRule('')
                 setIsInput(false)
               }}

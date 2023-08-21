@@ -7,7 +7,11 @@ import {
   updatePostGameRule
 } from '../../db/supabase/queries'
 
-export const usePostTagsEditMode = (postId: number, initRules: string[]) => {
+export const usePostTagsEditMode = (initRules: string[], postId?: number, ) => {
+  if (!postId) {
+    return { rules: initRules }
+  }
+  
   const [rules, setRules] = useState(initRules)
 
   const remove = async (toBeRemoved: string) => {

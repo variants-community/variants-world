@@ -1,21 +1,11 @@
-import { createPost } from './../../../services/postsService'
+// import { createPost } from './../../../services/postsService'
 import type { APIRoute } from 'astro'
 import { getGameDetailsById } from '../../../cgabot'
 import { getTextForComparing, isGame } from '../../../utils/hepers'
+import { PostDetailsDTO, createPost } from '../../../services/createPost'
 
 const isSameGames = (arr: string[]) =>
   arr.every((element) => element === arr[0])
-
-export interface PostDetailsDTO {
-  userId: number
-  gameId: string
-  approveIds: string[]
-  details: {
-    description: string
-    title: string
-    type: string
-  }
-}
 
 export interface ErrorMessage {
   message: string
@@ -58,22 +48,23 @@ export const post: APIRoute = async ({ request }) => {
 
   if (isSame) {
     console.log(`[api/posts/create] [${data.gameId}] - Basic checks passed`)
-    const response = await createPost(mainGame!, data)
+    // const response = await createPost(mainGame!, data)
+    const response = await createPost(data)
 
     if (response.status < 400) {
-      return new Response(JSON.stringify({ id: response.data?.id }), {
+      return new Response(JSON.stringify({ id: response.id }), {
         status: response.status
       })
-    } else if (response.status === 409) {
-      return new Response(
-        errorMessage({ message: 'The game is already registered' }),
-        { status: response.status }
-      )
     } else {
       return new Response(errorMessage({ message: 'Error' }), {
         status: response.status
       })
     }
+    // else if (response.status === 409) {
+    //   return new Response(
+    //     errorMessage({ message: 'The game is already registered' }),
+    //     { status: response.status }
+    //   )
   } else {
     console.log(
       `[api/posts/create] [${data.gameId}] - Failed - Games not related`

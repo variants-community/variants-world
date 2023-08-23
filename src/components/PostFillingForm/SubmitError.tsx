@@ -1,12 +1,7 @@
-import type { ErrorMessage } from '../../pages/api/posts/create'
-
-
-
-export const SubmitError = (props: {error: ErrorMessage}) => (
+export const SubmitError = (props: { error: string }) => (
   <div className={'flex flex-row gap-[20px] justify-center items-center'}>
     <span className={'text-red'}>
-     {props.error.message}
+      {props.error}
     </span>
-    {props.error.details && <p>{props.error.details}</p>}
   </div>
 )

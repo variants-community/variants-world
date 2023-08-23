@@ -1,77 +1,65 @@
-// import { createPost } from './../../../services/postsService'
 import type { APIRoute } from 'astro'
-import { getGameDetailsById } from '../../../cgabot'
-import { getTextForComparing, isGame } from '../../../utils/hepers'
 import { PostDetailsDTO, createPost } from '../../../services/createPost'
+import { validateGame } from '../../../services/validateGame'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
-const isSameGames = (arr: string[]) =>
-  arr.every((element) => element === arr[0])
-
-export interface ErrorMessage {
+interface ErrorMessage {
   message: string
   details?: string
 }
 
-const errorMessage = (errorMessage: ErrorMessage): string =>
-  JSON.stringify(errorMessage)
+export interface CreateRouteResponseDataInterface {
+  confirmedGameId?: number
+  error?: ErrorMessage
+}
 
 export const post: APIRoute = async ({ request }) => {
-  const data = (await request.json()) as PostDetailsDTO
-  console.log(
-    `[api/posts/create] [${data.gameId}] - Attempt to create a post\ndetails: `,
-    data
-  )
-
-  const mainGame = await getGameDetailsById(data.gameId)
-  const gamesOrUndefined = await Promise.all(
-    data.approveIds.map(getGameDetailsById)
-  )
-
-  gamesOrUndefined.push(mainGame)
-
-  if (
-    gamesOrUndefined.some((game) => game === undefined) ||
-    data.approveIds.length !== 8
-  ) {
-    console.log(
-      `[api/posts/create] [${data.gameId}] - Failed - One or more games is undefined`
-    )
+  try {
+    const gameDetails = (await request.json()) as PostDetailsDTO
+    const game = await validateGame(gameDetails)
+    const id = await createPost(game, gameDetails)
     return new Response(
-      errorMessage({ message: 'One of the games was not found' }),
-      { status: 400 }
+      JSON.stringify({
+        confirmedGameId: id
+      } as CreateRouteResponseDataInterface)
     )
+  } catch (e) {
+    if (e instanceof PrismaClientKnownRequestError) {
+      return handlePrismaError(e)
+    } else if (e instanceof Error) return handleError(e)
+    else return handleUnknowError()
   }
+}
 
-  const games = gamesOrUndefined.filter(isGame)
-
-  const isSame = isSameGames(games.map(getTextForComparing))
-
-  if (isSame) {
-    console.log(`[api/posts/create] [${data.gameId}] - Basic checks passed`)
-    // const response = await createPost(mainGame!, data)
-    const response = await createPost(data)
-
-    if (response.status < 400) {
-      return new Response(JSON.stringify({ id: response.id }), {
-        status: response.status
-      })
-    } else {
-      return new Response(errorMessage({ message: 'Error' }), {
-        status: response.status
-      })
-    }
-    // else if (response.status === 409) {
-    //   return new Response(
-    //     errorMessage({ message: 'The game is already registered' }),
-    //     { status: response.status }
-    //   )
+const handlePrismaError = (e: PrismaClientKnownRequestError) => {
+  let errorMessage = ''
+  if (e.code === 'P2002') {
+    errorMessage = 'Post with this game alredy exist.'
   } else {
-    console.log(
-      `[api/posts/create] [${data.gameId}] - Failed - Games not related`
-    )
-    return new Response(
-      errorMessage({ message: 'The games are not related' }),
-      { status: 422 }
-    )
+    errorMessage = 'Unknow error.'
   }
+  return new Response(
+    JSON.stringify({
+      error: { message: errorMessage }
+    } as CreateRouteResponseDataInterface),
+    { status: 500 }
+  )
+}
+
+const handleError = (e: Error) => {
+  return new Response(
+    JSON.stringify({
+      error: { message: e.message }
+    } as CreateRouteResponseDataInterface),
+    { status: 500 }
+  )
+}
+
+const handleUnknowError = () => {
+  return new Response(
+    JSON.stringify({
+      error: { message: 'Error' }
+    } as CreateRouteResponseDataInterface),
+    { status: 500 }
+  )
 }

@@ -32,10 +32,10 @@
  @apply border border-[2px] border-border-dark
 }
 
-body, html {
+/* body, html {
  overflow-y: auto;
  scrollbar-gutter: stable;
-}
+} */
 
 .comment-quoting::before {
  content: "";

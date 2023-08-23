@@ -25,7 +25,7 @@ export const getTextForComparing = (game: CGABotGameDetails) =>
 
 
 // to display the correct data type after filtering
-export const isGame = (
+export const isCGABotGameDetails = (
   game: CGABotGameDetails | undefined
 ): game is CGABotGameDetails => {
   return !!game

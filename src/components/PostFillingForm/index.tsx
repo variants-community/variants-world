@@ -1,10 +1,7 @@
-import type { CGABotGameDetails } from '../../cgabot' 
+import type { CGABotGameDetails } from '../../cgabot'
 import { DescriptionInput } from './DescriptionInput'
 import { TitleInput } from './TitleInput'
 import { postGameToCreatePost } from '../../utils/fetchQueries'
-import type {
-  ErrorMessage,
-} from '../../pages/api/posts/create'
 import { TypeInput } from './TypeInput'
 import { useFormData } from './useFormData'
 import { useState } from 'preact/hooks'
@@ -18,7 +15,7 @@ type PostFillingFormProps = {
 };
 
 export const PostFillingForm = (props: PostFillingFormProps) => {
-  const [submitError, setSubmitError] = useState<ErrorMessage>()
+  const [submitError, setSubmitError] = useState<string>()
 
   const {
     errors,
@@ -50,14 +47,15 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         userId: props.userId,
       }
 
-      const res = await postGameToCreatePost(data)
+      const response = await postGameToCreatePost(data)
 
-      if (res.status === 200) {
-        window.location.replace(`http://localhost:3000/posts/${res.data.id}`)
-      } else {
-        setSubmitError(res.data)
-        console.log('status: ', res.status)
-        console.log('message: ', res.data)
+      if (response.confirmedGameId) {
+        window.location.replace(
+          `http://localhost:3000/posts/${response.confirmedGameId}`,
+        )
+      } else if (response.error) {
+          setSubmitError(response.error.message)
+        
       }
     }
   }

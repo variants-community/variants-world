@@ -5,12 +5,11 @@ export const IdsInputs = (
   props: {
     mainGameId: string;
     userId: number;
-    approveIds: string[]
-    setApproveIds: (ids: string[]) => void
+    approveIds: string[];
+    setApproveIds: (ids: string[]) => void;
     setIsAllConfirmed: (value: boolean) => void;
   },
 ) => {
-  
   const [states, setStates] = useState<IdInputState[]>(
     new Array<IdInputState>(8).fill(IdInputState.INPUT),
   )

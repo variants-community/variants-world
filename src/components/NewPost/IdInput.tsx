@@ -20,7 +20,7 @@ type IdInputProps = {
 
 export const IdInput = (props: IdInputProps) => {
   useEffect(() => {
-    if (props.value === '') {
+    if (props.value.length === 0) {
       props.setState(IdInputState.INPUT)
     } else {
       fetch(`/api/game/${props.mainGameId}/same-as/${props.value}`, {

@@ -1,4 +1,4 @@
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 import SearchIcon from '../icons/SearchIcon'
 import { isMobile } from 'react-device-detect'
 

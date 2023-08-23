@@ -1,7 +1,7 @@
 import { useEffect } from 'preact/hooks'
 import AcceptedIcon from '../icons/AcceptedIcon'
 import CrossIcon from '../icons/CrossIcon'
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 
 export enum IdInputState {
   ACCEPTED,

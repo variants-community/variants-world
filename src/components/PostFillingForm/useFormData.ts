@@ -1,6 +1,6 @@
 import { GameType } from '@prisma/client'
 import { useEffect, useState } from 'preact/hooks'
-import { isTitleValid } from '../../hepers'
+import { isTitleValid } from '../../utils/hepers'
 
 type InitState = {
   title?: string

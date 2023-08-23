@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 
 type AddRuleButton = {
   className?: string;

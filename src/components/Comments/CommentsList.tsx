@@ -1,6 +1,6 @@
 import type { Comment } from '@prisma/client'
 import type { ExtendedComment } from './index'
-import { formatDate } from '../../hepers'
+import { formatDate } from '../../utils/hepers'
 
 type CommentsProps = {
   comments: ExtendedComment[];

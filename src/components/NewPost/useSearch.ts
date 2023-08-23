@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
-import { fetchGameById, isIdValid } from '../../hepers'
-import type { CGABotGameDetails } from '../../services/cgabot'
+import { fetchGameById } from '../../utils/fetchQueries'
+import { isIdValid } from '../../utils/hepers'
+import type { CGABotGameDetails } from '../../cgabot'
 
 export const useSearch = () => {
   const [isInvalidId, setIsInvalidId] = useState(false)
@@ -36,11 +37,11 @@ export const useSearch = () => {
   }, [gameId])
 
   return {
-   game,
-   gameId,
-   setGameId,
-   isLoading,
-   isSearching,
-   isInvalidId
+    game,
+    gameId,
+    setGameId,
+    isLoading,
+    isSearching,
+    isInvalidId
   }
 }

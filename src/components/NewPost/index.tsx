@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { mapRuleVariantsToString, scrollTo } from '../../hepers'
+import { mapRuleVariantsToString, scrollTo } from '../../utils/hepers'
 import { Title } from './Title'
 import { Picture } from './Picture'
 import PostTags from '../PostTags'

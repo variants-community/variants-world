@@ -1,4 +1,4 @@
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 
 export const DescriptionInput = (
   props: {

@@ -1,6 +1,6 @@
 import type { Comment, User } from '@prisma/client'
 import { useEffect } from 'preact/hooks'
-import { scrollTo } from '../../hepers'
+import { scrollTo } from '../../utils/hepers'
 import CommentsList from './CommentsList'
 import CommentInput from './CommentInput'
 import { useComments } from './useComments'

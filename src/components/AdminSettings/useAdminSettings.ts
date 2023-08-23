@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks'
 
 import type { PostDetails } from '../../db/prisma/queries'
 
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 
 import type {
   GameClassification,

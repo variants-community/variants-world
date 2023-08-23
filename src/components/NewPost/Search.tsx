@@ -1,4 +1,4 @@
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 import SpinnerIcon from '../icons/SpinnerIcon'
 
 type SearchProps = {

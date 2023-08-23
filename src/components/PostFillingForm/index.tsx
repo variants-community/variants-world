@@ -1,15 +1,15 @@
-import type { CGABotGameDetails } from '../../services/cgabot'
+import type { CGABotGameDetails } from '../../cgabot' 
 import { DescriptionInput } from './DescriptionInput'
 import { TitleInput } from './TitleInput'
-import { postGameToCreatePost } from '../../hepers'
+import { postGameToCreatePost } from '../../utils/fetchQueries'
 import type {
   ErrorMessage,
-  PostDetailsDTO,
 } from '../../pages/api/posts/create'
 import { TypeInput } from './TypeInput'
 import { useFormData } from './useFormData'
 import { useState } from 'preact/hooks'
 import { SubmitError } from './SubmitError'
+import type { PostDetailsDTO } from '../../services/createPost'
 
 type PostFillingFormProps = {
   userId: number;
@@ -40,7 +40,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
 
     if (errors.size === 0) {
       const data: PostDetailsDTO = {
-        details: {
+        data: {
           description: description?.toString() ?? '',
           title: title?.toString() ?? '',
           type: type?.toString() ?? '',
@@ -52,7 +52,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
 
       const res = await postGameToCreatePost(data)
 
-      if (res.status === 201) {
+      if (res.status === 200) {
         window.location.replace(`http://localhost:3000/posts/${res.data.id}`)
       } else {
         setSubmitError(res.data)

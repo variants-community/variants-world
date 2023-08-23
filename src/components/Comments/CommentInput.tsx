@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 import type { Comment } from '@prisma/client'
 
 type CommentInputProps = {

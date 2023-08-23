@@ -1,6 +1,20 @@
 type ValueType = void | boolean | string | number | number[]
 type RuleMaker = (value: ValueType) => string
 
+class RuleMapper {
+  private map: Map<string, RuleMaker>
+
+  constructor(matches: Map<string, RuleMaker>) {
+    this.map = matches
+  }
+
+  public makeRule(type: string, value: ValueType): string {
+    const ruleMaker = this.map.get(type)
+    if (ruleMaker) return ruleMaker(value)
+    else return 'undefined'
+  }
+}
+
 const map: Map<string, RuleMaker> = new Map([
   ['allowPassing', () => 'Passing'],
   ['anonymous', () => 'Anonymous'],
@@ -42,18 +56,4 @@ const map: Map<string, RuleMaker> = new Map([
   ['torpedo', () => 'Torpedo']
 ])
 
-class RuleMapper {
-  private map: Map<string, RuleMaker>
-
-  constructor(matches: Map<string, RuleMaker>) {
-    this.map = matches
-  }
-
-  public makeRule(type: string, value: ValueType): string {
-    const ruleMaker = this.map.get(type)
-    if (ruleMaker) return ruleMaker(value)
-    else return 'undefined'
-  }
-}
-
-export const ruleMapper = new RuleMapper(map)
+export const gameRuleMapper = new RuleMapper(map)

@@ -1,7 +1,7 @@
 import { createPost } from './../../../services/postsService'
 import type { APIRoute } from 'astro'
-import { getGameDetailsById } from '../../../services/cgabot'
-import { getTextForComparing, isGame } from '../../../hepers'
+import { getGameDetailsById } from '../../../cgabot'
+import { getTextForComparing, isGame } from '../../../utils/hepers'
 
 const isSameGames = (arr: string[]) =>
   arr.every((element) => element === arr[0])

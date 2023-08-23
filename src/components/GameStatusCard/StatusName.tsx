@@ -1,5 +1,5 @@
 import { GameStatus } from '@prisma/client'
-import { statusToString } from '../../hepers'
+import { statusToString } from '../../utils/hepers'
 
 const statuses = [
   { label: 'Accepted', value: GameStatus.ACCEPTED },

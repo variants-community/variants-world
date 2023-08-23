@@ -1,5 +1,5 @@
 import { GameType } from '@prisma/client'
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 
 export const TypeInput = (
   props: {

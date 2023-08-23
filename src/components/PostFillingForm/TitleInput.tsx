@@ -1,4 +1,4 @@
-import { getValueFromEvent } from '../../hepers'
+import { getValueFromEvent } from '../../utils/hepers'
 
 export const TitleInput = (props: { title: string, setTitle: (value: string) => void, isInvalid: boolean }) => (
   <div className={'flex flex-row gap-[20px] justify-between items-center'}>

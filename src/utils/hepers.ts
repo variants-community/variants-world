@@ -1,8 +1,7 @@
-import type { CGABotGameDetails, CGABotRuleVariants } from './services/cgabot'
-import type { PostDetailsDTO } from './pages/api/posts/create'
+import type { CGABotGameDetails, CGABotRuleVariants } from '../cgabot'
+
 import type { GameStatus } from '@prisma/client'
-import { ruleMapper } from './services/ruleMapper'
-import type { PostForCard } from './db/prisma/queries'
+import { gameRuleMapper } from './gameRulesMapper'
 
 export const getValueFromEvent = <Type = string>(e: Event) =>
   (e.target as HTMLInputElement).value as Type
@@ -19,57 +18,13 @@ export const isDescriptionValid = (description: string): boolean => {
   return description.length > 4
 }
 
-export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {
-  const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
-  if (response.status === 200) {
-    return (await response.json()) as CGABotGameDetails
-  } else {
-    return undefined
-  }
-}
 
-export const postGameToCreatePost = async (data: PostDetailsDTO) => {
-  const response = await fetch('/api/posts/create', {
-    method: 'post',
-    body: JSON.stringify(data)
-  })
-
-  const id = await response.json()
-
-  return { data: id, status: response.status, statusText: response.statusText }
-}
-
-type Query = {
-  page?: number
-  limit?: number
-  searchText?: string
-}
-
-export const fetchPosts = async (query: Query) => {
-  let response = null
-  if (query.page != undefined && query.limit != undefined) {
-    response = await fetch(
-      `/api/posts?page=${query.page}&limit=${query.limit}`,
-      { method: 'get' }
-    )
-  } else if (query.searchText) {
-    response = await fetch(`/api/posts?searchText=${query.searchText}`, {
-      method: 'get'
-    })
-  } else {
-    return []
-  }
-
-  if (response.status === 200) {
-    return (await response.json()) as PostForCard[]
-  } else {
-    return []
-  }
-}
-
+// to confirm the identity of the games
 export const getTextForComparing = (game: CGABotGameDetails) =>
   game.q.startFen + JSON.stringify(game.q.ruleVariants)
 
+
+// to display the correct data type after filtering
 export const isGame = (
   game: CGABotGameDetails | undefined
 ): game is CGABotGameDetails => {
@@ -104,7 +59,7 @@ export const statusToColor = (status: GameStatus): string => {
 
 export const mapRuleVariantsToString = (rules: CGABotRuleVariants) => {
   const mappedRules = Object.keys(rules).map((key) =>
-    ruleMapper.makeRule(key, rules[key])
+    gameRuleMapper.makeRule(key, rules[key])
   )
   return mappedRules
 }

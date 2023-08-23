@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import type { PostForCard } from '../../db/prisma/queries'
 import { getTotalPostsCount } from '../../db/supabase/queries'
-import { fetchPosts } from '../../hepers'
+import { fetchPosts } from '../../utils/fetchQueries'
 
 export const useSearch = () => {
   const [query, setQuery] = useState('')

@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const command = `npx supabase gen types typescript --project-id "${process.env.PROJECT_ID}" --schema public > ./src/db/supabase/types.ts`
+const command = `npx supabase gen types typescript --project-id "${process.env.SUPABASE_PROJECT_ID}" --schema public > ./src/db/supabase/types.ts`
 
 exec(command, (err) =>
   err

@@ -3,6 +3,9 @@ import type { PostForCard } from '../../db/prisma/queries'
 import { getTotalPostsCount } from '../../db/supabase/queries'
 import { fetchPosts } from '../../utils/fetchQueries'
 
+const POSTS_PER_PAGE = 10
+
+
 export const useSearch = () => {
   const [query, setQuery] = useState('')
   const [posts, setPosts] = useState<PostForCard[]>([])
@@ -17,7 +20,7 @@ export const useSearch = () => {
 
   useEffect(() => {
     if (fetching && posts.length < totalCount) {
-      fetchPosts({ page: currentPage, limit: 5 }).then((posts) => {
+      fetchPosts({ page: currentPage, limit: POSTS_PER_PAGE }).then((posts) => {
         setPosts((prev) => [...prev, ...posts])
         setCurrentPage((prev) => prev + 1)
         setFetching(false)
@@ -32,7 +35,7 @@ export const useSearch = () => {
         setFetching(false)
       })
     } else {
-      fetchPosts({ page: 0, limit: 5 }).then((posts) => {
+      fetchPosts({ page: 0, limit: POSTS_PER_PAGE }).then((posts) => {
         setPosts(posts)
         setCurrentPage(1)
         setFetching(false)
@@ -42,7 +45,7 @@ export const useSearch = () => {
 
   const handleScroll = () => {
     const { scrollTop, scrollHeight } = document.documentElement
-    if (scrollHeight - (scrollTop + window.innerHeight) < 400) {
+    if (scrollHeight - (scrollTop + window.innerHeight) < 800) {
       setFetching(true)
     }
   }

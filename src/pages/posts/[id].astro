@@ -38,7 +38,7 @@ console.log(post)
               postId={post.id}
               userId={user.id}
               likes={post.UserLikedPosts}
-              client:load
+              client:only
             />
             {userIsTester ? (
               <GameInfo

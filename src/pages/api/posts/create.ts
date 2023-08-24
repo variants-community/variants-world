@@ -1,7 +1,9 @@
 import type { APIRoute } from 'astro'
-import { PostDetailsDTO, createPost } from '../../../services/createPost'
-import { validateGame } from '../../../services/validateGame'
+import { createPost } from '../../../services/createPost'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { ValiError, parseAsync } from 'valibot'
+import { PostDetailsValidator } from '../../../services/postDetailsValidator'
+import { getGameDetailsById } from '../../../cgabot'
 
 interface ErrorMessage {
   message: string
@@ -15,18 +17,21 @@ export interface CreateRouteResponseDataInterface {
 
 export const post: APIRoute = async ({ request }) => {
   try {
-    const gameDetails = (await request.json()) as PostDetailsDTO
-    const game = await validateGame(gameDetails)
-    const id = await createPost(game, gameDetails)
+    const postDetails = await parseAsync(
+      PostDetailsValidator,
+      await request.json()
+    )
+    const game = await getGameDetailsById(postDetails.gameId)
+    const id = await createPost(game!, postDetails) // the game has already been validate and exist
     return new Response(
       JSON.stringify({
         confirmedGameId: id
       } as CreateRouteResponseDataInterface)
     )
   } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      return handlePrismaError(e)
-    } else if (e instanceof Error) return handleError(e)
+    if (e instanceof PrismaClientKnownRequestError) return handlePrismaError(e)
+    else if (e instanceof Error) return handleError(e)
+    else if (e instanceof ValiError) return handleValiError(e)
     else return handleUnknowError()
   }
 }
@@ -34,13 +39,22 @@ export const post: APIRoute = async ({ request }) => {
 const handlePrismaError = (e: PrismaClientKnownRequestError) => {
   let errorMessage = ''
   if (e.code === 'P2002') {
-    errorMessage = 'Post with this game alredy exist.'
+    errorMessage = 'A post with this game already exists'
   } else {
     errorMessage = 'Unknow error.'
   }
   return new Response(
     JSON.stringify({
       error: { message: errorMessage }
+    } as CreateRouteResponseDataInterface),
+    { status: 500 }
+  )
+}
+
+const handleValiError = (e: ValiError) => {
+  return new Response(
+    JSON.stringify({
+      error: { message: e.message }
     } as CreateRouteResponseDataInterface),
     { status: 500 }
   )

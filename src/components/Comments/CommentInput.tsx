@@ -23,7 +23,7 @@ const CommentInput = (props: CommentInputProps) => {
 
   return (
     <div
-      className={'bg-dark border border-[2px] text-[16px] border-border-dark shadow-light rounded-[12px] w-full bg-dark overflow-hidden'}
+      className={'w-[984px] bg-dark border border-[2px] text-[16px] border-border-dark shadow-light rounded-[12px] bg-dark overflow-hidden'}
     >
       {props.replyTo && (
         <div

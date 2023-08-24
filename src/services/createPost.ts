@@ -1,18 +1,13 @@
+
 import type { CGABotGameDetails, CGABotRuleVariants } from '../cgabot'
 import prisma from '../db/prisma/prisma'
 import { mapRuleVariantsToString } from '../utils/hepers'
 import type { GameType } from '@prisma/client'
+import type { PostDetailsValidator } from './postDetailsValidator'
+import type { Output } from 'valibot'
 
-export interface PostDetailsDTO {
-  userId: number
-  gameId: string
-  approveIds: string[]
-  data: {
-    description: string
-    title: string
-    type: string
-  }
-}
+
+export type PostDetails = Output<typeof PostDetailsValidator>
 
 const mapRules = (ruleVariants: CGABotRuleVariants) => {
   return mapRuleVariantsToString(ruleVariants).map((rule) => ({ name: rule }))
@@ -20,7 +15,7 @@ const mapRules = (ruleVariants: CGABotRuleVariants) => {
 
 export const createPost = async (
   mainGame: CGABotGameDetails,
-  postDetailsDTO: PostDetailsDTO
+  postDetailsDTO: PostDetails
 ) => {
   const post = await prisma.post.create({
     data: {

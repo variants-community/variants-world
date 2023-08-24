@@ -6,7 +6,7 @@ import { TypeInput } from './TypeInput'
 import { useFormData } from './useFormData'
 import { useState } from 'preact/hooks'
 import { SubmitError } from './SubmitError'
-import type { PostDetailsDTO } from '../../services/createPost'
+import type { PostDetails } from '../../services/postDetailsValidator'
 
 type PostFillingFormProps = {
   userId: number;
@@ -36,7 +36,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
     const description = formData.get('description')?.toString()
 
     if (errors.size === 0) {
-      const data: PostDetailsDTO = {
+      const data: PostDetails = {
         data: {
           description: description?.toString() ?? '',
           title: title?.toString() ?? '',

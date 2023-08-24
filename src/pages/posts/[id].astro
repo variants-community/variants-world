@@ -23,6 +23,7 @@ const postId = parseInt(id!)
 const post = await getPostById(postId)
 const details = await getPostDetailsById(postId)
 const userIsTester = user.role == "TESTER"
+const userIsAuthor = user.id === post?.author.id
 
 console.log(post)
 ---
@@ -40,7 +41,7 @@ console.log(post)
               likes={post.UserLikedPosts}
               client:only
             />
-            {userIsTester ? (
+            {userIsTester || userIsAuthor ? (
               <GameInfo
                 displayEditBotton
                 postId={post.id}

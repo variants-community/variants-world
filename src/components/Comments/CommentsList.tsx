@@ -1,8 +1,10 @@
 import type { Comment } from '@prisma/client'
 import type { ExtendedComment } from './index'
 import { formatDate } from '../../utils/hepers'
+import { supabase } from '../../db/supabase/supabase'
 
 type CommentsProps = {
+  isUserTester: boolean;
   comments: ExtendedComment[];
   onReply: (comment: Comment) => void;
 };
@@ -11,17 +13,23 @@ const CommentsList = (props: CommentsProps) => (
   <div className={'flex flex-col gap-[20px] mb-[40px]'}>
     {props.comments.map((c) => (
       <CommentCard
+        isUserTester={props.isUserTester}
         key={c.id}
         comment={c}
         reply={() => props.onReply(c)}
+        remove={async () => {
+          await supabase.from('Comment').delete().eq('id', c.id)
+        }}
       />
     ))}
   </div>
 )
 
 type CommentCardProps = {
+  isUserTester: boolean;
   comment: ExtendedComment;
   reply: () => void;
+  remove: () => void;
 };
 
 const CommentCard = (props: CommentCardProps) => (
@@ -41,6 +49,14 @@ const CommentCard = (props: CommentCardProps) => (
           <button className={'flex'} onClick={() => props.reply()}>
             reply
           </button>
+          {props.isUserTester && (
+            <button
+              className={'flex'}
+              onClick={() => props.remove()}
+            >
+              remove
+            </button>
+          )}
         </div>
       </div>
 

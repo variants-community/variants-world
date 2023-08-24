@@ -13,6 +13,7 @@ export type ExtendedComment = Comment & {
 };
 
 type CommentsProps = {
+  isUserTester: boolean
   comments: ExtendedComment[];
   postId: number;
   userId: number;
@@ -42,7 +43,7 @@ const Comments = (props: CommentsProps) => {
 
   return (
     <div className={'sm:mx-[20px] lg:mx-auto lg:w-auto flex flex-col gap-[30px] mb-[100px]'}>
-      <CommentsList comments={comments} onReply={setReplyTo} />
+      <CommentsList isUserTester={props.isUserTester} comments={comments} onReply={setReplyTo} />
       <CommentInput
         onSendComment={postComment}
         replyTo={replyTo}

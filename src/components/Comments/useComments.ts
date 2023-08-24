@@ -80,6 +80,18 @@ export const useComments = (
           }
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'Comment',
+          filter: `postId=eq.${postId}`
+        },
+        async (payload) => {
+          setComments((prev) => prev.filter((c) => c.id !== payload.old.id))
+        }
+      )
       .subscribe()
     return () => {
       supabase.removeChannel(channel)

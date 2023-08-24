@@ -90,7 +90,7 @@ console.log(post)
             />
           )}
         </div>
-        <Comments userId={user.id} postId={post.id} comments={post.comments} client:only />
+        <Comments isUserTester={userIsTester} userId={user.id} postId={post.id} comments={post.comments} client:only />
       </>
     )
   }

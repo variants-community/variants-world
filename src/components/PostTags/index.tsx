@@ -1,7 +1,4 @@
 import { RuleItem } from './RuleItem'
-import { AddRuleButton } from './AddRuleButton'
-import { usePostTagsEditMode } from './usePostTagsEditMode'
-import { RuleItemEditable } from './RuleItemEditable'
 
 type PostTagsProps = {
   postId?: number;
@@ -13,19 +10,19 @@ type PostTagsProps = {
 };
 
 const PostTags = (props: PostTagsProps) => {
-  const { rules, edit, remove, add } = usePostTagsEditMode(
-    props.rules,
-    props.postId,
-  )
+  // const { rules, edit, remove, add } = usePostTagsEditMode(
+  //   props.rules,
+  //   props.postId,
+  // )
 
-  const withEditingMode = !!props.postId // if the postId is not passed - there is no possibility to edit
+  // const withEditingMode = !!props.postId // if the postId is not passed - there is no possibility to edit
 
   return (
     <div>
       <ul
         className={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulClassName}`}
       >
-        {withEditingMode && rules.sort().map((rule) => (
+        {/* {withEditingMode && rules.sort().map((rule) => (
           <RuleItemEditable
             key={rule}
             ruleName={rule}
@@ -37,8 +34,8 @@ const PostTags = (props: PostTagsProps) => {
         ))}
         {withEditingMode && props.isEditMode && (
           <AddRuleButton addRule={add} className={props.className} />
-        )}
-        {!withEditingMode && rules.sort().map((rule) => (
+        )} */}
+        {props.rules.sort().map((rule) => (
           <RuleItem
             key={rule}
             ruleName={rule}

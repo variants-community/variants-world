@@ -27,7 +27,7 @@ export const createPost = async (
       type: (postDetailsDTO.data.type as GameType) ?? 'NCV',
       PostDetails: { create: {} },
       gamerules: {
-        connectOrCreate: mapRules(mainGame.q.ruleVariants).map((rule) => ({
+        connectOrCreate: [...mapRules(mainGame.q.ruleVariants), {name: mainGame.q.timeControl}].map((rule) => ({
           where: { name: rule.name },
           create: { name: rule.name }
         }))

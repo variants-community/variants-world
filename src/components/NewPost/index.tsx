@@ -45,7 +45,7 @@ const NewPost = (props: { userId: number }) => {
       {isGameFound && (
         <div className={'sm:w-[450px] mt-[14px]'}>
           <PostTags
-            rules={mapRuleVariantsToString(game.q.ruleVariants)}
+            rules={[game.q.timeControl, ...mapRuleVariantsToString(game.q.ruleVariants)]}
             className="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
             iconsClassName="fill-secondary"
             ulClassName="justify-center"

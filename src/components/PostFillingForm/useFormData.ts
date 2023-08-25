@@ -25,22 +25,7 @@ export const useFormData = (initState?: InitState) => {
       temp.add('title')
       setErrors(temp)
     }
-    console.log('tit', errors)
   }, [title])
-
-  // useEffect(() => {
-  //   const temp = new Set(errors)
-  //   if (isDescriptionValid(description)) {
-  //     console.log('des del')
-  //     temp.delete('description')
-  //     setErrors(temp)
-  //   } else {
-  //     console.log('des set')
-  //     temp.add('description')
-  //     setErrors(temp)
-  //   }
-  //   console.log('des', errors)
-  // }, [description])
 
   return {
     errors,

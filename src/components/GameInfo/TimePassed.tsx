@@ -25,7 +25,7 @@ const getFormattedTimePassed = (createdAt: Date): string => {
 export const TimePassed = ({ from }: { from: Date }) => (
   <div className={'items-center '}>
     <span className={'block text-[16px] whitespace-nowrap'}>
-      {`${getFormattedTimePassed(from)}`}
+      {`${getFormattedTimePassed(new Date(from))}`}
     </span>
   </div>
 )

@@ -18,11 +18,9 @@ export const isDescriptionValid = (description: string): boolean => {
   return description.length > 4
 }
 
-
 // to confirm the identity of the games
 export const getTextForComparing = (game: CGABotGameDetails) =>
   game.q.startFen + JSON.stringify(game.q.ruleVariants)
-
 
 // to display the correct data type after filtering
 export const isCGABotGameDetails = (
@@ -91,4 +89,10 @@ export const scrollTo = (tagId: string) => {
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' })
   }
+}
+
+export const formatLikesCount = (likes: number): string => {
+  if (likes < 1000) return likes.toString()
+  else if (likes < 1000000) return `${(likes / 1000).toFixed(1)}k`
+  else return `${(likes / 1000000).toFixed(1)}M`
 }

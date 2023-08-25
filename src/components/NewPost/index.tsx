@@ -43,7 +43,7 @@ const NewPost = (props: { userId: number }) => {
       {isGameFound && <Picture />}
 
       {isGameFound && (
-        <div className={'w-[450px] mt-[14px]'}>
+        <div className={'sm:w-[450px] mt-[14px]'}>
           <PostTags
             rules={mapRuleVariantsToString(game.q.ruleVariants)}
             className="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
@@ -63,7 +63,7 @@ const NewPost = (props: { userId: number }) => {
       )}
       {isGameFound && isAllConfirmed &&
         (
-          <div className={'w-[700px] mt-[150px] mb-[300px]'}>
+          <div className={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
             <PostFillingForm
               userId={props.userId}
               game={game}

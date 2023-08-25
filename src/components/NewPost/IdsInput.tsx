@@ -35,7 +35,7 @@ export const IdsInputs = (
 
   return (
     <div
-      className={'flex flex-wrap gap-[21px] mt-[75px] mx-auto justify-center'}
+      className={'flex flex-wrap gap-[21px] mt-[75px] mx-auto justify-center mb-[50px]'}
     >
       {props.approveIds.map((value, index) => {
         return (

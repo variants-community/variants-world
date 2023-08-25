@@ -5,7 +5,7 @@ const LikeIcon = (props: { className?: string; isLiked?: boolean }) => (
     height="22"
     viewBox="0 0 24 22"
     className={`stroke-2 ${props.className} ${
-      props.isLiked ? 'fill-[#CD2740]' : 'fill-[#1E1E20]'
+      props.isLiked ? '!fill-[#CD2740]' : '!fill-[#1E1E20]'
     }`}
   >
     <path

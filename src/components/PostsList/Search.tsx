@@ -1,6 +1,5 @@
 import { getValueFromEvent } from '../../utils/hepers'
 import SearchIcon from '../icons/SearchIcon'
-import { isMobile } from 'react-device-detect'
 
 type SearhProps = {
   query: string;
@@ -14,7 +13,7 @@ const Search = (props: SearhProps) => {
 
   return (
     <div
-      className={'flex flex-row items-center w-full bg-dark shadow-light border border-[2px] border-border-dark rounded-full'}
+      className={'w-11/12 mt-[80px] mb-[30px] sm:mb-[55px] sm:mt-0  mx-auto sm:mx-0 flex flex-row items-center sm:w-full bg-dark shadow-light border border-[2px] border-border-dark rounded-full'}
     >
       <SearchIcon className="h-[20px] w-[20px] ml-[20px] my-[12px] mr-[12px]" />
       <input
@@ -25,17 +24,15 @@ const Search = (props: SearhProps) => {
         className={'w-full bg-dark outline-none text-[20px] font-normal'}
         placeholder={'Search'}
       />
-      {!isMobile &&
-        (
-          <div className={'flex flex-row mr-[20px] gap-[4px] text-[16px]'}>
-            <span className={'py-[3px] px-[6px] bg-border-light rounded-[3px]'}>
-              CTRL
-            </span>
-            <span className={'py-[3px] px-[7px] bg-border-light rounded-[3px]'}>
-              K
-            </span>
-          </div>
-        )}
+
+      <div className={'hidden sm:flex flex-row mr-[20px] gap-[4px] text-[16px]'}>
+        <span className={'py-[3px] px-[6px] bg-border-light rounded-[3px]'}>
+          CTRL
+        </span>
+        <span className={'py-[3px] px-[7px] bg-border-light rounded-[3px]'}>
+          K
+        </span>
+      </div>
     </div>
   )
 }

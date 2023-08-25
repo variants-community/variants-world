@@ -11,22 +11,28 @@ export const useSearch = () => {
   const [gameId, setGameId] = useState('')
   const [game, setGame] = useState<CGABotGameDetails>()
 
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>()
+
   useEffect(() => {
     const abortController = new AbortController()
     if (isIdValid(gameId)) {
-      setIsSearching(true)
-      setIsLoading(true)
-
-      fetchGameById(gameId, abortController.signal)
-        .then((data) => {
-          if (data) {
-            console.log(data)
-            setGame(data)
-          } else {
-            setIsInvalidId(true)
-          }
-        })
-        .finally(() => setIsLoading(false))
+      if (searchTimeout) clearTimeout(searchTimeout)
+      setSearchTimeout(
+        setTimeout(() => {
+          setIsSearching(true)
+          setIsLoading(true)
+          fetchGameById(gameId, abortController.signal)
+            .then((data) => {
+              if (data) {
+                console.log(data)
+                setGame(data)
+              } else {
+                setIsInvalidId(true)
+              }
+            })
+            .finally(() => setIsLoading(false))
+        }, 300)
+      )
     } else {
       setIsSearching(false)
       setGame(undefined)

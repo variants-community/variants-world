@@ -5,7 +5,6 @@ import { fetchPosts } from '../../utils/fetchQueries'
 
 const POSTS_PER_PAGE = 10
 
-
 export const useSearch = () => {
   const [query, setQuery] = useState('')
   const [posts, setPosts] = useState<PostForCard[]>([])
@@ -13,6 +12,8 @@ export const useSearch = () => {
   const [currentPage, setCurrentPage] = useState(0)
   const [fetching, setFetching] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
+
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>()
 
   useEffect(() => {
     getTotalPostsCount().then(setTotalCount)
@@ -30,10 +31,15 @@ export const useSearch = () => {
 
   useEffect(() => {
     if (query != '') {
-      fetchPosts({ searchText: query }).then((posts) => {
-        setPosts(posts)
-        setFetching(false)
-      })
+      if (searchTimeout) clearTimeout(searchTimeout)
+      setSearchTimeout(
+        setTimeout(() => {
+          fetchPosts({ searchText: query }).then((posts) => {
+            setPosts(posts)
+            setFetching(false)
+          })
+        }, 500)
+      )
     } else {
       fetchPosts({ page: 0, limit: POSTS_PER_PAGE }).then((posts) => {
         setPosts(posts)

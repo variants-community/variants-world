@@ -44,13 +44,15 @@ export const getPostDetailsById = async (postId: number) => {
 }
 
 export const searchFor = async (query: string) => {
+  const words = query.split(/(\s+)/).filter( e => e.trim().length > 0).reduce((prev, curr) => `${prev} | ${curr}`)
+  console.log('words: ', words)
   const posts = await prisma.post.findMany({
     where: {
       OR: [
-        { title: { search: query } },
-        { description: { search: query } },
-        { author: { name: { search: query } } },
-        { gamerules: { some: { name: { search: query } } } }
+        { title: { search: words, mode: 'insensitive'} },
+        { description: { search: words, mode: 'insensitive' } },
+        { author: { name: { search: words, mode: 'insensitive' } } },
+        { gamerules: { some: { name: { search: words, mode: 'insensitive' } } } }
       ]
     },
     include: {

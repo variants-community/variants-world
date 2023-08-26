@@ -2,7 +2,7 @@ import { getValueFromEvent } from 'utils/hepers'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
 type AddRuleButtonProps = {
-  className?: string
+  class?: string
   addRule?: (rule: string) => void
 }
 
@@ -22,14 +22,14 @@ export const AddRuleButton = (props: AddRuleButtonProps) => {
     <>
       {isInput && (
         <li
-          className={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.className}`}
+          class={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.class}`}
         >
           <input
             ref={ref}
             style={{
               width: newRule.length === 0 ? '10ch' : `${newRule.length}ch`
             }}
-            className={'inline bg-dark outline-none'}
+            class={'inline bg-dark outline-none'}
             value={newRule}
             onInput={e => setNewRule(getValueFromEvent(e))}
             onChange={() => {
@@ -47,7 +47,7 @@ export const AddRuleButton = (props: AddRuleButtonProps) => {
         <li>
           <button
             onClick={() => setIsInput(true)}
-            className={'h-[26px] text-text border border-border-dark rounded-[3px] py-[5px] px-[5px]'}
+            class={'h-[26px] text-text border border-border-dark rounded-[3px] py-[5px] px-[5px]'}
           >
             + Add
           </button>

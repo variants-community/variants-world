@@ -1,11 +1,11 @@
-const Bubbles = (props: { className?: string; color: string }) => (
+const Bubbles = (props: { class?: string; color: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="125"
     height="114"
     viewBox="0 0 125 114"
     fill="none"
-    className={`${props.className}`}
+    class={`${props.class}`}
   >
     <rect x="28" y="14" width="8" height="8" rx="4" fill={props.color} />
     <rect width="5" height="5" rx="2.5" fill={props.color} />

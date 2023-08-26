@@ -19,42 +19,42 @@ const PostCard = (props: PostCardProps) => {
   return (
     <>
       <div
-        className={
+        class={
           'flex mx-auto w-11/12 sm:mx-0 sm:w-auto flex-col sm:flex-row rounded-[12px] overflow-hidden bg-border-light border border-[2px] border-border-dark'
         }
       >
-        <img src="/src/assets/images/game.png" alt={props.post.title} className={'sm:w-[220px] sm:h-[220px]'} />
-        <div className={'w-full flex flex-col justify-between p-[20px] '}>
-          <div className={'flex flex-col gap-[10px] mb-[30px] sm:mb-0'}>
-            <div className={'flex flex-row justify-between'}>
+        <img src="/src/assets/images/game.png" alt={props.post.title} class={'sm:w-[220px] sm:h-[220px]'} />
+        <div class={'w-full flex flex-col justify-between p-[20px] '}>
+          <div class={'flex flex-col gap-[10px] mb-[30px] sm:mb-0'}>
+            <div class={'flex flex-row justify-between'}>
               <PostTitle linkTo={`/posts/${props.post.id}`} type={props.post.type} title={props.post.title} />
-              <div className={'hidden sm:block'}>
+              <div class={'hidden sm:block'}>
                 <TimePassed from={props.post.createdAt} />
               </div>
             </div>
 
             <PostTags
               rules={props.post.gamerules.map(rule => rule.name)}
-              className="text-text bg-dark border border-[0.4px] border-border-dark"
-              iconsClassName="fill-text"
+              class="text-text bg-dark border border-[0.4px] border-border-dark"
+              iconsclass="fill-text"
             />
           </div>
-          <div className={'flex gap-[20px] sm:gap-0 flex-col sm:flex-row justify-between'}>
-            <div className={'flex flex-row justify-between items-center'}>
+          <div class={'flex gap-[20px] sm:gap-0 flex-col sm:flex-row justify-between'}>
+            <div class={'flex flex-row justify-between items-center'}>
               <PostUser user={props.post.author.name} />
-              <div className={'block sm:hidden'}>
+              <div class={'block sm:hidden'}>
                 <TimePassed from={props.post.createdAt} />
               </div>
             </div>
 
-            <div className={'w-full sm:w-[150px] flex flex-row justify-between sm:justify-end text-[22px] gap-[15px]'}>
-              <div className={'mr-auto'}>
+            <div class={'w-full sm:w-[150px] flex flex-row justify-between sm:justify-end text-[22px] gap-[15px]'}>
+              <div class={'mr-auto'}>
                 <Status status={props.post.status} />
               </div>
-              <div className={' sm:w-min-[70px]'}>
+              <div class={' sm:w-min-[70px]'}>
                 <Comments count={props.post.commentsCount} />
               </div>
-              <div className={' sm:w-min-[70px]'}>
+              <div class={' sm:w-min-[70px]'}>
                 <Likes likes={props.post.likes} postId={props.post.id} userId={props.userId} />
               </div>
             </div>
@@ -66,21 +66,21 @@ const PostCard = (props: PostCardProps) => {
 }
 
 const Status = ({ status }: { status: GameStatus }) => (
-  <div className={'w-auto'}>
+  <div class={'w-auto'}>
     {status === 'ACCEPTED' ? (
-      <StatusIcon className="fill-green" />
+      <StatusIcon class="fill-green" />
     ) : status === 'DECLINED' ? (
-      <StatusIcon className="fill-red" />
+      <StatusIcon class="fill-red" />
     ) : status === 'PENDING_REPLY' ? (
-      <StatusIcon className="fill-blue" />
+      <StatusIcon class="fill-blue" />
     ) : (
-      <StatusIcon className="fill-yellow" />
+      <StatusIcon class="fill-yellow" />
     )}
   </div>
 )
 
 const Comments = ({ count }: { count: number }) => (
-  <div className={'flex flex-row justify-end items-center gap-[8px]'}>
+  <div class={'flex flex-row justify-end items-center gap-[8px]'}>
     <span>{count}</span>
     <CommentIcon />
   </div>

@@ -58,13 +58,13 @@ const GameInfo = (props: GameInfoProps) => {
 
   return (
     <div
-      className={
+      class={
         'w-full sm:w-[500px] lg:w-[474px] flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'
       }
     >
-      <div className={'flex flex-col gap-[10px]'}>
-        <div className={'flex flex-row items-center justify-between'}>
-          <div className={'flex flex-row items-center gap-[10px]'}>
+      <div class={'flex flex-col gap-[10px]'}>
+        <div class={'flex flex-row items-center justify-between'}>
+          <div class={'flex flex-row items-center gap-[10px]'}>
             <PostTitle
               isEditMode={isEditMode}
               type={type}
@@ -83,8 +83,8 @@ const GameInfo = (props: GameInfoProps) => {
           postId={props.postId}
           isEditMode={isEditMode}
           rules={props.rules}
-          className="text-secondary"
-          iconsClassName="fill-secondary"
+          class="text-secondary"
+          iconsclass="fill-secondary"
         />
       </div>
 
@@ -94,7 +94,7 @@ const GameInfo = (props: GameInfoProps) => {
         <Description isEditMode={isEditMode} value={description} onDescriptionChange={onDescriptionChange} />
       )}
 
-      <div className={'flex flex-row justify-end mt-auto'}>
+      <div class={'flex flex-row justify-end mt-auto'}>
         <LinkToVariant isEditMode={isEditMode} value={variantLink} onVarianLinkChange={onVariantLinkChange} />
       </div>
     </div>

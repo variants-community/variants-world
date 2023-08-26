@@ -25,7 +25,7 @@ const NewPost = (props: { userId: number }) => {
   }
 
   return (
-    <div className="flex flex-col items-center mx-auto">
+    <div class="flex flex-col items-center mx-auto">
       <Title isSearching={isSearching} />
 
       <Search
@@ -39,12 +39,12 @@ const NewPost = (props: { userId: number }) => {
       {isGameFound && <Picture />}
 
       {isGameFound && (
-        <div className={'sm:w-[450px] mt-[14px]'}>
+        <div class={'sm:w-[450px] mt-[14px]'}>
           <PostTags
             rules={[game.q.timeControl, ...mapRuleVariantsToString(game.q.ruleVariants)]}
-            className="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
-            iconsClassName="fill-secondary"
-            ulClassName="justify-center"
+            class="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
+            iconsclass="fill-secondary"
+            ulclass="justify-center"
           />
         </div>
       )}
@@ -58,7 +58,7 @@ const NewPost = (props: { userId: number }) => {
         />
       )}
       {isGameFound && isAllConfirmed && (
-        <div className={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
+        <div class={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
           <PostFillingForm userId={props.userId} game={game} approveIds={approveIds} />
         </div>
       )}

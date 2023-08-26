@@ -23,28 +23,23 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={submit} className="w-[300px] flex flex-col gap-2 mt-5">
-      <div className="flex flex-row justify-between">
+    <form onSubmit={submit} class="w-[300px] flex flex-col gap-2 mt-5">
+      <div class="flex flex-row justify-between">
         <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="text"
-          className="w-[200px] bg-dark border border-text rounded outline-none"
-        />
+        <input id="email" name="email" type="text" class="w-[200px] bg-dark border border-text rounded outline-none" />
       </div>
 
-      <div className="flex flex-row justify-between">
+      <div class="flex flex-row justify-between">
         <label htmlFor="password">Password</label>
         <input
           id="password"
           name="password"
           type="password"
-          className="w-[200px] bg-dark border border-text rounded outline-none"
+          class="w-[200px] bg-dark border border-text rounded outline-none"
         />
       </div>
-      <div className="flex justify-end">
-        <button className="border border-gray-800 px-2 rounded">login</button>
+      <div class="flex justify-end">
+        <button class="border border-gray-800 px-2 rounded">login</button>
       </div>
     </form>
   )

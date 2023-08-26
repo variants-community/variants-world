@@ -1,6 +1,6 @@
-const CrossIcon = (props: { className?: string }) => (
+const CrossIcon = (props: { class?: string }) => (
   <svg
-    className={`${props.className}`}
+    class={`${props.class}`}
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"

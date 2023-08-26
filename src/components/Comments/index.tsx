@@ -37,7 +37,7 @@ const Comments = (props: CommentsProps) => {
   }
 
   return (
-    <div className={'sm:mx-[20px] lg:mx-auto lg:w-auto flex flex-col gap-[30px] mb-[100px]'}>
+    <div class={'sm:mx-[20px] lg:mx-auto lg:w-auto flex flex-col gap-[30px] mb-[100px]'}>
       <CommentsList isUserTester={props.isUserTester} comments={comments} onReply={setReplyTo} />
       <CommentInput onSendComment={postComment} replyTo={replyTo} cancelReplyTo={cancelReplyTo} />
     </div>

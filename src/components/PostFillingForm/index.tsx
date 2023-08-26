@@ -50,7 +50,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
     <form
       id="post-details-form"
       onSubmit={submit}
-      className={'flex flex-col gap-[20px] w-full border border-border-light rounded-[12px] text-[28px] p-[20px] '}
+      class={'flex flex-col gap-[20px] w-full border border-border-light rounded-[12px] text-[28px] p-[20px] '}
     >
       <TitleInput title={title} setTitle={setTitle} isInvalid={errors.has('title')} />
       <TypeInput type={type} setType={setType} isInvalid={errors.has('type')} />
@@ -60,7 +60,7 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         isInvalid={errors.has('description')}
       />
       {submitError && <SubmitError error={submitError} />}
-      <button className={'border border-border-light p-[10px] rounded-[12px] mt-[20px]'}>Post</button>
+      <button class={'border border-border-light p-[10px] rounded-[12px] mt-[20px]'}>Post</button>
     </form>
   )
 }

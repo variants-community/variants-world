@@ -1,6 +1,6 @@
-const StatusIcon = (props: { className?: string }) => (
+const StatusIcon = (props: { class?: string }) => (
   <svg
-    className={`${props.className}`}
+    class={`${props.class}`}
     xmlns="http://www.w3.org/2000/svg"
     width="20"
     height="20"

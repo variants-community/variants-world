@@ -42,16 +42,16 @@ export const IdInput = (props: IdInputProps) => {
   }, [props.value])
   return (
     <div
-      className={
+      class={
         'w-[183px] h-[45px] flex flex-row gap-[8px] items-center text-[18px] px-[15px] py-[10px] border border-border-light rounded-full'
       }
     >
       {props.state === IdInputState.INPUT ? (
-        <span className={'max-w-[15px] text-[23px]'}>#</span>
+        <span class={'max-w-[15px] text-[23px]'}>#</span>
       ) : props.state === IdInputState.ACCEPTED ? (
-        <AcceptedIcon className="h-[15px] max-w-[15px]" />
+        <AcceptedIcon class="h-[15px] max-w-[15px]" />
       ) : (
-        <CrossIcon className="h-[15px] max-w-[15px]" />
+        <CrossIcon class="h-[15px] max-w-[15px]" />
       )}
 
       <input
@@ -59,7 +59,7 @@ export const IdInput = (props: IdInputProps) => {
         onInput={e => props.setValue(getValueFromEvent(e))}
         placeholder={props.placeholder}
         type="text"
-        className={'w-[100%] bg-dark outline-none'}
+        class={'w-[100%] bg-dark outline-none'}
       />
     </div>
   )

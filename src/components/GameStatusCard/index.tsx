@@ -36,18 +36,18 @@ const GameStatusCard = (props: AcceptedCardProps) => {
 
   return (
     <div
-      className={`relative flex flex-row justify-between items-center text-center bg-border-light text-${statusToColor(
+      class={`relative flex flex-row justify-between items-center text-center bg-border-light text-${statusToColor(
         status
       )} shadow-dark rounded-[12px]`}
     >
-      <Bubbles className="ml-[48px] mt-[45px] mb-[20px] mr-0" color={statusToColor(status)} />
-      <div className={'block w-full'}>
+      <Bubbles class="ml-[48px] mt-[45px] mb-[20px] mr-0" color={statusToColor(status)} />
+      <div class={'block w-full'}>
         <StatusName isEditMode={isEditMode} status={status} onChange={onStatusChange} />
         <Verdict isEditMode={isEditMode} verdict={verdict} onChange={onVerdictChange} />
       </div>
-      <Bubbles className="mr-[48px] mt-[45px] mb-[20px] miror" color={statusToColor(status)} />
+      <Bubbles class="mr-[48px] mt-[45px] mb-[20px] miror" color={statusToColor(status)} />
       {props.displayEditBotton && (
-        <EditButton onClick={() => toogleIsChangeable()} className={'absolute bottom-[12px] right-[10px]'} />
+        <EditButton onClick={() => toogleIsChangeable()} class={'absolute bottom-[12px] right-[10px]'} />
       )}
     </div>
   )

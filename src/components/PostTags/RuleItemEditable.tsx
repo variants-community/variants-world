@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 type RuleItemEditableProps = {
   isEditMode: boolean
   ruleName: string
-  className?: string
+  class?: string
   onRemove: () => void
   edit?: (old: string, edited: string) => void
 }
@@ -23,14 +23,14 @@ export const RuleItemEditable = (props: RuleItemEditableProps) => {
 
   return (
     <li
-      className={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.className}`}
+      class={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.class}`}
     >
       {props.isEditMode ? (
         inputMode ? (
           <input
             ref={ref}
             style={{ width: `${value.length}ch` }}
-            className={'inline bg-dark outline-none'}
+            class={'inline bg-dark outline-none'}
             value={value}
             onInput={e => setValue(getValueFromEvent(e))}
             onChange={() => {
@@ -49,7 +49,7 @@ export const RuleItemEditable = (props: RuleItemEditableProps) => {
       )}
 
       {props.isEditMode && (
-        <button onClick={() => props.onRemove()} className={'text-text'}>
+        <button onClick={() => props.onRemove()} class={'text-text'}>
           X
         </button>
       )}

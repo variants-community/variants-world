@@ -5,8 +5,8 @@ export const DescriptionInput = (props: {
   setDescription: (value: string) => void
   isInvalid: boolean
 }) => (
-  <div className={'flex flex-col'}>
-    <label htmlFor={'description'} className={`${props.isInvalid ? 'text-red' : ''}`}>
+  <div class={'flex flex-col'}>
+    <label htmlFor={'description'} class={`${props.isInvalid ? 'text-red' : ''}`}>
       Description
     </label>
     <textarea
@@ -15,7 +15,7 @@ export const DescriptionInput = (props: {
       name="description"
       id="description"
       rows={5}
-      className={`rounded-[12px] outline-none bg-border-dark text-[18px] p-[10px] mt-[5px] border ${
+      class={`rounded-[12px] outline-none bg-border-dark text-[18px] p-[10px] mt-[5px] border ${
         props.isInvalid ? 'border-red' : 'border-border-light'
       }`}
     />

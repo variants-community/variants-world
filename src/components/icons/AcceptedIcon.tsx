@@ -1,7 +1,7 @@
-const AcceptedIcon = (props: { className?: string }) => (
+const AcceptedIcon = (props: { class?: string }) => (
   <div>
     <svg
-      className={`${props.className}`}
+      class={`${props.class}`}
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="12"

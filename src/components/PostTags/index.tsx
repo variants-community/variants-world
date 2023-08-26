@@ -4,9 +4,9 @@ type PostTagsProps = {
   postId?: number
   isEditMode?: boolean
   rules: string[]
-  className?: string
-  iconsClassName?: string
-  ulClassName?: string
+  class?: string
+  iconsclass?: string
+  ulclass?: string
 }
 
 const PostTags = (props: PostTagsProps) => {
@@ -19,22 +19,22 @@ const PostTags = (props: PostTagsProps) => {
 
   return (
     <div>
-      <ul className={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulClassName}`}>
+      <ul class={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulclass}`}>
         {/* {withEditingMode && rules.sort().map((rule) => (
           <RuleItemEditable
             key={rule}
             ruleName={rule}
             isEditMode={props.isEditMode ?? false}
-            className={props.className}
+            class={props.class}
             onRemove={() => remove?.(rule)}
             edit={edit}
           />
         ))}
         {withEditingMode && props.isEditMode && (
-          <AddRuleButton addRule={add} className={props.className} />
+          <AddRuleButton addRule={add} class={props.class} />
         )} */}
         {props.rules.sort().map(rule => (
-          <RuleItem key={rule} ruleName={rule} className={props.className} />
+          <RuleItem key={rule} ruleName={rule} class={props.class} />
         ))}
       </ul>
     </div>

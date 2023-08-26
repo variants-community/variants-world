@@ -1,7 +1,7 @@
-const EditIcon = (props: { className?: string }) => (
+const EditIcon = (props: { class?: string }) => (
   <div>
     <svg
-      className={`${props.className}`}
+      class={`${props.class}`}
       xmlns="http://www.w3.org/2000/svg"
       width="18"
       height="16"

@@ -1,10 +1,4 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 export interface Database {
   public: {
@@ -179,34 +173,22 @@ export interface Database {
       }
       PostDetails: {
         Row: {
-          gameClassification:
-            | Database['public']['Enums']['GameClassification']
-            | null
-          gameplayClassification:
-            | Database['public']['Enums']['GameplayClassification']
-            | null
+          gameClassification: Database['public']['Enums']['GameClassification'] | null
+          gameplayClassification: Database['public']['Enums']['GameplayClassification'] | null
           id: number
           notes: string | null
           postId: number
         }
         Insert: {
-          gameClassification?:
-            | Database['public']['Enums']['GameClassification']
-            | null
-          gameplayClassification?:
-            | Database['public']['Enums']['GameplayClassification']
-            | null
+          gameClassification?: Database['public']['Enums']['GameClassification'] | null
+          gameplayClassification?: Database['public']['Enums']['GameplayClassification'] | null
           id?: number
           notes?: string | null
           postId: number
         }
         Update: {
-          gameClassification?:
-            | Database['public']['Enums']['GameClassification']
-            | null
-          gameplayClassification?:
-            | Database['public']['Enums']['GameplayClassification']
-            | null
+          gameClassification?: Database['public']['Enums']['GameClassification'] | null
+          gameplayClassification?: Database['public']['Enums']['GameplayClassification'] | null
           id?: number
           notes?: string | null
           postId?: number
@@ -311,18 +293,8 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      GameClassification:
-        | 'MATERIALISTIC'
-        | 'TACTICAL'
-        | 'DYNAMIC'
-        | 'POSITIONAL'
-        | 'STRATEGIC'
-        | 'FORTUNE'
-      GameplayClassification:
-        | 'FIRST_POSITIVE'
-        | 'FIRST_NEGATIVE'
-        | 'SECOND_POSITIVE'
-        | 'SECOND_NEGATIVE'
+      GameClassification: 'MATERIALISTIC' | 'TACTICAL' | 'DYNAMIC' | 'POSITIONAL' | 'STRATEGIC' | 'FORTUNE'
+      GameplayClassification: 'FIRST_POSITIVE' | 'FIRST_NEGATIVE' | 'SECOND_POSITIVE' | 'SECOND_NEGATIVE'
       GameStatus: 'ACCEPTED' | 'DECLINED' | 'PENDING_REPLY' | 'UNDER_REVIEW'
       GameType: 'NCV' | 'WOF'
       UserRole: 'TESTER' | 'MEMBER'

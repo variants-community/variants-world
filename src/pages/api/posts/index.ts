@@ -1,8 +1,7 @@
+import { getPosts, searchFor } from 'db/prisma/queries'
 import type { APIRoute } from 'astro'
-import { getPosts, searchFor } from '../../../db/prisma/queries'
 
 export const get: APIRoute = async ({ url }) => {
-
   const page = Number(url.searchParams.get('page'))
   const limit = Number(url.searchParams.get('limit'))
   const searchText = url.searchParams.get('searchText')
@@ -21,7 +20,7 @@ export const get: APIRoute = async ({ url }) => {
   } else {
     console.log('[api/posts] page=', page, ' limit=', limit)
     const posts = await getPosts(page * limit, limit)
-  
+
     return new Response(JSON.stringify(posts), { status: 200 })
   }
 }

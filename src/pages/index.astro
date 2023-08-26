@@ -1,9 +1,8 @@
 ---
-import PostsList from "../components/PostsList"
-import Layout from "../layouts/Layout.astro"
-import { getPosts } from "../db/prisma/queries"
-import { getUser } from "../db/supabase/auth"
-import Navigation from "../components/Navigation"
+  import { getUser } from "db/supabase/auth"
+import Layout from "layouts/Layout.astro"
+import Navigation from "components/Navigation"
+import PostsList from "components/PostsList"
 
 const user = await getUser(Astro.request)
 

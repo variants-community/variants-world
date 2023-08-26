@@ -1,17 +1,17 @@
+import { formatDate } from 'utils/hepers'
+import { supabase } from 'db/supabase/supabase'
 import type { Comment } from '@prisma/client'
-import type { ExtendedComment } from './index'
-import { formatDate } from '../../utils/hepers'
-import { supabase } from '../../db/supabase/supabase'
+import type { ExtendedComment } from 'components/Comments/index'
 
 type CommentsProps = {
-  isUserTester: boolean;
-  comments: ExtendedComment[];
-  onReply: (comment: Comment) => void;
-};
+  isUserTester: boolean
+  comments: ExtendedComment[]
+  onReply: (comment: Comment) => void
+}
 
 const CommentsList = (props: CommentsProps) => (
   <div className={'flex flex-col gap-[20px] mb-[40px]'}>
-    {props.comments.map((c) => (
+    {props.comments.map(c => (
       <CommentCard
         isUserTester={props.isUserTester}
         key={c.id}
@@ -26,23 +26,23 @@ const CommentsList = (props: CommentsProps) => (
 )
 
 type CommentCardProps = {
-  isUserTester: boolean;
-  comment: ExtendedComment;
-  reply: () => void;
-  remove: () => void;
-};
+  isUserTester: boolean
+  comment: ExtendedComment
+  reply: () => void
+  remove: () => void
+}
 
 const CommentCard = (props: CommentCardProps) => (
   <div
-    className={'w-full flex flex-row p-[15px] gap-[15px] border border-border-dark border-[1px] rounded-[12px] shadow-dark'}
+    className={
+      'w-full flex flex-row p-[15px] gap-[15px] border border-border-dark border-[1px] rounded-[12px] shadow-dark'
+    }
   >
     <img src="/src/assets/images/user.png" className={'h-[48px]'} />
     <div className={'w-full flex flex-col gap-[8px]'}>
       <div className={'flex flex-row justify-between'}>
         <div>
-          <span className={'text-white font-semibold'}>
-            {props.comment.User.name}
-          </span>
+          <span className={'text-white font-semibold'}>{props.comment.User.name}</span>
         </div>
         <div className={'flex flex-row gap-[12px]'}>
           <span className={'flex'}>{formatDate(props.comment.createdAt)}</span>
@@ -50,10 +50,7 @@ const CommentCard = (props: CommentCardProps) => (
             reply
           </button>
           {props.isUserTester && (
-            <button
-              className={'flex'}
-              onClick={() => props.remove()}
-            >
+            <button className={'flex'} onClick={() => props.remove()}>
               remove
             </button>
           )}
@@ -62,21 +59,13 @@ const CommentCard = (props: CommentCardProps) => (
 
       <div className={'flex flex-col gap-[8px]'}>
         {props.comment.parent && (
-          <div
-            className={'comment-quoting flex flex-col bg-gray p-[5px] rounded mr-auto'}
-          >
-            <span className={'font-bold'}>
-              {props.comment.parent.User.name}:
-            </span>
-            <p className={'inline-block'}>
-              {`${props.comment.parent.content}`}
-            </p>
+          <div className={'comment-quoting flex flex-col bg-gray p-[5px] rounded mr-auto'}>
+            <span className={'font-bold'}>{props.comment.parent.User.name}:</span>
+            <p className={'inline-block'}>{`${props.comment.parent.content}`}</p>
           </div>
         )}
 
-        <p>
-          {props.comment.content}
-        </p>
+        <p>{props.comment.content}</p>
       </div>
     </div>
   </div>

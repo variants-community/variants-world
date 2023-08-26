@@ -8,7 +8,7 @@ class RuleMapper {
     this.map = matches
   }
 
-  public makeRule(type: string, value: ValueType): string {
+  makeRule(type: string, value: ValueType): string {
     const ruleMaker = this.map.get(type)
     if (ruleMaker) return ruleMaker(value)
     else return 'undefined'

@@ -1,8 +1,8 @@
 export class LruCache<T> {
   private values: Map<string, T> = new Map<string, T>()
-  private maxEntries: number = 100
+  private maxEntries = 100
 
-  public get(key: string): T | undefined {
+  get(key: string): T | undefined {
     const entry = this.values.get(key)
 
     if (entry) {
@@ -14,7 +14,7 @@ export class LruCache<T> {
     }
   }
 
-  public put(key: string, value: T) {
+  put(key: string, value: T) {
     if (this.values.size >= this.maxEntries) {
       // least-recently used cache eviction strategy
       const keyToDelete = this.values.keys().next().value

@@ -1,24 +1,16 @@
 import { useEffect, useState } from 'preact/hooks'
 
-import type { PostDetails } from '../../db/prisma/queries'
+import type { PostDetails } from 'db/prisma/queries'
 
-import { getValueFromEvent } from '../../utils/hepers'
+import { getValueFromEvent } from 'utils/hepers'
 
-import type {
-  GameClassification,
-  GameplayClassification,
-  Voice
-} from '@prisma/client'
-import type { VoiceExtended } from './Votes'
-import { supabase } from '../../db/supabase/supabase'
+import { supabase } from 'db/supabase/supabase'
+import type { GameClassification, GameplayClassification, Voice } from '@prisma/client'
+import type { VoiceExtended } from 'components/AdminSettings/Votes'
 
 export const useAdminSettings = (details: PostDetails) => {
-  const [gameClassification, setGameClassification] = useState(
-    details.gameClassification ?? undefined
-  )
-  const [gameplayClassification, setGameplayClassification] = useState(
-    details.gameplayClassification ?? undefined
-  )
+  const [gameClassification, setGameClassification] = useState(details.gameClassification ?? undefined)
+  const [gameplayClassification, setGameplayClassification] = useState(details.gameplayClassification ?? undefined)
   const [notes, setNotes] = useState<string | null>(details.notes)
   const [votes, setVotes] = useState<VoiceExtended[] | []>(details.voices)
 
@@ -33,7 +25,7 @@ export const useAdminSettings = (details: PostDetails) => {
           table: 'PostDetails',
           filter: `postId=eq.${details.postId}`
         },
-        (payload) => {
+        payload => {
           const updated = payload.new as PostDetails
           setGameClassification(updated.gameClassification ?? undefined)
           setGameplayClassification(updated.gameplayClassification ?? undefined)
@@ -48,22 +40,14 @@ export const useAdminSettings = (details: PostDetails) => {
           table: 'Voice',
           filter: `postId=eq.${details.id}`
         },
-        async (payload) => {
+        async payload => {
           const updated = payload.new as Voice
-          const user = await supabase
-            .from('User')
-            .select('*')
-            .eq('id', updated.testerId)
-            .single()
+          const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
           const voiceWithUser = { ...updated, tester: user.data }
 
           if (votes.length > 0) {
-            setVotes(
-              votes.map((voice) =>
-                voice.id === voiceWithUser.id ? voiceWithUser : voice
-              ) as VoiceExtended[]
-            )
+            setVotes(votes.map(voice => (voice.id === voiceWithUser.id ? voiceWithUser : voice)) as VoiceExtended[])
           } else {
             setVotes([voiceWithUser as VoiceExtended])
           }
@@ -77,13 +61,9 @@ export const useAdminSettings = (details: PostDetails) => {
           table: 'Voice',
           filter: `postId=eq.${details.id}`
         },
-        async (payload) => {
+        async payload => {
           const updated = payload.new as Voice
-          const user = await supabase
-            .from('User')
-            .select('*')
-            .eq('id', updated.testerId)
-            .single()
+          const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
           const voiceWithUser = { ...updated, tester: user.data }
           setVotes([...votes, voiceWithUser as VoiceExtended])
@@ -112,9 +92,7 @@ export const useAdminSettings = (details: PostDetails) => {
     console.log('game: ', result)
   }
 
-  const setGameplayClassificationOnChange = async (
-    value: GameplayClassification
-  ) => {
+  const setGameplayClassificationOnChange = async (value: GameplayClassification) => {
     setGameplayClassification(value)
     await supabase
       .from('PostDetails')

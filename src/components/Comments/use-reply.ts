@@ -1,12 +1,12 @@
-import type { Comment } from '@prisma/client'
 import { useState } from 'preact/hooks'
+import type { Comment } from '@prisma/client'
 
 export const useReply = () => {
   const [replyTo, setReplyTo] = useState<Comment | undefined>()
 
   return {
-    replyTo: replyTo,
-    setReplyTo: setReplyTo,
+    replyTo,
+    setReplyTo,
     cancelReplyTo: () => setReplyTo(undefined)
   }
 }

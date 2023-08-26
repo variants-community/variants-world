@@ -1,10 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro"
-import { isLoggedIn } from "../db/supabase/auth"
-import LoginForm from "../components/LoginForm"
+import { isLoggedIn } from "db/supabase/auth"
+import Layout from "layouts/Layout.astro"
+import LoginForm from "components/LoginForm"
 
-const email = Astro.url.searchParams.get("email") || undefined
-const password = Astro.url.searchParams.get("password") || undefined
+// const email = Astro.url.searchParams.get("email") || undefined
+// const password = Astro.url.searchParams.get("password") || undefined
 
 if (await isLoggedIn(Astro.request)) {
   return Astro.redirect("/")

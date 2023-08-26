@@ -1,13 +1,13 @@
-import { getValueFromEvent } from '../../utils/hepers'
-import SpinnerIcon from '../icons/SpinnerIcon'
+import { getValueFromEvent } from 'utils/hepers'
+import SpinnerIcon from 'components/icons/SpinnerIcon'
 
 type SearchProps = {
-  value: string;
-  onChange: (value: string) => void;
-  isSearching: boolean;
-  isLoading: boolean;
-  isInvalidId: boolean;
-};
+  value: string
+  onChange: (value: string) => void
+  isSearching: boolean
+  isLoading: boolean
+  isInvalidId: boolean
+}
 
 export const Search = (props: SearchProps) => (
   <div
@@ -18,15 +18,13 @@ export const Search = (props: SearchProps) => (
     }`}
   >
     <span
-      className={`${
-        props.isSearching ? 'text-[23px]' : 'text-[24px] sm:text-[38px]'
-      } transition-all duration-1000`}
+      className={`${props.isSearching ? 'text-[23px]' : 'text-[24px] sm:text-[38px]'} transition-all duration-1000`}
     >
       #
     </span>
     <input
       value={props.value}
-      onInput={(e) => props.onChange(getValueFromEvent(e))}
+      onInput={e => props.onChange(getValueFromEvent(e))}
       className={`w-full  bg-dark outline-none ${
         props.isSearching ? 'text-[18px]' : 'text-[22px] sm:text-[29px]'
       } transition-all duration-1000`}

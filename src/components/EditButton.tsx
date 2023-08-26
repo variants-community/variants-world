@@ -1,9 +1,9 @@
-import EditIcon from './icons/EditIcon'
+import EditIcon from 'components/icons/EditIcon'
 
 type EditButtonProps = {
   className?: string
-  onClick: () => void;
-};
+  onClick: () => void
+}
 
 export const EditButton = (props: EditButtonProps) => (
   <div onClick={() => props.onClick()} className={'cursor-pointer '}>

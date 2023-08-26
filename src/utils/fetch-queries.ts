@@ -1,7 +1,7 @@
-import type { CGABotGameDetails } from '../cgabot'
-import type { PostForCard } from '../db/prisma/queries'
-import type { CreateRouteResponseDataInterface } from '../pages/api/posts/create'
-import type { PostDetails } from '../services/createPost'
+import type { CGABotGameDetails } from 'cgabot'
+import type { CreateRouteResponseDataInterface } from 'pages/api/posts/create'
+import type { PostDetails } from 'services/create-post'
+import type { PostForCard } from 'db/prisma/queries'
 
 export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {
   const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
@@ -12,9 +12,7 @@ export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {
   }
 }
 
-export const postGameToCreatePost = async (
-  postDetails: PostDetails
-): Promise<CreateRouteResponseDataInterface> => {
+export const postGameToCreatePost = async (postDetails: PostDetails): Promise<CreateRouteResponseDataInterface> => {
   const response = await fetch('/api/posts/create', {
     method: 'post',
     body: JSON.stringify(postDetails)
@@ -32,11 +30,8 @@ type Query = {
 
 export const fetchPosts = async (query: Query) => {
   let response = null
-  if (query.page != undefined && query.limit != undefined) {
-    response = await fetch(
-      `/api/posts?page=${query.page}&limit=${query.limit}`,
-      { method: 'get' }
-    )
+  if (query.page !== undefined && query.limit !== undefined) {
+    response = await fetch(`/api/posts?page=${query.page}&limit=${query.limit}`, { method: 'get' })
   } else if (query.searchText) {
     response = await fetch(`/api/posts?searchText=${query.searchText}`, {
       method: 'get'

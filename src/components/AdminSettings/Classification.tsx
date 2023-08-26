@@ -8,7 +8,7 @@ const gameClassification = [
   { label: 'Dynamic', value: GameClassification.DYNAMIC },
   { label: 'Positional', value: GameClassification.POSITIONAL },
   { label: 'Strategic', value: GameClassification.STRATEGIC },
-  { label: 'Fortune', value: GameClassification.FORTUNE },
+  { label: 'Fortune', value: GameClassification.FORTUNE }
 ]
 
 const gameplayClassification = [
@@ -16,15 +16,15 @@ const gameplayClassification = [
   { label: 'First Positive', value: GameplayClassification.FIRST_POSITIVE },
   { label: 'First Negative', value: GameplayClassification.FIRST_NEGATIVE },
   { label: 'Second Positive', value: GameplayClassification.SECOND_POSITIVE },
-  { label: 'Second Negative', value: GameplayClassification.SECOND_NEGATIVE },
+  { label: 'Second Negative', value: GameplayClassification.SECOND_NEGATIVE }
 ]
 
 type ClassificationProps = {
-  gameClassification?: GameClassification;
-  onChangeGameClassification: (e: Event) => void;
-  gameplayClassification?: GameplayClassification;
-  setGameplayClassification: (value: GameplayClassification) => void;
-};
+  gameClassification?: GameClassification
+  onChangeGameClassification: (e: Event) => void
+  gameplayClassification?: GameplayClassification
+  setGameplayClassification: (value: GameplayClassification) => void
+}
 
 export const Classification = (props: ClassificationProps) => {
   const [firstRule, setFirstRule] = useState<boolean>(false)
@@ -63,8 +63,10 @@ export const Classification = (props: ClassificationProps) => {
         id="game-clsfc"
         className="w-[200px] text-white bg-dark bold-border rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
       >
-        {gameClassification.map((cl) => (
-          <option key={cl.value} value={cl.value}>{cl.label}</option>
+        {gameClassification.map(cl => (
+          <option key={cl.value} value={cl.value}>
+            {cl.label}
+          </option>
         ))}
       </select>
 
@@ -77,7 +79,7 @@ export const Classification = (props: ClassificationProps) => {
         id="gameplay-clsfc"
         className="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark bold-border rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
       >
-        {gameplayClassification.map((cl) => (
+        {gameplayClassification.map(cl => (
           <option key={cl.value} value={cl.value}>
             {cl.label}
           </option>
@@ -106,8 +108,9 @@ export const Classification = (props: ClassificationProps) => {
           className="h-[14px] w-[14px] mt-[1px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
         />
         <label htmlFor="checkbox2" className="ml-[6px] text-white">
-          attacking the other player directly by aggressively<br />developing
-          one’s own ideas is viable
+          attacking the other player directly by aggressively
+          <br />
+          developing one’s own ideas is viable
         </label>
       </div>
     </div>

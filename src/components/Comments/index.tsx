@@ -1,23 +1,23 @@
-import type { Comment, User } from '@prisma/client'
+import { addCommentQuery } from 'db/supabase/queries'
+import { scrollToElement } from 'utils/hepers'
+import { useComments } from 'components/Comments/use-comments'
 import { useEffect } from 'preact/hooks'
-import { scrollTo } from '../../utils/hepers'
-import CommentsList from './CommentsList'
-import CommentInput from './CommentInput'
-import { useComments } from './useComments'
-import { useReply } from './useReply'
-import { addCommentQuery } from '../../db/supabase/queries'
+import { useReply } from 'components/Comments/use-reply'
+import CommentInput from 'components/Comments/CommentInput'
+import CommentsList from 'components/Comments/CommentsList'
+import type { Comment, User } from '@prisma/client'
 
 export type ExtendedComment = Comment & {
-  User: User;
-  parent?: ExtendedComment | null;
-};
+  User: User
+  parent?: ExtendedComment | null
+}
 
 type CommentsProps = {
   isUserTester: boolean
-  comments: ExtendedComment[];
-  postId: number;
-  userId: number;
-};
+  comments: ExtendedComment[]
+  postId: number
+  userId: number
+}
 
 const Comments = (props: CommentsProps) => {
   const { comments } = useComments(props.comments, props.postId)
@@ -25,18 +25,13 @@ const Comments = (props: CommentsProps) => {
 
   useEffect(() => {
     if (replyTo) {
-      scrollTo('comment-input')
+      scrollToElement('comment-input')
     }
   }, [replyTo])
 
   const postComment = async (commentText: string, replyCommentId?: number) => {
     if (commentText.length > 0) {
-      await addCommentQuery(
-        commentText,
-        props.postId,
-        props.userId,
-        replyCommentId,
-      )
+      await addCommentQuery(commentText, props.postId, props.userId, replyCommentId)
       cancelReplyTo()
     }
   }
@@ -44,11 +39,7 @@ const Comments = (props: CommentsProps) => {
   return (
     <div className={'sm:mx-[20px] lg:mx-auto lg:w-auto flex flex-col gap-[30px] mb-[100px]'}>
       <CommentsList isUserTester={props.isUserTester} comments={comments} onReply={setReplyTo} />
-      <CommentInput
-        onSendComment={postComment}
-        replyTo={replyTo}
-        cancelReplyTo={cancelReplyTo}
-      />
+      <CommentInput onSendComment={postComment} replyTo={replyTo} cancelReplyTo={cancelReplyTo} />
     </div>
   )
 }

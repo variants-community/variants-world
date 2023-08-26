@@ -5,6 +5,6 @@ export const get: APIRoute = async () => {
   // headers.set("Set-Cookie", `sbat=${data.session.access_token}; Path=/;`)
   return new Response(JSON.stringify({ message: 'ok' }), {
     status: 200,
-    headers: headers
+    headers
   })
 }

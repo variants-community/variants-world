@@ -1,26 +1,26 @@
+import { Description } from 'components/GameInfo/Description'
+import { EditButton } from 'components/EditButton'
+import { LinkToVariant } from 'components/GameInfo/LinkToVariant'
+import { TimePassed } from 'components/GameInfo/TimePassed'
+import { getValueFromEvent } from 'utils/hepers'
+import { supabase } from 'db/supabase/supabase'
 import { useState } from 'preact/hooks'
-import PostTags from '../PostTags'
-import PostTitle from '../PostTitle'
-import PostUser from '../PostUser'
-import { getValueFromEvent } from '../../utils/hepers'
-import { supabase } from '../../db/supabase/supabase'
+import PostTags from 'components/PostTags'
+import PostTitle from 'components/PostTitle'
+import PostUser from 'components/PostUser'
 import type { GameType } from '@prisma/client'
-import { Description } from './Description'
-import { LinkToVariant } from './LinkToVariant'
-import { TimePassed } from './TimePassed'
-import { EditButton } from '../EditButton'
 
 type GameInfoProps = {
-  displayEditBotton?: boolean;
-  postId: number;
-  type: string;
-  title: string;
-  rules: string[];
-  user: string;
-  createdAt: Date;
-  description: string;
-  variantLink: string;
-};
+  displayEditBotton?: boolean
+  postId: number
+  type: string
+  title: string
+  rules: string[]
+  user: string
+  createdAt: Date
+  description: string
+  variantLink: string
+}
 
 const GameInfo = (props: GameInfoProps) => {
   const [isEditMode, setIsEditMode] = useState(false)
@@ -30,26 +30,26 @@ const GameInfo = (props: GameInfoProps) => {
   const [variantLink, setVariantLink] = useState(props.variantLink)
 
   const onTypeChange = async (e: Event) => {
-    const type = getValueFromEvent<GameType>(e)
-    setType(type)
-    await supabase.from('Post').update({ type }).eq('id', props.postId)
+    const newType = getValueFromEvent<GameType>(e)
+    setType(newType)
+    await supabase.from('Post').update({ type: newType }).eq('id', props.postId)
   }
 
   const onTitleChange = async (e: Event) => {
-    const title = getValueFromEvent<string>(e)
-    setTitle(title)
-    await supabase.from('Post').update({ title }).eq('id', props.postId)
+    const newTitle = getValueFromEvent<string>(e)
+    setTitle(newTitle)
+    await supabase.from('Post').update({ title: newTitle }).eq('id', props.postId)
   }
 
   const onDescriptionChange = async (e: Event) => {
-    const description = getValueFromEvent<string>(e)
-    setDescription(description)
-    await supabase.from('Post').update({ description }).eq('id', props.postId)
+    const newDescription = getValueFromEvent<string>(e)
+    setDescription(newDescription)
+    await supabase.from('Post').update({ description: newDescription }).eq('id', props.postId)
   }
 
   const onVariantLinkChange = async (e: Event) => {
-    const variantLink = getValueFromEvent<string>(e)
-    setVariantLink(variantLink)
+    const newVariantLink = getValueFromEvent<string>(e)
+    setVariantLink(newVariantLink)
   }
 
   const toogleIsChangeable = () => {
@@ -58,7 +58,9 @@ const GameInfo = (props: GameInfoProps) => {
 
   return (
     <div
-      className={'w-full sm:w-[500px] lg:w-[474px] flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'}
+      className={
+        'w-full sm:w-[500px] lg:w-[474px] flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'
+      }
     >
       <div className={'flex flex-col gap-[10px]'}>
         <div className={'flex flex-row items-center justify-between'}>
@@ -71,9 +73,7 @@ const GameInfo = (props: GameInfoProps) => {
               onTitleChange={onTitleChange}
             />
 
-            {props.displayEditBotton && (
-              <EditButton onClick={() => toogleIsChangeable()} />
-            )}
+            {props.displayEditBotton && <EditButton onClick={() => toogleIsChangeable()} />}
           </div>
 
           <TimePassed from={props.createdAt} />
@@ -90,21 +90,12 @@ const GameInfo = (props: GameInfoProps) => {
 
       <PostUser user={props.user} />
 
-      {(description.length > 0 || isEditMode) &&
-        (
-          <Description
-            isEditMode={isEditMode}
-            value={description}
-            onDescriptionChange={onDescriptionChange}
-          />
-        )}
+      {(description.length > 0 || isEditMode) && (
+        <Description isEditMode={isEditMode} value={description} onDescriptionChange={onDescriptionChange} />
+      )}
 
       <div className={'flex flex-row justify-end mt-auto'}>
-        <LinkToVariant
-          isEditMode={isEditMode}
-          value={variantLink}
-          onVarianLinkChange={onVariantLinkChange}
-        />
+        <LinkToVariant isEditMode={isEditMode} value={variantLink} onVarianLinkChange={onVariantLinkChange} />
       </div>
     </div>
   )

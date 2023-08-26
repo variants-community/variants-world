@@ -1,17 +1,17 @@
+import { CGABotGameDetails, getGameDetailsById } from 'cgabot'
 import {
-  string,
-  object,
-  numberAsync,
-  objectAsync,
-  length,
-  minLength,
-  stringAsync,
+  type Output,
   arrayAsync,
-  Output
+  length as exactLength,
+  minLength,
+  numberAsync,
+  object,
+  objectAsync,
+  string,
+  stringAsync
 } from 'valibot'
-import prisma from '../db/prisma/prisma'
-import { CGABotGameDetails, getGameDetailsById } from '../cgabot'
-import { isCGABotGameDetails } from '../utils/hepers'
+import { isCGABotGameDetails } from 'utils/hepers'
+import prisma from 'db/prisma/prisma'
 
 const linesMatch = (value: string, i: number, array: string[]) => {
   return value === array[0]
@@ -53,7 +53,7 @@ export const PostDetailsValidator = objectAsync(
   {
     userId: numberAsync([userExist]),
     gameId: stringAsync('Main game is not provided', [gameExist]),
-    approveIds: arrayAsync(stringAsync([gameExist]), [length(8)]),
+    approveIds: arrayAsync(stringAsync([gameExist]), [exactLength(8)]),
     data: object({
       description: string(),
       title: string('Title is not provided', [minLength(3)]),
@@ -62,7 +62,7 @@ export const PostDetailsValidator = objectAsync(
   },
   [
     // all approve games are checked for belonging to the main game
-    async (postDetails) => {
+    async postDetails => {
       const mainGame = await getGameDetailsById(postDetails.gameId)
 
       if (mainGame === undefined) {
@@ -75,14 +75,9 @@ export const PostDetailsValidator = objectAsync(
         }
       }
 
-      const gamesOrUndefined = await Promise.all(
-        postDetails.approveIds.map(getGameDetailsById)
-      )
+      const gamesOrUndefined = await Promise.all(postDetails.approveIds.map(getGameDetailsById))
 
-      if (
-        gamesOrUndefined.length !== 8 ||
-        gamesOrUndefined.some((game) => game === undefined)
-      ) {
+      if (gamesOrUndefined.length !== 8 || gamesOrUndefined.some(game => game === undefined)) {
         return {
           issue: {
             input: postDetails,

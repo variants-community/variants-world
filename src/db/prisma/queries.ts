@@ -1,5 +1,5 @@
+import prisma from 'db/prisma/prisma'
 import type { GameStatus, GameType, UserRole } from '@prisma/client'
-import prisma from './prisma'
 
 export const getPostById = async (postId: number) => {
   const post = await prisma.post.findFirst({
@@ -29,7 +29,7 @@ export const getPostById = async (postId: number) => {
 export const getPostDetailsById = async (postId: number) => {
   const details = await prisma.postDetails.findFirst({
     where: {
-      postId: postId
+      postId
     },
     include: {
       voices: {
@@ -44,12 +44,15 @@ export const getPostDetailsById = async (postId: number) => {
 }
 
 export const searchFor = async (query: string) => {
-  const words = query.split(/(\s+)/).filter( e => e.trim().length > 0).reduce((prev, curr) => `${prev} | ${curr}`)
+  const words = query
+    .split(/(\s+)/)
+    .filter(e => e.trim().length > 0)
+    .reduce((prev, curr) => `${prev} | ${curr}`)
   console.log('words: ', words)
   const posts = await prisma.post.findMany({
     where: {
       OR: [
-        { title: { search: words, mode: 'insensitive'} },
+        { title: { search: words, mode: 'insensitive' } },
         { description: { search: words, mode: 'insensitive' } },
         { author: { name: { search: words, mode: 'insensitive' } } },
         { gamerules: { some: { name: { search: words, mode: 'insensitive' } } } }
@@ -70,7 +73,7 @@ export const searchFor = async (query: string) => {
     }
   })
 
-  const mapped: PostForCard[] = posts.map((p) => ({
+  const mapped: PostForCard[] = posts.map(p => ({
     id: p.id,
     type: p.type,
     status: p.status,
@@ -82,7 +85,7 @@ export const searchFor = async (query: string) => {
     createdAt: new Date(p.createdAt),
     updatedAt: new Date(p.updatedAt),
     description: p.description,
-    likes: p.UserLikedPosts.map((l) => ({ userId: l.userId })),
+    likes: p.UserLikedPosts.map(l => ({ userId: l.userId })),
     author: p.author,
     authorUserId: p.authorUserId
   }))
@@ -90,7 +93,7 @@ export const searchFor = async (query: string) => {
   return mapped
 }
 
-export const getPosts = async (skip: number, take: number = 5) => {
+export const getPosts = async (skip: number, take = 5) => {
   const posts = await prisma.post.findMany({
     skip,
     take,
@@ -109,7 +112,7 @@ export const getPosts = async (skip: number, take: number = 5) => {
     }
   })
 
-  const mapped: PostForCard[] = posts.map((p) => ({
+  const mapped: PostForCard[] = posts.map(p => ({
     id: p.id,
     type: p.type,
     status: p.status,
@@ -121,7 +124,7 @@ export const getPosts = async (skip: number, take: number = 5) => {
     createdAt: new Date(p.createdAt),
     updatedAt: new Date(p.updatedAt),
     description: p.description,
-    likes: p.UserLikedPosts.map((l) => ({ userId: l.userId })),
+    likes: p.UserLikedPosts.map(l => ({ userId: l.userId })),
     author: p.author,
     authorUserId: p.authorUserId
   }))
@@ -152,10 +155,6 @@ export interface PostForCard {
 }
 
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
-export type PostWithDetailsForCard = ThenArg<
-  ReturnType<typeof getPosts>
->[number]
+export type PostWithDetailsForCard = ThenArg<ReturnType<typeof getPosts>>[number]
 
-export type PostDetails = NonNullable<
-  ThenArg<ReturnType<typeof getPostDetailsById>>
->
+export type PostDetails = NonNullable<ThenArg<ReturnType<typeof getPostDetailsById>>>

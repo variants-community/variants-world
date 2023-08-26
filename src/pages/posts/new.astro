@@ -1,7 +1,7 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import NewPost from "../../components/NewPost"
-import { getUser } from "../../db/supabase/auth"
+import { getUser } from "db/supabase/auth"
+import Layout from "layouts/Layout.astro"
+import NewPost from "components/NewPost"
 
 const user = await getUser(Astro.request)
 

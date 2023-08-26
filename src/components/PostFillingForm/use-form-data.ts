@@ -1,6 +1,6 @@
 import { GameType } from '@prisma/client'
+import { isTitleValid } from 'utils/hepers'
 import { useEffect, useState } from 'preact/hooks'
-import { isTitleValid } from '../../utils/hepers'
 
 type InitState = {
   title?: string
@@ -12,9 +12,7 @@ export const useFormData = (initState?: InitState) => {
   const [errors, setErrors] = useState<Set<string>>(new Set())
   const [title, setTitle] = useState<string>(initState?.title ?? '')
   const [type, setType] = useState<GameType>(initState?.type ?? GameType.NCV)
-  const [description, setDescription] = useState<string>(
-    initState?.description ?? ''
-  )
+  const [description, setDescription] = useState<string>(initState?.description ?? '')
 
   useEffect(() => {
     const temp = new Set(errors)

@@ -1,14 +1,14 @@
-import { Classification } from './Classification'
-import { Notes } from './Notes'
-import { Votes } from './Votes'
-import type { AuthentificatedUser } from '../../db/supabase/auth'
-import type { PostDetails } from '../../db/prisma/queries'
-import { useAdminSettings } from './useAdminSettings'
+import { Classification } from 'components/AdminSettings/Classification'
+import { Notes } from 'components/AdminSettings/Notes'
+import { Votes } from 'components/AdminSettings/Votes'
+import { useAdminSettings } from 'components/AdminSettings/use-admin-settings'
+import type { AuthentificatedUser } from 'db/supabase/auth'
+import type { PostDetails } from 'db/prisma/queries'
 
 type AdminSettingsProps = {
-  details: PostDetails;
-  user: AuthentificatedUser;
-};
+  details: PostDetails
+  user: AuthentificatedUser
+}
 
 const AdminSettings = (props: AdminSettingsProps) => {
   const {
@@ -18,12 +18,14 @@ const AdminSettings = (props: AdminSettingsProps) => {
     votes,
     onChangeGameClassification,
     setGameplayClassificationOnChange,
-    onChangeNotes,
+    onChangeNotes
   } = useAdminSettings(props.details)
 
   return (
     <div
-      className={'flex flex-col gap-[40px] sm:(flex-col gap-[40px]) lg:(h-[250px] flex-row gap-0) bg-border-light shadow-dark rounded-[12px] p-[20px] justify-between'}
+      className={
+        'flex flex-col gap-[40px] sm:(flex-col gap-[40px]) lg:(h-[250px] flex-row gap-0) bg-border-light shadow-dark rounded-[12px] p-[20px] justify-between'
+      }
     >
       <Classification
         gameClassification={gameClassification}
@@ -31,11 +33,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
         gameplayClassification={gameplayClassification}
         setGameplayClassification={setGameplayClassificationOnChange}
       />
-      <Votes
-        voces={votes}
-        testerId={props.user.id}
-        postId={props.details.id}
-      />
+      <Votes voces={votes} testerId={props.user.id} postId={props.details.id} />
       <Notes notes={notes} onChangeNotes={onChangeNotes} />
     </div>
   )

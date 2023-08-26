@@ -1,12 +1,12 @@
+import { getValueFromEvent } from 'utils/hepers'
 import { useState } from 'preact/hooks'
-import { getValueFromEvent } from '../../utils/hepers'
 import type { Comment } from '@prisma/client'
 
 type CommentInputProps = {
-  onSendComment: (value: string, replyCommentId?: number) => void;
-  cancelReplyTo: () => void;
-  replyTo?: Comment;
-};
+  onSendComment: (value: string, replyCommentId?: number) => void
+  cancelReplyTo: () => void
+  replyTo?: Comment
+}
 
 const CommentInput = (props: CommentInputProps) => {
   const [commentText, setCommentText] = useState('')
@@ -23,15 +23,14 @@ const CommentInput = (props: CommentInputProps) => {
 
   return (
     <div
-      className={'w-11/12 mx-auto lg:mx-0 sm:w-[500px] lg:w-[984px] bg-dark border border-[2px] text-[16px] border-border-dark shadow-light rounded-[12px] bg-dark overflow-hidden'}
+      className={
+        'w-11/12 mx-auto lg:mx-0 sm:w-[500px] lg:w-[984px] bg-dark border border-[2px] text-[16px] border-border-dark shadow-light rounded-[12px] bg-dark overflow-hidden'
+      }
     >
       {props.replyTo && (
-        <div
-          className={'flex flex-row justify-between border-b border-b-border-dark border-b-[2px] p-[8px]'}
-        >
+        <div className={'flex flex-row justify-between border-b border-b-border-dark border-b-[2px] p-[8px]'}>
           <div>
-            <span className={'font-font-semibold'}>reply to:</span>{' '}
-            <p>{props.replyTo.content}</p>
+            <span className={'font-font-semibold'}>reply to:</span> <p>{props.replyTo.content}</p>
           </div>
           <button onClick={() => props.cancelReplyTo()}>cancel</button>
         </div>
@@ -46,7 +45,9 @@ const CommentInput = (props: CommentInputProps) => {
       />
       <button
         onClick={sendComment}
-        className={'block bg-primary border border-[2px] border-border-dark rounded-[10px] px-[50px] py-[9px] text-white ml-auto m-[20px] mt-[24px]'}
+        className={
+          'block bg-primary border border-[2px] border-border-dark rounded-[10px] px-[50px] py-[9px] text-white ml-auto m-[20px] mt-[24px]'
+        }
       >
         Comment
       </button>

@@ -1,11 +1,8 @@
+import { supabase } from 'db/supabase/supabase'
 import { useEffect, useState } from 'preact/hooks'
-import { supabase } from '../../db/supabase/supabase'
 import type { ExtendedComment } from '.'
 
-export const useComments = (
-  initComments: ExtendedComment[],
-  postId: number
-) => {
+export const useComments = (initComments: ExtendedComment[], postId: number) => {
   const [comments, setComments] = useState(initComments)
 
   useEffect(() => {
@@ -19,29 +16,17 @@ export const useComments = (
           table: 'Comment',
           filter: `postId=eq.${postId}`
         },
-        async (payload) => {
+        async payload => {
           const newComment = payload.new as ExtendedComment
           let parent: ExtendedComment | null = null
 
-          const user = await supabase
-            .from('User')
-            .select()
-            .eq('id', newComment.userId)
-            .single()
+          const user = await supabase.from('User').select().eq('id', newComment.userId).single()
 
           if (newComment.parent_id) {
-            const parentComment = await supabase
-              .from('Comment')
-              .select()
-              .eq('id', newComment.parent_id)
-              .single()
+            const parentComment = await supabase.from('Comment').select().eq('id', newComment.parent_id).single()
 
             if (parentComment.data) {
-              const parentUser = await supabase
-                .from('User')
-                .select()
-                .eq('id', newComment.userId)
-                .single()
+              const parentUser = await supabase.from('User').select().eq('id', newComment.userId).single()
 
               if (parentUser.data) {
                 parent = {
@@ -54,6 +39,7 @@ export const useComments = (
                   content: parentComment.data.content,
                   createdAt: new Date(parentComment.data.createdAt),
                   id: parentComment.data.id,
+                  // eslint-disable-next-line camelcase
                   parent_id: parentComment.data.parent_id,
                   postId: parentComment.data.postId,
                   userId: parentComment.data.userId
@@ -74,7 +60,7 @@ export const useComments = (
                   name: user.data.name,
                   role: user.data.role
                 },
-                parent: parent
+                parent
               }
             ])
           }
@@ -88,8 +74,8 @@ export const useComments = (
           table: 'Comment',
           filter: `postId=eq.${postId}`
         },
-        async (payload) => {
-          setComments((prev) => prev.filter((c) => c.id !== payload.old.id))
+        async payload => {
+          setComments(prev => prev.filter(c => c.id !== payload.old.id))
         }
       )
       .subscribe()

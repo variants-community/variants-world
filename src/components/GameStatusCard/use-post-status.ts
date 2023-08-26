@@ -1,12 +1,8 @@
-import type { GameStatus } from '@prisma/client'
+import { supabase } from 'db/supabase/supabase'
 import { useEffect, useState } from 'preact/hooks'
-import { supabase } from '../../db/supabase/supabase'
+import type { GameStatus } from '@prisma/client'
 
-export const usePostStatus = (
-  initVerdict: string | null,
-  initStatus: GameStatus,
-  postId: number
-) => {
+export const usePostStatus = (initVerdict: string | null, initStatus: GameStatus, postId: number) => {
   const [verdict, setVerdict] = useState(initVerdict ?? '')
   const [status, setStatus] = useState(initStatus)
 
@@ -21,7 +17,7 @@ export const usePostStatus = (
           table: 'Post',
           filter: `id=eq.${postId}`
         },
-        (payload) => {
+        payload => {
           const updated = payload.new as {
             verdict: string
             status: GameStatus

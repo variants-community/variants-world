@@ -1,4 +1,5 @@
-import { supabase } from './supabase'
+/* eslint-disable prettier/prettier */
+import { supabase } from 'db/supabase/supabase'
 
 export const isPostLikedByUserQuery = async (
   postId: number,
@@ -47,9 +48,10 @@ export const addCommentQuery = async (
   replyToCommentId?: number
 ) => {
   const { error } = await supabase.from('Comment').insert({
-    content: content,
-    postId: postId,
-    userId: userId,
+    content,
+    postId,
+    userId,
+    // eslint-disable-next-line camelcase
     parent_id: replyToCommentId
   })
 

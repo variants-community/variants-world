@@ -1,14 +1,10 @@
+/* eslint-disable filenames/match-regex */
+import { getGameDetailsById } from 'cgabot'
+import { isIdValid } from 'utils/hepers'
 import type { APIRoute } from 'astro'
-import { getGameDetailsById } from '../../../../../cgabot'
-import { isIdValid } from '../../../../../utils/hepers'
 
 export const get: APIRoute = async ({ params }) => {
-  if (
-    !params.id ||
-    !params.verify_id ||
-    !isIdValid(params.id) ||
-    !isIdValid(params.verify_id)
-  )
+  if (!params.id || !params.verify_id || !isIdValid(params.id) || !isIdValid(params.verify_id))
     return new Response(JSON.stringify(false), {
       status: 404,
       statusText: 'Invalid format.'
@@ -20,8 +16,7 @@ export const get: APIRoute = async ({ params }) => {
   if (mainGame && gameToVerify) {
     const isSameGame =
       mainGame.q.startFen === gameToVerify.q.startFen &&
-      JSON.stringify(mainGame.q.ruleVariants) ===
-        JSON.stringify(gameToVerify.q.ruleVariants)
+      JSON.stringify(mainGame.q.ruleVariants) === JSON.stringify(gameToVerify.q.ruleVariants)
 
     return new Response(JSON.stringify(isSameGame), { status: 200 })
   }

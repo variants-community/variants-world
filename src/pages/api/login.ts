@@ -1,5 +1,5 @@
+import { supabase } from 'db/supabase/supabase'
 import type { APIRoute } from 'astro'
-import { supabase } from '../../db/supabase/supabase'
 
 export const post: APIRoute = async ({ request }) => {
   const formData = await request.formData()
@@ -41,6 +41,6 @@ export const post: APIRoute = async ({ request }) => {
 
   return new Response(JSON.stringify({ message: 'ok' }), {
     status: 200,
-    headers: headers
+    headers
   })
 }

@@ -1,7 +1,8 @@
+/* eslint-disable github/no-then */
+import { fetchPosts } from 'utils/fetch-queries'
+import { getTotalPostsCount } from 'db/supabase/queries'
 import { useEffect, useState } from 'preact/hooks'
-import type { PostForCard } from '../../db/prisma/queries'
-import { getTotalPostsCount } from '../../db/supabase/queries'
-import { fetchPosts } from '../../utils/fetchQueries'
+import type { PostForCard } from 'db/prisma/queries'
 
 const POSTS_PER_PAGE = 10
 
@@ -13,7 +14,7 @@ export const useSearch = () => {
   const [fetching, setFetching] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
 
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>()
+  const [searchTimeout, setSearchTimeout] = useState<number>()
 
   useEffect(() => {
     getTotalPostsCount().then(setTotalCount)
@@ -21,28 +22,28 @@ export const useSearch = () => {
 
   useEffect(() => {
     if (fetching && posts.length < totalCount) {
-      fetchPosts({ page: currentPage, limit: POSTS_PER_PAGE }).then((posts) => {
-        setPosts((prev) => [...prev, ...posts])
-        setCurrentPage((prev) => prev + 1)
+      fetchPosts({ page: currentPage, limit: POSTS_PER_PAGE }).then(newPosts => {
+        setPosts(prev => [...prev, ...newPosts])
+        setCurrentPage(prev => prev + 1)
         setFetching(false)
       })
     }
   }, [fetching])
 
   useEffect(() => {
-    if (query != '') {
-      if (searchTimeout) clearTimeout(searchTimeout)
+    if (query !== '') {
+      if (searchTimeout) self.clearTimeout(searchTimeout)
       setSearchTimeout(
-        setTimeout(() => {
-          fetchPosts({ searchText: query }).then((posts) => {
-            setPosts(posts)
+        self.setTimeout(() => {
+          fetchPosts({ searchText: query }).then(newPosts => {
+            setPosts(newPosts)
             setFetching(false)
           })
         }, 500)
       )
     } else {
-      fetchPosts({ page: 0, limit: POSTS_PER_PAGE }).then((posts) => {
-        setPosts(posts)
+      fetchPosts({ page: 0, limit: POSTS_PER_PAGE }).then(newPosts => {
+        setPosts(newPosts)
         setCurrentPage(1)
         setFetching(false)
       })

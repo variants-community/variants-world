@@ -1,34 +1,25 @@
-import { formatLikesCount } from '../../utils/hepers'
-import LikeIcon from '../icons/LikeIcon'
-import { useLikes } from './useLikes'
+import { formatLikesCount } from 'utils/hepers'
+import { useLikes } from 'components/Likes/use-likes'
+import LikeIcon from 'components/icons/LikeIcon'
 
 type LikesProps = {
-  likes: { userId: number }[];
-  userId: number;
-  postId: number;
-};
+  likes: { userId: number }[]
+  userId: number
+  postId: number
+}
 
 const Likes = (props: LikesProps) => {
-  const { isLiked, likesCount, toogleLike } = useLikes(
-    props.likes,
-    props.userId,
-    props.postId,
-  )
+  const { isLiked, likesCount, toogleLike } = useLikes(props.likes, props.userId, props.postId)
 
   return (
     <div
-      onClick={() => toogleLike()}
+      onClick={async () => toogleLike()}
       aria-hidden="true"
       className={'flex flex-row justify-end whitespace-nowrap gap-[8px] parent transition-all duration-100'}
     >
-      <span className={`text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>
-        {formatLikesCount(likesCount)}
-      </span>
+      <span className={`text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>{formatLikesCount(likesCount)}</span>
 
-      <LikeIcon
-        className="child hover:fill-red transition duration-100"
-        isLiked={isLiked}
-      />
+      <LikeIcon className="child hover:fill-red transition duration-100" isLiked={isLiked} />
     </div>
   )
 }

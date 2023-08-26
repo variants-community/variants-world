@@ -1,17 +1,17 @@
-import { useState } from 'preact/hooks'
 import {
   addGameRuleAndGetId,
   addGameRuleToPost,
   getGameRuleId,
   removeGameRuleFromPost,
   updatePostGameRule
-} from '../../db/supabase/queries'
+} from 'db/supabase/queries'
+import { useState } from 'preact/hooks'
 
-export const usePostTagsEditMode = (initRules: string[], postId?: number, ) => {
+export const usePostTagsEditMode = (initRules: string[], postId?: number) => {
   if (!postId) {
     return { rules: initRules }
   }
-  
+
   const [rules, setRules] = useState(initRules)
 
   const remove = async (toBeRemoved: string) => {
@@ -22,14 +22,14 @@ export const usePostTagsEditMode = (initRules: string[], postId?: number, ) => {
 
       if (ok) {
         console.log('successfully delted: ', id)
-        setRules([...rules.filter((p) => p !== toBeRemoved)])
+        setRules([...rules.filter(p => p !== toBeRemoved)])
       }
     }
   }
 
   const edit = async (old: string, edited: string) => {
     if (edited.length === 0) {
-      setRules([...rules.filter((p) => p !== old)])
+      setRules([...rules.filter(p => p !== old)])
       remove(old)
       return
     }
@@ -51,7 +51,7 @@ export const usePostTagsEditMode = (initRules: string[], postId?: number, ) => {
       const ok = await updatePostGameRule(editedId, oldRuleId, postId)
 
       if (ok) {
-        const updated = [...rules.filter((p) => p !== old), edited]
+        const updated = [...rules.filter(p => p !== old), edited]
         setRules(updated)
       }
     }
@@ -68,7 +68,7 @@ export const usePostTagsEditMode = (initRules: string[], postId?: number, ) => {
       if (id) {
         const ok = await addGameRuleToPost(id, postId)
         if (ok) {
-          setRules([...rules.filter((p) => p !== toBeAdded), toBeAdded])
+          setRules([...rules.filter(p => p !== toBeAdded), toBeAdded])
         }
       }
     }

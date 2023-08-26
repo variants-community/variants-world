@@ -1,12 +1,12 @@
+import { getValueFromEvent } from 'utils/hepers'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { getValueFromEvent } from '../../utils/hepers'
 
-type AddRuleButton = {
-  className?: string;
-  addRule?: (rule: string) => void;
-};
+type AddRuleButtonProps = {
+  className?: string
+  addRule?: (rule: string) => void
+}
 
-export const AddRuleButton = (props: AddRuleButton) => {
+export const AddRuleButton = (props: AddRuleButtonProps) => {
   const [isInput, setIsInput] = useState(false)
   const [newRule, setNewRule] = useState('')
 
@@ -20,42 +20,39 @@ export const AddRuleButton = (props: AddRuleButton) => {
 
   return (
     <>
-      {isInput &&
-        (
-          <li
-            className={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.className}`}
+      {isInput && (
+        <li
+          className={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.className}`}
+        >
+          <input
+            ref={ref}
+            style={{
+              width: newRule.length === 0 ? '10ch' : `${newRule.length}ch`
+            }}
+            className={'inline bg-dark outline-none'}
+            value={newRule}
+            onInput={e => setNewRule(getValueFromEvent(e))}
+            onChange={() => {
+              setIsInput(false)
+            }}
+            onBlur={e => {
+              props.addRule?.(getValueFromEvent(e))
+              setNewRule('')
+              setIsInput(false)
+            }}
+          ></input>
+        </li>
+      )}
+      {!isInput && (
+        <li>
+          <button
+            onClick={() => setIsInput(true)}
+            className={'h-[26px] text-text border border-border-dark rounded-[3px] py-[5px] px-[5px]'}
           >
-            <input
-              ref={ref}
-              style={{
-                width: newRule.length === 0 ? '10ch' : newRule.length + 'ch',
-              }}
-              className={'inline bg-dark outline-none'}
-              value={newRule}
-              onInput={(e) => setNewRule(getValueFromEvent(e))}
-              onChange={() => {
-                setIsInput(false)
-              }}
-              onBlur={(e) => {
-                props.addRule?.(getValueFromEvent(e))
-                setNewRule('')
-                setIsInput(false)
-              }}
-            >
-            </input>
-          </li>
-        )}
-      {!isInput &&
-        (
-          <li>
-            <button
-              onClick={() => setIsInput(true)}
-              className={'h-[26px] text-text border border-border-dark rounded-[3px] py-[5px] px-[5px]'}
-            >
-              + Add
-            </button>
-          </li>
-        )}
+            + Add
+          </button>
+        </li>
+      )}
     </>
   )
 }

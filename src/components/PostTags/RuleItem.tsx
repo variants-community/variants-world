@@ -1,7 +1,7 @@
 type RuleItemProps = {
-  ruleName: string;
-  className?: string;
-};
+  ruleName: string
+  className?: string
+}
 
 export const RuleItem = (props: RuleItemProps) => {
   return (

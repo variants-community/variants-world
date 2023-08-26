@@ -1,12 +1,11 @@
-import PostCard from './PostCard'
-import Search from './Search'
-import { useSearch } from './useSearch'
-import { useCtrlKFocus } from './useCtrlKFocus'
-
+import { useCtrlKFocus } from 'components/PostsList/use-focus-shortcut'
+import { useSearch } from 'components/PostsList/use-search'
+import PostCard from 'components/PostsList/PostCard'
+import Search from 'components/PostsList/Search'
 
 type PostsListProps = {
-  userId: number;
-};
+  userId: number
+}
 
 const PostsList = (props: PostsListProps) => {
   const { posts, query, setQuery } = useSearch()
@@ -18,7 +17,7 @@ const PostsList = (props: PostsListProps) => {
       <Search query={query} setQuery={setQuery} />
 
       <div className="flex flex-col gap-[30px] ">
-        {posts.map((post) => (
+        {posts.map(post => (
           <PostCard userId={props.userId} key={post.id} post={post} />
         ))}
       </div>

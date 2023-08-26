@@ -1,26 +1,22 @@
+import { IdsInputs } from 'components/NewPost/IdsInput'
+import { Picture } from 'components/NewPost/Picture'
+import { PostFillingForm } from 'components/PostFillingForm'
+import { Search } from 'components/NewPost/Search'
+import { Title } from 'components/NewPost/Title'
+import { mapRuleVariantsToString, scrollToElement } from 'utils/hepers'
 import { useEffect, useState } from 'preact/hooks'
-import { mapRuleVariantsToString, scrollTo } from '../../utils/hepers'
-import { Title } from './Title'
-import { Picture } from './Picture'
-import PostTags from '../PostTags'
-import { IdsInputs } from './IdsInput'
-import { Search } from './Search'
-import { useSearch } from './useSearch'
-import { PostFillingForm } from '../PostFillingForm'
+import { useSearch } from 'components/NewPost/use-search'
+import PostTags from 'components/PostTags'
 
 const NewPost = (props: { userId: number }) => {
-  const [approveIds, setApproveIds] = useState<string[]>(
-    new Array<string>(8).fill(''),
-  )
+  const [approveIds, setApproveIds] = useState<string[]>(new Array<string>(8).fill(''))
   const [isAllConfirmed, setIsAllConfirmed] = useState(false)
-  const { game, gameId, setGameId, isSearching, isLoading, isInvalidId } =
-    useSearch()
+  const { game, gameId, setGameId, isSearching, isLoading, isInvalidId } = useSearch()
 
   const isGameFound = !!game
 
   useEffect(() => {
-    if (isAllConfirmed)
-      scrollTo('post-details-form')
+    if (isAllConfirmed) scrollToElement('post-details-form')
   }, [isAllConfirmed])
 
   const onSearch = (value: string) => {
@@ -61,16 +57,11 @@ const NewPost = (props: { userId: number }) => {
           userId={props.userId}
         />
       )}
-      {isGameFound && isAllConfirmed &&
-        (
-          <div className={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
-            <PostFillingForm
-              userId={props.userId}
-              game={game}
-              approveIds={approveIds}
-            />
-          </div>
-        )}
+      {isGameFound && isAllConfirmed && (
+        <div className={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
+          <PostFillingForm userId={props.userId} game={game} approveIds={approveIds} />
+        </div>
+      )}
     </div>
   )
 }

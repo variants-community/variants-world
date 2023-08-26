@@ -1,4 +1,4 @@
-const Bubbles = (props: { className?: string, color: string }) => (
+const Bubbles = (props: { className?: string; color: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="125"

@@ -1,7 +1,7 @@
+import { fetchGameById } from 'utils/fetch-queries'
+import { isIdValid } from 'utils/hepers'
 import { useEffect, useState } from 'preact/hooks'
-import { fetchGameById } from '../../utils/fetchQueries'
-import { isIdValid } from '../../utils/hepers'
-import type { CGABotGameDetails } from '../../cgabot'
+import type { CGABotGameDetails } from 'cgabot'
 
 export const useSearch = () => {
   const [isInvalidId, setIsInvalidId] = useState(false)
@@ -11,18 +11,19 @@ export const useSearch = () => {
   const [gameId, setGameId] = useState('')
   const [game, setGame] = useState<CGABotGameDetails>()
 
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>()
+  const [searchTimeout, setSearchTimeout] = useState<number>()
 
   useEffect(() => {
     const abortController = new AbortController()
     if (isIdValid(gameId)) {
-      if (searchTimeout) clearTimeout(searchTimeout)
+      if (searchTimeout) self.clearTimeout(searchTimeout)
       setSearchTimeout(
-        setTimeout(() => {
+        self.setTimeout(() => {
           setIsSearching(true)
           setIsLoading(true)
           fetchGameById(gameId, abortController.signal)
-            .then((data) => {
+            // eslint-disable-next-line github/no-then
+            .then(data => {
               if (data) {
                 console.log(data)
                 setGame(data)

@@ -1,20 +1,9 @@
+import { getLikesCountQuery, isPostLikedByUserQuery, putLikeQuery, removeLikeQuery } from 'db/supabase/queries'
+import { supabase } from 'db/supabase/supabase'
 import { useEffect, useState } from 'preact/hooks'
-import {
-  getLikesCountQuery,
-  isPostLikedByUserQuery,
-  putLikeQuery,
-  removeLikeQuery
-} from '../../db/supabase/queries'
-import { supabase } from '../../db/supabase/supabase'
 
-export const useLikes = (
-  likes: {userId: number}[],
-  userId: number,
-  postId: number
-) => {
-  const [isLiked, setIsLiked] = useState<boolean>(
-    likes.find((like) => like.userId === userId) ? true : false
-  )
+export const useLikes = (likes: { userId: number }[], userId: number, postId: number) => {
+  const [isLiked, setIsLiked] = useState<boolean>(likes.some(like => like.userId === userId))
   const [likesCount, setLikesCount] = useState<number>(likes.length)
 
   const updateLiksCount = async () => {

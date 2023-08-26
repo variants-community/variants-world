@@ -1,22 +1,17 @@
-
-import type { CGABotGameDetails, CGABotRuleVariants } from '../cgabot'
-import prisma from '../db/prisma/prisma'
-import { mapRuleVariantsToString } from '../utils/hepers'
+import { mapRuleVariantsToString } from 'utils/hepers'
+import prisma from 'db/prisma/prisma'
+import type { CGABotGameDetails, CGABotRuleVariants } from 'cgabot'
 import type { GameType } from '@prisma/client'
-import type { PostDetailsValidator } from './postDetailsValidator'
 import type { Output } from 'valibot'
-
+import type { PostDetailsValidator } from 'services/post-details-validator'
 
 export type PostDetails = Output<typeof PostDetailsValidator>
 
 const mapRules = (ruleVariants: CGABotRuleVariants) => {
-  return mapRuleVariantsToString(ruleVariants).map((rule) => ({ name: rule }))
+  return mapRuleVariantsToString(ruleVariants).map(rule => ({ name: rule }))
 }
 
-export const createPost = async (
-  mainGame: CGABotGameDetails,
-  postDetailsDTO: PostDetails
-) => {
+export const createPost = async (mainGame: CGABotGameDetails, postDetailsDTO: PostDetails) => {
   const post = await prisma.post.create({
     data: {
       title: postDetailsDTO.data.title,
@@ -27,7 +22,7 @@ export const createPost = async (
       type: (postDetailsDTO.data.type as GameType) ?? 'NCV',
       PostDetails: { create: {} },
       gamerules: {
-        connectOrCreate: [...mapRules(mainGame.q.ruleVariants), {name: mainGame.q.timeControl}].map((rule) => ({
+        connectOrCreate: [...mapRules(mainGame.q.ruleVariants), { name: mainGame.q.timeControl }].map(rule => ({
           where: { name: rule.name },
           create: { name: rule.name }
         }))

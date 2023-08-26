@@ -1,13 +1,13 @@
-import { RuleItem } from './RuleItem'
+import { RuleItem } from 'components/PostTags/RuleItem'
 
 type PostTagsProps = {
-  postId?: number;
-  isEditMode?: boolean;
-  rules: string[];
-  className?: string;
-  iconsClassName?: string;
-  ulClassName?: string;
-};
+  postId?: number
+  isEditMode?: boolean
+  rules: string[]
+  className?: string
+  iconsClassName?: string
+  ulClassName?: string
+}
 
 const PostTags = (props: PostTagsProps) => {
   // const { rules, edit, remove, add } = usePostTagsEditMode(
@@ -19,9 +19,7 @@ const PostTags = (props: PostTagsProps) => {
 
   return (
     <div>
-      <ul
-        className={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulClassName}`}
-      >
+      <ul className={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulClassName}`}>
         {/* {withEditingMode && rules.sort().map((rule) => (
           <RuleItemEditable
             key={rule}
@@ -35,12 +33,8 @@ const PostTags = (props: PostTagsProps) => {
         {withEditingMode && props.isEditMode && (
           <AddRuleButton addRule={add} className={props.className} />
         )} */}
-        {props.rules.sort().map((rule) => (
-          <RuleItem
-            key={rule}
-            ruleName={rule}
-            className={props.className}
-          />
+        {props.rules.sort().map(rule => (
+          <RuleItem key={rule} ruleName={rule} className={props.className} />
         ))}
       </ul>
     </div>

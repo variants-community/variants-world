@@ -1,9 +1,9 @@
-import type { APIRoute } from 'astro'
-import { createPost } from '../../../services/createPost'
+import { PostDetailsValidator } from 'services/post-details-validator'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { ValiError, parseAsync } from 'valibot'
-import { PostDetailsValidator } from '../../../services/postDetailsValidator'
-import { getGameDetailsById } from '../../../cgabot'
+import { createPost } from 'services/create-post'
+import { getGameDetailsById } from 'cgabot'
+import type { APIRoute } from 'astro'
 
 interface ErrorMessage {
   message: string
@@ -17,11 +17,10 @@ export interface CreateRouteResponseDataInterface {
 
 export const post: APIRoute = async ({ request }) => {
   try {
-    const postDetails = await parseAsync(
-      PostDetailsValidator,
-      await request.json()
-    )
+    const postDetails = await parseAsync(PostDetailsValidator, await request.json())
     const game = await getGameDetailsById(postDetails.gameId)
+    // TODO: handle `game` being undefined
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const id = await createPost(game!, postDetails) // the game has already been validate and exist
     return new Response(
       JSON.stringify({

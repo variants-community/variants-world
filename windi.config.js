@@ -5,10 +5,7 @@ import { defineConfig } from 'windicss/helpers'
 export default defineConfig({
   darkMode: 'class', // or 'media'
   extract: {
-    include: [
-      'index.html',
-      'src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'
-    ],
+    include: ['index.html', 'src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
     exclude: ['node_modules/**/*', '.git/**/*']
   },
   theme: {

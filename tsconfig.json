@@ -5,5 +5,18 @@
     "jsxImportSource": "preact",
     "strict": true,
     "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "assets/*": ["src/assets/*"],
+      "cgabot": ["src/cgabot"],
+      "cgabot/*": ["src/cgabot/*"],
+      "components/*": ["src/components/*"],
+      "db/*": ["src/db/*"],
+      "layouts/*": ["src/layouts/*"],
+      "pages/*": ["src/pages/*"],
+      "services/*": ["src/services/*"],
+      "styles/*": ["src/styles/*"],
+      "utils/*": ["src/utils/*"],
+    }
   }
 }

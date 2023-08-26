@@ -1,5 +1,5 @@
 {
-  "plugins": ["@typescript-eslint", "simple-import-sort"],
+  "plugins": ["@typescript-eslint", "sort-imports-es6-autofix", "no-relative-import-paths"],
   "extends": ["plugin:astro/recommended", "plugin:github/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -9,8 +9,21 @@
   },
   "rules": {
     "no-console": "warn",
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    "sort-imports-es6-autofix/sort-imports-es6": [
+      2,
+      {
+        "ignoreCase": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ],
+    "no-relative-import-paths/no-relative-import-paths": [
+      "warn",
+      { "allowSameFolder": false, "rootDir": "src", "prefix": "" }
+    ],
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "no-restricted-imports": "off",
     "i18n-text/no-en": "off",
     "eslint-comments/no-use": "off",
     "import/no-namespace": "off",
@@ -60,8 +73,7 @@
         "extraFileExtensions": [".astro"]
       },
       "rules": {
-        "prettier/prettier": "off",
-        "import/no-unresolved": "off"
+        "prettier/prettier": "off"
       }
     }
   ],

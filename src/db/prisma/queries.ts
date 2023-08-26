@@ -1,5 +1,5 @@
+import { GameStatus, GameType, UserRole } from '@prisma/client'
 import prisma from 'db/prisma/prisma'
-import type { GameStatus, GameType, UserRole } from '@prisma/client'
 
 export const getPostById = async (postId: number) => {
   const post = await prisma.post.findFirst({
@@ -44,18 +44,37 @@ export const getPostDetailsById = async (postId: number) => {
 }
 
 export const searchFor = async (query: string) => {
-  const words = query
-    .split(/(\s+)/)
-    .filter(e => e.trim().length > 0)
-    .reduce((prev, curr) => `${prev} | ${curr}`)
-  console.log('words: ', words)
+  const words = query.toLocaleLowerCase().split(/(\s+)/)
+
+  const statuses: GameStatus[] = []
+
+  for (const st of words) {
+    if (st === 'accepted') statuses.push(GameStatus.ACCEPTED)
+    else if (st === 'declined') statuses.push(GameStatus.DECLINED)
+    else if (st === 'pending') statuses.push(GameStatus.PENDING_REPLY)
+    else if (st === 'review') statuses.push(GameStatus.UNDER_REVIEW)
+  }
+
+  const searchText = words.filter(e => e.trim().length > 0).reduce((prev, curr) => `${prev} | ${curr}`)
+
   const posts = await prisma.post.findMany({
     where: {
       OR: [
-        { title: { search: words, mode: 'insensitive' } },
-        { description: { search: words, mode: 'insensitive' } },
-        { author: { name: { search: words, mode: 'insensitive' } } },
-        { gamerules: { some: { name: { search: words, mode: 'insensitive' } } } }
+        { title: { search: searchText, mode: 'insensitive' } },
+        { description: { search: searchText, mode: 'insensitive' } },
+        { author: { name: { search: searchText, mode: 'insensitive' } } },
+        {
+          gamerules: {
+            some: { name: { search: searchText, mode: 'insensitive' } }
+          }
+        },
+        {
+          comments: {
+            some: { content: { search: searchText, mode: 'insensitive' } }
+          }
+        },
+        { verdict: { search: searchText } },
+        { status: { in: statuses } }
       ]
     },
     include: {

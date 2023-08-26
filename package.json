@@ -18,6 +18,7 @@
     "astro": "^2.8.2",
     "astro-windi": "^0.0.2",
     "dotenv": "^16.3.1",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
     "preact": "^10.16.0",
     "react-device-detect": "^2.2.3",
     "react-query": "^3.39.3",
@@ -30,7 +31,10 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.44.0",
-    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-astro": "^0.29.0",
+    "eslint-plugin-autofix": "^1.1.0",
+    "eslint-plugin-github": "^4.9.2",
+    "prettier": "^3.0.2",
     "prisma": "^5.0.0"
   }
 }

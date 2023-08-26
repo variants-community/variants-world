@@ -1,5 +1,5 @@
 ---
-import { getPostById, getPostDetailsById } from "db/prisma/queries"
+import { getPostById } from "db/prisma/queries"
 import { getUser } from "db/supabase/auth"
 import AdminSettings from "components/AdminSettings"
 import Comments from "components/Comments"
@@ -10,22 +10,18 @@ import Layout from "layouts/Layout.astro"
 import Navigation from "components/Navigation"
 import Presence from "components/Presence"
 
-const user = await getUser(Astro.request)
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const postId = parseInt(Astro.params.id!)
 
-console.log(user)
+const [user, post] = await Promise.all([getUser(Astro.request), getPostById(postId)])
 
 if (!user) {
   return Astro.redirect("/auth")
 }
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const postId = parseInt(Astro.params.id!)
-const post = await getPostById(postId)
-const details = await getPostDetailsById(postId)
 const userIsTester = user.role === "TESTER"
 const userIsAuthor = user.id === post?.author.id
 
-console.log(post)
 ---
 
 <Layout>
@@ -39,7 +35,7 @@ console.log(post)
               postId={post.id}
               userId={user.id}
               likes={post.UserLikedPosts}
-              client:only
+              client:load
             />
             {userIsTester || userIsAuthor ? (
               <GameInfo
@@ -53,7 +49,7 @@ console.log(post)
                 createdAt={post.createdAt}
                 description={post.description}
                 variantLink={`/${post.id}`}
-                client:only
+                client:load
               />
             ) : (
               <GameInfo
@@ -70,9 +66,9 @@ console.log(post)
             )}
           </div>
 
-          {details && userIsTester && (
-            <Presence postId={post.id} user={user} client:only />
-            <AdminSettings user={user} details={details} client:only />
+          {post.PostDetails && userIsTester && (
+            <Presence postId={post.id} user={user} client:idle />
+            <AdminSettings user={user} details={post.PostDetails} client:load />
           )}
           {userIsTester ? (
             <GameStatusCard
@@ -80,7 +76,7 @@ console.log(post)
               postId={post.id}
               verdict={post.verdict}
               status={post.status}
-              client:only
+              client:load
             />
           ) : (
             <GameStatusCard
@@ -90,7 +86,7 @@ console.log(post)
             />
           )}
         </div>
-        <Comments isUserTester={userIsTester} userId={user.id} postId={post.id} comments={post.comments} client:only />
+        <Comments isUserTester={userIsTester} userId={user.id} postId={post.id} comments={post.comments} client:visible />
       </section>
     )
   }

@@ -4,13 +4,15 @@ import { useScrolLoading } from 'components/PostsList/use-scroll-loading'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/PostsList/PostCard'
 import Search from 'components/PostsList/Search'
+import type { PostForCard } from 'db/prisma/queries'
 
 type PostsListProps = {
   userId: number
+  initPosts: PostForCard[]
 }
 
 const PostsList = (props: PostsListProps) => {
-  const { posts } = useScrolLoading()
+  const { posts } = useScrolLoading(props.initPosts)
 
   const {
     data: foundPosts,

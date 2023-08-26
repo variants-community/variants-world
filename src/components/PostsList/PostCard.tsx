@@ -15,7 +15,6 @@ type PostCardProps = {
 }
 
 const PostCard = (props: PostCardProps) => {
-  console.log(typeof props.post.createdAt)
   return (
     <>
       <div

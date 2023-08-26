@@ -1,6 +1,6 @@
-import type { UserRole } from '@prisma/client'
-import { supabase } from './supabase'
+import { supabase } from 'db/supabase/supabase'
 import cookie from 'cookie'
+import type { UserRole } from '@prisma/client'
 
 export interface AuthentificatedUser {
   id: number
@@ -21,11 +21,7 @@ export async function getUser(req: Request) {
     return null
   }
 
-  const { data } = await supabase
-    .from('User')
-    .select('*')
-    .eq('email', user.email)
-    .single()
+  const { data } = await supabase.from('User').select('*').eq('email', user.email).single()
 
   if (data) {
     return {

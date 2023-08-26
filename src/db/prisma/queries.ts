@@ -18,6 +18,15 @@ export const getPostById = async (postId: number) => {
           User: true
         }
       },
+      PostDetails: {
+        include: {
+          voices: {
+            include: {
+              tester: true
+            }
+          }
+        }
+      },
       gamerules: true,
       UserLikedPosts: true
     }

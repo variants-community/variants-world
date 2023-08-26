@@ -45,7 +45,7 @@ const NewPost = (props: { userId: number }) => {
   })
 
   return (
-    <div className="flex flex-col items-center mx-auto">
+    <div class="flex flex-col items-center mx-auto">
       <Title isSearching={!!game && !!query} />
 
       <Search value={query} onChange={onSearch} isSearching={!!game && !!query} isLoading={isFetching} />
@@ -53,7 +53,7 @@ const NewPost = (props: { userId: number }) => {
       {isGameFound && (
         <>
           <Picture />
-          <div className={'sm:w-[450px] mt-[14px]'}>
+          <div class={'sm:w-[450px] mt-[14px]'}>
             <PostTags
               rules={[game.q.timeControl, ...mapRuleVariantsToString(game.q.ruleVariants)]}
               class="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
@@ -72,7 +72,7 @@ const NewPost = (props: { userId: number }) => {
             onClick={() => {
               if (isAllConfirmed) setIsSecondStep(true)
             }}
-            className={
+            class={
               'mb-[45px] mx-auto lg:mx-0 lg:ml-auto w-[185px] h-[45px] mt-[10px] text-center bg-primary border border-border-dark shadow-dark font-[600] text-white text-[18px] rounded-[10px]'
             }
           >
@@ -82,7 +82,7 @@ const NewPost = (props: { userId: number }) => {
       )}
 
       {game && isSecondStep && (
-        <div className={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
+        <div class={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
           <PostFillingForm userId={props.userId} game={game} approveIds={approveIds} />
         </div>
       )}

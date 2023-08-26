@@ -9,6 +9,7 @@ export const getPostById = async (postId: number) => {
     include: {
       author: true,
       comments: {
+        where: { hidden: false },
         include: {
           parent: {
             include: {
@@ -181,8 +182,3 @@ export interface PostForCard {
   updatedAt: Date
   description: string
 }
-
-type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
-export type PostWithDetailsForCard = ThenArg<ReturnType<typeof getPosts>>[number]
-
-export type PostDetails = NonNullable<ThenArg<ReturnType<typeof getPostDetailsById>>>

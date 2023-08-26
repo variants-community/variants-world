@@ -69,13 +69,13 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
       .on(
         'postgres_changes',
         {
-          event: 'DELETE',
+          event: 'UPDATE',
           schema: 'public',
           table: 'Comment',
           filter: `postId=eq.${postId}`
         },
         async payload => {
-          setComments(prev => prev.filter(c => c.id !== payload.old.id))
+          setComments(prev => prev.filter(c => c.id !== payload.new.id && payload.new.hidden))
         }
       )
       .subscribe()

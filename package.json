@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "seed:gen-chema-types": "npx tsx src/seeds/dbTypes.ts; npx eslint --fix ./src/db/supabase/types.ts"
+    "seed:gen-chema-types": "npx tsx src/seeds/db-types.ts; npx eslint --fix ./src/db/supabase/types.ts"
   },
   "dependencies": {
     "@astrojs/preact": "^2.2.1",

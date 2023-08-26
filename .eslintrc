@@ -60,7 +60,7 @@
     "@typescript-eslint/require-array-sort-compare": "error",
     "@typescript-eslint/restrict-plus-operands": "error",
     "no-underscore-dangle": "error",
-    "filenames/match-regex": [2, "(^\\[[a-z-]+\\]$)|(^[a-z-]+$)|(^([A-Z][a-z]*)+$)", true],
+    "filenames/match-regex": [2, "(^\\[[a-z-]+\\]$)|(^[a-z-.]+$)|(^([A-Z][a-z]*)+$)", true],
     "semi": "off",
     "@typescript-eslint/semi": ["error", "never"],
     "@typescript-eslint/type-annotation-spacing": "error",

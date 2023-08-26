@@ -68,6 +68,7 @@ export interface Database {
         Row: {
           content: string
           createdAt: string
+          hidden: boolean
           id: number
           parent_id: number | null
           postId: number
@@ -76,6 +77,7 @@ export interface Database {
         Insert: {
           content: string
           createdAt?: string
+          hidden?: boolean
           id?: number
           parent_id?: number | null
           postId: number
@@ -84,6 +86,7 @@ export interface Database {
         Update: {
           content?: string
           createdAt?: string
+          hidden?: boolean
           id?: number
           parent_id?: number | null
           postId?: number

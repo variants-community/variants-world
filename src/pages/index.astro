@@ -1,12 +1,12 @@
 ---
-  import { getUser } from "db/supabase/auth"
+import { getPosts } from "db/prisma/queries"
+import { getUser } from "db/supabase/auth"
 import Layout from "layouts/Layout.astro"
 import Navigation from "components/Navigation"
 import PostsList from "components/PostsList"
 
-const user = await getUser(Astro.request)
 
-console.log(user)
+const [user, posts] = await Promise.all([getUser(Astro.request), getPosts(0, 10)])
 
 if (!user) {
   return Astro.redirect("/auth")
@@ -17,5 +17,5 @@ if (!user) {
 
 <Layout>
   <Navigation username={user.username} />
-  <PostsList userId={user.id} client:load />
+  <PostsList userId={user.id} initPosts={posts} client:load />
 </Layout>

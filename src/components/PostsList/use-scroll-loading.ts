@@ -5,8 +5,8 @@ import type { PostForCard } from 'db/prisma/queries'
 
 const POSTS_PER_PAGE = 10
 
-export const useScrolLoading = () => {
-  const [posts, setPosts] = useState<PostForCard[]>([])
+export const useScrolLoading = (initPosts: PostForCard[]) => {
+  const [posts, setPosts] = useState<PostForCard[]>(initPosts)
 
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoadNeed, setIsLoadNeed] = useState(false)
@@ -15,11 +15,6 @@ export const useScrolLoading = () => {
   useEffect(() => {
     // eslint-disable-next-line github/no-then
     getTotalPostsCount().then(t => setTotalCount(t))
-    // eslint-disable-next-line github/no-then
-    fetchPosts({ page: currentPage, limit: POSTS_PER_PAGE }).then(fethedPosts => {
-      setPosts(fethedPosts)
-      setCurrentPage(prev => prev + 1)
-    })
   }, [])
 
   useEffect(() => {

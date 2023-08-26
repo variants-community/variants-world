@@ -1,11 +1,11 @@
-import { GameStatus } from '@prisma/client'
 import { statusToString } from 'utils/hepers'
+import type { GameStatus } from '@prisma/client'
 
 const statuses = [
-  { label: 'Accepted', value: GameStatus.ACCEPTED },
-  { label: 'Declined', value: GameStatus.DECLINED },
-  { label: 'Pending reply', value: GameStatus.PENDING_REPLY },
-  { label: 'Under review', value: GameStatus.UNDER_REVIEW }
+  { label: 'Accepted', value: 'ACCEPTED' },
+  { label: 'Declined', value: 'DECLINED' },
+  { label: 'Pending reply', value: 'PENDING_REPLY' },
+  { label: 'Under review', value: 'UNDER_REVIEW' }
 ]
 
 type StatusNameProps = {

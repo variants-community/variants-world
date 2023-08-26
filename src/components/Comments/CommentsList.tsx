@@ -11,17 +11,20 @@ type CommentsProps = {
 
 const CommentsList = (props: CommentsProps) => (
   <div class={'flex flex-col gap-[20px] mb-[40px]'}>
-    {props.comments.map(c => (
-      <CommentCard
-        isUserTester={props.isUserTester}
-        key={c.id}
-        comment={c}
-        reply={() => props.onReply(c)}
-        remove={async () => {
-          await supabase.from('Comment').delete().eq('id', c.id)
-        }}
-      />
-    ))}
+    {props.comments
+      .sort((first, second) => first.createdAt.getTime() - second.createdAt.getTime())
+      .filter(c => !c.hidden)
+      .map(c => (
+        <CommentCard
+          isUserTester={props.isUserTester}
+          key={c.id}
+          comment={c}
+          reply={() => props.onReply(c)}
+          remove={async () => {
+            await supabase.from('Comment').update({ hidden: true }).eq('id', c.id)
+          }}
+        />
+      ))}
   </div>
 )
 
@@ -59,7 +62,9 @@ const CommentCard = (props: CommentCardProps) => (
         {props.comment.parent && (
           <div class={'comment-quoting flex flex-col bg-gray p-[5px] rounded mr-auto'}>
             <span class={'font-bold'}>{props.comment.parent.User.name}:</span>
-            <p class={'inline-block'}>{`${props.comment.parent.content}`}</p>
+            <p class={'inline-block'}>
+              {props.comment.parent.hidden ? '[comment deleted]' : props.comment.parent.content}
+            </p>
           </div>
         )}
 

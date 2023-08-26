@@ -6,7 +6,6 @@ type SearchProps = {
   onChange: (value: string) => void
   isSearching: boolean
   isLoading: boolean
-  isInvalidId: boolean
 }
 
 export const Search = (props: SearchProps) => (
@@ -30,6 +29,5 @@ export const Search = (props: SearchProps) => (
       placeholder={'game number or link'}
     />
     {props.isLoading && <SpinnerIcon class="h-[20px] w-[20px]" />}
-    {/* {props.isInvalidId && <CrossIcon />} */}
   </div>
 )

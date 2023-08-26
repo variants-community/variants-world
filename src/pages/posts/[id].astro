@@ -7,25 +7,27 @@ import GameInfo from "components/GameInfo"
 import GamePicture from "components/GamePicture"
 import GameStatusCard from "components/GameStatusCard"
 import Layout from "layouts/Layout.astro"
-import Navigation from "components/Navigation"
 import Presence from "components/Presence"
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const postId = parseInt(Astro.params.id!)
 
-const [user, post] = await Promise.all([getUser(Astro.request), getPostById(postId)])
+const postPromise = getPostById(postId)
+const user = await getUser(Astro.request)
 
 if (!user) {
   return Astro.redirect("/auth")
 }
 
+const post = await postPromise
+
 const userIsTester = user.role === "TESTER"
 const userIsAuthor = user.id === post?.author.id
 
+// flex flex-col container mx-auto
 ---
 
-<Layout>
-  <Navigation username={user.username} />
+<Layout user={user}>
   {
     post && (
       <section class="">

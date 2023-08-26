@@ -1,5 +1,5 @@
 type NavigationProps = {
-  username: string
+  username?: string
 }
 
 const Navigation = (props: NavigationProps) => {
@@ -23,10 +23,12 @@ const Navigation = (props: NavigationProps) => {
           Add your variant!
         </a>
       </div>
-      <div class={'flex flex-row gap-[10px]'}>
-        {props.username}
-        <img src="/src/assets/images/user.png" alt={props.username} class={'h-[24px]'} />
-      </div>
+      {props.username && (
+        <div class={'flex flex-row gap-[10px]'}>
+          {props.username}
+          <img src="/src/assets/images/user.png" alt={props.username} class={'h-[24px]'} />
+        </div>
+      )}
     </nav>
   )
 }

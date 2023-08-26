@@ -22,7 +22,7 @@ const PostCard = (props: PostCardProps) => {
           'flex mx-auto w-11/12 sm:mx-0 sm:w-auto flex-col sm:flex-row rounded-[12px] overflow-hidden bg-border-light border border-[2px] border-border-dark'
         }
       >
-        <img src="/src/assets/images/game.png" alt={props.post.title} class={'sm:w-[220px] sm:h-[220px]'} />
+        <img src="/src/assets/images/game.png" alt={props.post.title} class="sm:(w-[220px] h-[220px] min-w-[220px])" />
         <div class={'w-full flex flex-col justify-between p-[20px] '}>
           <div class={'flex flex-col gap-[10px] mb-[30px] sm:mb-0'}>
             <div class={'flex flex-row justify-between'}>

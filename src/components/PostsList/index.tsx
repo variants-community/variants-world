@@ -8,11 +8,11 @@ import type { PostForCard } from 'db/prisma/queries'
 
 type PostsListProps = {
   userId: number
-  initPosts: PostForCard[]
+  posts: PostForCard[]
 }
 
 const PostsList = (props: PostsListProps) => {
-  const { posts } = useScrolLoading(props.initPosts)
+  const { posts } = useScrolLoading(props.posts)
 
   const {
     data: foundPosts,

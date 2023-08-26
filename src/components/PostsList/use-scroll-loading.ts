@@ -5,8 +5,8 @@ import type { PostForCard } from 'db/prisma/queries'
 
 const POSTS_PER_PAGE = 10
 
-export const useScrolLoading = (initPosts: PostForCard[]) => {
-  const [posts, setPosts] = useState<PostForCard[]>(initPosts)
+export const useScrolLoading = (initialPosts: PostForCard[]) => {
+  const [posts, setPosts] = useState<PostForCard[]>(initialPosts)
 
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoadNeed, setIsLoadNeed] = useState(false)

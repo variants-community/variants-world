@@ -5,13 +5,11 @@ import NewPost from "components/NewPost"
 
 const user = await getUser(Astro.request)
 
-console.log(user)
-
 if (!user) {
   return Astro.redirect("/auth")
 }
 ---
 
 <Layout>
-  <NewPost userId={user.id}  client:load />
+  <NewPost userId={user.id} client:idle />
 </Layout>

@@ -1,6 +1,7 @@
 ---
 import 'styles/font.css'
 import 'virtual:windi.css'
+import { ViewTransitions } from 'astro:transitions'
 import Navigation from "components/Navigation"
 import type { AuthentificatedUser } from 'db/supabase/auth'
 
@@ -20,6 +21,7 @@ const { title, user} = Astro.props as LayoutProps
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<ViewTransitions />
 	</head>
 	<body class="bg-dark text-text">
 		<Navigation username={user?.username} />

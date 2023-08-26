@@ -12,7 +12,7 @@ export const Notes = (props: NotesProps) => (
       onChange={props.onChangeNotes}
       rows={4}
       class={
-        'h-full w-full lg:w-[375px] p-[10px] mt-[6px] font-[16px] font-semibold bg-dark bold-border rounded-[3px] outline-none resize-none'
+        'h-full w-full lg:w-[375px] p-[10px] mt-[6px] font-[16px] font-semibold bg-dark border-bold rounded-[3px] outline-none resize-none'
       }
     />
   </div>

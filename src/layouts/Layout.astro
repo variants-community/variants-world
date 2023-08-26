@@ -1,5 +1,4 @@
 ---
-import 'styles/main.css'
 import 'virtual:windi.css'
 
 type LayoutProps = {
@@ -10,15 +9,18 @@ const { title } = Astro.props as LayoutProps
  
 ---
 
-<html lang="en" class="bg-dark text-text">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Glory:wght@400;500;600&display=swap" rel="stylesheet">
 		<title>{title}</title>
 	</head>
-	<body class="flex flex-col container mx-auto">
+	<body class="bg-dark text-text">
 		<slot />
 	</body>
 </html>

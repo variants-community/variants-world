@@ -35,9 +35,22 @@ export default defineConfig({
         dark: '#141415',
         'border-dark': '#0E0E10',
         'border-light': '#1E1E20'
+      },
+      boxShadow: {
+        dark: '2px 4px 20px -5px rgba(0, 0, 0, 0.80)',
+        light: '0px 0px 20px 0px rgba(255, 255, 255, 0.10)'
+      },
+      textShadow: {
+        light: '0px 0px 15px rgba(255, 255, 255, 0.15)'
+      },
+      scale: {
+        inverse: '-1'
       }
     }
   },
   plugins: [],
-  safelist: 'text-yellow text-blue text-green'
+  safelist: 'text-yellow text-blue text-green',
+  alias: {
+    'border-bold': 'border border-[2px] border-border-dark'
+  }
 })

@@ -15,11 +15,11 @@ const Likes = (props: LikesProps) => {
     <div
       onClick={async () => toogleLike()}
       aria-hidden="true"
-      class={'flex flex-row justify-end whitespace-nowrap gap-[8px] parent transition-all duration-100'}
+      class={'flex flex-row justify-end whitespace-nowrap gap-[8px] transition-all duration-100 cursor-pointer'}
     >
       <span class={`text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>{formatLikesCount(likesCount)}</span>
 
-      <LikeIcon class="child hover:fill-red transition duration-100" isLiked={isLiked} />
+      <LikeIcon class="hover:fill-red transition duration-100" isLiked={isLiked} />
     </div>
   )
 }

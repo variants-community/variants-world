@@ -61,7 +61,7 @@ export const Classification = (props: ClassificationProps) => {
         value={props.gameClassification}
         onChange={props.onChangeGameClassification}
         id="game-clsfc"
-        class="w-[200px] text-white bg-dark bold-border rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
+        class="w-[200px] text-white bg-dark border-bold rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
       >
         {gameClassification.map(cl => (
           <option key={cl.value} value={cl.value}>
@@ -77,7 +77,7 @@ export const Classification = (props: ClassificationProps) => {
         disabled={true}
         value={props.gameplayClassification ?? 'Undefined'}
         id="gameplay-clsfc"
-        class="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark bold-border rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
+        class="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark border-bold rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
       >
         {gameplayClassification.map(cl => (
           <option key={cl.value} value={cl.value}>

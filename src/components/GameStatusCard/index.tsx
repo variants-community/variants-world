@@ -45,7 +45,7 @@ const GameStatusCard = (props: AcceptedCardProps) => {
         <StatusName isEditMode={isEditMode} status={status} onChange={onStatusChange} />
         <Verdict isEditMode={isEditMode} verdict={verdict} onChange={onVerdictChange} />
       </div>
-      <Bubbles class="mr-[48px] mt-[45px] mb-[20px] miror" color={statusToColor(status)} />
+      <Bubbles class="mr-[48px] mt-[45px] mb-[20px] transform scale-x-inverse" color={statusToColor(status)} />
       {props.displayEditBotton && (
         <EditButton onClick={() => toogleIsChangeable()} class={'absolute bottom-[12px] right-[10px]'} />
       )}

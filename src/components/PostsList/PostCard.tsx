@@ -5,6 +5,7 @@ import PostTags from 'components/PostTags'
 import PostTitle from 'components/PostTitle'
 import PostUser from 'components/PostUser'
 import StatusIcon from 'components/icons/StatusIcon'
+import type { Color } from 'windi.config'
 import type { GameStatus } from '@prisma/client'
 import type { PostForCard } from 'db/prisma/queries'
 // import { isMobile } from 'react-device-detect' // 10 kb жесть......
@@ -49,7 +50,7 @@ const PostCard = (props: PostCardProps) => {
 
             <div class={'w-full sm:w-[150px] flex flex-row justify-between sm:justify-end text-[22px] gap-[15px]'}>
               <div class={'mr-auto'}>
-                <Status status={props.post.status} />
+                <StatusIndicator status={props.post.status} />
               </div>
               <div class={' sm:w-min-[70px]'}>
                 <Comments count={props.post.commentsCount} />
@@ -65,19 +66,19 @@ const PostCard = (props: PostCardProps) => {
   )
 }
 
-const Status = ({ status }: { status: GameStatus }) => (
-  <div class={'w-auto'}>
-    {status === 'ACCEPTED' ? (
-      <StatusIcon class="fill-green" />
-    ) : status === 'DECLINED' ? (
-      <StatusIcon class="fill-red" />
-    ) : status === 'PENDING_REPLY' ? (
-      <StatusIcon class="fill-blue" />
-    ) : (
-      <StatusIcon class="fill-yellow" />
-    )}
-  </div>
-)
+const StatusIndicator = ({ status }: { status: GameStatus }) => {
+  const colors: Record<GameStatus, Color> = {
+    ACCEPTED: 'green',
+    DECLINED: 'red',
+    PENDING_REPLY: 'yellow',
+    UNDER_REVIEW: 'blue'
+  }
+  return (
+    <div class={'w-auto'}>
+      <StatusIcon class={`fill-${colors[status]}`} />
+    </div>
+  )
+}
 
 const Comments = ({ count }: { count: number }) => (
   <div class={'flex flex-row justify-end items-center gap-[8px]'}>

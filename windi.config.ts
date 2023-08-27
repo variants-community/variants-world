@@ -1,6 +1,22 @@
 import { defineConfig } from 'windicss/helpers'
+import type { FullConfig } from 'windicss/types/interfaces'
 // import colors from 'windicss/colors'
 // import plugin from 'windicss/plugin'
+
+export const COLORS = {
+  primary: '#AE4939',
+  secondary: '#D3543F',
+  green: '#61AD14',
+  blue: '#2B99EA',
+  red: '#CD2740',
+  gray: '#2D2D32',
+  yellow: '#CDBF27',
+  text: '#959595',
+  white: '#F6F6F6',
+  dark: '#141415',
+  'border-dark': '#0E0E10',
+  'border-light': '#1E1E20'
+} as const satisfies NonNullable<FullConfig['theme']>['colors']
 
 export default defineConfig({
   darkMode: 'class', // or 'media'
@@ -22,20 +38,7 @@ export default defineConfig({
       fontFamily: {
         sans: ['Glory', 'sans-serif']
       },
-      colors: {
-        primary: '#AE4939',
-        secondary: '#D3543F',
-        green: '#61AD14',
-        blue: '#2B99EA',
-        red: '#CD2740',
-        gray: '#2D2D32',
-        yellow: '#CDBF27',
-        text: '#959595',
-        white: '#F6F6F6',
-        dark: '#141415',
-        'border-dark': '#0E0E10',
-        'border-light': '#1E1E20'
-      },
+      colors: COLORS,
       boxShadow: {
         dark: '2px 4px 20px -5px rgba(0, 0, 0, 0.80)',
         light: '0px 0px 20px 0px rgba(255, 255, 255, 0.10)'
@@ -54,3 +57,5 @@ export default defineConfig({
     'border-bold': 'border border-[2px] border-border-dark'
   }
 })
+
+export type Color = keyof typeof COLORS

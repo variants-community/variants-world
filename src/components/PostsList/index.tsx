@@ -29,16 +29,15 @@ const PostsList = (props: PostsListProps) => {
   useCtrlKFocus()
 
   return (
-    <>
+    <div class="mx-auto container">
       <Search query={query} setQuery={setQuery} />
 
       <div class="flex flex-col gap-[30px] ">
-        {query.length > 0 &&
-          foundPosts &&
-          foundPosts.map(post => <PostCard userId={props.userId} key={post.id} post={post} />)}
-        {query.length === 0 && posts && posts.map(post => <PostCard userId={props.userId} key={post.id} post={post} />)}
+        {(query.length > 0 ? foundPosts : posts)?.map(post => (
+          <PostCard userId={props.userId} key={post.id} post={post} />
+        ))}
       </div>
-    </>
+    </div>
   )
 }
 

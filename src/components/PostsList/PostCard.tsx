@@ -17,7 +17,8 @@ type PostCardProps = {
 const PostCard = (props: PostCardProps) => {
   return (
     <>
-      <div
+      <a
+        href={`/posts/${props.post.id}`}
         class={
           'flex mx-auto w-11/12 sm:mx-0 sm:w-auto flex-col sm:flex-row rounded-[12px] overflow-hidden bg-border-light border border-[2px] border-border-dark'
         }
@@ -26,7 +27,7 @@ const PostCard = (props: PostCardProps) => {
         <div class={'w-full flex flex-col justify-between p-[20px] '}>
           <div class={'flex flex-col gap-[10px] mb-[30px] sm:mb-0'}>
             <div class={'flex flex-row justify-between'}>
-              <PostTitle linkTo={`/posts/${props.post.id}`} type={props.post.type} title={props.post.title} />
+              <PostTitle type={props.post.type} title={props.post.title} />
               <div class={'hidden sm:block'}>
                 <TimePassed from={props.post.createdAt} />
               </div>
@@ -59,7 +60,7 @@ const PostCard = (props: PostCardProps) => {
             </div>
           </div>
         </div>
-      </div>
+      </a>
     </>
   )
 }

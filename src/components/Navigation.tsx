@@ -15,12 +15,12 @@ const Navigation = (props: NavigationProps) => {
         </a>
 
         <a
-          href={'/posts/new'}
+          href={'/posts'}
           class={
             'flex bg-opacity-40 items-center hover:(text-white bg-opacity-35) h-[30px] bg-gray text-[18px] align-middle rounded-[6px] px-[7px] transition-colors duration-300 ease-out'
           }
         >
-          Add your variant!
+          Posts
         </a>
       </div>
       {props.username && (

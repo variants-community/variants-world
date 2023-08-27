@@ -14,6 +14,7 @@ export const useSearch = <T>(props: UseSearchProps<T>) => {
   const [isFetching, setIsFetching] = useState(false)
 
   useEffect(() => {
+    if (!query) return
     setIsFetching(true)
     if (searchTimeout) clearTimeout(searchTimeout)
     setSearchTimeout(

@@ -8,7 +8,7 @@ const POSTS_PER_PAGE = 10
 export const useScrolLoading = (initialPosts: PostForCard[]) => {
   const [posts, setPosts] = useState<PostForCard[]>(initialPosts)
 
-  const [currentPage, setCurrentPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const [isLoadNeed, setIsLoadNeed] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
 
@@ -29,16 +29,22 @@ export const useScrolLoading = (initialPosts: PostForCard[]) => {
   }, [isLoadNeed])
 
   const handleScroll = () => {
-    const { scrollTop, scrollHeight } = document.documentElement
-    if (scrollHeight - (scrollTop + window.innerHeight) < 800) {
+    const app = document.querySelector('#app')
+    if (!app) return
+    const { scrollTop, scrollHeight } = app
+    // play around with the trigger factor instead of fixed px
+    const trigger = 1
+    if (scrollHeight - (scrollTop + window.innerHeight) < window.innerHeight * trigger) {
       setIsLoadNeed(true)
     }
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
+    const app = document.querySelector('#app')
+    if (!app) return
+    app.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      app.removeEventListener('scroll', handleScroll)
     }
   }, [totalCount])
 

@@ -23,8 +23,22 @@ const { title, user} = Astro.props as LayoutProps
 		<title>{title}</title>
 		<ViewTransitions />
 	</head>
-	<body class="bg-dark text-text">
+	<body class="bg-dark text-text overflow-y-auto!">
 		<Navigation username={user?.username} />
-		<slot />
+		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll pl-2">
+			<slot />
+		</div>
 	</body>
 </html>
+
+<style is:global>
+	::-webkit-scrollbar {
+		width: 0.5rem;
+	}
+	::-webkit-scrollbar-thumb {
+		@apply bg-border-light rounded-sm;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		@apply bg-primary;
+	}
+</style>

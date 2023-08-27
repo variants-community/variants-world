@@ -10,6 +10,6 @@ if (!user) {
 }
 ---
 
-<Layout>
+<Layout user={user}>
   <NewPost userId={user.id} client:idle />
 </Layout>

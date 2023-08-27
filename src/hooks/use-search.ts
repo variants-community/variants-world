@@ -1,34 +1,42 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
+import { useSignal } from '@preact/signals'
 
 type UseSearchProps<T> = {
   data?: T
-  onQuery: (query: string) => (T | undefined) | Promise<T | undefined>
+  onQuery: (query: string, signal?: AbortSignal) => (T | undefined) | Promise<T | undefined>
 }
 
 export const useSearch = <T>(props: UseSearchProps<T>) => {
-  const [searchTimeout, setSearchTimeout] = useState<number>()
+  const data = useSignal(props.data)
+  const query = useSignal('')
+  const controller = useRef<AbortController>()
 
-  const [data, setData] = useState(props.data)
-  const [query, setQuery] = useState('')
+  const isFetching = useSignal(false)
 
-  const [isFetching, setIsFetching] = useState(false)
+  const changeQuery = async (newQuery: string) => {
+    query.value = newQuery
+    if (!newQuery) {
+      data.value = undefined
+      isFetching.value = false
+      return
+    }
 
-  useEffect(() => {
-    if (!query) return
-    setIsFetching(true)
-    if (searchTimeout) clearTimeout(searchTimeout)
-    setSearchTimeout(
-      window.setTimeout(async () => {
-        setData(await props.onQuery(query.trim()))
-        setIsFetching(false)
-      }, 300)
-    )
-  }, [query])
+    isFetching.value = true
+    if (controller.current) controller.current.abort()
+    controller.current = new AbortController()
+    try {
+      const newData = await props.onQuery(newQuery.trim(), controller.current.signal)
+      data.value = newData
+      isFetching.value = false
+    } catch {
+      // Request canceled
+    }
+  }
 
   return {
-    data,
-    query,
-    setQuery,
-    isFetching
+    data: data.value,
+    query: query.value,
+    setQuery: changeQuery,
+    isFetching: isFetching.value
   }
 }

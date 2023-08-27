@@ -15,16 +15,7 @@ const NewPost = (props: { userId: number }) => {
   const [isAllConfirmed, setIsAllConfirmed] = useState(false)
   const [isSecondStep, setIsSecondStep] = useState(false)
 
-  const {
-    data: game,
-    isFetching,
-    query,
-    setQuery
-  } = useSearch<CGABotGameDetails>({
-    onQuery: async q => {
-      return await fetchGameById(q)
-    }
-  })
+  const { data: game, isFetching, query, setQuery } = useSearch<CGABotGameDetails>({ onQuery: fetchGameById })
 
   const isGameFound = !!game
 
@@ -45,13 +36,13 @@ const NewPost = (props: { userId: number }) => {
   })
 
   return (
-    <div class="flex flex-col items-center mx-auto">
+    <div class="flex flex-col items-center mx-auto max-w-230 w-11/12">
       <Title isSearching={!!game && !!query} />
 
       <Search value={query} onChange={onSearch} isSearching={!!game && !!query} isLoading={isFetching} />
 
       {isGameFound && (
-        <>
+        <div class="animate-fadefast flex flex-col items-center">
           <Picture />
           <div class={'sm:w-[450px] mt-[14px]'}>
             <PostTags
@@ -73,16 +64,16 @@ const NewPost = (props: { userId: number }) => {
               if (isAllConfirmed) setIsSecondStep(true)
             }}
             class={
-              'mb-[45px] mx-auto lg:mx-0 lg:ml-auto w-[185px] h-[45px] mt-[10px] text-center bg-primary border border-border-dark shadow-dark font-[600] text-white text-[18px] rounded-[10px]'
+              'ml-auto w-46 h-11 mt-2 mb-4 text-center bg-primary hover:bg-secondary border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg'
             }
           >
             Continue
           </button>
-        </>
+        </div>
       )}
 
       {game && isSecondStep && (
-        <div class={'w-11/12 sm:w-[700px] mt-[150px] mb-[300px]'}>
+        <div class={'w-11/12 sm:w-175 mt-[36] mb-[75]'}>
           <PostFillingForm userId={props.userId} game={game} approveIds={approveIds} />
         </div>
       )}

@@ -1,11 +1,16 @@
 export const Title = ({ isSearching }: { isSearching: boolean }) => (
   <h1
-    class={`${
-      isSearching ? '!h-[0px] !mt-[0px] !opacity-0 !mb-[0px] z-0' : 'mb-[100px]'
-    } h-[170px] text-[50px] sm:text-[85px] mt-[90px] sm:mt-[180px] text-white font-[300] tracking-[2.55px] text-center text-shadow-light opacity-100 overflow=hidden  transition-all duration-900`}
+    class={`${isSearching ? '!h-0 !mt-0 !opacity-0 !md:mb-bigcenter' : 'sm:mb-0 md:mb-10 lg:mb-25'} sm:h-42 h-24
+    text-4xl mt-smallcenter
+    sm:(text-5xl mt-60)
+    md:(text-6xl mt-52)
+    lg:(text-7xl mt-45)
+    leading-none text-white font-light tracking-glory whitespace-nowrap text-center text-shadow-light transition-title`}
   >
-    Variants universe starts
-    <br />
-    with a single game
+    <span class={isSearching ? '' : 'animate-fade'}>
+      Variants universe starts
+      <br />
+      with a single game
+    </span>
   </h1>
 )

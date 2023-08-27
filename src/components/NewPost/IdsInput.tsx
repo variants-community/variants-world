@@ -28,7 +28,7 @@ export const IdsInputs = (props: {
   }
 
   return (
-    <div class={'flex flex-wrap gap-[21px] mt-[75px] mx-auto justify-center mb-[50px]'}>
+    <div class={'flex flex-wrap gap-5 mt-12 mx-auto justify-center mb-10'}>
       {props.approveIds.map((value, index) => {
         return (
           <IdInput
@@ -40,7 +40,7 @@ export const IdsInputs = (props: {
             setValue={newValue => {
               onChangeValue(newValue, index)
             }}
-            placeholder={`game ${index + 1}`}
+            placeholder={`game ${index + 2}`}
           />
         )
       })}

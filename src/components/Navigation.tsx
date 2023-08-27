@@ -6,7 +6,7 @@ const Navigation = (props: NavigationProps) => {
   return (
     <nav
       class={
-        'fixed sm:static sm:mb-[30px] flex flex-row justify-between items-center bg-border-light h-[50px] w-full px-[20px] sm:rounded-[12px] sm:border sm:border-[2px] sm:border-border-dark shadow-dark'
+        'fixed sm:static sm:mb-[30px] flex flex-row justify-between items-center bg-border-light h-12 w-full px-[20px] sm:rounded-[12px] sm:border sm:border-[2px] sm:border-border-dark shadow-dark'
       }
     >
       <div class={'flex flex-row gap-[20px] sm:gap-[40px]'}>

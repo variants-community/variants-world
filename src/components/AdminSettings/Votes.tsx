@@ -62,7 +62,7 @@ export const Votes = (props: VoicesProps) => {
         {props.voces.map(vote => (
           <li
             key={vote.testerId}
-            class={'h-[30px] px-[10px] flex flex-row justify-between bg-dark border-bold rounded-[3px]'}
+            class={'h-[30px] px-[10px] flex flex-row justify-between bg-dark darkborder rounded-[3px]'}
           >
             <span>{vote.tester?.name}</span>
             <span class={'font-mono font-light'}>

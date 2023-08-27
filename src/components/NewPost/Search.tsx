@@ -9,25 +9,31 @@ type SearchProps = {
 }
 
 export const Search = (props: SearchProps) => (
-  <div
-    class={` z-10 flex flex-row items-center mx-auto bg-dark border border-[2px] border-border-dark shadow-light text-text font-[400] rounded-full items-center transition-all duration-1000 ${
-      props.isSearching
-        ? 'w-10/11 px-[18px] pt-[13px] pb-[12px] gap-[8px] mt-[100px] sm:(w-[492px] px-[18px] pt-[13px] pb-[12px] gap-[8px] mt-[100px])'
-        : 'w-11/12 px-[20px] pt-[15px] pb-[14px] gap-[8px] sm:(w-[762px] px-[28px] pt-[16px] pb-[16px] gap-[14px])'
-    }`}
-  >
-    <span class={`${props.isSearching ? 'text-[23px]' : 'text-[24px] sm:text-[38px]'} transition-all duration-1000`}>
+  <div class={`relative w-auto max-w-11/12 flex items-center opacity-0 animate-postfade`}>
+    <span
+      class={`absolute ${
+        props.isSearching ? 'left-4 text-2xl' : 'md:(left-7 text-4xl mt-0) sm:(text-2xl left-6 mt-1) text-xl left-5'
+      } transition-inset duration-500 ease-expo`}
+    >
       #
     </span>
     <input
       value={props.value}
       onInput={e => props.onChange(getValueFromEvent(e))}
-      class={`w-full  bg-dark outline-none ${
-        props.isSearching ? 'text-[18px]' : 'text-[22px] sm:text-[29px]'
-      } transition-all duration-1000`}
+      class={`bg-dark pr-16 rounded-full darkborder outline-none placeholder-text
+      focus:(text-text-light placeholder-text-light) transition-search w-full
+      ${
+        props.isSearching
+          ? 'shadow-lightSmall focus:shadow-lightSmallHover text-lg md:w-120 w-100 py-2 pl-10'
+          : `shadow-light      focus:shadow-lightHover  
+             lg:(text-2xl w-188 py-4)
+             md:(text-xl  w-164 py-3 pl-16)
+             sm:(text-xl  w-120 py-2 pl-13)
+             text-lg  w-84 py-1 pl-11`
+      }`}
       type="text"
       placeholder={'game number or link'}
     />
-    {props.isLoading && <SpinnerIcon class="h-[20px] w-[20px]" />}
+    {props.isLoading && <SpinnerIcon class="absolute right-7 h-6 w-6" />}
   </div>
 )

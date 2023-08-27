@@ -5,6 +5,7 @@ import { useEffect, useState } from 'preact/hooks'
 export const useLikes = (likes: { userId: number }[], userId: number, postId: number) => {
   const [isLiked, setIsLiked] = useState<boolean>(likes.some(like => like.userId === userId))
   const [likesCount, setLikesCount] = useState<number>(likes.length)
+  const [likeTimeout, setLikeTimeout] = useState<number>()
 
   const updateLiksCount = async () => {
     const count = await getLikesCountQuery(postId)
@@ -51,15 +52,20 @@ export const useLikes = (likes: { userId: number }[], userId: number, postId: nu
     setLikesCount(isLiked ? likesCount - 1 : likesCount + 1)
     setIsLiked(!isLiked)
 
-    if (await isPostLikedByUserQuery(postId, userId)) {
-      const ok = await removeLikeQuery(postId, userId)
-      setIsLiked(ok ? false : true)
-    } else {
-      const ok = await putLikeQuery(postId, userId)
-      setIsLiked(ok)
+    if (likeTimeout) clearTimeout(likeTimeout)
+    else {
+      setLikeTimeout(
+        window.setTimeout(async () => {
+          if (await isPostLikedByUserQuery(postId, userId)) {
+            const ok = await removeLikeQuery(postId, userId)
+            setIsLiked(ok ? false : true)
+          } else {
+            const ok = await putLikeQuery(postId, userId)
+            setIsLiked(ok)
+          }
+        }, 500)
+      )
     }
-
-    await updateLiksCount()
   }
 
   return {

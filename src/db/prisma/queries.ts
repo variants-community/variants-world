@@ -1,4 +1,4 @@
-import { GameStatus, GameType, UserRole } from '@prisma/client'
+import { GameClassification, GameStatus, GameType, GameplayClassification, UserRole, VoteValue } from '@prisma/client'
 import prisma from 'db/prisma/prisma'
 
 export const getPostById = async (postId: number) => {
@@ -161,6 +161,13 @@ export const getPosts = async (skip: number, take = 5) => {
   return mapped
 }
 
+export interface User {
+  id: number
+  name: string
+  email: string | null
+  role: UserRole
+}
+
 export interface PostForCard {
   id: number
   status: GameStatus
@@ -171,14 +178,24 @@ export interface PostForCard {
   title: string
   authorUserId: number
   gamerules: { id: number; name: string }[]
-  author: {
-    id: number
-    name: string
-    email: string | null
-    role: UserRole
-  }
+  author: User
   commentsCount: number
   createdAt: Date
   updatedAt: Date
   description: string
+}
+
+export interface PostDetails {
+  id: number
+  postId: number
+  gameClassification: GameClassification | null
+  gameplayClassification: GameplayClassification | null
+  notes: string | null
+  voices: {
+    id: number
+    postId: number
+    teste: User
+    testerId: number
+    value: VoteValue
+  }[]
 }

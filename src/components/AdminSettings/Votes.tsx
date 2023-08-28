@@ -28,12 +28,12 @@ export const Votes = (props: VoicesProps) => {
 
   return (
     <div class={'flex flex-col'}>
-      <div class={'w-[160px] flex flex-row justify-between font-semibold'}>
-        <h2 class={'text-primary font-[16px] font-semibold'}>Votes</h2>
-        <div class={'flex flex-row text-white text-[14px] gap-[5px] transition-all duration-300'}>
+      <div class={'w-40 flex flex-row justify-between font-semibold'}>
+        <h2 class={'text-primary font-semibold'}>Votes</h2>
+        <div class={'flex flex-row gap-1 text-white text-[14px] transition-all duration-300'}>
           <button
             onClick={async () => onVoice('NEGATIVE')}
-            class={`w-[30px] py-[3px] bg-border-light border border-primary rounded-[3px] ${
+            class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVoice && testerVoice.value === 'NEGATIVE' ? 'bg-primary' : 'hover:bg-primary'
             }`}
           >
@@ -41,7 +41,7 @@ export const Votes = (props: VoicesProps) => {
           </button>
           <button
             onClick={async () => onVoice('NEUTRAL')}
-            class={`w-[30px] py-[3px] bg-border-light border border-primary rounded-[3px] ${
+            class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVoice && testerVoice.value === 'NEUTRAL' ? 'bg-primary' : 'hover:bg-primary'
             }`}
           >
@@ -49,7 +49,7 @@ export const Votes = (props: VoicesProps) => {
           </button>
           <button
             onClick={async () => onVoice('POSITIVE')}
-            class={`w-[30px] py-[3px] bg-border-light border border-primary rounded-[3px] ${
+            class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVoice && testerVoice.value === 'POSITIVE' ? 'bg-primary' : 'hover:bg-primary'
             }`}
           >
@@ -58,12 +58,9 @@ export const Votes = (props: VoicesProps) => {
         </div>
       </div>
 
-      <ul class={'flex flex-col gap-[8px] mt-[6px] font-[16px] font-semibold  overflow-scroll'}>
+      <ul class={'flex flex-col gap-2 mt-2 font-semibold overflow-y-scroll'}>
         {props.voces.map(vote => (
-          <li
-            key={vote.testerId}
-            class={'h-[30px] px-[10px] flex flex-row justify-between bg-dark darkborder rounded-[3px]'}
-          >
+          <li key={vote.testerId} class={'h-7 flex flex-row justify-between px-2 bg-dark darkborder rounded'}>
             <span>{vote.tester?.name}</span>
             <span class={'font-mono font-light'}>
               {vote.value === VoteValue.POSITIVE ? 1 : vote.value === VoteValue.NEGATIVE ? -1 : 0}

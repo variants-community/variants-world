@@ -1,7 +1,7 @@
 import { getValueFromEvent } from 'utils/hepers'
 
 export const TitleInput = (props: { title: string; setTitle: (value: string) => void; isInvalid: boolean }) => (
-  <div class={'flex flex-col sm:flex-row gap-[20px] justify-items-start sm:justify-between'}>
+  <div class={'flex flex-col items-center gap-5 sm:(flex-row justify-between)'}>
     <label htmlFor={'title'} class={`${props.isInvalid ? 'text-red' : ''}`}>
       Title
     </label>
@@ -11,7 +11,7 @@ export const TitleInput = (props: { title: string; setTitle: (value: string) => 
       onInput={e => props.setTitle(getValueFromEvent(e))}
       name={'title'}
       type="text"
-      class={`w-full sm:w-1/2 rounded-[12px] p-[10px] outline-none bg-border-dark border ${
+      class={`w-full sm:w-1/2 p-[10px] rounded-xl outline-none bg-border-dark border ${
         props.isInvalid ? 'border-red' : 'border-border-light'
       }`}
     />

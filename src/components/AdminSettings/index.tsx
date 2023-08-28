@@ -24,7 +24,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
   return (
     <div
       class={
-        'flex flex-col gap-[40px] sm:(flex-col gap-[40px]) lg:(h-[250px] flex-row gap-0) bg-border-light shadow-dark rounded-[12px] p-[20px] justify-between'
+        'flex flex-col justify-between p-5 gap-[40px] sm:flex-col lg:(h-63 flex-row gap-0) bg-border-light shadow-dark rounded-xl'
       }
     >
       <Classification

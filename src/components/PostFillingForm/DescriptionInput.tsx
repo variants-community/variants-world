@@ -15,7 +15,7 @@ export const DescriptionInput = (props: {
       name="description"
       id="description"
       rows={5}
-      class={`rounded-[12px] outline-none bg-border-dark text-[18px] p-[10px] mt-[5px] border ${
+      class={`p-[10px] mt-[5px] text-[18px] rounded-xl outline-none bg-border-dark border ${
         props.isInvalid ? 'border-red' : 'border-border-light'
       }`}
     />

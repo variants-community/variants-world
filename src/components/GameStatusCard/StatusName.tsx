@@ -17,13 +17,13 @@ type StatusNameProps = {
 export const StatusName = (props: StatusNameProps) => (
   <>
     {!props.isEditMode ? (
-      <h2 class={'text-[40px] font-semibold mt-[16px]'}>{statusToString(props.status)}</h2>
+      <h2 class={'text-[40px] font-semibold mt-4'}>{statusToString(props.status)}</h2>
     ) : (
       <select
         value={props.status}
         onChange={props.onChange}
         type="text"
-        class={'bg-dark rounded-[3px] text-center block text-[40px] font-semibold mt-[16px] mx-auto outline-none'}
+        class={'block mx-auto mt-4 text-center text-[40px] font-semibold rounded bg-dark outline-none'}
       >
         {statuses.map((status, i) => (
           <option key={i} value={status.value}>

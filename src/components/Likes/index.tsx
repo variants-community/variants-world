@@ -15,7 +15,7 @@ const Likes = (props: LikesProps) => {
     <div
       onClick={async () => toogleLike()}
       aria-hidden="true"
-      class={'flex flex-row justify-end whitespace-nowrap gap-[8px] transition-all duration-100 cursor-pointer'}
+      class={'flex flex-row justify-end gap-2 whitespace-nowrap transition-all duration-100 cursor-pointer'}
     >
       <span class={`text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>{formatLikesCount(likesCount)}</span>
 

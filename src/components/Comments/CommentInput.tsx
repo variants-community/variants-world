@@ -22,32 +22,28 @@ const CommentInput = (props: CommentInputProps) => {
   }
 
   return (
-    <div
-      class={
-        'w-11/12 mx-auto lg:mx-0 sm:w-[500px] lg:w-[984px] bg-dark border border-[2px] text-[16px] border-border-dark shadow-light rounded-[12px] bg-dark overflow-hidden'
-      }
-    >
-      {props.replyTo && (
-        <div class={'flex flex-row justify-between border-b border-b-border-dark border-b-[2px] p-[8px]'}>
-          <div>
-            <span class={'font-font-semibold'}>reply to:</span> <p>{props.replyTo.content}</p>
+    <div className={'w-11/12 mx-auto sm:w-125 lg:(mx-0 w-246)'}>
+      <div class={'rounded-xl darkborder bg-dark overflow-hidden shadow-light'}>
+        {props.replyTo && (
+          <div class={'flex flex-row justify-between border-b border-b-border-dark border-b-2 p-2'}>
+            <div>
+              <span class={'font-font-semibold'}>reply to:</span> <p>{props.replyTo.content}</p>
+            </div>
+            <button onClick={() => props.cancelReplyTo()}>cancel</button>
           </div>
-          <button onClick={() => props.cancelReplyTo()}>cancel</button>
-        </div>
-      )}
-      <textarea
-        id="comment-input"
-        value={commentText}
-        onInput={onInput}
-        placeholder={'Please be nice when you chat'}
-        rows={4}
-        class={'w-full p-[20px] bg-dark resize-none outline-none'}
-      />
+        )}
+        <textarea
+          id="comment-input"
+          value={commentText}
+          onInput={onInput}
+          placeholder={'Please be nice when you chat'}
+          rows={4}
+          class={'w-full p-5 bg-dark resize-none outline-none'}
+        />
+      </div>
       <button
         onClick={sendComment}
-        class={
-          'block bg-primary border border-[2px] border-border-dark rounded-[10px] px-[50px] py-[9px] text-white ml-auto m-[20px] mt-[24px]'
-        }
+        class={'w-46 h-11 block ml-auto mt-6 bg-primary darkborder rounded-[10px] text-white'}
       >
         Comment
       </button>

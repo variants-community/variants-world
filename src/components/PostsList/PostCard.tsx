@@ -20,12 +20,10 @@ const PostCard = (props: PostCardProps) => {
     <>
       <a
         href={`/posts/${props.post.id}`}
-        class={
-          'flex mx-auto w-11/12 flex-col sm:flex-row rounded-[12px] overflow-hidden bg-border-light border border-[2px] border-border-dark'
-        }
+        class={'w-11/12 flex flex-col sm:flex-row mx-auto rounded-xl darkborder bg-border-light overflow-hidden'}
       >
-        <img src="/src/assets/images/game.png" alt={props.post.title} class="sm:(w-[220px] h-[220px] min-w-[220px])" />
-        <div class={'w-full flex flex-col justify-between p-[20px] '}>
+        <img src="/src/assets/images/game.png" alt={props.post.title} class="sm:(w-55 h-55 min-w-55)" />
+        <div class={'w-full flex flex-col justify-between p-5 '}>
           <div class={'flex flex-col gap-[10px] mb-[30px] sm:mb-0'}>
             <div class={'flex flex-row justify-between'}>
               <PostTitle type={props.post.type} title={props.post.title} />
@@ -40,7 +38,7 @@ const PostCard = (props: PostCardProps) => {
               iconsclass="fill-text"
             />
           </div>
-          <div class={'flex gap-[20px] sm:gap-0 flex-col sm:flex-row justify-between'}>
+          <div class={'flex gap-5 sm:gap-0 flex-col sm:flex-row justify-between'}>
             <div class={'flex flex-row justify-between items-center'}>
               <PostUser user={props.post.author.name} />
               <div class={'block sm:hidden'}>
@@ -48,14 +46,14 @@ const PostCard = (props: PostCardProps) => {
               </div>
             </div>
 
-            <div class={'w-full sm:w-[150px] flex flex-row justify-between sm:justify-end text-[22px] gap-[15px]'}>
+            <div class={'w-full sm:w-38 flex flex-row justify-between sm:justify-end text-[22px] gap-4'}>
               <div class={'mr-auto'}>
                 <StatusIndicator status={props.post.status} />
               </div>
-              <div class={' sm:w-min-[70px]'}>
+              <div class={'sm:w-min-18'}>
                 <Comments count={props.post.commentsCount} />
               </div>
-              <div class={' sm:w-min-[70px]'}>
+              <div class={'sm:w-min-18'}>
                 <Likes likes={props.post.likes} postId={props.post.id} userId={props.userId} />
               </div>
             </div>
@@ -81,7 +79,7 @@ const StatusIndicator = ({ status }: { status: GameStatus }) => {
 }
 
 const Comments = ({ count }: { count: number }) => (
-  <div class={'flex flex-row justify-end items-center gap-[8px]'}>
+  <div class={'flex flex-row justify-end items-center gap-2'}>
     <span>{count}</span>
     <CommentIcon />
   </div>

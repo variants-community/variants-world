@@ -14,22 +14,22 @@ const Search = (props: SearhProps) => {
   return (
     <div
       class={
-        'w-11/12 mt-[80px] mb-[30px] sm:mb-[55px] sm:mt-0  mx-auto sm:mx-0 flex flex-row items-center sm:w-full bg-dark shadow-light border border-[2px] border-border-dark rounded-full'
+        'w-11/12 flex flex-row items-center mx-auto mt-20 mb-8 sm:(w-full mx-0 mb-14 mt-0) bg-dark darkborder rounded-full shadow-light'
       }
     >
-      <SearchIcon class="h-[20px] w-[20px] ml-[20px] my-[12px] mr-[12px]" />
+      <SearchIcon class="h-5 w-5 ml-5 my-3 mr-3" />
       <input
         id={'index-page-search'}
         value={props.query}
         onInput={onQueryInput}
         type="text"
-        class={'w-full bg-dark outline-none text-[20px] font-normal'}
+        class={'w-full bg-dark outline-none text-[20px]'}
         placeholder={'Search'}
       />
 
-      <div class={'hidden sm:flex flex-row mr-[20px] gap-[4px] text-[16px]'}>
-        <span class={'py-[3px] px-[6px] bg-border-light rounded-[3px]'}>CTRL</span>
-        <span class={'py-[3px] px-[7px] bg-border-light rounded-[3px]'}>K</span>
+      <div class={'hidden flex-row sm:flex mr-5 gap-1'}>
+        <span class={'py-[3px] px-[6px] bg-border-light rounded'}>CTRL</span>
+        <span class={'py-[3px] px-[7px] bg-border-light rounded'}>K</span>
       </div>
     </div>
   )

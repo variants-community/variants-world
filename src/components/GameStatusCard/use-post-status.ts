@@ -24,7 +24,6 @@ export const usePostStatus = (initVerdict: string | null, initStatus: GameStatus
           }
           setVerdict(updated.verdict)
           setStatus(updated.status)
-          console.log('realtime update: ', updated)
         }
       )
       .subscribe()

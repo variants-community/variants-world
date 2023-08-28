@@ -23,7 +23,7 @@ export const RuleItemEditable = (props: RuleItemEditableProps) => {
 
   return (
     <li
-      class={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded-[3px] py-[5px] px-[5px] ${props.class}`}
+      class={`h-[26px] flex flex-row gap-[5px] whitespace-nowrap bg-dark border border-border-dark rounded py-[5px] px-[5px] ${props.class}`}
     >
       {props.isEditMode ? (
         inputMode ? (

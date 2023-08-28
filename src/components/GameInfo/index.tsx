@@ -39,11 +39,7 @@ const GameInfo = (props: GameInfoProps) => {
   }
 
   return (
-    <div
-      class={
-        'w-full sm:w-[500px] lg:w-[474px] flex flex-col bg-border-light rounded-[12px] shadow-dark p-[20px] gap-[20px]'
-      }
-    >
+    <div class={'w-full flex flex-col p-5 gap-5 sm:w-125 lg:w-118 rounded-xl bg-border-light shadow-dark '}>
       <div class={'flex flex-col gap-[10px]'}>
         <div class={'flex flex-row items-center justify-between'}>
           <div class={'flex flex-row items-center gap-[10px]'}>

@@ -6,7 +6,7 @@ type EditButtonProps = {
 }
 
 export const EditButton = (props: EditButtonProps) => (
-  <div onClick={() => props.onClick()} class={'cursor-pointer '}>
+  <div onClick={() => props.onClick()} class={'cursor-pointer'}>
     <EditIcon class={props.class} />
   </div>
 )

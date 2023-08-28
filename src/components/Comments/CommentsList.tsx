@@ -38,16 +38,16 @@ type CommentCardProps = {
 const CommentCard = (props: CommentCardProps) => (
   <div
     class={
-      'flex flex-row w-11/12 mx-auto sm:w-[500px] lg:w-full p-[15px] gap-[15px] border border-border-dark border-[1px] rounded-[12px] shadow-dark'
+      'w-11/12 flex flex-row mx-auto sm:w-125 lg:w-full p-4 gap-4 border-1 border border-border-dark rounded-xl shadow-dark'
     }
   >
     <img src="/src/assets/images/user.png" class={'h-[48px]'} />
-    <div class={'w-full flex flex-col gap-[8px]'}>
+    <div class={'w-full flex flex-col gap-2'}>
       <div class={'flex flex-row justify-between'}>
         <div>
           <span class={'text-white font-semibold'}>{props.comment.User.name}</span>
         </div>
-        <div class={'flex flex-row gap-[12px]'}>
+        <div class={'flex flex-row gap-3'}>
           <span class={'flex'}>{formatDate(props.comment.createdAt)}</span>
           <button class={'flex'} onClick={() => props.reply()}>
             reply
@@ -60,9 +60,9 @@ const CommentCard = (props: CommentCardProps) => (
         </div>
       </div>
 
-      <div class={'flex flex-col gap-[8px]'}>
+      <div class={'flex flex-col gap-2'}>
         {props.comment.parent && (
-          <div class={'comment-quoting flex flex-col bg-gray p-[5px] rounded mr-auto'}>
+          <div class={'flex flex-col mr-auto p-2 bg-gray rounded comment-quoting'}>
             <span class={'font-bold'}>{props.comment.parent.User.name}:</span>
             <p class={'inline-block'}>
               {props.comment.parent.hidden ? '[comment deleted]' : props.comment.parent.content}
@@ -76,30 +76,3 @@ const CommentCard = (props: CommentCardProps) => (
   </div>
 )
 export default CommentsList
-
-{
-  /* <div
-class={'bg-gray w-full flex flex-row justify-between  p-[5px] '}
->
-<div class={'flex flex-row gap-[20px]'}>
-  <img src="/src/assets/images/user.png" class={'h-[48px]'} />
-  <div class={'bg-green flex flex-col'}>
-    <span class={'text-white font-semibold'}>
-      {props.comment.User.name}
-    </span>
-    {props.comment.parent && (
-      <p class={'inline-block bg-gray p-[5px] rounded-[3px]'}>
-        {`"""${props.comment.parent.content.substring(0, 20)}...`}
-      </p>
-    )}
-    <p>
-      {props.comment.content}
-    </p>
-  </div>
-</div>
-<div class={'bg-green flex flex-row gap-[10px]'}>
-  <span class={'flex'}>{formatDate(props.comment.createdAt)}</span>
-  <button class={'flex'} onClick={() => props.reply()}>reply</button>
-</div>
-</div> */
-}

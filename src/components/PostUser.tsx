@@ -4,9 +4,9 @@ type PostUserProps = {
 
 const PostUser = (props: PostUserProps) => {
   return (
-    <div class={'flex flex-row items-center gap-[7px]'}>
-      <img src="/src/assets/images/user.png" alt={props.user} class={'h-[24px] 2-[24px]'} />
-      <span class={'text-[16px] font-semibold'}>{props.user}</span>
+    <div class={'flex flex-row items-center gap-2'}>
+      <img src="/src/assets/images/user.png" alt={props.user} class={'h-6 w-6'} />
+      <span class={'font-semibold'}>{props.user}</span>
     </div>
   )
 }

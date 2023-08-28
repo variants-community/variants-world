@@ -9,10 +9,10 @@ type GamePictureProps = {
 
 const GamePicture = (props: GamePictureProps) => {
   return (
-    <div class={'w-full relative sm:(h-[500px] sm:w-[500px])'}>
+    <div class={'w-full relative sm:(h-125 sm:w-125)'}>
       <div
         class={
-          'w-full sm:(w-[500px] h-[500px]) flex items-center justify-center border-[2px] border-border-dark bg-border-light shadow-dark rounded-[12px] overflow-hidden'
+          'w-full sm:(w-125 h-125) flex items-center justify-center darkborder bg-border-light shadow-dark rounded-xl overflow-hidden'
         }
       >
         <img src="/src/assets/images/game.png" />

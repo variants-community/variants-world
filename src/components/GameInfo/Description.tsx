@@ -13,7 +13,7 @@ export const Description = (props: DescriptionProps) => {
           rows={15}
           value={props.value}
           onChange={props.onDescriptionChange}
-          class={'h-full bg-dark outline-none rounded-[3px]'}
+          class={'h-full bg-dark outline-none rounded'}
         />
       ) : (
         <p>{props.value}</p>

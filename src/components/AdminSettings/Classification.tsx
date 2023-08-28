@@ -53,7 +53,7 @@ export const Classification = (props: ClassificationProps) => {
   }
 
   return (
-    <div class={'flex flex-col text-[16px] font-semibold'}>
+    <div class={'flex flex-col font-semibold'}>
       <label htmlFor="game-clsfc" class={'text-secondary'}>
         Game Classification
       </label>
@@ -61,7 +61,7 @@ export const Classification = (props: ClassificationProps) => {
         value={props.gameClassification}
         onChange={props.onChangeGameClassification}
         id="game-clsfc"
-        class="w-[200px] text-white bg-dark darkborder rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
+        class="w-50 mt-1 py-1 px-2 text-white bg-dark darkborder rounded outline-none"
       >
         {gameClassification.map(cl => (
           <option key={cl.value} value={cl.value}>
@@ -70,14 +70,14 @@ export const Classification = (props: ClassificationProps) => {
         ))}
       </select>
 
-      <label htmlFor="gameplay-clsfc" class={'text-secondary pt-[21px]'}>
+      <label htmlFor="gameplay-clsfc" class={'text-secondary pt-3'}>
         Gameplay Classification
       </label>
       <select
         disabled={true}
         value={props.gameplayClassification ?? 'Undefined'}
         id="gameplay-clsfc"
-        class="w-[200px] disabled:opacity-100 appearance-none text-white bg-dark darkborder rounded-[3px] px-[10px] py-[6px] mt-[6px] outline-none"
+        class="w-50 mt-1 py-1 px-2 text-white bg-dark darkborder rounded appearance-none outline-none disabled:opacity-100"
       >
         {gameplayClassification.map(cl => (
           <option key={cl.value} value={cl.value}>
@@ -86,28 +86,28 @@ export const Classification = (props: ClassificationProps) => {
         ))}
       </select>
 
-      <div class="flex items-center mt-[8px]">
+      <div class="flex items-center mt-1">
         <input
           onChange={handlerFirstRule}
           checked={firstRule}
           id="checkbox1"
           type="checkbox"
-          class="h-[14px] w-[14px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
+          class="h-4 w-4 appearance-none outline-none accent-dark border border-primary rounded transition-all checked:bg-primary"
         />
-        <label htmlFor="checkbox1" class="ml-[6px] text-white">
+        <label htmlFor="checkbox1" class={`ml-2 ${firstRule ? 'text-white' : ''}`}>
           waiting and shuffling can be optimal
         </label>
       </div>
 
-      <div class="flex mt-[8px] mt-[13px]">
+      <div class="flex mt-2">
         <input
           id="checkbox2"
           type="checkbox"
           onChange={handlerSecondRule}
           checked={secondRule}
-          class="h-[14px] w-[14px] mt-[1px] appearance-none outline-none accent-dark border border-primary rounded-[3px] transition-all checked:bg-primary"
+          class="h-4 w-4 mt-[2px] appearance-none outline-none accent-dark border border-primary rounded transition-all checked:bg-primary"
         />
-        <label htmlFor="checkbox2" class="ml-[6px] text-white">
+        <label htmlFor="checkbox2" class={`ml-2 leading-5 ${secondRule ? 'text-white' : ''}`}>
           attacking the other player directly by aggressively
           <br />
           developing one’s own ideas is viable

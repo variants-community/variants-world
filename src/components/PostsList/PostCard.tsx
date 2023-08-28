@@ -21,7 +21,7 @@ const PostCard = (props: PostCardProps) => {
       <a
         href={`/posts/${props.post.id}`}
         class={
-          'flex mx-auto w-11/12 sm:mx-0 sm:w-auto flex-col sm:flex-row rounded-[12px] overflow-hidden bg-border-light border border-[2px] border-border-dark'
+          'flex mx-auto w-11/12 flex-col sm:flex-row rounded-[12px] overflow-hidden bg-border-light border border-[2px] border-border-dark'
         }
       >
         <img src="/src/assets/images/game.png" alt={props.post.title} class="sm:(w-[220px] h-[220px] min-w-[220px])" />

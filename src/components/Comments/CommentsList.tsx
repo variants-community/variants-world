@@ -37,7 +37,9 @@ type CommentCardProps = {
 
 const CommentCard = (props: CommentCardProps) => (
   <div
-    class={'w-full flex flex-row p-[15px] gap-[15px] border border-border-dark border-[1px] rounded-[12px] shadow-dark'}
+    class={
+      'flex flex-row w-11/12 mx-auto sm:w-[500px] lg:w-full p-[15px] gap-[15px] border border-border-dark border-[1px] rounded-[12px] shadow-dark'
+    }
   >
     <img src="/src/assets/images/user.png" class={'h-[48px]'} />
     <div class={'w-full flex flex-col gap-[8px]'}>

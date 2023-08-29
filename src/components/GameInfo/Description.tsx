@@ -1,4 +1,5 @@
 import { getValueFromEvent } from 'utils/hepers'
+import { useHideScroll } from 'components/GameInfo/use-hide-scroll'
 
 type DescriptionProps = {
   isEditMode: boolean
@@ -7,18 +8,20 @@ type DescriptionProps = {
 }
 
 export const Description = (props: DescriptionProps) => {
+  useHideScroll()
+
   return (
-    <div class={'flex flex-col text-[16px] '}>
+    <div class={'flex flex-col text-[16px] overflow-hidden'}>
       <h2 class={'text-secondary font-semibold'}>Description</h2>
       {props.isEditMode ? (
         <textarea
           rows={15}
           value={props.value}
           onChange={e => props.onDescriptionChange(getValueFromEvent(e))}
-          class={'h-full bg-dark outline-none rounded'}
+          class={'h-full bg-dark outline-none rounded resize-none'}
         />
       ) : (
-        <p>{props.value}</p>
+        <p className={'description-scrollbar'}>{props.value}</p>
       )}
     </div>
   )

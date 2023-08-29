@@ -91,6 +91,9 @@ export const searchFor = async (query: string) => {
       gamerules: true,
       author: true,
       comments: {
+        where: {
+          hidden: false
+        },
         select: {
           _count: true
         }
@@ -130,6 +133,9 @@ export const getPosts = async (skip: number, take = 5) => {
       gamerules: true,
       author: true,
       comments: {
+        where: {
+          hidden: false
+        },
         select: {
           _count: true
         }

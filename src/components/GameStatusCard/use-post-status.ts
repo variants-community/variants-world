@@ -1,10 +1,10 @@
 import { supabase } from 'db/supabase/supabase'
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect } from 'preact/hooks'
+import { useSignal } from '@preact/signals'
 import type { GameStatus } from '@prisma/client'
 
-export const usePostStatus = (initVerdict: string | null, initStatus: GameStatus, postId: number) => {
-  const [verdict, setVerdict] = useState(initVerdict ?? '')
-  const [status, setStatus] = useState(initStatus)
+export const usePostStatus = (verdict: string | null, status: GameStatus, postId: number) => {
+  const data = useSignal({ status, verdict })
 
   useEffect(() => {
     const channel = supabase
@@ -18,12 +18,10 @@ export const usePostStatus = (initVerdict: string | null, initStatus: GameStatus
           filter: `id=eq.${postId}`
         },
         payload => {
-          const updated = payload.new as {
+          data.value = payload.new as {
             verdict: string
             status: GameStatus
           }
-          setVerdict(updated.verdict)
-          setStatus(updated.status)
         }
       )
       .subscribe()
@@ -32,8 +30,21 @@ export const usePostStatus = (initVerdict: string | null, initStatus: GameStatus
       supabase.removeChannel(channel)
     }
   }, [supabase])
+
+  const changeStatus = async (newStatus: GameStatus) => {
+    data.value.status = newStatus
+    await supabase.from('Post').update({ status: newStatus }).eq('id', postId)
+  }
+
+  const changeVerdict = async (newVerdict: string) => {
+    data.value.verdict = newVerdict
+    await supabase.from('Post').update({ verdict: newVerdict }).eq('id', postId)
+  }
+
   return {
-    verdict,
-    status
+    verdict: data.value.verdict,
+    status: data.value.status,
+    changeStatus,
+    changeVerdict
   }
 }

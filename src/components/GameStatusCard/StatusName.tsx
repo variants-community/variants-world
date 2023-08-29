@@ -1,4 +1,4 @@
-import { statusToString } from 'utils/hepers'
+import { getValueFromEvent, statusToString } from 'utils/hepers'
 import type { GameStatus } from '@prisma/client'
 
 const statuses = [
@@ -11,7 +11,7 @@ const statuses = [
 type StatusNameProps = {
   isEditMode: boolean
   status: GameStatus
-  onChange: (e: Event) => void
+  onChange: (status: GameStatus) => void
 }
 
 export const StatusName = (props: StatusNameProps) => (
@@ -21,7 +21,7 @@ export const StatusName = (props: StatusNameProps) => (
     ) : (
       <select
         value={props.status}
-        onChange={props.onChange}
+        onChange={e => props.onChange(getValueFromEvent(e))}
         type="text"
         class={'block mx-auto mt-4 text-center text-[40px] font-semibold rounded bg-dark outline-none'}
       >

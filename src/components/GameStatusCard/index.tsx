@@ -1,10 +1,9 @@
 import { EditButton } from 'components/EditButton'
 import { StatusName } from 'components/GameStatusCard/StatusName'
 import { Verdict } from 'components/GameStatusCard/Verdict'
-import { getValueFromEvent, statusToColor } from 'utils/hepers'
-import { supabase } from 'db/supabase/supabase'
+import { statusToColor } from 'utils/hepers'
 import { usePostStatus } from 'components/GameStatusCard/use-post-status'
-import { useState } from 'preact/hooks'
+import { useSignal } from '@preact/signals'
 import Bubbles from 'components/icons/Bubbles'
 import type { GameStatus } from '@prisma/client'
 
@@ -16,23 +15,13 @@ type AcceptedCardProps = {
 }
 
 const GameStatusCard = (props: AcceptedCardProps) => {
-  const [isEditMode, setIsEditMode] = useState(false)
+  const isEditMode = useSignal(false)
 
   const toogleIsChangeable = () => {
-    setIsEditMode(!isEditMode)
+    isEditMode.value = !isEditMode.value
   }
 
-  const { verdict, status } = usePostStatus(props.verdict, props.status, props.postId)
-
-  const onStatusChange = async (e: Event) => {
-    const newStatus = getValueFromEvent<GameStatus>(e)
-    await supabase.from('Post').update({ status: newStatus }).eq('id', props.postId)
-  }
-
-  const onVerdictChange = async (e: Event) => {
-    const newVerdict = getValueFromEvent<string>(e)
-    await supabase.from('Post').update({ verdict: newVerdict }).eq('id', props.postId)
-  }
+  const { verdict, changeVerdict, status, changeStatus } = usePostStatus(props.verdict, props.status, props.postId)
 
   return (
     <div
@@ -42,8 +31,8 @@ const GameStatusCard = (props: AcceptedCardProps) => {
     >
       <Bubbles class="ml-12 mt-11 mb-5 mr-0" color={statusToColor(status)} />
       <div class={'w-full mb-auto'}>
-        <StatusName isEditMode={isEditMode} status={status} onChange={onStatusChange} />
-        <Verdict isEditMode={isEditMode} verdict={verdict} onChange={onVerdictChange} />
+        <StatusName isEditMode={isEditMode.value} status={status} onChange={changeStatus} />
+        <Verdict isEditMode={isEditMode.value} verdict={verdict} onChange={changeVerdict} />
       </div>
       <Bubbles class="mr-12 mt-11 mb-5 transform scale-x-inverse" color={statusToColor(status)} />
       {props.displayEditBotton && (

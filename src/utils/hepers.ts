@@ -76,3 +76,15 @@ export const formatLikesCount = (likes: number): string => {
   else if (likes < 1000000) return `${(likes / 1000).toFixed(1)}k`
   else return `${(likes / 1000000).toFixed(1)}M`
 }
+
+export const convertUTCDateToLocalDate = (utcDate: Date) => {
+  const date = new Date(utcDate)
+  const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
+
+  const offset = date.getTimezoneOffset() / 60
+  const hours = date.getHours()
+
+  newDate.setHours(hours - offset)
+
+  return newDate
+}

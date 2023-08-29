@@ -1,9 +1,11 @@
+import { convertUTCDateToLocalDate } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect } from 'preact/hooks'
+import { useSignal } from '@preact/signals'
 import type { ExtendedComment } from '.'
 
 export const useComments = (initComments: ExtendedComment[], postId: number) => {
-  const [comments, setComments] = useState(initComments)
+  const comments = useSignal(initComments)
 
   useEffect(() => {
     const channel = supabase
@@ -49,11 +51,11 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
           }
 
           if (user.data) {
-            setComments([
-              ...comments,
+            comments.value = [
+              ...comments.value,
               {
                 ...newComment,
-                createdAt: new Date(newComment.createdAt),
+                createdAt: convertUTCDateToLocalDate(newComment.createdAt),
                 User: {
                   id: user.data.id,
                   email: user.data.email,
@@ -62,7 +64,11 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                 },
                 parent
               }
-            ])
+            ]
+              .sort((first, second) =>
+                first.createdAt > second.createdAt ? -1 : first.createdAt < second.createdAt ? 1 : 0
+              )
+              .filter(c => !c.hidden)
           }
         }
       )
@@ -75,7 +81,7 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
           filter: `postId=eq.${postId}`
         },
         async payload => {
-          setComments(prev => prev.filter(c => c.id !== payload.new.id && payload.new.hidden))
+          comments.value = comments.value.filter(c => c.id !== payload.new.id && payload.new.hidden)
         }
       )
       .subscribe()
@@ -85,6 +91,6 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
   }, [supabase, comments])
 
   return {
-    comments
+    comments: comments.value
   }
 }

@@ -194,7 +194,7 @@ export interface PostDetails {
   voices: {
     id: number
     postId: number
-    teste: User
+    tester: User
     testerId: number
     value: VoteValue
   }[]

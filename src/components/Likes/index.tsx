@@ -6,6 +6,7 @@ type LikesProps = {
   likes: { userId: number }[]
   userId: number
   postId: number
+  clickable?: boolean
 }
 
 const Likes = (props: LikesProps) => {
@@ -13,7 +14,9 @@ const Likes = (props: LikesProps) => {
 
   return (
     <div
-      onClick={async () => toogleLike()}
+      onClick={async () => {
+        if (props.clickable) toogleLike()
+      }}
       aria-hidden="true"
       class={'flex flex-row justify-end gap-2 whitespace-nowrap transition-all duration-100 cursor-pointer'}
     >

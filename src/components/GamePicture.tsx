@@ -17,7 +17,7 @@ const GamePicture = (props: GamePictureProps) => {
       >
         <img src="/src/assets/images/game.png" />
         <div class={'absolute bg-border-light rounded-full bottom-[-8px] p-[13px] right-[-6px] shadow-dark'}>
-          <Likes likes={props.likes} postId={props.postId} userId={props.userId} />
+          <Likes clickable likes={props.likes} postId={props.postId} userId={props.userId} />
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ const mapRules = (ruleVariants: CGABotRuleVariants) => {
 export const createPost = async (mainGame: CGABotGameDetails, postDetailsDTO: PostDetails) => {
   const post = await prisma.post.create({
     data: {
+      gameNr: mainGame.gameNr,
       title: postDetailsDTO.data.title,
       authorUserId: postDetailsDTO.userId,
       description: postDetailsDTO.data.description,

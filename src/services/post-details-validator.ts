@@ -2,6 +2,7 @@ import { CGABotGameDetails, getGameDetailsById } from 'cgabot'
 import {
   type Output,
   arrayAsync,
+  enumType,
   length as exactLength,
   minLength,
   numberAsync,
@@ -57,7 +58,7 @@ export const PostDetailsValidator = objectAsync(
     data: object({
       description: string(),
       title: string('Title is not provided', [minLength(3)]),
-      type: string()
+      type: enumType(['NCV', 'WOF'])
     })
   },
   [

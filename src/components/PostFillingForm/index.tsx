@@ -6,6 +6,7 @@ import { postGameToCreatePost } from 'utils/fetch-queries'
 import { useFormData } from 'components/PostFillingForm/use-form-data'
 import { useState } from 'preact/hooks'
 import type { CGABotGameDetails } from 'cgabot'
+import type { GameType } from '@prisma/client'
 import type { PostDetails } from 'services/post-details-validator'
 
 type PostFillingFormProps = {
@@ -28,9 +29,9 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
     if (errors.size === 0) {
       const data: PostDetails = {
         data: {
-          description: formData.get('type')?.toString() ?? '',
+          description: formData.get('description')?.toString() ?? '',
           title: formData.get('title')?.toString() ?? '',
-          type: formData.get('description')?.toString() ?? ''
+          type: (formData.get('type')?.toString() as GameType) ?? 'WOF'
         },
         gameId: props.game.gameNr.toString(),
         approveIds: props.approveIds,

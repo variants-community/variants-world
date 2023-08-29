@@ -20,6 +20,8 @@ export const post: APIRoute = async ({ request }) => {
     const postDetails = await parseAsync(PostDetailsValidator, await request.json())
     const game = await getGameDetailsById(postDetails.gameId)
     // TODO: handle `game` being undefined
+    // "handle `game` being undefined" -- if the game is undefined,
+    // an exception will be thrown at the validation stage ( parseAsync(...) )
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const id = await createPost(game!, postDetails) // the game has already been validate and exist
     return new Response(

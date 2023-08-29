@@ -17,7 +17,7 @@ type GameInfoProps = {
   user: string
   createdAt: Date
   description: string
-  variantLink: string
+  gameNr: number
 }
 
 const GameInfo = (props: GameInfoProps) => {
@@ -60,7 +60,7 @@ const GameInfo = (props: GameInfoProps) => {
       )}
 
       <div class={'flex flex-row justify-end mt-auto'}>
-        <LinkToVariant value={props.variantLink} />
+        <LinkToVariant value={`https://www.chess.com/variants/game/${props.gameNr}`} />
       </div>
     </div>
   )

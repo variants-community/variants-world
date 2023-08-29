@@ -48,7 +48,7 @@ enum UserRole {
 }
 
 model PostOnUserLikes {
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   user   User @relation(fields: [userId], references: [id])
   postId Int
   userId Int
@@ -69,6 +69,7 @@ model User {
 
 model Post {
   id             Int               @id @default(autoincrement())
+  gameNr         Int               @unique
   title          String
   description    String
   createdAt      DateTime          @default(now())
@@ -79,9 +80,9 @@ model Post {
   verdict        String?
   author         User              @relation("UserPosts", fields: [authorUserId], references: [id])
   authorUserId   Int
-  comments       Comment[]
+  comments       Comment[]         
   PostDetails    PostDetails?
-  variantLink    String            @unique
+  variantLink    String            @unique 
   UserLikedPosts PostOnUserLikes[]
 }
 
@@ -89,7 +90,7 @@ model Comment {
   id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
-  Post      Post     @relation(fields: [postId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
   User      User     @relation(fields: [userId], references: [id])
   userId    Int
@@ -98,7 +99,7 @@ model Comment {
   parent    Comment?  @relation("Comment_Children", fields: [parent_id], references: [id])
   parent_id Int?
 
-  hidden    Boolean   @default(false)
+  hidden Boolean @default(false)
 }
 
 model PostDetails {

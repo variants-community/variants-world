@@ -49,7 +49,7 @@ const userIsAuthor = user.id === post?.author.id
                 user={post.author.name}
                 createdAt={post.createdAt}
                 description={post.description}
-                variantLink={`/${post.id}`}
+                gameNr={post.gameNr}
                 client:load
               />
             ) : (
@@ -62,7 +62,7 @@ const userIsAuthor = user.id === post?.author.id
                 user={post.author.name}
                 createdAt={post.createdAt}
                 description={post.description}
-                variantLink={`${post.variantLink}`}
+                gameNr={post.gameNr}
               />
             )}
           </div>

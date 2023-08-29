@@ -66,10 +66,3 @@ export const useLikes = (likes: { userId: number }[], userId: number, postId: nu
     toogleLike
   }
 }
-
-// isLiked
-//
-//
-//
-//
-//

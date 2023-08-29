@@ -1,5 +1,4 @@
-import { gameRuleMapper } from 'utils/game-rules-mapper'
-import type { CGABotGameDetails, CGABotRuleVariants } from 'cgabot'
+import type { CGABotGameDetails } from 'cgabot'
 import type { GameStatus } from '@prisma/client'
 
 export const getValueFromEvent = <Type = string>(e: Event) => (e.target as HTMLInputElement).value as Type
@@ -48,11 +47,6 @@ export const statusToColor = (status: GameStatus): string => {
     case 'UNDER_REVIEW':
       return 'blue'
   }
-}
-
-export const mapRuleVariantsToString = (rules: CGABotRuleVariants) => {
-  const mappedRules = Object.keys(rules).map(key => gameRuleMapper.makeRule(key, rules[key]))
-  return mappedRules
 }
 
 export const formatDate = (date: Date): string => {

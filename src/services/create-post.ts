@@ -1,4 +1,4 @@
-import { mapRuleVariantsToString } from 'utils/hepers'
+import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import prisma from 'db/prisma/prisma'
 import type { CGABotGameDetails, CGABotRuleVariants } from 'cgabot'
 import type { GameType } from '@prisma/client'

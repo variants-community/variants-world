@@ -2,8 +2,8 @@ import { Description } from 'components/GameInfo/Description'
 import { EditButton } from 'components/EditButton'
 import { LinkToVariant } from 'components/GameInfo/LinkToVariant'
 import { TimePassed } from 'components/GameInfo/TimePassed'
+import { useEditMode } from 'src/hooks/use-edit-mode'
 import { useGameInfo } from 'components/GameInfo/use-game-info'
-import { useState } from 'preact/hooks'
 import PostTags from 'components/PostTags'
 import PostTitle from 'components/PostTitle'
 import PostUser from 'components/PostUser'
@@ -21,22 +21,9 @@ type GameInfoProps = {
 }
 
 const GameInfo = (props: GameInfoProps) => {
-  const [isEditMode, setIsEditMode] = useState(false)
+  const { isEditMode, toggleEditMode } = useEditMode()
 
-  const {
-    title,
-    onTitleChange,
-    type,
-    onTypeChange,
-    description,
-    onDescriptionChange,
-    variantLink,
-    onVariantLinkChange
-  } = useGameInfo(props)
-
-  const toogleIsChangeable = () => {
-    setIsEditMode(!isEditMode)
-  }
+  const { title, type, description, changeTitle, changeType, changeDescription } = useGameInfo(props)
 
   return (
     <div class={'w-full flex flex-col p-5 gap-5 sm:w-125 lg:w-118 rounded-xl bg-border-light shadow-dark '}>
@@ -47,11 +34,11 @@ const GameInfo = (props: GameInfoProps) => {
               isEditMode={isEditMode}
               type={type}
               title={title}
-              onTypeChange={onTypeChange}
-              onTitleChange={onTitleChange}
+              onTypeChange={changeType}
+              onTitleChange={changeTitle}
             />
 
-            {props.displayEditBotton && <EditButton onClick={() => toogleIsChangeable()} />}
+            {props.displayEditBotton && <EditButton onClick={() => toggleEditMode()} />}
           </div>
 
           <TimePassed from={props.createdAt} />
@@ -69,11 +56,11 @@ const GameInfo = (props: GameInfoProps) => {
       <PostUser user={props.user} />
 
       {(description.length > 0 || isEditMode) && (
-        <Description isEditMode={isEditMode} value={description} onDescriptionChange={onDescriptionChange} />
+        <Description isEditMode={isEditMode} value={description} onDescriptionChange={changeDescription} />
       )}
 
       <div class={'flex flex-row justify-end mt-auto'}>
-        <LinkToVariant isEditMode={isEditMode} value={variantLink} onVarianLinkChange={onVariantLinkChange} />
+        <LinkToVariant value={props.variantLink} />
       </div>
     </div>
   )

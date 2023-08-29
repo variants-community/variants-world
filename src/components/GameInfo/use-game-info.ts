@@ -1,6 +1,6 @@
-import { getValueFromEvent } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect } from 'preact/hooks'
+import { useSignal } from '@preact/signals'
 import type { GameType } from '@prisma/client'
 
 type UseGameInfoProps = {
@@ -9,14 +9,14 @@ type UseGameInfoProps = {
   title: string
   user: string
   description: string
-  variantLink: string
 }
 
 export const useGameInfo = (props: UseGameInfoProps) => {
-  const [title, setTitle] = useState(props.title)
-  const [type, setType] = useState(props.type)
-  const [description, setDescription] = useState(props.description)
-  const [variantLink, setVariantLink] = useState(props.variantLink)
+  const gameInfo = useSignal({
+    title: props.title,
+    type: props.type,
+    description: props.description
+  })
 
   useEffect(() => {
     const channel = supabase
@@ -30,11 +30,7 @@ export const useGameInfo = (props: UseGameInfoProps) => {
           filter: `id=eq.${props.postId}`
         },
         payload => {
-          const updated = payload.new as UseGameInfoProps
-          setTitle(updated.title)
-          setType(updated.type)
-          setDescription(updated.description)
-          setVariantLink(updated.variantLink)
+          gameInfo.value = payload.new as UseGameInfoProps
         }
       )
       .subscribe()
@@ -44,37 +40,27 @@ export const useGameInfo = (props: UseGameInfoProps) => {
     }
   }, [supabase])
 
-  const onTypeChange = async (e: Event) => {
-    const typeValue = getValueFromEvent<GameType>(e)
-    setType(typeValue)
-    await supabase.from('Post').update({ type: typeValue }).eq('id', props.postId)
+  const changeType = async (gameType: GameType) => {
+    gameInfo.value.type = gameType
+    await supabase.from('Post').update({ type: gameType }).eq('id', props.postId)
   }
 
-  const onTitleChange = async (e: Event) => {
-    const titleValue = getValueFromEvent(e)
-    setTitle(titleValue)
+  const changeTitle = async (title: string) => {
+    gameInfo.value.title = title
     await supabase.from('Post').update({ title }).eq('id', props.postId)
   }
 
-  const onDescriptionChange = async (e: Event) => {
-    const descriptionValue = getValueFromEvent(e)
-    setDescription(descriptionValue)
+  const changeDescription = async (description: string) => {
+    gameInfo.value.description = description
     await supabase.from('Post').update({ description }).eq('id', props.postId)
   }
 
-  const onVariantLinkChange = async (e: Event) => {
-    const variantLinkValue = getValueFromEvent(e)
-    setVariantLink(variantLinkValue)
-  }
-
   return {
-    title,
-    onTitleChange,
-    type,
-    onTypeChange,
-    description,
-    onDescriptionChange,
-    variantLink,
-    onVariantLinkChange
+    title: gameInfo.value.title,
+    changeTitle,
+    type: gameInfo.value.type,
+    changeType,
+    description: gameInfo.value.description,
+    changeDescription
   }
 }

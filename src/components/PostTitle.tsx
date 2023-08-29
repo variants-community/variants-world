@@ -1,7 +1,10 @@
+import { getValueFromEvent } from 'utils/hepers'
+import type { GameType } from '@prisma/client'
+
 type PostTitleProps = {
   isEditMode?: boolean
-  onTypeChange?: (e: Event) => void
-  onTitleChange?: (e: Event) => void
+  onTypeChange?: (gameType: GameType) => void
+  onTitleChange?: (title: string) => void
   type: string
   title: string
   linkTo?: string
@@ -13,7 +16,7 @@ const PostTitle = (props: PostTitleProps) => {
       {props.isEditMode ? (
         <select
           value={props.type}
-          onChange={props.onTypeChange}
+          onChange={e => props.onTypeChange?.(getValueFromEvent<GameType>(e))}
           class={'bg-gray py-[7px] px-[10px] rounded outline-none text-[24px]'}
         >
           <option value={'WOF'}>WOF</option>
@@ -25,7 +28,7 @@ const PostTitle = (props: PostTitleProps) => {
       {props.isEditMode ? (
         <input
           value={props.title}
-          onChange={props.onTitleChange}
+          onChange={e => props.onTitleChange?.(getValueFromEvent(e))}
           class={'w-full bg-dark rounded outline-none text-[28px]'}
         />
       ) : (

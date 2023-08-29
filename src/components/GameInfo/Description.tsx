@@ -1,7 +1,9 @@
+import { getValueFromEvent } from 'utils/hepers'
+
 type DescriptionProps = {
   isEditMode: boolean
   value: string
-  onDescriptionChange: (e: Event) => void
+  onDescriptionChange: (description: string) => void
 }
 
 export const Description = (props: DescriptionProps) => {
@@ -12,7 +14,7 @@ export const Description = (props: DescriptionProps) => {
         <textarea
           rows={15}
           value={props.value}
-          onChange={props.onDescriptionChange}
+          onChange={e => props.onDescriptionChange(getValueFromEvent(e))}
           class={'h-full bg-dark outline-none rounded'}
         />
       ) : (

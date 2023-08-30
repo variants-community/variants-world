@@ -115,7 +115,7 @@ export default defineConfig({
     }
   },
   plugins: [],
-  safelist: 'text-yellow text-blue text-green',
+  safelist: 'text-yellow text-blue text-green fill-blue fill-yellow fill-red fill-green',
   shortcuts: {
     darkborder: 'border border-[2px] border-border-dark',
     'transition-title': {

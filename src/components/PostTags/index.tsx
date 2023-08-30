@@ -12,7 +12,9 @@ type PostTagsProps = {
 const PostTags = (props: PostTagsProps) => {
   return (
     <div>
-      <ul class={`flex flex-wrap items-center list-none gap-[10px] text-[14px] font-bold ${props.ulclass}`}>
+      <ul
+        class={`flex flex-wrap items-center list-none gap-[5px] sm:gap-[10px] text-[12px] sm:text-[14px] font-bold ${props.ulclass}`}
+      >
         {props.rules.sort().map(rule => (
           <RuleItem key={rule} ruleName={rule} class={props.class} />
         ))}

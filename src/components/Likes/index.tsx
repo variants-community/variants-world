@@ -20,7 +20,9 @@ const Likes = (props: LikesProps) => {
       aria-hidden="true"
       class={'flex flex-row justify-end gap-2 whitespace-nowrap transition-all duration-100 cursor-pointer'}
     >
-      <span class={`text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>{formatLikesCount(likesCount)}</span>
+      <span class={`text-[16px] sm:text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>
+        {formatLikesCount(likesCount)}
+      </span>
 
       <LikeIcon class="hover:fill-red transition duration-100" isLiked={isLiked} />
     </div>

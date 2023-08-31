@@ -34,8 +34,8 @@ const PostCard = (props: PostCardProps) => {
 
             <PostTags
               rules={props.post.gamerules.map(rule => rule.name)}
-              class="!h-4 -1 text-text bg-dark border border-[0.4px] border-border-dark"
-              ulclass="!text-[10px] !gap-1"
+              class="text-text bg-dark border border-[0.4px] border-border-dark"
+              ulclass="!h-4 !sm:h-7 !text-[10px] !sm:text-[14px] !gap-1 !sm:gap-[10px]"
               iconsclass="fill-text"
             />
           </div>

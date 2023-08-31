@@ -1,5 +1,5 @@
-import { addCommentQuery } from 'db/supabase/queries'
 import { useComments } from 'components/Comments/use-comments'
+import { useRef } from 'preact/hooks'
 import { useReply } from 'components/Comments/use-reply'
 import CommentInput from 'components/Comments/CommentInput'
 import CommentsList from 'components/Comments/CommentsList'
@@ -18,20 +18,15 @@ type CommentsProps = {
 }
 
 const Comments = (props: CommentsProps) => {
-  const { comments } = useComments(props.comments, props.postId)
-  const { reply, onChangeReply, cancelReplyTo } = useReply()
+  const textarea = useRef<HTMLTextAreaElement>(null)
 
-  const postComment = async (commentText: string, replyCommentId?: number) => {
-    if (commentText.length > 0) {
-      await addCommentQuery(commentText, props.postId, props.userId, replyCommentId)
-      cancelReplyTo()
-    }
-  }
+  const { comments, postComment } = useComments(textarea, props.comments, props.postId, props.userId)
+  const { reply, onChangeReply, cancelReplyTo } = useReply(textarea)
 
   return (
     <div class={'flex flex-col gap-8 mb-25 sm:mx-5 lg:(mx-auto w-auto)'}>
       <CommentsList isUserTester={props.isUserTester} comments={comments} onReply={onChangeReply} />
-      <CommentInput onSendComment={postComment} reply={reply} cancelReply={cancelReplyTo} />
+      <CommentInput textarea={textarea} onSendComment={postComment} reply={reply} cancelReply={cancelReplyTo} />
     </div>
   )
 }

@@ -1,22 +1,16 @@
-// import { getValueFromEvent } from 'utils/hepers'
-import { useRef } from 'preact/hooks'
+import { useCtrlEnterToSend } from 'components/Comments/use-ctrl-enter-to-send'
 import type { Comment } from '@prisma/client'
+import type { Ref } from 'preact/hooks'
 
 type CommentInputProps = {
-  onSendComment: (value: string, replyCommentId?: number) => void
+  onSendComment: (replyCommentId?: number) => void
   cancelReply: () => void
   reply?: Comment
+  textarea: Ref<HTMLTextAreaElement>
 }
 
 const CommentInput = (props: CommentInputProps) => {
-  const textarea = useRef<HTMLTextAreaElement>(null)
-
-  const sendComment = () => {
-    if (textarea.current) {
-      props.onSendComment(textarea.current.value, props.reply?.id)
-      textarea.current.value = ''
-    }
-  }
+  useCtrlEnterToSend(props.textarea, async () => props.onSendComment(props.reply?.id))
 
   return (
     <div className={'w-11/12 mx-auto sm:w-125 lg:(mx-0 w-246)'}>
@@ -30,7 +24,7 @@ const CommentInput = (props: CommentInputProps) => {
           </div>
         )}
         <textarea
-          ref={textarea}
+          ref={props.textarea}
           id="comment-input"
           placeholder={'Please be nice when you chat'}
           rows={4}
@@ -38,7 +32,7 @@ const CommentInput = (props: CommentInputProps) => {
         />
       </div>
       <button
-        onClick={sendComment}
+        onClick={() => props.onSendComment(props.reply?.id)}
         class={'w-46 h-11 block ml-auto mt-6 bg-primary darkborder rounded-[10px] text-white'}
       >
         Comment

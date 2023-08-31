@@ -1,14 +1,15 @@
-import { scrollToElement } from 'utils/hepers'
 import { useSignal } from '@preact/signals'
 import type { Comment } from '@prisma/client'
+import type { Ref } from 'preact/hooks'
 
-export const useReply = () => {
+export const useReply = (onReplyScrollTo: Ref<HTMLTextAreaElement>) => {
   const reply = useSignal<Comment | undefined>(undefined)
 
   const onChangeReply = (comment?: Comment) => {
     reply.value = comment
-    if (comment) {
-      scrollToElement('comment-input')
+
+    if (onReplyScrollTo.current !== null) {
+      onReplyScrollTo.current.scrollIntoView({ behavior: 'smooth' })
     }
   }
 

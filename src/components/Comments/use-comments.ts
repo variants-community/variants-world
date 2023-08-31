@@ -1,10 +1,17 @@
+import { addCommentQuery } from 'db/supabase/queries'
 import { convertUTCDateToLocalDate } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 import type { ExtendedComment } from '.'
+import type { Ref } from 'preact/hooks'
 
-export const useComments = (initComments: ExtendedComment[], postId: number) => {
+export const useComments = (
+  textarea: Ref<HTMLTextAreaElement>,
+  initComments: ExtendedComment[],
+  postId: number,
+  userId: number
+) => {
   const comments = useSignal(initComments)
 
   useEffect(() => {
@@ -90,7 +97,19 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
     }
   }, [supabase, comments])
 
+  const postComment = async (replyCommentId?: number) => {
+    if (textarea.current) {
+      const commentText = textarea.current.value
+
+      if (commentText.length > 0) {
+        await addCommentQuery(commentText, postId, userId, replyCommentId)
+        textarea.current.value = ''
+      }
+    }
+  }
+
   return {
-    comments: comments.value
+    comments: comments.value,
+    postComment
   }
 }

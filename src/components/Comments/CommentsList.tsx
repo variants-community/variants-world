@@ -70,7 +70,7 @@ const CommentCard = (props: CommentCardProps) => (
           </div>
         )}
 
-        <p>{props.comment.content}</p>
+        <p class={'whitespace-break-spaces'}>{props.comment.content}</p>
       </div>
     </div>
   </div>

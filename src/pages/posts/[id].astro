@@ -31,6 +31,9 @@ const userIsAuthor = user.id === post?.author.id
     post && (
       <section class="container mx-auto">
         <div class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
+          {post.PostDetails && userIsTester && (
+            <Presence postId={post.id} user={user} client:idle />
+            )}
           <div class="flex lg:flex-row  flex-col gap-[10px]">
             <GamePicture
               postId={post.id}
@@ -68,7 +71,6 @@ const userIsAuthor = user.id === post?.author.id
           </div>
 
           {post.PostDetails && userIsTester && (
-            <Presence postId={post.id} user={user} client:idle />
             <AdminSettings user={user} details={post.PostDetails} client:load />
           )}
           {userIsTester ? (

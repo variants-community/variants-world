@@ -11,15 +11,14 @@ const Presence = (props: PresenceProps) => {
   return (
     <>
       {usersOnPost.length > 0 && (
-        <div class={'flex flex-row items-center text-[24px]'}>
-          <span class={'mr-[10px]'}>Here now:</span>
-          <div class={'flex flex-wrap gap-[10px] font-semibold'}>
-            {usersOnPost.map(u => (
-              <span class={'px-[5px] py-[2px] bg-gray rounded'} key={u.id}>
-                {u.username}
-              </span>
-            ))}
-          </div>
+        <div class={'flex flex-row justify-end items-center'}>
+          {usersOnPost.map((user, i) => (
+            <img
+              class={`h-10 w-10 rounded-full ${i === 0 ? '' : 'mr-[-20px]'} order-${i + 1}`}
+              src="/src/assets/images/user.png"
+              title={user.username}
+            />
+          ))}
         </div>
       )}
     </>

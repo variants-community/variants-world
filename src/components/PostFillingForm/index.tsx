@@ -25,8 +25,13 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         setDescription={changeDescription}
         isInvalid={errors.has('invalidDescription')}
       />
-      {/* {submitError && <SubmitError error={submitError} />} */}
-      <button class={'border border-border-light p-[10px] rounded-xl mt-5'}>Post</button>
+      <button
+        class={
+          'border border-border-light p-[10px] rounded-xl mt-5 hover:(shadow-light text-white) transition-all duration-300'
+        }
+      >
+        Post
+      </button>
     </form>
   )
 }

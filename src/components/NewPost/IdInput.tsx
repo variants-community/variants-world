@@ -9,6 +9,7 @@ export enum IdInputState {
 }
 
 type IdInputProps = {
+  disabled: boolean
   placeholder: string
   value: string
   setValue: (value: string) => void
@@ -17,9 +18,9 @@ type IdInputProps = {
 
 export const IdInput = (props: IdInputProps) => (
   <div
-    class={
-      'w-[183px] h-[45px] flex flex-row gap-[8px] items-center text-[18px] px-[15px] py-[10px] border border-border-light rounded-full'
-    }
+    class={`w-[183px] h-[45px] flex flex-row gap-[8px] items-center text-[18px] px-[15px] py-[10px] border border-border-light rounded-full ${
+      props.disabled ? 'opacity-50' : ''
+    } transition-all duration-300 easy-in`}
   >
     {props.state === IdInputState.INPUT ? (
       <span class={'max-w-[15px] text-[23px]'}>#</span>
@@ -30,6 +31,7 @@ export const IdInput = (props: IdInputProps) => (
     )}
 
     <input
+      disabled={props.disabled}
       value={props.value}
       onInput={e => props.setValue(getValueFromEvent(e))}
       placeholder={props.placeholder}

@@ -133,6 +133,7 @@ export interface Database {
           authorUserId: number
           createdAt: string
           description: string
+          gameNr: number
           id: number
           status: Database['public']['Enums']['GameStatus']
           title: string
@@ -145,6 +146,7 @@ export interface Database {
           authorUserId: number
           createdAt?: string
           description: string
+          gameNr: number
           id?: number
           status: Database['public']['Enums']['GameStatus']
           title: string
@@ -157,6 +159,7 @@ export interface Database {
           authorUserId?: number
           createdAt?: string
           description?: string
+          gameNr?: number
           id?: number
           status?: Database['public']['Enums']['GameStatus']
           title?: string

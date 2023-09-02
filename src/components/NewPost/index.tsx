@@ -5,8 +5,9 @@ import { Search } from 'components/NewPost/Search'
 import { Title } from 'components/NewPost/Title'
 import { fetchGameById } from 'utils/fetch-queries'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
+import { supabase } from 'db/supabase/supabase'
+import { useEffect, useRef } from 'preact/hooks'
 import { useNewPostApprove } from 'components/NewPost/use-new-post-approve'
-import { useRef } from 'preact/hooks'
 import { useSearch } from 'src/hooks/use-search'
 import { useSignal } from '@preact/signals'
 import PostTags from 'components/PostTags'
@@ -15,10 +16,23 @@ import type { CGABotGameDetails } from 'cgabot'
 const NewPost = (props: { userId: number }) => {
   const step2ref = useRef<HTMLDivElement>(null)
   const isSecondStep = useSignal(false)
+  const isGameAlredyAdded = useSignal(false)
   const { data: game, isFetching, query, setQuery } = useSearch<CGABotGameDetails>({ onQuery: fetchGameById })
   const { isApproved, approveIds, approveIdsState, changeApproveId, clearApproveIds } = useNewPostApprove(game)
 
   const isGameFound = !!game
+
+  useEffect(() => {
+    if (game) {
+      const gameIsAlredyAdded = async (gameToBeValidated: CGABotGameDetails) => {
+        const { data } = await supabase.from('Post').select('gameNr').eq('gameNr', gameToBeValidated.gameNr).single()
+        return data !== null
+      }
+
+      // eslint-disable-next-line github/no-then
+      gameIsAlredyAdded(game).then(result => (isGameAlredyAdded.value = result))
+    }
+  }, [game])
 
   const onSearch = (value: string) => {
     setQuery(value)
@@ -44,6 +58,14 @@ const NewPost = (props: { userId: number }) => {
 
             {isGameFound && (
               <div class="animate-fadefast flex flex-col items-center">
+                <div
+                  class={`text-red mt-[20px] px-3 py1 border border-border-light rounded-full select-none ${
+                    isGameAlredyAdded.value ? 'opacity-100' : 'opacity-0'
+                  } transition-all duration-300 easy-in`}
+                >
+                  Already exist
+                </div>
+
                 <Picture />
                 <div class={'sm:w-[450px] mt-[14px]'}>
                   <PostTags
@@ -54,6 +76,7 @@ const NewPost = (props: { userId: number }) => {
                   />
                 </div>
                 <IdsInputs
+                  disabled={isGameAlredyAdded.value}
                   approveIds={approveIds}
                   approveIdsState={approveIdsState}
                   changeApproveId={changeApproveId}
@@ -64,9 +87,9 @@ const NewPost = (props: { userId: number }) => {
                       isSecondStep.value = true
                     }
                   }}
-                  class={
-                    ' w-46 h-11 mx-auto sm:(ml-auto mr-2 mt-2 mb-4) text-center bg-primary hover:bg-secondary border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg'
-                  }
+                  class={` w-46 h-11 mx-auto sm:(ml-auto mr-2 mt-2 mb-4) text-center bg-primary  border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg ${
+                    isGameAlredyAdded.value ? 'opacity-50 cursor-default' : 'hover:bg-secondary'
+                  } transition-all duration-300 easy-in`}
                 >
                   Continue
                 </button>

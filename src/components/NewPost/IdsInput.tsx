@@ -1,6 +1,7 @@
 import { IdInput, IdInputState } from 'components/NewPost/IdInput'
 
 export const IdsInputs = (props: {
+  disabled: boolean
   approveIds: string[]
   approveIdsState: IdInputState[]
   changeApproveId: (id: string, index: number) => void
@@ -9,6 +10,7 @@ export const IdsInputs = (props: {
     {props.approveIds.map((value, index) => {
       return (
         <IdInput
+          disabled={props.disabled}
           state={props.approveIdsState[index]}
           key={index}
           value={value}

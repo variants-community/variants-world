@@ -1,7 +1,7 @@
 import { getValueFromEvent } from 'utils/hepers'
 import type { GameType } from '@prisma/client'
 
-export const TypeInput = (props: { type: string; setType: (value: GameType) => void; isInvalid: boolean }) => (
+export const TypeInput = (props: { type: string; setType: (value: GameType) => void }) => (
   <div class={'flex flex-row justify-between items-center gap-5'}>
     <label htmlFor={'type'}>Type</label>
     <select

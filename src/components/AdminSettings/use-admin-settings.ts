@@ -38,7 +38,7 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'Voice',
-          filter: `postId=eq.${details.id}`
+          filter: `postDetailsId=eq.${details.postId}`
         },
         async payload => {
           const updated = payload.new as Voice
@@ -59,7 +59,7 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'INSERT',
           schema: 'public',
           table: 'Voice',
-          filter: `postId=eq.${details.id}`
+          filter: `postDetailsId=eq.${details.postId}`
         },
         async payload => {
           const updated = payload.new as Voice
@@ -83,13 +83,12 @@ export const useAdminSettings = (details: PostDetails) => {
 
     setGameClassification(value)
 
-    const result = await supabase
+    await supabase
       .from('PostDetails')
       .update({
         gameClassification: value ?? null
       })
       .eq('postId', details.postId)
-    console.log('game: ', result)
   }
 
   const setGameplayClassificationOnChange = async (value: GameplayClassification) => {

@@ -54,7 +54,14 @@ const NewPost = (props: { userId: number }) => {
           >
             <Title isSearching={!!game && !!query} />
 
-            <Search value={query} onChange={onSearch} isSearching={!!game && !!query} isLoading={isFetching} />
+            <Search
+              value={query}
+              onChange={onSearch}
+              isSearching={!!game && !!query}
+              isLoading={isFetching}
+              isGamedFoud={isGameFound}
+              isValid={!isGameAlredyAdded.value}
+            />
 
             {isGameFound && (
               <div class="animate-fadefast flex flex-col items-center">
@@ -66,7 +73,7 @@ const NewPost = (props: { userId: number }) => {
                   Already exist
                 </div>
 
-                <Picture />
+                <Picture fen={game.q.startFen} />
                 <div class={'sm:w-[450px] mt-[14px]'}>
                   <PostTags
                     rules={[game.q.timeControl, ...mapRuleVariantsToString(game.q.ruleVariants)]}
@@ -100,9 +107,21 @@ const NewPost = (props: { userId: number }) => {
 
         {game && isApproved && (
           <div class={'absolute left-[100%] min-w-[100%]'}>
-            <div ref={step2ref} class={'w-full mx-auto mt-[10%] sm:(w-145)'}>
+            <div ref={step2ref} class={'w-full mx-auto mt-[5%] sm:(w-145)'}>
               <PostFillingForm userId={props.userId} game={game} approveIds={approveIds} />
             </div>
+            <button
+              onClick={() => {
+                if (isApproved) {
+                  isSecondStep.value = false
+                }
+              }}
+              class={`mt-10 w-24 h-11 mx-auto sm:(mr-auto ml-10 mt-2 mb-4) text-center bg-primary  border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg ${
+                isGameAlredyAdded.value ? 'opacity-50 cursor-default' : 'hover:bg-secondary'
+              } transition-all duration-300 easy-in`}
+            >
+              Back
+            </button>
           </div>
         )}
       </div>

@@ -25,18 +25,22 @@ export const useNewPostApprove = (game: CGABotGameDetails | undefined) => {
         setApproveId('', index)
         setApproveIdState(IdInputState.INPUT, index)
       } else {
-        setApproveId(id, index)
-        const response = await fetch(`/api/game/${game.gameNr}/same-as/${approveIds.value[index]}`, {
-          method: 'get'
-        })
+        if (!approveIds.value.includes(id)) {
+          const response = await fetch(`/api/game/${game.gameNr}/same-as/${id}`, {
+            method: 'get'
+          })
 
-        const isSame = (await response.json()) as boolean
+          const isSame = (await response.json()) as boolean
 
-        if (isSame) {
-          setApproveIdState(IdInputState.ACCEPTED, index)
+          if (isSame) {
+            setApproveIdState(IdInputState.ACCEPTED, index)
+          } else {
+            setApproveIdState(IdInputState.DECLINED, index)
+          }
         } else {
           setApproveIdState(IdInputState.DECLINED, index)
         }
+        setApproveId(id, index)
       }
     }
 

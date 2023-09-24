@@ -1,6 +1,5 @@
-import { PostDetailsValidator } from 'services/post-details-validator'
+import { type PostDetails, validatePostDetails } from 'services/post-details-validator-new'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { ValiError, parseAsync } from 'valibot'
 import { createPost } from 'services/create-post'
 import { getGameDetailsById } from 'cgabot'
 import type { APIRoute } from 'astro'
@@ -17,7 +16,8 @@ export interface CreateRouteResponseDataInterface {
 
 export const post: APIRoute = async ({ request }) => {
   try {
-    const postDetails = await parseAsync(PostDetailsValidator, await request.json())
+    const postDetails = (await request.json()) as PostDetails
+    await validatePostDetails(postDetails)
     const game = await getGameDetailsById(postDetails.gameId)
     // TODO: handle `game` being undefined
     // "handle `game` being undefined" -- if the game is undefined,
@@ -32,7 +32,6 @@ export const post: APIRoute = async ({ request }) => {
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) return handlePrismaError(e)
     else if (e instanceof Error) return handleError(e)
-    else if (e instanceof ValiError) return handleValiError(e)
     else return handleUnknowError()
   }
 }
@@ -47,15 +46,6 @@ const handlePrismaError = (e: PrismaClientKnownRequestError) => {
   return new Response(
     JSON.stringify({
       error: { message: errorMessage }
-    } as CreateRouteResponseDataInterface),
-    { status: 500 }
-  )
-}
-
-const handleValiError = (e: ValiError) => {
-  return new Response(
-    JSON.stringify({
-      error: { message: e.message }
     } as CreateRouteResponseDataInterface),
     { status: 500 }
   )

@@ -4,10 +4,14 @@ import type { PostDetails } from 'services/create-post'
 import type { PostForCard } from 'db/prisma/queries'
 
 export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {
-  const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
-  if (response.status === 200) {
-    return (await response.json()) as CGABotGameDetails
-  } else {
+  try {
+    const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
+    if (response.status === 200) {
+      return (await response.json()) as CGABotGameDetails
+    } else {
+      return undefined
+    }
+  } catch {
     return undefined
   }
 }
@@ -29,20 +33,24 @@ type Query = {
 }
 
 export const fetchPosts = async (query: Query) => {
-  let response = null
-  if (query.page !== undefined && query.limit !== undefined) {
-    response = await fetch(`/api/posts?page=${query.page}&limit=${query.limit}`, { method: 'get' })
-  } else if (query.searchText) {
-    response = await fetch(`/api/posts?searchText=${query.searchText}`, {
-      method: 'get'
-    })
-  } else {
-    return []
-  }
+  try {
+    let response = null
+    if (query.page !== undefined && query.limit !== undefined) {
+      response = await fetch(`/api/posts?page=${query.page}&limit=${query.limit}`, { method: 'get' })
+    } else if (query.searchText) {
+      response = await fetch(`/api/posts?searchText=${query.searchText}`, {
+        method: 'get'
+      })
+    } else {
+      return []
+    }
 
-  if (response.status === 200) {
-    return (await response.json()) as PostForCard[]
-  } else {
+    if (response.status === 200) {
+      return (await response.json()) as PostForCard[]
+    } else {
+      return []
+    }
+  } catch {
     return []
   }
 }

@@ -38,6 +38,7 @@ const userIsAuthor = user.id === post?.author.id
             <GamePicture
               postId={post.id}
               userId={user.id}
+              fen={post.fen}
               likes={post.UserLikedPosts}
               client:load
             />

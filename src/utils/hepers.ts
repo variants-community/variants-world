@@ -106,3 +106,7 @@ export const getFormattedTimePassed = (createdAt: Date): string => {
     return `${yearsAgo} ${yearsAgo === 1 ? 'year' : 'years'} ago`
   }
 }
+
+export const getGamePictureUrl = (fen: string) => {
+  return `https://assets.variants.studio/image?quadratic&size=550&fen=${fen}&border=0`
+}

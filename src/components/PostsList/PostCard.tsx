@@ -1,4 +1,5 @@
 import { TimePassed } from 'components/GameInfo/TimePassed'
+import { getGamePictureUrl } from 'utils/hepers'
 import CommentIcon from 'components/icons/CommentIcon'
 import Likes from 'components/Likes'
 import PostTags from 'components/PostTags'
@@ -8,7 +9,6 @@ import StatusIcon from 'components/icons/StatusIcon'
 import type { Color } from 'windi.config'
 import type { GameStatus } from '@prisma/client'
 import type { PostForCard } from 'db/prisma/queries'
-// import { isMobile } from 'react-device-detect' // 10 kb жесть......
 
 type PostCardProps = {
   post: PostForCard
@@ -22,7 +22,7 @@ const PostCard = (props: PostCardProps) => {
         href={`/posts/${props.post.id}`}
         class={'w-11/12 flex flex-row mx-auto rounded-xl darkborder bg-border-light overflow-hidden'}
       >
-        <img src="/src/assets/images/game.png" alt={props.post.title} class="w-30 h-30 sm:(w-55 h-55 min-w-55)" />
+        <img src={getGamePictureUrl(props.post.fen)} alt={props.post.title} class="w-30 h-30 sm:(w-55 h-55 min-w-55)" />
         <div class={'w-full flex flex-col justify-between p-2 sm:p-5 '}>
           <div class={'flex flex-col gap-1 sm:(gap-[10px] mb-[30px] mb-0)'}>
             <div class={'flex flex-row justify-between'}>

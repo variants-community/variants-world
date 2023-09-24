@@ -4,7 +4,7 @@ const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(false)
 
   useEffect(() => {
-    if (isLogin) window.location.replace('http://localhost:3000/')
+    if (isLogin) window.location.replace('/')
   }, [isLogin])
 
   const submit = async (e: Event) => {

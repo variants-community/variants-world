@@ -4,7 +4,7 @@ import { supabase } from 'db/supabase/supabase'
 export type VoiceExtended = Voice & ({ tester?: User } | undefined)
 
 type VoicesProps = {
-  postId: number
+  postDetailsId: number
   testerId: number
   voces: VoiceExtended[]
 }
@@ -16,10 +16,10 @@ export const Votes = (props: VoicesProps) => {
       .upsert(
         {
           value,
-          postId: props.postId,
+          postDetailsId: props.postDetailsId,
           testerId: props.testerId
         },
-        { onConflict: 'postId, testerId' }
+        { onConflict: 'postDetailsId, testerId' }
       )
       .eq('testerId', props.testerId)
   }
@@ -58,7 +58,7 @@ export const Votes = (props: VoicesProps) => {
         </div>
       </div>
 
-      <ul class={'flex flex-col gap-2 mt-2 font-semibold overflow-y-scroll'}>
+      <ul class={'flex flex-col gap-2 mt-2 font-semibold overflow-y-scroll light-scrollbar'}>
         {props.voces.map(vote => (
           <li key={vote.testerId} class={'h-7 flex flex-row justify-between px-2 bg-dark darkborder rounded'}>
             <span>{vote.tester?.name}</span>

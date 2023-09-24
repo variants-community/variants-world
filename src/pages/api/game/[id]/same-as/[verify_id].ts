@@ -1,6 +1,7 @@
 /* eslint-disable filenames/match-regex */
 import { getGameDetailsById } from 'cgabot'
 import { isIdValid } from 'utils/hepers'
+import { isValidSimilarity } from 'services/validation-utlis'
 import type { APIRoute } from 'astro'
 
 export const get: APIRoute = async ({ params }) => {
@@ -14,9 +15,9 @@ export const get: APIRoute = async ({ params }) => {
   const gameToVerify = await getGameDetailsById(params.verify_id)
 
   if (mainGame && gameToVerify) {
-    const isSameGame =
-      mainGame.q.startFen === gameToVerify.q.startFen &&
-      JSON.stringify(mainGame.q.ruleVariants) === JSON.stringify(gameToVerify.q.ruleVariants)
+    const isSameGame = isValidSimilarity([mainGame, gameToVerify]) && params.id !== params.verify_id
+    // mainGame.q.startFen === gameToVerify.q.startFen &&
+    // JSON.stringify(mainGame.q.ruleVariants) === JSON.stringify(gameToVerify.q.ruleVariants)
 
     return new Response(JSON.stringify(isSameGame), { status: 200 })
   }

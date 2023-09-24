@@ -133,6 +133,7 @@ export interface Database {
           authorUserId: number
           createdAt: string
           description: string
+          fen: string
           gameNr: number
           id: number
           status: Database['public']['Enums']['GameStatus']
@@ -146,6 +147,7 @@ export interface Database {
           authorUserId: number
           createdAt?: string
           description: string
+          fen: string
           gameNr: number
           id?: number
           status: Database['public']['Enums']['GameStatus']
@@ -159,6 +161,7 @@ export interface Database {
           authorUserId?: number
           createdAt?: string
           description?: string
+          fen?: string
           gameNr?: number
           id?: number
           status?: Database['public']['Enums']['GameStatus']
@@ -260,26 +263,26 @@ export interface Database {
       Voice: {
         Row: {
           id: number
-          postId: number
+          postDetailsId: number
           testerId: number
           value: Database['public']['Enums']['VoteValue']
         }
         Insert: {
           id?: number
-          postId: number
+          postDetailsId: number
           testerId: number
           value: Database['public']['Enums']['VoteValue']
         }
         Update: {
           id?: number
-          postId?: number
+          postDetailsId?: number
           testerId?: number
           value?: Database['public']['Enums']['VoteValue']
         }
         Relationships: [
           {
-            foreignKeyName: 'Voice_postId_fkey'
-            columns: ['postId']
+            foreignKeyName: 'Voice_postDetailsId_fkey'
+            columns: ['postDetailsId']
             referencedRelation: 'PostDetails'
             referencedColumns: ['id']
           },

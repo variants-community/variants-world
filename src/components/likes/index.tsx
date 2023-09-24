@@ -1,5 +1,5 @@
 import { formatLikesCount } from 'utils/hepers'
-import { useLikes } from 'components/Likes/use-likes'
+import { useLikes } from 'components/likes/use-likes'
 import LikeIcon from 'components/icons/LikeIcon'
 
 type LikesProps = {

@@ -1,8 +1,8 @@
-import { useComments } from 'components/Comments/use-comments'
+import { useComments } from 'components/comments/use-comments'
 import { useRef } from 'preact/hooks'
-import { useReply } from 'components/Comments/use-reply'
-import CommentInput from 'components/Comments/CommentInput'
-import CommentsList from 'components/Comments/CommentsList'
+import { useReply } from 'components/comments/use-reply'
+import CommentInput from 'components/comments/CommentInput'
+import CommentsList from 'components/comments/CommentsList'
 import type { Comment, User } from '@prisma/client'
 
 export type ExtendedComment = Comment & {

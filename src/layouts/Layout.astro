@@ -11,6 +11,7 @@ type LayoutProps = {
 }
 
 const { title, user} = Astro.props as LayoutProps
+const path = Astro.url.pathname
 
 ---
 
@@ -24,7 +25,7 @@ const { title, user} = Astro.props as LayoutProps
 		<ViewTransitions />
 	</head>
 	<body class="bg-dark text-text overflow-y-auto!">
-		<Navigation username={user?.username} />
+		<Navigation username={user?.username} path={path}/>
 		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll pl-2">
 			<slot />
 		</div>
@@ -32,6 +33,10 @@ const { title, user} = Astro.props as LayoutProps
 </html>
 
 <style is:global>
+	::selection {
+		background: #ff6149a4;
+		color: #e6e6e6;
+	}
 	::-webkit-scrollbar {
 		width: 0.5rem;
 	}

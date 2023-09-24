@@ -3,7 +3,7 @@ import { getGameDetailsById } from 'cgabot'
 import { isIdValid } from 'utils/hepers'
 import type { APIRoute } from 'astro'
 
-export const get: APIRoute = async ({ params }) => {
+export const GET: APIRoute = async ({ params }) => {
   if (!params.id || !params.verify_id || !isIdValid(params.id) || !isIdValid(params.verify_id))
     return new Response(JSON.stringify(false), {
       status: 404,

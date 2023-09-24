@@ -2,28 +2,32 @@ import { getValueFromEvent } from 'utils/hepers'
 import SpinnerIcon from 'components/icons/SpinnerIcon'
 
 type SearchProps = {
-  value: string
-  onChange: (value: string) => void
-  isSearching: boolean
-  isLoading: boolean
+  value: number | undefined
+  onChange: (value: number | undefined) => void
+  collapsed: boolean
+  loading: boolean
 }
 
-export const Search = (props: SearchProps) => (
+export const LandingSearch = (props: SearchProps) => (
   <div class={`relative w-auto max-w-11/12 flex items-center opacity-0 animate-postfade`}>
     <span
       class={`absolute ${
-        props.isSearching ? 'left-4 text-2xl' : 'md:(left-7 text-4xl mt-0) sm:(text-2xl left-6 mt-1) text-xl left-5'
+        props.collapsed ? 'left-4 text-2xl' : 'md:(left-7 text-4xl mt-0) sm:(text-2xl left-6 mt-1) text-xl left-5'
       } transition-inset duration-500 ease-expo`}
     >
       #
     </span>
     <input
-      value={props.value}
-      onInput={e => props.onChange(getValueFromEvent(e))}
+      value={props.value ?? ''}
+      onInput={e => {
+        const value = getValueFromEvent(e)
+        const match = value.match(/(game\/|#)?(\d+)/)
+        props.onChange(match ? Number(match[2]) : undefined)
+      }}
       class={`bg-dark pr-16 rounded-full darkborder outline-none placeholder-text
-      focus:(text-text-light placeholder-text-light) transition-search w-full
+        focus:(text-text-light placeholder-text-light) transition-search w-full
       ${
-        props.isSearching
+        props.collapsed
           ? 'shadow-lightSmall focus:shadow-lightSmallHover text-lg md:w-120 w-100 py-2 pl-10'
           : `shadow-light      focus:shadow-lightHover  
              lg:(text-2xl w-188 py-4)
@@ -34,6 +38,6 @@ export const Search = (props: SearchProps) => (
       type="text"
       placeholder={'game number or link'}
     />
-    {props.isLoading && <SpinnerIcon class="absolute right-7 h-6 w-6" />}
+    {props.loading && <SpinnerIcon class="absolute right-7 h-6 w-6" />}
   </div>
 )

@@ -19,6 +19,7 @@ const PostsList = (props: PostsListProps) => {
     query,
     setQuery
   } = useSearch({
+    default: '',
     onQuery: async q => {
       if (query.length > 0) {
         return fetchPosts({ searchText: q })
@@ -32,7 +33,7 @@ const PostsList = (props: PostsListProps) => {
     <div class="mx-auto container">
       <Search query={query} setQuery={setQuery} />
 
-      <div class="flex flex-col gap-8 ">
+      <div class="flex flex-col gap-8">
         {(query.length > 0 ? foundPosts : posts)?.map(post => (
           <PostCard userId={props.userId} key={post.id} post={post} />
         ))}

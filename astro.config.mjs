@@ -4,9 +4,7 @@ import windi from 'astro-windi'
 
 // https://astro.build/config
 export default defineConfig({
-  experimental: {
-    viewTransitions: true
-  },
   integrations: [preact(), windi()],
-  output: 'server'
+  output: 'server',
+  server: { port: 3000 }
 })

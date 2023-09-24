@@ -1,19 +1,20 @@
 import { useRef } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 
-type UseSearchProps<T> = {
+type UseSearchProps<V, T> = {
+  default: V
   data?: T
-  onQuery: (query: string, signal?: AbortSignal) => (T | undefined) | Promise<T | undefined>
+  onQuery: (query: NonNullable<V>, signal?: AbortSignal) => (T | undefined) | Promise<T | undefined>
 }
 
-export const useSearch = <T>(props: UseSearchProps<T>) => {
+export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
   const data = useSignal(props.data)
-  const query = useSignal('')
+  const query = useSignal<V>(props.default)
   const controller = useRef<AbortController>()
 
   const isFetching = useSignal(false)
 
-  const changeQuery = async (newQuery: string) => {
+  const changeQuery = async (newQuery: V) => {
     query.value = newQuery
     if (!newQuery) {
       data.value = undefined
@@ -25,7 +26,7 @@ export const useSearch = <T>(props: UseSearchProps<T>) => {
     if (controller.current) controller.current.abort()
     controller.current = new AbortController()
     try {
-      const newData = await props.onQuery(newQuery.trim(), controller.current.signal)
+      const newData = await props.onQuery(newQuery, controller.current.signal)
       data.value = newData
       isFetching.value = false
     } catch {

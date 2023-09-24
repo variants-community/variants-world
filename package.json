@@ -11,11 +11,11 @@
     "seed:gen-chema-types": "npx tsx src/seeds/db-types.ts; npx eslint --fix ./src/db/supabase/types.ts"
   },
   "dependencies": {
-    "@astrojs/preact": "^2.2.1",
+    "@astrojs/preact": "^3.0.0",
     "@prisma/client": "^5.0.0",
     "@supabase/supabase-js": "^2.26.0",
     "@types/node": "^20.4.2",
-    "astro": "^2.8.2",
+    "astro": "^3.1.2",
     "astro-windi": "^0.0.2",
     "dotenv": "^16.3.1",
     "preact": "^10.16.0",

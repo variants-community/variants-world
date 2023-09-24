@@ -1,7 +1,7 @@
 ---
 import { getUser } from "db/supabase/auth"
+import Landing from "components/landing/Landing"
 import Layout from "layouts/Layout.astro"
-import NewPost from "components/NewPost"
 
 const user = await getUser(Astro.request)
 
@@ -11,5 +11,5 @@ if (!user) {
 ---
 
 <Layout user={user}>
-  <NewPost userId={user.id} client:idle />
+  <Landing userId={user.id} client:idle />
 </Layout>

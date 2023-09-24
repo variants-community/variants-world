@@ -1,6 +1,6 @@
 import { TimePassed } from 'components/GameInfo/TimePassed'
 import CommentIcon from 'components/icons/CommentIcon'
-import Likes from 'components/Likes'
+import Likes from 'components/likes'
 import PostTags from 'components/PostTags'
 import PostTitle from 'components/PostTitle'
 import PostUser from 'components/PostUser'

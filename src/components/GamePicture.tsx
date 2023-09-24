@@ -1,4 +1,4 @@
-import Likes from 'components/Likes'
+import Likes from 'components/likes'
 import type { PostOnUserLikes } from '@prisma/client'
 
 type GamePictureProps = {

@@ -1,17 +1,17 @@
-import { IdInput, IdInputState } from 'components/NewPost/IdInput'
+import { GameInput, GameInputStatus } from 'components/landing/GameInput'
 
-export const IdsInputs = (props: {
+export const GameInputsGroup = (props: {
   disabled: boolean
   approveIds: string[]
-  approveIdsState: IdInputState[]
+  approveIdsState: GameInputStatus[]
   changeApproveId: (id: string, index: number) => void
 }) => (
   <div class={'flex flex-wrap gap-5 mt-12 mx-auto justify-center mb-10'}>
     {props.approveIds.map((value, index) => {
       return (
-        <IdInput
+        <GameInput
           disabled={props.disabled}
-          state={props.approveIdsState[index]}
+          status={props.approveIdsState[index]}
           key={index}
           value={value}
           setValue={newValue => {

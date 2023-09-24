@@ -2,12 +2,12 @@
 import { getPostById } from "db/prisma/queries"
 import { getUser } from "db/supabase/auth"
 import AdminSettings from "components/AdminSettings"
-import Comments from "components/Comments"
+import Comments from "components/comments"
 import GameInfo from "components/GameInfo"
 import GamePicture from "components/GamePicture"
 import GameStatusCard from "components/GameStatusCard"
 import Layout from "layouts/Layout.astro"
-import Presence from "components/Presence"
+import PresentUsers from "components/presence/PresentUsers"
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const postId = parseInt(Astro.params.id!)
@@ -32,7 +32,7 @@ const userIsAuthor = user.id === post?.author.id
       <section class="container mx-auto">
         <div class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
           {post.PostDetails && userIsTester && (
-            <Presence postId={post.id} user={user} client:idle />
+            <PresentUsers postId={post.id} user={user} client:idle />
             )}
           <div class="flex lg:flex-row  flex-col gap-[10px]">
             <GamePicture

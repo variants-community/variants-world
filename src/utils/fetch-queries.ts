@@ -3,7 +3,7 @@ import type { CreateRouteResponseDataInterface } from 'pages/api/posts/create'
 import type { PostDetails } from 'services/create-post'
 import type { PostForCard } from 'db/prisma/queries'
 
-export const fetchGameById = async (gameId: string, signal?: AbortSignal) => {
+export const fetchGameById = async (gameId: number, signal?: AbortSignal) => {
   const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
   if (response.status === 200) {
     return (await response.json()) as CGABotGameDetails

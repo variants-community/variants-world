@@ -1,7 +1,7 @@
 import { getPosts, searchFor } from 'db/prisma/queries'
 import type { APIRoute } from 'astro'
 
-export const get: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url }) => {
   const page = Number(url.searchParams.get('page'))
   const limit = Number(url.searchParams.get('limit'))
   const searchText = url.searchParams.get('searchText')

@@ -1,4 +1,4 @@
-import { usePresence } from 'components/Presence/use-presence'
+import { usePresence } from 'components/presence/use-presence'
 import type { AuthentificatedUser } from 'db/supabase/auth'
 
 type PresenceProps = {
@@ -6,7 +6,7 @@ type PresenceProps = {
   user: AuthentificatedUser
 }
 
-const Presence = (props: PresenceProps) => {
+const PresentUsers = (props: PresenceProps) => {
   const { usersOnPost } = usePresence(props.postId, props.user)
   return (
     <>
@@ -25,4 +25,4 @@ const Presence = (props: PresenceProps) => {
   )
 }
 
-export default Presence
+export default PresentUsers

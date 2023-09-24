@@ -1,4 +1,4 @@
-import { useCtrlEnterToSend } from 'components/Comments/use-ctrl-enter-to-send'
+import { useCtrlEnterToSend } from 'components/comments/use-ctrl-enter-to-send'
 import type { Comment } from '@prisma/client'
 import type { Ref } from 'preact/hooks'
 

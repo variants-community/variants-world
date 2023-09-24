@@ -1,7 +1,7 @@
 import { formatDate } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 import type { Comment } from '@prisma/client'
-import type { ExtendedComment } from 'components/Comments/index'
+import type { ExtendedComment } from 'components/comments/index'
 
 type CommentsProps = {
   isUserTester: boolean

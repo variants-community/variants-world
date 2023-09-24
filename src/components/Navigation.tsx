@@ -1,5 +1,6 @@
 type NavigationProps = {
   username?: string
+  path: string
 }
 
 const Navigation = (props: NavigationProps) => {
@@ -10,7 +11,7 @@ const Navigation = (props: NavigationProps) => {
       }
     >
       <div class={'flex flex-row gap-5 sm:gap-10'}>
-        <a href={'/'} class={'text-white text-[28px]'}>
+        <a href={'/'} class={'text-white text-[28px]'} data-astro-reload={props.path === '/' ? '' : undefined}>
           Variants
         </a>
 

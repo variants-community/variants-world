@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'preact/hooks'
 import type { GameClassification, GameplayClassification } from '@prisma/client'
 
-const gameClassification = [
-  { label: 'Undefined', value: undefined },
+const gameClassification: { label: string; value?: GameClassification }[] = [
+  { label: 'Unknown', value: undefined },
   { label: 'Materialistic', value: 'MATERIALISTIC' },
   { label: 'Tactical', value: 'TACTICAL' },
   { label: 'Dynamic', value: 'DYNAMIC' },
@@ -11,8 +11,7 @@ const gameClassification = [
   { label: 'Fortune', value: 'FORTUNE' }
 ]
 
-const gameplayClassification = [
-  { label: 'Undefined', value: undefined },
+const gameplayClassification: { label: string; value: GameplayClassification }[] = [
   { label: 'First Positive', value: 'FIRST_POSITIVE' },
   { label: 'First Negative', value: 'FIRST_NEGATIVE' },
   { label: 'Second Positive', value: 'SECOND_POSITIVE' },

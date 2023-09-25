@@ -1,5 +1,5 @@
-import { User, Voice, VoteValue } from '@prisma/client'
 import { supabase } from 'db/supabase/supabase'
+import type { User, Voice, VoteValue } from '@prisma/client'
 
 export type VoiceExtended = Voice & ({ tester?: User } | undefined)
 
@@ -63,7 +63,7 @@ export const Votes = (props: VoicesProps) => {
           <li key={vote.testerId} class={'h-7 flex flex-row justify-between px-2 bg-dark darkborder rounded'}>
             <span>{vote.tester?.name}</span>
             <span class={'font-mono font-light'}>
-              {vote.value === VoteValue.POSITIVE ? 1 : vote.value === VoteValue.NEGATIVE ? -1 : 0}
+              {vote.value === 'POSITIVE' ? 1 : vote.value === 'NEGATIVE' ? -1 : 0}
             </span>
           </li>
         ))}

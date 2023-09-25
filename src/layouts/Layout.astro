@@ -46,16 +46,14 @@ const path = Astro.url.pathname
 	::-webkit-scrollbar-thumb:hover {
 		@apply bg-primary;
 	}
-.description-scrollbar::-webkit-scrollbar {
-  @apply w-[0.2rem]
-}
-.description-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-dark 
-}
-.description-scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-dark
-}
-.description-scrollbar::-webkit-scrollbar-track {
+	
+	.light-scrollbar::-webkit-scrollbar {
+		@apply w-[0.2rem]
+	}
+	.light-scrollbar::-webkit-scrollbar-thumb {
 		@apply bg-gray
-}
+	}
+	.light-scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-primary;
+	}
 </style>

@@ -119,7 +119,8 @@ export const searchFor = async (query: string) => {
     description: p.description,
     likes: p.UserLikedPosts.map(l => ({ userId: l.userId })),
     author: p.author,
-    authorUserId: p.authorUserId
+    authorUserId: p.authorUserId,
+    fen: p.fen
   }))
 
   return mapped
@@ -161,7 +162,8 @@ export const getPosts = async (skip: number, take = 5) => {
     description: p.description,
     likes: p.UserLikedPosts.map(l => ({ userId: l.userId })),
     author: p.author,
-    authorUserId: p.authorUserId
+    authorUserId: p.authorUserId,
+    fen: p.fen
   }))
 
   return mapped
@@ -189,6 +191,7 @@ export interface PostForCard {
   createdAt: Date
   updatedAt: Date
   description: string
+  fen: string
 }
 
 export interface PostDetails {
@@ -199,7 +202,7 @@ export interface PostDetails {
   notes: string | null
   voices: {
     id: number
-    postId: number
+    postDetailsId: number
     tester: User
     testerId: number
     value: VoteValue

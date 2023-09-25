@@ -4,7 +4,7 @@ import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
 import type { GameType } from '@prisma/client'
-import type { PostDetails } from 'services/post-details-validator'
+import type { PostDetails } from 'services/post-details-validator-new'
 
 type GameData = {
   userId: number
@@ -14,6 +14,7 @@ type GameData = {
 
 export const useFormData = (gameData: GameData) => {
   const errors = useSignal<Set<string>>(new Set())
+  const serverError = useSignal<string | undefined>(undefined)
 
   useEffect(() => {
     validateTitle(gameData.game.q.title)
@@ -75,13 +76,16 @@ export const useFormData = (gameData: GameData) => {
       const response = await postGameToCreatePost(data)
 
       if (response.confirmedGameId) {
-        window.location.replace(`http://localhost:3000/posts/${response.confirmedGameId}`)
+        window.location.replace(`/posts/${response.confirmedGameId}`)
+      } else {
+        serverError.value = response.error?.message
       }
     }
   }
 
   return {
     submit,
+    serverError: serverError.value,
     errors: errors.value,
     title: formData.value.title,
     changeTitle,

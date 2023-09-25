@@ -9,7 +9,7 @@ type VerdictProps = {
 export const Verdict = (props: VerdictProps) => (
   <>
     {!props.isEditMode ? (
-      <p class={'font-semibold mt-2] mb-5 text-center'}>{props.verdict}</p>
+      <p class={'font-semibold mt-2 mb-5 text-center break-words whitespace-pre-wrap'}>{props.verdict}</p>
     ) : (
       <textarea
         value={props.verdict ?? ''}

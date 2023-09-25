@@ -11,7 +11,8 @@ type PostFillingFormProps = {
 }
 
 export const PostFillingForm = (props: PostFillingFormProps) => {
-  const { submit, errors, title, changeTitle, type, changeType, description, changeDescription } = useFormData(props)
+  const { submit, errors, serverError, title, changeTitle, type, changeType, description, changeDescription } =
+    useFormData(props)
   return (
     <form
       id="post-details-form"
@@ -25,9 +26,16 @@ export const PostFillingForm = (props: PostFillingFormProps) => {
         setDescription={changeDescription}
         isInvalid={errors.has('invalidDescription')}
       />
+      <p
+        class={`h-15 flex justify-center text-[18px] text-red ${
+          serverError ? 'opacity-100' : 'opacity-0'
+        } transition-all duration-300 easy-in-out`}
+      >
+        {serverError}
+      </p>
       <button
         class={
-          'border border-border-light p-[10px] rounded-xl mt-5 hover:(shadow-light text-white) transition-all duration-300'
+          'border border-border-light p-[10px] rounded-xl mt-3 hover:(shadow-light text-white) transition-all duration-300'
         }
       >
         Post

@@ -8,7 +8,7 @@ type Props = {
 export const Screens = (props: Props) => {
   const screen = 'min-w-full transition-opacity transition-opacity'
   return (
-    <div class="relative h-full overflow-hidden">
+    <div class="relative h-full overflow-x-clip">
       <div
         class={`absolute flex w-screen pr-4 transition-inset duration-400 easy-in-out ${
           props.isSecondScreen ? 'left-[-100%]' : 'left-0'

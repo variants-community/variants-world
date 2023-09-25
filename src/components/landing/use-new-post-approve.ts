@@ -2,7 +2,7 @@ import { GameInputStatus } from 'components/landing/GameInput'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
 
-export const useNewPostApprove = (game: CGABotGameDetails | undefined) => {
+export const useGameValidation = (game: CGABotGameDetails | undefined) => {
   const approveIds = useSignal<string[]>(new Array<string>(8).fill(''))
   const approveIdsState = useSignal<GameInputStatus[]>(new Array<GameInputStatus>(8).fill(GameInputStatus.Default))
   const isApproved = useSignal(false)

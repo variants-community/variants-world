@@ -31,6 +31,7 @@ const GameInfo = (props: GameInfoProps) => {
         <div class={'flex flex-row items-center justify-between'}>
           <div class={'flex flex-row items-center gap-[10px]'}>
             <PostTitle
+              postId={props.postId}
               isEditMode={isEditMode}
               type={type}
               title={title}

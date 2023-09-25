@@ -1,17 +1,13 @@
 import type { CGABotGameDetails } from 'cgabot'
 import type { CreateRouteResponseDataInterface } from 'pages/api/posts/create'
-import type { PostDetails } from 'services/create-post'
+import type { PostDetails } from 'services/post-details-validator-new'
 import type { PostForCard } from 'db/prisma/queries'
 
 export const fetchGameById = async (gameId: number, signal?: AbortSignal) => {
-  try {
-    const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
-    if (response.status === 200) {
-      return (await response.json()) as CGABotGameDetails
-    } else {
-      return undefined
-    }
-  } catch {
+  const response = await fetch(`/api/game/${gameId}`, { method: 'get', signal })
+  if (response.status === 200) {
+    return (await response.json()) as CGABotGameDetails
+  } else {
     return undefined
   }
 }

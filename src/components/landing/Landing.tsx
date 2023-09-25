@@ -3,7 +3,7 @@ import { Screens } from 'components/landing/Screens'
 import { fetchGameById } from 'utils/fetch-queries'
 import { supabase } from 'db/supabase/supabase'
 import { useEffect } from 'preact/hooks'
-import { useNewPostApprove } from 'components/landing/use-new-post-approve'
+import { useGameValidation } from 'components/landing/use-new-post-approve'
 import { useSearch } from 'src/hooks/use-search'
 import { useSignal } from '@preact/signals'
 import FirstScreen from 'components/landing/FirstScreen'
@@ -19,7 +19,7 @@ const Landing = (props: { userId: number }) => {
     setQuery: requestGame
   } = useSearch<number | undefined, CGABotGameDetails>({ default: undefined, onQuery: fetchGameById })
 
-  const approveSlice = useNewPostApprove(game)
+  const validationSlice = useGameValidation(game)
 
   useEffect(() => {
     if (game) {
@@ -38,11 +38,11 @@ const Landing = (props: { userId: number }) => {
       <FirstScreen
         onContinue={() => (isSecondStep.value = true)}
         disabled={isGameAlredyAdded.value}
-        {...{ mainGameNr, game, loading, requestGame, ...approveSlice }}
+        {...{ mainGameNr, game, loading, requestGame, ...validationSlice }}
       />
-      {game && approveSlice.isApproved ? (
+      {game && validationSlice.isApproved ? (
         <div class={'w-full mx-auto mt-[10%] max-w-230'}>
-          <PostFillingForm userId={props.userId} game={game} approveIds={approveSlice.approveIds} />
+          <PostFillingForm userId={props.userId} game={game} approveIds={validationSlice.approveIds} />
           <button
             onClick={() => (isSecondStep.value = false)}
             class={` w-46 h-11 mx-auto sm:(ml-auto mr-2 mt-2 mb-4) text-center bg-primary  border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg ${

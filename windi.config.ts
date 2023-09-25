@@ -66,8 +66,8 @@ export default defineConfig({
       },
       colors: COLORS,
       margin: {
-        bigcenter: 'max(0px, (100vh - 950px) / 2)',
-        smallcenter: 'max(0px, (100vh - 250px) / 2)'
+        bigcenter: 'max(1rem, (100dvh - 950px) / 2)',
+        smallcenter: 'max(0dvh, (60dvh - 300px) / 2)'
       },
       letterSpacing: {
         glory: '2.55px'

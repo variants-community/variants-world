@@ -22,7 +22,7 @@ const path = Astro.url.pathname
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<ViewTransitions />
+		<ViewTransitions fallback="animate" />
 	</head>
 	<body class="bg-dark text-text overflow-y-auto!">
 		<Navigation username={user?.username} path={path}/>

@@ -108,5 +108,5 @@ export const getFormattedTimePassed = (createdAt: Date): string => {
 }
 
 export const getGamePictureUrl = (fen: string) => {
-  return `https://assets.variants.studio/image?quadratic&size=550&fen=${fen}&border=0`
+  return `https://assets.variants.studio/image?quadratic&size=550&fen=${fen}`
 }

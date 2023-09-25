@@ -18,7 +18,7 @@ type Props = {
 
 export const GameInput = (props: Props) => (
   <div class={`relative w-46 items-center ${props.disabled ? 'opacity-50' : ''} transition-all duration-300 easy-in`}>
-    <div class={'absolute left-4 text-3xl'}>
+    <div class={'absolute left-4 text-3xl pointer-events-none'}>
       <StatusIcon status={props.status} />
     </div>
 

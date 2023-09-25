@@ -2,6 +2,7 @@ import { getValueFromEvent } from 'utils/hepers'
 import type { GameType } from '@prisma/client'
 
 type PostTitleProps = {
+  postId: number
   isEditMode?: boolean
   onTypeChange?: (gameType: GameType) => void
   onTitleChange?: (title: string) => void

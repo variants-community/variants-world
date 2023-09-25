@@ -1,7 +1,4 @@
-import { GameInputStatus } from 'components/landing/GameInput'
 import { getValueFromEvent } from 'utils/hepers'
-import AcceptedIcon from 'components/icons/AcceptedIcon'
-import CrossIcon from 'components/icons/CrossIcon'
 import SpinnerIcon from 'components/icons/SpinnerIcon'
 
 type SearchProps = {
@@ -9,24 +6,24 @@ type SearchProps = {
   onChange: (value: number | undefined) => void
   collapsed: boolean
   loading: boolean
-  status: GameInputStatus
+  invalid: boolean
 }
 
 export const LandingSearch = (props: SearchProps) => (
   <div class={`relative w-auto max-w-11/12 flex items-center opacity-0 animate-postfade`}>
     <span
-      class={`absolute ${
+      class={`absolute pointer-events-none ${
         props.collapsed ? 'left-4 text-2xl' : 'md:(left-7 text-4xl mt-0) sm:(text-2xl left-6 mt-1) text-xl left-5'
       } transition-inset duration-500 ease-expo`}
     >
-      <SearchIcon status={props.loading ? GameInputStatus.Default : props.status} />
+      #
     </span>
     <input
       value={props.value ?? ''}
       onInput={e => {
         const value = getValueFromEvent(e)
-        const match = value.match(/(game\/|#)?(\d+)/)
-        props.onChange(match ? Number(match[2]) : undefined)
+        const match = value.match(/(game\/|#|^)(\d+)/)
+        props.onChange(match ? Number(match[2].slice(0, 9)) : undefined)
       }}
       class={`bg-dark pr-16 rounded-full darkborder outline-none placeholder-text
         focus:(text-text-light placeholder-text-light) transition-search w-full
@@ -42,17 +39,13 @@ export const LandingSearch = (props: SearchProps) => (
       type="text"
       placeholder={'game number or link'}
     />
-    {props.loading && <SpinnerIcon class="absolute right-7 h-6 w-6" />}
+    {props.loading && <SpinnerIcon class="absolute right-7 h-6 w-6 pointer-events-none" />}
+    <div
+      class={`absolute right-3 text-red px-3 border border-border-light rounded-full pointer-events-none ${
+        props.invalid ? 'opacity-100' : 'opacity-0'
+      } transition-opacity duration-300 easy-in`}
+    >
+      Already exist
+    </div>
   </div>
 )
-
-const SearchIcon = ({ status }: { status: GameInputStatus }) => {
-  switch (status) {
-    case GameInputStatus.Default:
-      return <span>#</span>
-    case GameInputStatus.Valid:
-      return <AcceptedIcon />
-    case GameInputStatus.Invalid:
-      return <CrossIcon class="h-3 w-3" />
-  }
-}

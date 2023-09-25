@@ -5,7 +5,7 @@ import { Picture } from 'components/landing/Picture'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import PostTags from 'components/PostTags'
 import type { CGABotGameDetails } from 'cgabot'
-import type { useNewPostApprove } from 'components/landing/use-new-post-approve'
+import type { useGameValidation } from 'components/landing/use-new-post-approve'
 
 type Props = {
   onContinue: () => void
@@ -14,7 +14,7 @@ type Props = {
   mainGameNr: number | undefined
   requestGame: (gameNr: number | undefined) => void
   loading: boolean
-} & ReturnType<typeof useNewPostApprove>
+} & ReturnType<typeof useGameValidation>
 
 const FirstScreen = (props: Props) => (
   <div class={`max-w-230 flex flex-col mx-auto items-center pb-10 transition-opacity duration-1000`}>
@@ -25,19 +25,15 @@ const FirstScreen = (props: Props) => (
       onChange={props.requestGame}
       collapsed={!!props.game}
       loading={props.loading}
+      invalid={props.disabled}
     />
 
     {props.game && (
       <div class="animate-fadefast flex flex-col items-center">
-        <div
-          class={`text-red mt-[20px] px-3 py1 border border-border-light rounded-full select-none ${
-            props.disabled ? 'opacity-100' : 'opacity-0'
-          } transition-all duration-300 easy-in`}
-        >
-          Already exist
-        </div>
-
-        <Picture />
+        <Picture
+          fen={props.game.q.startFen}
+          class={`mt-[35px] w-11/12 sm:(w-[450px] h-[450px]) rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
+        />
         <div class={'sm:w-[450px] mt-[14px]'}>
           <PostTags
             rules={[props.game.q.timeControl, ...mapRuleVariantsToString(props.game.q.ruleVariants)]}

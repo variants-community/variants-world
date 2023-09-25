@@ -1,22 +1,22 @@
-import { GameClassification, GameplayClassification } from '@prisma/client'
 import { useEffect, useState } from 'preact/hooks'
+import type { GameClassification, GameplayClassification } from '@prisma/client'
 
 const gameClassification = [
   { label: 'Undefined', value: undefined },
-  { label: 'Materialistic', value: GameClassification.MATERIALISTIC },
-  { label: 'Tactical', value: GameClassification.TACTICAL },
-  { label: 'Dynamic', value: GameClassification.DYNAMIC },
-  { label: 'Positional', value: GameClassification.POSITIONAL },
-  { label: 'Strategic', value: GameClassification.STRATEGIC },
-  { label: 'Fortune', value: GameClassification.FORTUNE }
+  { label: 'Materialistic', value: 'MATERIALISTIC' },
+  { label: 'Tactical', value: 'TACTICAL' },
+  { label: 'Dynamic', value: 'DYNAMIC' },
+  { label: 'Positional', value: 'POSITIONAL' },
+  { label: 'Strategic', value: 'STRATEGIC' },
+  { label: 'Fortune', value: 'FORTUNE' }
 ]
 
 const gameplayClassification = [
   { label: 'Undefined', value: undefined },
-  { label: 'First Positive', value: GameplayClassification.FIRST_POSITIVE },
-  { label: 'First Negative', value: GameplayClassification.FIRST_NEGATIVE },
-  { label: 'Second Positive', value: GameplayClassification.SECOND_POSITIVE },
-  { label: 'Second Negative', value: GameplayClassification.SECOND_NEGATIVE }
+  { label: 'First Positive', value: 'FIRST_POSITIVE' },
+  { label: 'First Negative', value: 'FIRST_NEGATIVE' },
+  { label: 'Second Positive', value: 'SECOND_POSITIVE' },
+  { label: 'Second Negative', value: 'SECOND_NEGATIVE' }
 ]
 
 type ClassificationProps = {
@@ -26,19 +26,35 @@ type ClassificationProps = {
   setGameplayClassification: (value: GameplayClassification) => void
 }
 
+const kek = (status?: GameplayClassification) => {
+  if (status === 'FIRST_POSITIVE') {
+    return { firtsRule: true, secondRule: false }
+  } else if (status === 'FIRST_NEGATIVE') {
+    return { firtsRule: false, secondRule: true }
+  } else if (status === 'SECOND_POSITIVE') {
+    return { firtsRule: true, secondRule: true }
+  } else if (status === 'SECOND_NEGATIVE') {
+    return { firtsRule: false, secondRule: false }
+  } else return { firtsRule: true, secondRule: true }
+}
+
 export const Classification = (props: ClassificationProps) => {
-  const [firstRule, setFirstRule] = useState<boolean>(false)
-  const [secondRule, setSecondRule] = useState<boolean>(false)
+  const [firstRule, setFirstRule] = useState<boolean>(kek(props.gameplayClassification).firtsRule)
+  const [secondRule, setSecondRule] = useState<boolean>(kek(props.gameplayClassification).secondRule)
 
   useEffect(() => {
-    if (!firstRule && secondRule) {
-      props.setGameplayClassification('FIRST_NEGATIVE')
-    } else if (firstRule && !secondRule) {
-      props.setGameplayClassification('FIRST_POSITIVE')
-    } else if (!firstRule && !secondRule) {
-      props.setGameplayClassification('SECOND_NEGATIVE')
-    } else if (firstRule && secondRule) {
-      props.setGameplayClassification('SECOND_POSITIVE')
+    if (firstRule) {
+      if (secondRule) {
+        props.setGameplayClassification('SECOND_POSITIVE')
+      } else {
+        props.setGameplayClassification('FIRST_POSITIVE')
+      }
+    } else {
+      if (secondRule) {
+        props.setGameplayClassification('FIRST_NEGATIVE')
+      } else {
+        props.setGameplayClassification('SECOND_NEGATIVE')
+      }
     }
   }, [firstRule, secondRule])
 

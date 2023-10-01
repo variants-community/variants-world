@@ -18,7 +18,6 @@ export const validatePostDetails = async (post: PostDetails) => {
     descriptionValid(post.data.description)
     await titleValid(post.data.title)
     await validApprovedGames(post.gameId, post.approveIds)
-    // await validPlayers(post.gameId, post.approveIds)
   } catch (e) {
     throw e
   }

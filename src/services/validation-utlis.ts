@@ -1,11 +1,14 @@
-import { CGABotGameDetails, getGameDetailsById } from 'cgabot'
+import { getGameDetailsById } from 'cgabot'
 import { isCGABotGameDetails } from 'utils/hepers'
 import prisma from 'db/prisma/prisma'
+import type { CGABotGameDetails } from 'cgabot'
 
 // validation constants
 const MIN_DESCRIPTION_LENGTH = 10
 const MIN_TITLE_LENGTH = 4
 const VALID_GAMES_NUMBER = 8
+const MIN_TIME_BETWEEN_GAMES = 24 * 60 * 60 * 1000
+const MIN_PLAYERS_COUNT = 9
 
 export const userExist = async (userId: number) => {
   const count = await prisma.user.count({
@@ -38,11 +41,35 @@ export const validApprovedGames = async (gameNr: string, approveIds: string[]) =
   const approveGames = gamesOrUndefined.filter(isCGABotGameDetails)
 
   const mainGameFen = generateRowFen(mainGame.q.startFen)
+  let firstDate = new Date(mainGame.endDate)
+  let lastDate = new Date(mainGame.endDate)
+
+  const palyers = new Set<number>()
+
   for (const approveGame of approveGames) {
+    palyers.add(approveGame.uid1)
+    palyers.add(approveGame.uid2)
+    palyers.add(approveGame.uid3)
+    palyers.add(approveGame.uid4)
+
     if (approveGame.isBot1 || approveGame.isBot2 || approveGame.isBot3 || approveGame.isBot4) {
       throw Error('One or more approve games contains bots')
     }
+    const approveGameDate = new Date(approveGame.date)
+    if (firstDate.getTime() - approveGameDate.getTime() > 0) firstDate = approveGameDate
+    else if (lastDate.getTime() - approveGameDate.getTime() < 0) lastDate = approveGameDate
+
     if (mainGameFen !== generateRowFen(approveGame.q.startFen)) throw Error('One or more approve games is invalid')
+  }
+
+  if (Math.abs(lastDate.getTime() - firstDate.getTime()) < MIN_TIME_BETWEEN_GAMES) {
+    console.log('time pass:', lastDate.getTime() - firstDate.getTime())
+    throw Error('Not enough time has passed between the first and last game played')
+  }
+
+  if (palyers.size < MIN_PLAYERS_COUNT) {
+    console.log('palyers.size:', palyers.size)
+    throw Error('Too few different players have played the game')
   }
 }
 

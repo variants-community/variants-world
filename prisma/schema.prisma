@@ -7,7 +7,7 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "deno"]
-  output          = "./generated"
+  output          = env("PRISMA_OUTPUT")
 }
 
 enum VoteValue {

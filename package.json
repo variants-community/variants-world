@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "postinstall": "rm -rf node_modules/.prisma; prisma generate --no-engine",
     "seed:gen-chema-types": "npx tsx src/seeds/db-types.ts; npx eslint --fix ./src/db/supabase/types.ts"
   },
   "dependencies": {

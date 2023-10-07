@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
+const def = await (import.meta.env.PROD ? import('@prisma/client/edge') : import('@prisma/client'))
 
-const prisma = new PrismaClient().$extends(withAccelerate())
+const prisma = new def.PrismaClient().$extends(withAccelerate())
 
-export default prisma
+export default def.Prisma
+export { prisma }

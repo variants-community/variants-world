@@ -1,5 +1,5 @@
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
-import prisma from 'db/prisma/prisma'
+import { prisma } from 'db/prisma/prisma'
 import type { CGABotGameDetails, CGABotRuleVariants } from 'cgabot'
 import type { GameType } from '@prisma/client'
 import type { PostDetails } from 'services/post-details-validator-new'

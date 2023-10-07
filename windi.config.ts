@@ -41,7 +41,7 @@ export default defineConfig({
       tiny: '.875rem',
       base: '1rem',
       lg: '1.125rem', // final
-      xl: '1.25rem',
+      xl: '1.25rem', // final
       '2xl': '1.5rem', // final
       '3xl': '1.75rem',
       '4xl': '2rem', // final

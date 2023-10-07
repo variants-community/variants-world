@@ -72,7 +72,8 @@ export const searchFor = async (query: string) => {
     else if (st === 'review') statuses.push('UNDER_REVIEW')
   }
 
-  const searchText = words.filter(e => e.trim().length > 0).reduce((prev, curr) => `${prev} | ${curr}`)
+  const searchText = words.filter(e => e.trim().length > 0).join('|')
+  if (!searchText) return []
 
   const posts = await prisma.post.findMany({
     where: {

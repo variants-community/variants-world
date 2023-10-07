@@ -20,16 +20,16 @@ const PostCard = (props: PostCardProps) => {
     <>
       <a
         href={`/posts/${props.post.id}`}
-        class={'w-11/12 flex flex-row mx-auto rounded-xl darkborder bg-border-light overflow-hidden'}
+        class={`w-11/12 flex mx-auto rounded-xl darkborder bg-border-light overflow-hidden flex-col sm:flex-row`}
       >
         <Picture
           fen={props.post.fen}
           id={props.post.id}
-          class={'w-30 h-30 sm:(w-55 h-55 min-w-55) rounded-l-xl bg-border-light'}
+          class={'max-w-80 mx-auto w-full sm:(w-55 h-55 min-w-55) rounded-l-xl bg-border-light'}
         />
-        <div class={'w-full flex flex-col justify-between p-2 sm:p-5 '}>
-          <div class={'flex flex-col gap-1 sm:(gap-[10px] mb-[30px] mb-0)'}>
-            <div class={'flex flex-row justify-between'}>
+        <div class={'w-full flex flex-col justify-between p-3 sm:p-5 '}>
+          <div class={'flex flex-col gap-2 mb-2 sm:(gap-3 mb-7 mb-0)'}>
+            <div class={'flex justify-between'}>
               <PostTitle postId={props.post.id} type={props.post.type} title={props.post.title} />
               <div class={'hidden sm:block'}>
                 <TimePassed from={props.post.createdAt} />
@@ -38,26 +38,20 @@ const PostCard = (props: PostCardProps) => {
 
             <PostTags
               rules={props.post.gamerules.map(rule => rule.name)}
-              class="text-text bg-dark border border-[0.4px] border-border-dark"
-              ulclass="!h-4 !sm:h-7 !text-[10px] !sm:text-[14px] !gap-1 !sm:gap-[10px]"
+              class="text-text bg-dark border border-1 border-border-dark"
+              ulclass="!sm:h-7 !text-sm !sm:text-sm !gap-1 !sm:gap-[10px]"
               iconsclass="fill-text"
             />
           </div>
           <div class={'flex flex-wrap justify-between'}>
-            <div class={'flex flex-row justify-between items-center'}>
+            <div class={'flex justify-between items-center'}>
               <PostUser user={props.post.author.name} />
             </div>
 
-            <div class={'sm:w-38 flex flex-row justify-end items-center sm:justify-end ml-auto text-[22px] gap-4'}>
-              <div class={''}>
-                <StatusIndicator status={props.post.status} />
-              </div>
-              <div class={'sm:w-min-18'}>
-                <Comments count={props.post.commentsCount} />
-              </div>
-              <div class={'sm:w-min-18'}>
-                <Likes likes={props.post.likes} postId={props.post.id} userId={props.userId} />
-              </div>
+            <div class={'sm:w-38 flex justify-end items-center sm:justify-end ml-auto gap-3 sm:gap-5'}>
+              <StatusIndicator status={props.post.status} />
+              <Comments count={props.post.commentsCount} />
+              <Likes likes={props.post.likes} postId={props.post.id} userId={props.userId} />
             </div>
           </div>
         </div>
@@ -81,7 +75,7 @@ const StatusIndicator = ({ status }: { status: GameStatus }) => {
 }
 
 const Comments = ({ count }: { count: number }) => (
-  <div class={'flex flex-row justify-end items-center gap-2 text-[16px] sm:text-[22px]'}>
+  <div class={'flex justify-end items-center gap-2 text-[16px] sm:text-[22px]'}>
     <span>{count}</span>
     <CommentIcon />
   </div>

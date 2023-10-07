@@ -1,13 +1,13 @@
 ---
-import { getPostById } from "db/prisma/queries"
-import { getUser } from "db/supabase/auth"
-import AdminSettings from "components/AdminSettings"
-import Comments from "components/comments"
-import GameInfo from "components/GameInfo"
-import GamePicture from "components/GamePicture"
-import GameStatusCard from "components/GameStatusCard"
-import Layout from "layouts/Layout.astro"
-import PresentUsers from "components/presence/PresentUsers"
+import { getPostById } from 'db/prisma/queries'
+import { getUser } from 'db/supabase/auth'
+import AdminSettings from 'components/AdminSettings'
+import Comments from 'components/comments'
+import GameInfo from 'components/GameInfo'
+import GamePicture from 'components/GamePicture'
+import GameStatusCard from 'components/GameStatusCard'
+import Layout from 'layouts/Layout.astro'
+import PresentUsers from 'components/presence/PresentUsers'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const postId = parseInt(Astro.params.id!)
@@ -16,12 +16,12 @@ const postPromise = getPostById(postId)
 const user = await getUser(Astro.request)
 
 if (!user) {
-  return Astro.redirect("/auth")
+  return Astro.redirect('/auth')
 }
 
 const post = await postPromise
 
-const userIsTester = user.role === "TESTER"
+const userIsTester = user.role === 'TESTER'
 const userIsAuthor = user.id === post?.author.id
 ---
 
@@ -29,24 +29,16 @@ const userIsAuthor = user.id === post?.author.id
   {
     post && (
       <section class="container mx-auto">
-        <div class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
-          {post.PostDetails && userIsTester && (
-            <PresentUsers postId={post.id} user={user} client:idle />
-            )}
+        <div id="card" class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
+          {post.PostDetails && userIsTester && <PresentUsers postId={post.id} user={user} client:idle />}
           <div class="flex lg:flex-row  flex-col gap-[10px]">
-            <GamePicture
-              postId={post.id}
-              userId={user.id}
-              fen={post.fen}
-              likes={post.UserLikedPosts}
-              client:load
-            />
+            <GamePicture postId={post.id} userId={user.id} fen={post.fen} likes={post.UserLikedPosts} client:load />
             <GameInfo
               postId={post.id}
               title={post.title}
               type={post.type}
-              rules={["3min", "Points", "5-check", "8th=QBRN"]}
-              rules={post.gamerules.map((rule) => rule.name)}
+              rules={['3min', 'Points', '5-check', '8th=QBRN']}
+              rules={post.gamerules.map(rule => rule.name)}
               user={post.author.name}
               createdAt={post.createdAt}
               description={post.description}
@@ -56,9 +48,7 @@ const userIsAuthor = user.id === post?.author.id
             />
           </div>
 
-          {post.PostDetails && userIsTester && (
-            <AdminSettings user={user} details={post.PostDetails} client:load />
-          )}
+          {post.PostDetails && userIsTester && <AdminSettings user={user} details={post.PostDetails} client:load />}
           {userIsTester ? (
             <GameStatusCard
               displayEditBotton
@@ -68,15 +58,33 @@ const userIsAuthor = user.id === post?.author.id
               client:load
             />
           ) : (
-            <GameStatusCard
-              postId={post.id}
-              verdict={post.verdict}
-              status={post.status}
-            />
+            <GameStatusCard postId={post.id} verdict={post.verdict} status={post.status} />
           )}
         </div>
-        <Comments isUserTester={userIsTester} userId={user.id} postId={post.id} comments={post.comments} client:visible />
+        <Comments
+          isUserTester={userIsTester}
+          userId={user.id}
+          postId={post.id}
+          comments={post.comments}
+          client:visible
+        />
       </section>
     )
   }
 </Layout>
+
+<style lang="sass" is:global>
+  @keyframes new
+    from
+      opacity: 0
+      transform: translateY(2rem)
+    to
+      opacity: 1
+      transform: translateY(0rem)
+
+  $sections: (0 gameinfo) (1 admin) (2 status) (1 likes)
+
+  @each $delay, $property in $sections
+    ::view-transition-new(card-#{$property})
+      animation: 300ms + ($delay * 100ms) ease new
+</style>

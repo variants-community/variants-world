@@ -6,12 +6,13 @@
     "dev": "astro dev",
     "start": "astro dev --host",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "dotenv -- deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
     "astro": "astro",
-    "postinstall": "rm -rf node_modules/.prisma; prisma generate --no-engine",
+    "postinstall": "rm -rf node_modules/.prisma; prisma generate --no-engine; PRISMA_OUTPUT=./generated deno run -A --unstable npm:prisma@5.4.1 generate --no-engine; cd prisma/generated/deno; cp edge.ts index.js",
     "seed:gen-chema-types": "npx tsx src/seeds/db-types.ts; npx eslint --fix ./src/db/supabase/types.ts"
   },
   "dependencies": {
+    "@astrojs/deno": "^5.0.1",
     "@astrojs/preact": "^3.0.0",
     "@prisma/client": "^5.4.1",
     "@prisma/extension-accelerate": "^0.6.2",
@@ -31,6 +32,7 @@
     "@types/cookie": "^0.5.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.44.0",
     "eslint-plugin-astro": "^0.29.0",
     "eslint-plugin-autofix": "^1.1.0",

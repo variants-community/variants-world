@@ -1,7 +1,7 @@
 import { type PostDetails, validatePostDetails } from 'services/post-details-validator-new'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { createPost } from 'services/create-post'
 import { getGameDetailsById } from 'cgabot'
+import Prisma from 'db/prisma/prisma'
 import type { APIRoute } from 'astro'
 
 interface ErrorMessage {
@@ -30,13 +30,13 @@ export const post: APIRoute = async ({ request }) => {
       } as CreateRouteResponseDataInterface)
     )
   } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) return handlePrismaError(e)
+    if (e instanceof Prisma.PrismaClientKnownRequestError) return handlePrismaError(e)
     else if (e instanceof Error) return handleError(e)
     else return handleUnknowError()
   }
 }
 
-const handlePrismaError = (e: PrismaClientKnownRequestError) => {
+const handlePrismaError = (e: Prisma.PrismaClientKnownRequestError) => {
   let errorMessage = ''
   if (e.code === 'P2002') {
     errorMessage = 'A post with this game already exists'

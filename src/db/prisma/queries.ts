@@ -1,5 +1,12 @@
-import { GameClassification, GameStatus, GameType, GameplayClassification, UserRole, VoteValue } from '@prisma/client'
-import prisma from 'db/prisma/prisma'
+import { prisma } from 'db/prisma/prisma'
+import type {
+  GameClassification,
+  GameStatus,
+  GameType,
+  GameplayClassification,
+  UserRole,
+  VoteValue
+} from '@prisma/client'
 
 export const getPostById = async (postId: number) => {
   const post = await prisma.post.findFirst({
@@ -59,10 +66,10 @@ export const searchFor = async (query: string) => {
   const statuses: GameStatus[] = []
 
   for (const st of words) {
-    if (st === 'accepted') statuses.push(GameStatus.ACCEPTED)
-    else if (st === 'declined') statuses.push(GameStatus.DECLINED)
-    else if (st === 'pending') statuses.push(GameStatus.PENDING_REPLY)
-    else if (st === 'review') statuses.push(GameStatus.UNDER_REVIEW)
+    if (st === 'accepted') statuses.push('ACCEPTED')
+    else if (st === 'declined') statuses.push('DECLINED')
+    else if (st === 'pending') statuses.push('PENDING_REPLY')
+    else if (st === 'review') statuses.push('UNDER_REVIEW')
   }
 
   const searchText = words.filter(e => e.trim().length > 0).reduce((prev, curr) => `${prev} | ${curr}`)

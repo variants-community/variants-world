@@ -1,6 +1,6 @@
 import { getGameDetailsById } from 'cgabot'
 import { isCGABotGameDetails } from 'utils/hepers'
-import prisma from 'db/prisma/prisma'
+import { prisma } from 'db/prisma/prisma'
 import type { CGABotGameDetails } from 'cgabot'
 
 // validation constants

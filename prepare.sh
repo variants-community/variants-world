@@ -1,7 +1,7 @@
 git config core.hooksPath ./git-hooks
 
 npm i
-npx prisma generate
+npx prisma generate --no-engine
 
 clear
 

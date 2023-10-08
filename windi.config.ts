@@ -89,7 +89,8 @@ export default defineConfig({
         fade: 'fade 1s linear forwards',
         fadefast: 'fade 0.5s linear forwards',
         postfade: 'postfade 0.8s 0.1s linear forwards',
-        spinning: 'spinning 1s linear infinite, fade 0.5s linear forwards'
+        spinning: 'spinning 1s linear infinite, fade 0.5s linear forwards',
+        blink: 'blink 1.5s linear forwards'
       },
       keyframes: {
         fade: {
@@ -103,6 +104,11 @@ export default defineConfig({
         spinning: {
           from: { transform: 'rotate(0deg)' },
           to: { transform: 'rotate(360deg)' }
+        },
+        blink: {
+          '0%': { 'background-color': 'var(--border-light)' },
+          '5%, 90%': { 'background-color': '#983c2d' },
+          '100%': { 'background-color': 'var(--border-light)' }
         }
       },
       transitionTimingFunction: {
@@ -110,7 +116,8 @@ export default defineConfig({
       },
       transitionProperty: {
         text: 'font-size box-shadow',
-        inset: 'font-size left right bottom top'
+        inset: 'font-size left right bottom top',
+        margin: 'margin'
       }
     }
   },
@@ -126,6 +133,14 @@ export default defineConfig({
     'transition-search': {
       transitionProperty: 'font-size, box-shadow, color, width, padding',
       transitionDuration: '500ms, 200ms, 200ms, 500ms, 500ms',
+      transitionTimingFunction: 'cubic-bezier(0.28, 0.54, 0.49, 0.88)',
+      '&::placeholder': {
+        transition: 'color 200ms cubic-bezier(0.28, 0.54, 0.49, 0.88)'
+      }
+    },
+    'transition-comments-input': {
+      transitionProperty: 'font-size, box-shadow, color, width, padding',
+      transitionDuration: '500ms, 200ms, 200ms, 500ms, 100ms',
       transitionTimingFunction: 'cubic-bezier(0.28, 0.54, 0.49, 0.88)',
       '&::placeholder': {
         transition: 'color 200ms cubic-bezier(0.28, 0.54, 0.49, 0.88)'

@@ -24,9 +24,9 @@ const path = Astro.url.pathname
 		<title>{title}</title>
 		<ViewTransitions fallback="animate" />
 	</head>
-	<body class="bg-dark text-text overflow-y-auto!">
+	<body class="bg-dark text-text overflow-y-auto! text-base">
 		<Navigation username={user?.username} path={path}/>
-		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll pl-2">
+		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll scroll-smooth pl-2 ">
 			<slot />
 		</div>
 	</body>

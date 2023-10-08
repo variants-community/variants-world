@@ -4,19 +4,19 @@ import type { FullConfig } from 'windicss/types/interfaces'
 // import plugin from 'windicss/plugin'
 
 export const COLORS = {
-  primary: '#AE4939',
-  secondary: '#D3543F',
-  green: '#61AD14',
-  blue: '#2B99EA',
-  red: '#CD2740',
-  gray: '#2D2D32',
-  yellow: '#CDBF27',
-  text: '#959595',
-  'text-light': '#A8A8A8',
-  white: '#F6F6F6',
-  dark: '#141415',
-  'border-dark': '#0E0E10',
-  'border-light': '#1E1E20'
+  primary: 'var(--primary)',
+  secondary: 'var(--secondary)',
+  green: 'var(--green)',
+  blue: 'var(--blue)',
+  red: 'var(--red)',
+  gray: 'var(--gray)',
+  yellow: 'var(--yellow)',
+  text: 'var(--text)',
+  'text-light': 'var(--text-light)',
+  white: 'var(--white)',
+  dark: 'var(--dark)',
+  'border-dark': 'var(--border-dark)',
+  'border-light': 'var(--border-light)'
 } as const satisfies NonNullable<FullConfig['theme']>['colors']
 
 export default defineConfig({

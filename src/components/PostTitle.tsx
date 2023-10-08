@@ -8,7 +8,7 @@ type PostTitleProps = {
   onTitleChange?: (title: string) => void
   type: string
   title: string
-  linkTo?: string
+  card?: true
 }
 
 const PostTitle = (props: PostTitleProps) => {
@@ -24,7 +24,11 @@ const PostTitle = (props: PostTitleProps) => {
           <option value={'NCV'}>NCV</option>
         </select>
       ) : (
-        <h1 class={'bg-gray py-[4px] px-[5px] sm:(py-[9px] px-[15px]) rounded text-[20px] sm:text-[24px]'}>
+        <h1
+          class={`bg-gray py-1 px-2 sm:(py-2 px-4) rounded text-xl sm:text-2xl leading-none ${
+            !props.card && 'cursor-default'
+          }`}
+        >
           {props.type}
         </h1>
       )}
@@ -32,12 +36,10 @@ const PostTitle = (props: PostTitleProps) => {
         <input
           value={props.title}
           onChange={e => props.onTitleChange?.(getValueFromEvent(e))}
-          class={'w-full bg-dark rounded outline-none text-[22px] text-[28px]'}
+          class={'w-full bg-dark rounded outline-none text-xl text-3xl'}
         />
       ) : (
-        <a href={props.linkTo} class={'text-[22px] sm:text-[28px]'}>
-          {props.title}
-        </a>
+        <span class={'text-xl sm:text-3xl'}>{props.title}</span>
       )}
     </div>
   )

@@ -8,7 +8,6 @@
     "baseUrl": ".",
     "paths": {
       "prisma/*": ["prisma/*"],
-      "assets/*": ["src/assets/*"],
       "cgabot": ["src/cgabot"],
       "cgabot/*": ["src/cgabot/*"],
       "components/*": ["src/components/*"],

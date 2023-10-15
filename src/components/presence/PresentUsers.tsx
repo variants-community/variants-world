@@ -15,7 +15,7 @@ const PresentUsers = (props: PresenceProps) => {
           {usersOnPost.map((user, i) => (
             <img
               class={`h-10 w-10 rounded-full ${i === 0 ? '' : 'mr-[-20px]'} order-${i + 1}`}
-              src="/src/assets/images/user.png"
+              src="/assets/images/user.png"
               title={user.username}
             />
           ))}

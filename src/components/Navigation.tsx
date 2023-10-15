@@ -27,7 +27,7 @@ const Navigation = (props: NavigationProps) => {
       {props.username && (
         <div class={'flex flex-row gap-[10px]'}>
           {props.username}
-          <img src="/src/assets/images/user.png" alt={props.username} class={'h-6'} />
+          <img src="/assets/images/user.png" alt={props.username} class={'h-6'} />
         </div>
       )}
     </nav>

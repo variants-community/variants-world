@@ -32,33 +32,42 @@ const path = Astro.url.pathname
 	</body>
 </html>
 
-<style is:global>
-	::selection {
-		background: #ff6149a4;
-		color: #e6e6e6;
-	}
-	::-webkit-scrollbar {
-		width: 0.5rem;
-	}
-	::-webkit-scrollbar-thumb {
-		@apply bg-border-light rounded-sm;
-	}
-	::-webkit-scrollbar-thumb:hover {
-		@apply bg-primary;
-	}
-	
-	.light-scrollbar::-webkit-scrollbar {
-		@apply w-[0.2rem]
-	}
-	.light-scrollbar::-webkit-scrollbar-thumb {
-		@apply bg-gray
-	}
-	.light-scrollbar::-webkit-scrollbar-thumb:hover {
-		@apply bg-primary;
-	}
+<style lang="sass" is:global>
+	::selection 
+		background: #ff6149a4
+		color: #e6e6e6
+
+	::-webkit-scrollbar
+		width: 0.5rem
+	::-webkit-scrollbar-thumb
+		@apply bg-border-light rounded-sm
+		&:hover
+			@apply bg-primary
+
+	.light-scrollbar
+		&::-webkit-scrollbar
+			@apply w-[0.2rem]
+		&::-webkit-scrollbar-thumb
+			@apply bg-gray
+			&:hover
+				@apply bg-primary
 
 	::view-transition-old(root),
-	::view-transition-new(root) {
-		animation-duration: 100ms;
-	}
+	::view-transition-new(root)
+		animation-duration: 100ms
+
+	body
+		--primary: #AE4939
+		--secondary: #D3543F
+		--green: #61AD14
+		--blue: #2B99EA
+		--red: #CD2740
+		--gray: #2D2D32
+		--yellow: #CDBF27
+		--text: #959595
+		--text-light: #A8A8A8
+		--white: #F6F6F6
+		--dark: #141415
+		--border-dark: #0E0E10
+		--border-light: #1E1E20
 </style>

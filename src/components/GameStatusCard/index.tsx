@@ -26,12 +26,12 @@ const GameStatusCard = (props: AcceptedCardProps) => {
       )} shadow-dark rounded-xl`}
       style={{ viewTransitionName: 'card-status' }}
     >
-      <Bubbles class="ml-12 mt-11 mb-5 mr-0" color={statusToColor(status)} />
+      <Bubbles class="ml-12 mt-8 mb-6 mr-0" color={statusToColor(status)} />
       <div class={'w-full mb-auto'}>
         <StatusName isEditMode={isEditMode} status={status} onChange={changeStatus} />
         <Verdict isEditMode={isEditMode} verdict={verdict} onChange={changeVerdict} />
       </div>
-      <Bubbles class="mr-12 mt-11 mb-5 transform scale-x-inverse" color={statusToColor(status)} />
+      <Bubbles class="mr-12 mt-8 mb-6 transform scale-x-inverse" color={statusToColor(status)} />
       {props.displayEditBotton && (
         <EditButton onClick={() => toggleEditMode()} class={'absolute bottom-[12px] right-[10px]'} />
       )}

@@ -14,17 +14,20 @@ const Likes = (props: LikesProps) => {
 
   return (
     <div
-      onClick={async () => {
-        if (props.clickable) toogleLike()
-      }}
+      onClick={async () => props.clickable && toogleLike()}
       aria-hidden="true"
-      class={'flex flex-row justify-end gap-2 whitespace-nowrap transition-all duration-100 cursor-pointer'}
+      class={`flex group items-center justify-end gap-2 whitespace-nowrap cursor-pointer ${
+        props.clickable && 'bg-border-light rounded-full py-2 px-3.6 shadow-dark'
+      }`}
     >
-      <span class={`text-[16px] sm:text-[22px] ${isLiked ? 'text-red' : 'text-text'}`}>
+      <span class={`text-xl sm:text-2xl select-none ${isLiked ? 'text-red font-medium' : 'text-text'}`}>
         {formatLikesCount(likesCount)}
       </span>
 
-      <LikeIcon class="hover:fill-red transition duration-100" isLiked={isLiked} />
+      <LikeIcon
+        // class={props.clickable ? 'group-hover:fill-red transition-colors duration-100' : ''}
+        isLiked={isLiked}
+      />
     </div>
   )
 }

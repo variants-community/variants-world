@@ -18,10 +18,7 @@ const GamePicture = (props: GamePictureProps) => {
         }
       >
         <Picture fen={props.fen} id={props.postId} class={'rounded-xl bg-border-light'} />
-        <div
-          class={'absolute bg-border-light rounded-full bottom-[-8px] p-[13px] right-[-6px] shadow-dark'}
-          style={{ viewTransitionName: 'card-likes' }}
-        >
+        <div class={'absolute bottom-[-8px] right-[-6px]'} style={{ viewTransitionName: 'card-likes' }}>
           <Likes clickable likes={props.likes} postId={props.postId} userId={props.userId} />
         </div>
       </div>

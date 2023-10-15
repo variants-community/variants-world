@@ -1,9 +1,8 @@
 import { fetchPosts } from 'utils/fetch-queries'
-import { useCtrlKFocus } from 'components/posts/use-focus-shortcut'
 import { useScrolLoading } from 'components/posts/use-scroll-loading'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/posts/PostCard'
-import Search from 'components/posts/Search'
+import PostsSearch from 'components/posts/PostsSearch'
 import type { PostForCard } from 'db/prisma/queries'
 
 type PostsListProps = {
@@ -20,18 +19,16 @@ const PostsList = (props: PostsListProps) => {
     setQuery
   } = useSearch({
     default: '',
-    onQuery: async q => {
-      if (query.length > 0) {
-        return fetchPosts({ searchText: q })
+    onQuery: async newQuery => {
+      if (newQuery.length > 0) {
+        return fetchPosts({ searchText: newQuery })
       }
     }
   })
 
-  useCtrlKFocus()
-
   return (
     <div class="mx-auto container pb-12">
-      <Search query={query} setQuery={setQuery} />
+      <PostsSearch query={query} setQuery={setQuery} />
 
       <div class="flex flex-col gap-8">
         {(query.length > 0 ? foundPosts : posts)?.map(post => (

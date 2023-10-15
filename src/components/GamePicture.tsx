@@ -17,8 +17,11 @@ const GamePicture = (props: GamePictureProps) => {
           'w-full sm:(w-125 h-125) flex items-center justify-center darkborder bg-border-light shadow-dark rounded-xl overflow-hidden'
         }
       >
-        <Picture fen={props.fen} id={props.postId} class={'rounded-xl'} />
-        <div class={'absolute bg-border-light rounded-full bottom-[-8px] p-[13px] right-[-6px] shadow-dark'}>
+        <Picture fen={props.fen} id={props.postId} class={'rounded-xl bg-border-light'} />
+        <div
+          class={'absolute bg-border-light rounded-full bottom-[-8px] p-[13px] right-[-6px] shadow-dark'}
+          style={{ viewTransitionName: 'card-likes' }}
+        >
           <Likes clickable likes={props.likes} postId={props.postId} userId={props.userId} />
         </div>
       </div>

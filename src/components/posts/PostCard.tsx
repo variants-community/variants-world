@@ -22,7 +22,11 @@ const PostCard = (props: PostCardProps) => {
         href={`/posts/${props.post.id}`}
         class={'w-11/12 flex flex-row mx-auto rounded-xl darkborder bg-border-light overflow-hidden'}
       >
-        <Picture fen={props.post.fen} id={props.post.id} class={'w-30 h-30 sm:(w-55 h-55 min-w-55) rounded-l-xl'} />
+        <Picture
+          fen={props.post.fen}
+          id={props.post.id}
+          class={'w-30 h-30 sm:(w-55 h-55 min-w-55) rounded-l-xl bg-border-light'}
+        />
         <div class={'w-full flex flex-col justify-between p-2 sm:p-5 '}>
           <div class={'flex flex-col gap-1 sm:(gap-[10px] mb-[30px] mb-0)'}>
             <div class={'flex flex-row justify-between'}>

@@ -24,6 +24,7 @@ const GameStatusCard = (props: AcceptedCardProps) => {
       class={`relative flex flex-row justify-between items-center text-center bg-border-light text-${statusToColor(
         status
       )} shadow-dark rounded-xl`}
+      style={{ viewTransitionName: 'card-status' }}
     >
       <Bubbles class="ml-12 mt-11 mb-5 mr-0" color={statusToColor(status)} />
       <div class={'w-full mb-auto'}>

@@ -26,6 +26,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
       class={
         'flex flex-col justify-between p-5 gap-[40px] sm:flex-col lg:(h-63 flex-row gap-0) bg-border-light shadow-dark rounded-xl'
       }
+      style={{ viewTransitionName: 'card-admin' }}
     >
       <Classification
         gameClassification={gameClassification}

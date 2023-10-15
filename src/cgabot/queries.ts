@@ -5,8 +5,7 @@ export const getGameDetailsById = async (gameId: string): Promise<CGABotGameDeta
   const fromCache = cache.get(gameId)
 
   if (fromCache) {
-    // eslint-disable-next-line no-underscore-dangle
-    console.log('[cgabot] from cache: ', fromCache._id)
+    console.log('[cgabot] from cache: ', fromCache.gameNr)
     return fromCache
   }
 
@@ -16,8 +15,7 @@ export const getGameDetailsById = async (gameId: string): Promise<CGABotGameDeta
     if (response && response.status === 200) {
       const game = (await response.json()) as CGABotGameDetails
       cache.put(gameId, game)
-      // eslint-disable-next-line no-underscore-dangle
-      console.log('[cgabot] from cgabot API: ', game._id)
+      console.log('[cgabot] from cgabot API: ', game.gameNr)
       return game
     }
   } finally {

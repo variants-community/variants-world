@@ -59,7 +59,7 @@ const CommentCard = (props: CommentCardProps) => {
       class={`w-11/12 flex bg-border-light mx-auto sm:w-125 lg:w-full p-4 gap-4 border-1 border-border-dark rounded-xl
       group filter transition-colors duration-200 ${props.isHighlighted && '!bg-[#7e3024]'}`}
     >
-      <img src="/src/assets/images/user.png" class={'h-[48px]'} />
+      <img src="/assets/images/user.png" class={'h-[48px]'} />
       <div class={'w-[calc(100%-66px)] flex flex-col gap-2'}>
         <div class={'flex justify-between'}>
           <div>

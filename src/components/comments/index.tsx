@@ -1,6 +1,7 @@
+import { type Ref, useEffect, useRef } from 'preact/hooks'
+import { addCommentQuery } from 'db/supabase/queries'
 import { useComments } from 'components/comments/use-comments'
-import { useRef } from 'preact/hooks'
-import { useReply } from 'components/comments/use-reply'
+import { useSignal } from '@preact/signals'
 import CommentInput from 'components/comments/CommentInput'
 import CommentsList from 'components/comments/CommentsList'
 import type { Comment, User } from '@prisma/client'
@@ -18,15 +19,67 @@ type CommentsProps = {
 }
 
 const Comments = (props: CommentsProps) => {
-  const textarea = useRef<HTMLTextAreaElement>(null)
+  const timer = useRef<number>()
+  const anchor = useRef<HTMLDivElement>()
+  const comment = useSignal('')
+  const reply = useSignal<Comment | undefined>(undefined)
+  const highlighted = useSignal<number | undefined>(undefined)
 
-  const { comments, postComment } = useComments(textarea, props.comments, props.postId, props.userId)
-  const { reply, onChangeReply, cancelReplyTo } = useReply(textarea)
+  useEffect(() => {
+    const onhashchange = () => {
+      const match = self.location.hash.match(/^#comment-(\d+)$/)
+      if (match) highlight(Number(match[1]))
+    }
+    onhashchange()
+    addEventListener('hashchange', onhashchange)
+    return () => {
+      removeEventListener('hashchange', onhashchange)
+    }
+  }, [])
+
+  const onReply = (sourceComment?: Comment) => {
+    reply.value = sourceComment
+    setTimeout(() => {
+      anchor.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    })
+  }
+
+  const postComment = async () => {
+    if (comment.value) {
+      await addCommentQuery(comment.value, props.postId, props.userId, reply.value?.id)
+      comment.value = ''
+      reply.value = undefined
+    }
+  }
+
+  const highlight = (id: number) => {
+    self.clearTimeout(timer.current)
+    highlighted.value = undefined
+    timer.current = self.setTimeout(() => (highlighted.value = id))
+    timer.current = self.setTimeout(() => (highlighted.value = undefined), 800)
+  }
+
+  const { comments } = useComments(props.comments, props.postId)
 
   return (
-    <div class={'flex flex-col gap-8 mb-25 sm:mx-5 lg:(mx-auto w-auto)'}>
-      <CommentsList isUserTester={props.isUserTester} comments={comments} onReply={onChangeReply} />
-      <CommentInput textarea={textarea} onSendComment={postComment} reply={reply} cancelReply={cancelReplyTo} />
+    <div class={'flex flex-col gap-8 sm:mx-5 lg:(mx-auto w-auto)'}>
+      <CommentsList
+        isUserTester={props.isUserTester}
+        comments={comments}
+        onReply={onReply}
+        highlighted={highlighted.value}
+        highlight={highlight}
+      />
+      <CommentInput
+        comment={comment}
+        postComment={postComment}
+        reply={reply.value}
+        cancelReply={() => (reply.value = undefined)}
+      />
+      <div
+        ref={anchor as Ref<HTMLDivElement>}
+        class={`pb-25 transition-margin ease-expo duration-100 ${reply.value ? 'pt-16 mt-[-4rem]' : 'pt-0'}`}
+      />
     </div>
   )
 }

@@ -1,39 +1,66 @@
-import { useCtrlEnterToSend } from 'components/comments/use-ctrl-enter-to-send'
+import { type Ref, useEffect, useRef } from 'preact/hooks'
+import { getValueFromEvent } from 'utils/hepers'
 import type { Comment } from '@prisma/client'
-import type { Ref } from 'preact/hooks'
+import type { Signal } from '@preact/signals'
 
 type CommentInputProps = {
-  onSendComment: (replyCommentId?: number) => void
+  comment: Signal<string>
+  postComment: () => void
   cancelReply: () => void
   reply?: Comment
-  textarea: Ref<HTMLTextAreaElement>
 }
 
 const CommentInput = (props: CommentInputProps) => {
-  useCtrlEnterToSend(props.textarea, async () => props.onSendComment(props.reply?.id))
+  const ref = useRef<HTMLTextAreaElement>()
+  const onKeyDown = (e: KeyboardEvent) => {
+    switch (true) {
+      case e.key === 'Enter' && e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey:
+        props.postComment()
+        break
+      case e.key === 'Escape' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey:
+        if (props.reply) props.cancelReply()
+        else ref.current?.blur()
+        break
+    }
+  }
+
+  useEffect(() => {
+    props.reply && ref.current?.focus()
+  }, [props.reply?.id])
 
   return (
     <div className={'w-11/12 mx-auto sm:w-125 lg:(mx-0 w-246)'}>
-      <div class={'rounded-xl darkborder bg-dark overflow-hidden shadow-light'}>
+      <div class={'relative'}>
         {props.reply && (
-          <div class={'flex flex-row justify-between border-b border-b-border-dark border-b-2 p-2'}>
-            <div>
-              <span class={'font-font-semibold'}>reply to:</span> <p>{props.reply.content}</p>
+          <div
+            class={
+              'absolute top-0 flex w-full bg-border-light justify-between darkborder border-b border-border-dark border-b-2 py-2 px-4 rounded-t-xl'
+            }
+          >
+            <div class={'w-[95%]'}>
+              <span class={'font-font-semibold'}>reply to:</span>
+              <p class={'whitespace-nowrap overflow-ellipsis overflow-hidden'}>{props.reply.content}</p>
             </div>
             <button onClick={() => props.cancelReply()}>cancel</button>
           </div>
         )}
         <textarea
-          ref={props.textarea}
+          ref={ref as Ref<HTMLTextAreaElement>}
+          value={props.comment.value}
+          onInput={e => (props.comment.value = getValueFromEvent(e))}
+          onKeyDown={onKeyDown}
           id="comment-input"
           placeholder={'Please be nice when you chat'}
           rows={4}
-          class={'w-full p-5 bg-dark resize-none outline-none'}
+          class={`w-full p-5 bg-dark resize-none darkborder rounded-xl outline-none transition-comments-input text-lg
+          placeholder-text shadow-lightSmall focus:(text-text-light placeholder-text-light shadow-lightSmallHover)
+           ${props.reply && 'pt-21'}`}
         />
       </div>
       <button
-        onClick={() => props.onSendComment(props.reply?.id)}
-        class={'w-46 h-11 block ml-auto mt-6 bg-primary darkborder rounded-[10px] text-white'}
+        onClick={() => props.postComment()}
+        class={`w-46 h-11 block ml-auto mt-6 bg-primary darkborder rounded-[10px] text-white
+        transition duration-100 ${!props.comment.value && 'filter grayscale-20 opacity-70 pointer-events-none'}`}
       >
         Comment
       </button>

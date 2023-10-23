@@ -1,5 +1,5 @@
 import { getValueFromEvent } from 'utils/hepers'
-import AcceptedIcon from 'components/icons/AcceptedIcon'
+import CheckMarkIcon from 'components/icons/CheckMarkIcon'
 import CrossIcon from 'components/icons/CrossIcon'
 
 export enum GameInputStatus {
@@ -40,8 +40,8 @@ const StatusIcon = ({ status }: { status: GameInputStatus }) => {
     case GameInputStatus.Default:
       return <span class={'max-w-4 text-[23px]'}>#</span>
     case GameInputStatus.Valid:
-      return <AcceptedIcon class="mt-3.7 h-3.7 max-w-3.7" />
+      return <CheckMarkIcon class="mt-3.7 h-3.7 max-w-3.7 fill-green" />
     case GameInputStatus.Invalid:
-      return <CrossIcon class="mt-3.7 h-3.7 max-w-3.7" />
+      return <CrossIcon class="mt-3.7 h-3.7 max-w-3.7 fill-red" />
   }
 }

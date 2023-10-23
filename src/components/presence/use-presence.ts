@@ -46,6 +46,6 @@ export const usePresence = (postId: number, user: AuthentificatedUser) => {
   }, [user.id])
 
   return {
-    usersOnPost: [...new Map(usersOnPost.map(u => [u.id, u])).values()].filter(u => u.id !== user.id)
+    usersOnPost
   }
 }

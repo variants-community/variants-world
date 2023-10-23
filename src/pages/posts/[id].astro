@@ -30,7 +30,10 @@ const userIsAuthor = user.id === post?.author.id
     post && (
       <section class="container mx-auto">
         <div id="card" class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
-          {post.PostDetails && userIsTester && <PresentUsers postId={post.id} user={user} client:idle />}
+          <div class={'flex flex-row items-center h-8'}>  
+            <a class="flex whitespace-nowrap" href="/posts">Back to all posts</a>
+            {post.PostDetails && <PresentUsers postId={post.id} user={user} client:idle />}
+          </div>
           <div class="flex lg:flex-row  flex-col gap-[10px]">
             <GamePicture postId={post.id} userId={user.id} fen={post.fen} likes={post.UserLikedPosts} client:load />
             <GameInfo

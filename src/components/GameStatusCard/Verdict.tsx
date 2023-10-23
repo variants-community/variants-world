@@ -15,8 +15,8 @@ export const Verdict = (props: VerdictProps) => (
         value={props.verdict ?? ''}
         onChange={e => props.onChange(getValueFromEvent(e))}
         type="text"
-        rows={4}
-        class={'w-full bg-dark rounded font-semibold mt-2 mb-5 text-center outline-none'}
+        rows={3}
+        class={'w-full bg-dark rounded font-semibold mt-2 mb-5 text-center outline-none darkborder'}
       />
     )}
   </>

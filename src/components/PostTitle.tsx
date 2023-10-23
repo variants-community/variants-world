@@ -1,3 +1,4 @@
+import { Input } from 'components/common/Input'
 import { getValueFromEvent } from 'utils/hepers'
 import type { GameType } from '@prisma/client'
 
@@ -6,6 +7,7 @@ type PostTitleProps = {
   isEditMode?: boolean
   onTypeChange?: (gameType: GameType) => void
   onTitleChange?: (title: string) => void
+  onApply?: () => void
   type: string
   title: string
   card?: true
@@ -13,33 +15,34 @@ type PostTitleProps = {
 
 const PostTitle = (props: PostTitleProps) => {
   return (
-    <div class={'flex flex-row items-center text-white gap-2 sm:gap-4 font-semibold'}>
+    <div class={'flex flex-row items-center w-full text-white gap-2 sm:gap-4 font-semibold'}>
       {props.isEditMode ? (
         <select
           value={props.type}
           onChange={e => props.onTypeChange?.(getValueFromEvent<GameType>(e))}
-          class={'bg-gray py-[4px] px-[5px] sm:(py-[7px] px-[10px]) rounded outline-none text-[20px] sm:text-[24px]'}
+          class=" py-1 px-2 sm:(py-2 px-1.5) text-white bg-dark darkborder rounded outline-none appearance-none text-xl sm:text-2xl leading-none text-center"
         >
-          <option value={'WOF'}>WOF</option>
+          <option value={'WOF'}>WoF</option>
           <option value={'NCV'}>NCV</option>
         </select>
       ) : (
-        <h1
-          class={`bg-gray py-1 px-2 sm:(py-2 px-4) rounded text-xl sm:text-2xl leading-none ${
+        <h2
+          class={`flex bg-gray py-1 px-2 sm:(py-2 px-2.5) rounded text-xl sm:text-2xl leading-none ${
             !props.card && 'cursor-default'
           }`}
         >
           {props.type}
-        </h1>
+        </h2>
       )}
       {props.isEditMode ? (
-        <input
+        <Input
           value={props.title}
-          onChange={e => props.onTitleChange?.(getValueFromEvent(e))}
-          class={'w-full bg-dark rounded outline-none text-xl text-3xl'}
+          onInput={e => props.onTitleChange?.(getValueFromEvent(e))}
+          onCtrlEnter={props.onApply}
+          class={'w-full bg-dark rounded outline-none text-xl text-3xl darkborder'}
         />
       ) : (
-        <span class={'text-xl sm:text-3xl'}>{props.title}</span>
+        <h1 class={'w-full text-xl sm:text-3xl overflow-hidden overflow-ellipsis whitespace-nowrap'}>{props.title}</h1>
       )}
     </div>
   )

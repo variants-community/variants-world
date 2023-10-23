@@ -9,19 +9,17 @@ type PresenceProps = {
 const PresentUsers = (props: PresenceProps) => {
   const { usersOnPost } = usePresence(props.postId, props.user)
   return (
-    <>
-      {usersOnPost.length > 0 && (
-        <div class={'flex flex-row justify-end items-center'}>
-          {usersOnPost.map((user, i) => (
-            <img
-              class={`h-10 w-10 rounded-full ${i === 0 ? '' : 'mr-[-20px]'} order-${i + 1}`}
-              src="/assets/images/user.png"
-              title={user.username}
-            />
-          ))}
-        </div>
-      )}
-    </>
+    <div class={'flex flex-row-reverse w-full py-3'}>
+      {usersOnPost.map((user, i) => (
+        <img
+          key={`${user.id}${i}`}
+          class={`h-8 w-8 rounded-full ring-primary ring-3 shadow-dark
+          ${i ? 'mr-[-5px]' : ''}`}
+          src="/assets/images/user.png"
+          title={user.username}
+        />
+      ))}
+    </div>
   )
 }
 

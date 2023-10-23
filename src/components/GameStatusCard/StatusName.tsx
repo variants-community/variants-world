@@ -23,7 +23,9 @@ export const StatusName = (props: StatusNameProps) => (
         value={props.status}
         onChange={e => props.onChange(getValueFromEvent(e))}
         type="text"
-        class={'block mx-auto mt-4 text-center text-[40px] font-semibold rounded bg-dark outline-none'}
+        class={
+          'block mx-auto mt-4 px-2 py-0.75 text-center text-[30px] darkborder rounded bg-dark outline-none appearance-none'
+        }
       >
         {statuses.map((status, i) => (
           <option key={i} value={status.value}>

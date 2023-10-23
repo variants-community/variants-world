@@ -1,16 +1,17 @@
 import { supabase } from 'db/supabase/supabase'
 import { useEffect } from 'preact/hooks'
-import type { GameStatus } from '@prisma/client'
+import type { GameType } from '@prisma/client'
 
-type PostResolution = {
-  verdict: string
-  status: GameStatus
+type PostInfo = {
+  type: GameType
+  title: string
+  description: string
 }
 
-export const usePostStatus = (postId: number, updateData: (data: PostResolution) => void) => {
+export const usePostInfo = (postId: number, updateData: (data: PostInfo) => void) => {
   useEffect(() => {
     const channel = supabase
-      .channel('game-status-card')
+      .channel('game-info')
       .on(
         'postgres_changes',
         {
@@ -19,12 +20,12 @@ export const usePostStatus = (postId: number, updateData: (data: PostResolution)
           table: 'Post',
           filter: `id=eq.${postId}`
         },
-        payload => {
+        payload =>
           updateData({
-            status: payload.new.status,
-            verdict: payload.new.verdict
-          } as PostResolution)
-        }
+            type: payload.new.type,
+            title: payload.new.title,
+            description: payload.new.description
+          } as PostInfo)
       )
       .subscribe()
 

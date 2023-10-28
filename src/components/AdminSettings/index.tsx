@@ -16,6 +16,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
     gameplayClassification,
     notes,
     votes,
+    setVotes,
     onChangeGameClassification,
     setGameplayClassificationOnChange,
     onChangeNotes
@@ -34,7 +35,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
         gameplayClassification={gameplayClassification}
         setGameplayClassification={setGameplayClassificationOnChange}
       />
-      <Votes voces={votes} testerId={props.user.id} postDetailsId={props.details.id} />
+      <Votes voces={votes} testerId={props.user.id} postDetailsId={props.details.id} setVotes={setVotes} />
       <Notes notes={notes} onChangeNotes={onChangeNotes} />
     </div>
   )

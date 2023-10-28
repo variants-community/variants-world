@@ -7,6 +7,7 @@ type VoicesProps = {
   postDetailsId: number
   testerId: number
   voces: VoiceExtended[]
+  setVotes: (voces: VoiceExtended[]) => void
 }
 
 export const Votes = (props: VoicesProps) => {
@@ -24,6 +25,11 @@ export const Votes = (props: VoicesProps) => {
       .eq('testerId', props.testerId)
   }
 
+  const setVotes = (value: VoteValue) => {
+    const updated = props.voces.map(voice => (voice.testerId === props.testerId ? { ...voice, value } : voice))
+    props.setVotes(updated)
+  }
+
   const testerVoice = props.voces.find(voice => voice.testerId === props.testerId)
 
   return (
@@ -32,7 +38,10 @@ export const Votes = (props: VoicesProps) => {
         <h2 class={'text-primary font-semibold'}>Votes</h2>
         <div class={'flex flex-row gap-1 text-white text-[14px] transition-all duration-300'}>
           <button
-            onClick={async () => onVoice('NEGATIVE')}
+            onClick={async () => {
+              setVotes('NEGATIVE')
+              onVoice('NEGATIVE')
+            }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVoice && testerVoice.value === 'NEGATIVE' ? 'bg-primary' : 'hover:bg-primary'
             }`}
@@ -40,7 +49,10 @@ export const Votes = (props: VoicesProps) => {
             -1
           </button>
           <button
-            onClick={async () => onVoice('NEUTRAL')}
+            onClick={async () => {
+              setVotes('NEUTRAL')
+              onVoice('NEUTRAL')
+            }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVoice && testerVoice.value === 'NEUTRAL' ? 'bg-primary' : 'hover:bg-primary'
             }`}
@@ -48,7 +60,10 @@ export const Votes = (props: VoicesProps) => {
             +0
           </button>
           <button
-            onClick={async () => onVoice('POSITIVE')}
+            onClick={async () => {
+              setVotes('POSITIVE')
+              onVoice('POSITIVE')
+            }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVoice && testerVoice.value === 'POSITIVE' ? 'bg-primary' : 'hover:bg-primary'
             }`}

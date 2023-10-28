@@ -116,6 +116,7 @@ export const useAdminSettings = (details: PostDetails) => {
     gameplayClassification,
     notes,
     votes,
+    setVotes,
     onChangeGameClassification,
     setGameplayClassificationOnChange,
     onChangeNotes

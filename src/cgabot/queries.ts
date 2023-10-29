@@ -1,8 +1,8 @@
 import { CGABotToken, CGABotUrl, cache } from 'cgabot/config'
 import type { CGABotGameDetails } from 'cgabot/interface'
 
-export const getGameDetailsById = async (gameId: string): Promise<CGABotGameDetails | undefined> => {
-  const fromCache = cache.get(gameId)
+export const getGameDetailsById = async (gameNr: string): Promise<CGABotGameDetails | undefined> => {
+  const fromCache = cache.get(gameNr)
 
   if (fromCache) {
     console.log('[cgabot] from cache: ', fromCache.gameNr)
@@ -10,11 +10,11 @@ export const getGameDetailsById = async (gameId: string): Promise<CGABotGameDeta
   }
 
   try {
-    const response = await fetch(`${CGABotUrl}/game/${gameId}?${new URLSearchParams({ token: CGABotToken })}`)
+    const response = await fetch(`${CGABotUrl}/game/${gameNr}?${new URLSearchParams({ token: CGABotToken })}`)
 
     if (response && response.status === 200) {
       const game = (await response.json()) as CGABotGameDetails
-      cache.put(gameId, game)
+      cache.put(gameNr, game)
       console.log('[cgabot] from cgabot API: ', game.gameNr)
       return game
     }

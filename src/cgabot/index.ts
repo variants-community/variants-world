@@ -1,4 +1,2 @@
-import { getGameDetailsById } from 'cgabot/queries'
-import type { CGABotGameDetails, CGABotQ, CGABotRuleVariants } from 'cgabot/interface'
-
-export { getGameDetailsById, CGABotGameDetails, CGABotQ, CGABotRuleVariants }
+export { getGameDetailsById } from 'cgabot/queries'
+export type { CGABotGameDetails, CGABotQ, CGABotRuleVariants } from 'cgabot/interface'

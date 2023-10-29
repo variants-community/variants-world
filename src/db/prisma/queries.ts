@@ -1,4 +1,6 @@
+import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import { prisma } from 'db/prisma/prisma'
+import type { CGABotGameDetails } from 'cgabot'
 import type {
   GameClassification,
   GameStatus,
@@ -7,6 +9,47 @@ import type {
   UserRole,
   VoteValue
 } from '@prisma/client'
+
+export const doesUserExist = async (userId: number) => (await prisma.user.count({ where: { id: userId } })) === 1
+
+export const doesPostWithTitleExist = async (title: string) => (await prisma.post.count({ where: { title } })) === 0
+
+export interface CreatePostDetails {
+  userId: number
+  gameNr: string
+  approveIds: string[]
+  data: {
+    description: string
+    title: string
+    type: 'NCV' | 'WOF'
+  }
+}
+
+export const createPost = async (mainGame: CGABotGameDetails, postDetailsDTO: CreatePostDetails) => {
+  const rules = mapRuleVariantsToString(mainGame.q.ruleVariants).map(rule => ({ name: rule }))
+  const post = await prisma.post.create({
+    data: {
+      gameNr: mainGame.gameNr,
+      fen: mainGame.q.startFen,
+      title: postDetailsDTO.data.title,
+      authorUserId: postDetailsDTO.userId,
+      description: postDetailsDTO.data.description,
+      status: 'UNDER_REVIEW',
+      variantLink: postDetailsDTO.data.title,
+      type: (postDetailsDTO.data.type as GameType) ?? 'NCV',
+      PostDetails: { create: {} },
+      gamerules: {
+        connectOrCreate: [...rules, { name: mainGame.q.timeControl }].map(rule => ({
+          where: { name: rule.name },
+          create: { name: rule.name }
+        }))
+      }
+    },
+    select: { id: true }
+  })
+
+  return post.id
+}
 
 export const getPostById = async (postId: number) => {
   const post = await prisma.post.findFirst({

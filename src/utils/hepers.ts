@@ -3,8 +3,8 @@ import type { GameStatus } from '@prisma/client'
 
 export const getValueFromEvent = <Type = string>(e: Event) => (e.target as HTMLInputElement).value as Type
 
-export const isIdValid = (gameId: string): boolean => {
-  return /^\d+$/.test(gameId)
+export const isIdValid = (gameNr: string): boolean => {
+  return /^\d+$/.test(gameNr)
 }
 
 export const isTitleValid = (title: string): boolean => {
@@ -109,4 +109,40 @@ export const getFormattedTimePassed = (createdAt: Date): string => {
 
 export const getGamePictureUrl = (fen: string) => {
   return `https://assets.variants.studio/image?quadratic&size=550&fen=${fen}`
+}
+
+export const similar = (first: string, second: string, caseSensitive = true) => {
+  let longer = first.toString()
+  let shorter = second
+  if (first.length < second.length) {
+    longer = second
+    shorter = first.toString()
+  }
+  const longerLength = longer.length
+  if (longerLength === 0) return 1
+  return (longerLength - diffs(longer, shorter, caseSensitive)) / longerLength
+}
+
+const diffs = (s1: string, s2: string, caseSensitive: boolean) => {
+  if (caseSensitive) {
+    s1 = s1.toLowerCase()
+    s2 = s2.toLowerCase()
+  }
+  const a: number[] = []
+  for (let i = 0; i <= s1.length; i++) {
+    let lastValue = i
+    for (let j = 0; j <= s2.length; j++) {
+      if (i === 0) a[j] = j
+      else {
+        if (j > 0) {
+          let newValue = a[j - 1]
+          if (s1.charAt(i - 1) !== s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), a[j]) + 1
+          a[j - 1] = lastValue
+          lastValue = newValue
+        }
+      }
+    }
+    if (i > 0) a[s2.length] = lastValue
+  }
+  return a[s2.length]
 }

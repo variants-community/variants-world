@@ -1,10 +1,11 @@
+import { descriptionValid } from 'utils/post-validation'
 import { postGameToCreatePost } from 'utils/fetch-queries'
 import { supabase } from 'db/supabase/supabase'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
+import type { CreatePostDetails } from 'db/prisma/queries'
 import type { GameType } from '@prisma/client'
-import type { PostDetails } from 'services/post-details-validator-new'
 
 type GameData = {
   userId: number
@@ -30,8 +31,12 @@ export const useFormData = (gameData: GameData) => {
 
   const validateDescription = (description: string) => {
     const temp = new Set(errors.value)
-    if (description.trim().length < 10) temp.add('invalidDescription')
-    else temp.delete('invalidDescription')
+    try {
+      descriptionValid(description)
+      temp.delete('invalidDescription')
+    } catch {
+      temp.add('invalidDescription')
+    }
     errors.value = temp
   }
 
@@ -62,13 +67,13 @@ export const useFormData = (gameData: GameData) => {
     await validateTitle(formData.value.title)
 
     if (errors.value.size === 0) {
-      const data: PostDetails = {
+      const data: CreatePostDetails = {
         data: {
           description: formData.value.description,
           title: formData.value.title,
           type: formData.value.type
         },
-        gameId: gameData.game.gameNr.toString(),
+        gameNr: gameData.game.gameNr.toString(),
         approveIds: gameData.approveIds,
         userId: gameData.userId
       }

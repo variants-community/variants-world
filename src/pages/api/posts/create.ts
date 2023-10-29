@@ -1,6 +1,6 @@
-import { type PostDetails, validatePostDetails } from 'services/post-details-validator-new'
-import { createPost } from 'services/create-post'
-import { getGameDetailsById } from 'cgabot'
+import { type CreatePostDetails, createPost, doesPostWithTitleExist, doesUserExist } from 'db/prisma/queries'
+import { descriptionValid, doesGameExist, titleValid } from 'utils/post-validation'
+import { handleError, handlePrismaError, handleUnknowError } from 'utils/errors'
 import Prisma from 'db/prisma/prisma'
 import type { APIRoute } from 'astro'
 
@@ -14,16 +14,18 @@ export interface CreateRouteResponseDataInterface {
   error?: ErrorMessage
 }
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
-    const postDetails = (await request.json()) as PostDetails
-    await validatePostDetails(postDetails)
-    const game = await getGameDetailsById(postDetails.gameId)
-    // TODO: handle `game` being undefined
-    // "handle `game` being undefined" -- if the game is undefined,
-    // an exception will be thrown at the validation stage ( parseAsync(...) )
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const id = await createPost(game!, postDetails) // the game has already been validate and exist
+    const details = (await request.json()) as CreatePostDetails
+    const [game] = await Promise.all([
+      doesGameExist(details.gameNr),
+      doesUserExist(details.userId),
+      descriptionValid(details.data.description),
+      titleValid(details.data.title),
+      doesPostWithTitleExist(details.data.title)
+    ])
+
+    const id = await createPost(game, details) // the game has already been validate and exist
     return new Response(
       JSON.stringify({
         confirmedGameId: id
@@ -34,37 +36,4 @@ export const post: APIRoute = async ({ request }) => {
     else if (e instanceof Error) return handleError(e)
     else return handleUnknowError()
   }
-}
-
-const handlePrismaError = (e: Prisma.PrismaClientKnownRequestError) => {
-  let errorMessage = ''
-  if (e.code === 'P2002') {
-    errorMessage = 'A post with this game already exists'
-  } else {
-    errorMessage = 'Unknow error.'
-  }
-  return new Response(
-    JSON.stringify({
-      error: { message: errorMessage }
-    } as CreateRouteResponseDataInterface),
-    { status: 500 }
-  )
-}
-
-const handleError = (e: Error) => {
-  return new Response(
-    JSON.stringify({
-      error: { message: e.message }
-    } as CreateRouteResponseDataInterface),
-    { status: 500 }
-  )
-}
-
-const handleUnknowError = () => {
-  return new Response(
-    JSON.stringify({
-      error: { message: 'Error' }
-    } as CreateRouteResponseDataInterface),
-    { status: 500 }
-  )
 }

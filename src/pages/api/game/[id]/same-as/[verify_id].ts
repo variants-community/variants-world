@@ -1,7 +1,7 @@
 /* eslint-disable filenames/match-regex */
 import { getGameDetailsById } from 'cgabot'
 import { isIdValid } from 'utils/hepers'
-import { isValidSimilarity } from 'services/validation-utlis'
+import { isValidSimilarity } from 'utils/games-validation'
 import type { APIRoute } from 'astro'
 
 export const GET: APIRoute = async ({ params }) => {

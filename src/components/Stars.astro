@@ -1,0 +1,98 @@
+---
+const randomInt = (min: number, max: number) => Math.floor(Math.random() * max + min)
+const randomNum = (min: number, max: number) => Math.max(Math.random() * max, min).toFixed(1)
+
+const layersNum = 10
+const zoomMs = 10
+const blinkMs = 15
+const iterations = 1
+
+const layers = Array.from({ length: layersNum }, (_, nth) => ({
+  stars: Array.from({ length: 100 }, () => ({
+    left: `${randomInt(1, 100)}%`,
+    top: `${randomInt(1, 100)}%`,
+    transform: `scale(${randomNum(0.4, 1)})`,
+    opacity: randomNum(0.6, 1)
+  })),
+  styles: {
+    animationDuration: `${zoomMs}s, ${blinkMs}s`,
+    animationDelay: `${(zoomMs / layersNum) * nth}s, ${(blinkMs / layersNum) * (nth - 1) + zoomMs * iterations}s`,
+    animationIterationCount: `${iterations}, infinite`
+  }
+}))
+---
+
+<div class="layers">
+  {
+    layers.map(({ stars, styles }) => (
+      <div class="layer" style={styles}>
+        {stars.map(star => (
+          <span class="star" style={star} />
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<style lang="sass">
+  .layers
+    width: 100%
+    height: 100%
+    position: fixed
+    overflow: hidden
+    top: 3rem
+    pointer-events: none
+    z-index: -1
+    // animation: colors 10s linear infinite
+
+  .layer
+    width: 100%
+    height: 100%
+    position: absolute
+    opacity: 0
+    animation-name: zoom, blink
+    animation-timing-function: linear
+
+  .star
+    width: 3px
+    height: 3px
+    position: absolute
+    background-color: white
+    border-radius: 100%
+
+    // box-shadow: 0 0 18px 2px white
+    // background-color: #52fff8
+
+    // box-shadow: 0 0 0 10px #52fff8
+    // filter: opacity(0.8)
+
+  @keyframes zoom
+    0%
+      transform: scale(0.1)
+      opacity: 0
+
+    75%
+      opacity: 1
+
+    100%
+      transform: scale(2)
+      opacity: 0
+
+  @keyframes blink
+    0%
+      transform: translateY(-5%) scale(1)
+      opacity: 0
+
+    75%
+      opacity: 1
+
+    100%
+      transform: translateY(15%) scale(1.5)
+      opacity: 0
+
+  // @keyframes colors
+  //   0%
+  //     filter: hue-rotate(0deg)
+  //   100%
+  //     filter: hue-rotate(360deg)
+</style>

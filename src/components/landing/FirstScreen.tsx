@@ -18,6 +18,8 @@ type Props = {
 
 const FirstScreen = (props: Props) => (
   <div class={`max-w-230 flex flex-col mx-auto items-center pb-10 transition-opacity duration-1000`}>
+    <div class={`fixed inset-0 top-12 bg-dark -z-1 transition-opacity duration-200 opacity-${props.game ? 60 : 0}`} />
+
     <LandingTitle collapsed={!!props.game} />
 
     <LandingSearch

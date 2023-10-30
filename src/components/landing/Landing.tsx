@@ -30,6 +30,8 @@ const Landing = (props: { userId: number }) => {
 
       // eslint-disable-next-line github/no-then
       gameIsAlredyAdded(game).then(result => (isGameAlredyAdded.value = result))
+    } else {
+      isGameAlredyAdded.value = false
     }
   }, [game])
 

@@ -65,7 +65,7 @@ export const LandingSearch = (props: SearchProps) => {
           props.invalid ? 'opacity-100' : 'opacity-0'
         } transition-opacity duration-300 easy-in`}
       >
-        Already exist
+        Already posted
       </div>
     </div>
   )

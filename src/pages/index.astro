@@ -1,15 +1,17 @@
 ---
-import { getUser } from "db/supabase/auth"
-import Landing from "components/landing/Landing"
-import Layout from "layouts/Layout.astro"
+import { getUser } from 'db/supabase/auth'
+import Landing from 'components/landing/Landing'
+import Layout from 'layouts/Layout.astro'
+import Stars from 'components/Stars.astro'
 
 const user = await getUser(Astro.request)
 
 if (!user) {
-  return Astro.redirect("/auth")
+  return Astro.redirect('/auth')
 }
 ---
 
 <Layout user={user}>
+  <Stars />
   <Landing userId={user.id} client:idle />
 </Layout>

@@ -16,7 +16,7 @@ export const LandingSearch = (props: SearchProps) => {
   useEffect(() => {
     const onShortcut = (e: KeyboardEvent) => {
       if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey || !ref.current) return
-      if (e.key === ' ' && !props.collapsed) ref.current.focus()
+      if (e.key === ' ' && document.activeElement === document.body) ref.current.focus()
       else if (e.key === 'Escape' && ref.current === document.activeElement) ref.current?.blur()
       else return
       e.preventDefault()

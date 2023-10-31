@@ -65,6 +65,9 @@ export default defineConfig({
         }
       },
       colors: COLORS,
+      width: {
+        fit: 'fit-content'
+      },
       margin: {
         bigcenter: 'max(1rem, (100dvh - 950px) / 2)',
         smallcenter: 'max(0dvh, (60dvh - 300px) / 2)'

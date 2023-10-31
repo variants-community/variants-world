@@ -1,4 +1,4 @@
-import { GameInput, GameInputStatus } from 'components/landing/GameInput'
+import { GameInput, GameInputStatus } from 'components/landing/first/GameInput'
 
 export const GameInputsGroup = (props: {
   disabled: boolean

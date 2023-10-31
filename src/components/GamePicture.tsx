@@ -1,4 +1,4 @@
-import { Picture } from 'components/landing/Picture'
+import { Picture } from 'components/common/Picture'
 import Likes from 'components/likes'
 import type { PostOnUserLikes } from '@prisma/client'
 

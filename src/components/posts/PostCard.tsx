@@ -1,4 +1,4 @@
-import { Picture } from 'components/landing/Picture'
+import { Picture } from 'components/common/Picture'
 import { TimePassed } from 'components/GameInfo/TimePassed'
 import CommentIcon from 'components/icons/CommentIcon'
 import Likes from 'components/likes'

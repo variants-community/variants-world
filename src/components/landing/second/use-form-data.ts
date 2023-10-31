@@ -47,22 +47,20 @@ export const useFormData = (gameData: GameData) => {
   })
 
   const changeTitle = async (title: string) => {
-    formData.value.title = title
+    formData.value = { ...formData.value, title }
     await validateTitle(title)
   }
 
   const changeType = (type: GameType) => {
-    formData.value.type = type
+    formData.value = { ...formData.value, type }
   }
 
   const changeDescription = (description: string) => {
-    formData.value.description = description
+    formData.value = { ...formData.value, description }
     validateDescription(description)
   }
 
-  const submit = async (e: Event) => {
-    e.preventDefault()
-
+  const submit = async () => {
     validateDescription(formData.value.description)
     await validateTitle(formData.value.title)
 

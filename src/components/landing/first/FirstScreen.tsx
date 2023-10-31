@@ -1,7 +1,7 @@
-import { GameInputsGroup } from 'components/landing/GameInputsGroup'
-import { LandingSearch } from 'components/landing/LandingSearch'
-import { LandingTitle } from 'components/landing/LandingTitle'
-import { Picture } from 'components/landing/Picture'
+import { GameInputsGroup } from 'components/landing/first/GameInputsGroup'
+import { LandingSearch } from 'components/landing/first/LandingSearch'
+import { LandingTitle } from 'components/landing/first/LandingTitle'
+import { Picture } from 'components/common/Picture'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import PostTags from 'components/PostTags'
 import type { CGABotGameDetails } from 'cgabot'
@@ -18,8 +18,6 @@ type Props = {
 
 const FirstScreen = (props: Props) => (
   <div class={`max-w-230 flex flex-col mx-auto items-center pb-10 transition-opacity duration-1000`}>
-    <div class={`fixed inset-0 top-12 bg-dark -z-1 transition-opacity duration-200 opacity-${props.game ? 60 : 0}`} />
-
     <LandingTitle collapsed={!!props.game} />
 
     <LandingSearch
@@ -34,7 +32,7 @@ const FirstScreen = (props: Props) => (
       <div class="animate-fadefast flex flex-col items-center">
         <Picture
           fen={props.game.q.startFen}
-          class={`mt-[35px] w-11/12 sm:(w-[450px] h-[450px]) rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
+          class={`mt-[35px] w-11/12 sm:(w-[450px] h-[450px]) bg-dark rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
         />
         <div class={'sm:w-[450px] mt-[14px]'}>
           <PostTags
@@ -55,7 +53,7 @@ const FirstScreen = (props: Props) => (
             onClick={props.onContinue}
             class={` w-46 h-11 mx-auto sm:(ml-auto mr-2 mt-2 mb-4) text-center bg-primary  border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg ${
               props.disabled ? 'opacity-50 cursor-default' : 'hover:bg-secondary'
-            } transition-all duration-300 easy-in`}
+            } transition-colors duration-100 easy-in`}
           >
             Continue
           </button>

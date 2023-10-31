@@ -1,4 +1,3 @@
-import { PostFillingForm } from 'components/PostFillingForm'
 import { Screens } from 'components/landing/Screens'
 import { fetchGameById } from 'utils/fetch-queries'
 import { supabase } from 'db/supabase/supabase'
@@ -6,7 +5,8 @@ import { useEffect } from 'preact/hooks'
 import { useGameValidation } from 'components/landing/use-new-post-approve'
 import { useSearch } from 'src/hooks/use-search'
 import { useSignal } from '@preact/signals'
-import FirstScreen from 'components/landing/FirstScreen'
+import FirstScreen from 'components/landing/first/FirstScreen'
+import SecondScreen from 'components/landing/second/SecondScreen'
 import type { CGABotGameDetails } from 'cgabot'
 
 const Landing = (props: { userId: number }) => {
@@ -36,28 +36,26 @@ const Landing = (props: { userId: number }) => {
   }, [game])
 
   return (
-    <Screens isSecondScreen={isSecondStep.value}>
-      <FirstScreen
-        onContinue={() => (isSecondStep.value = true)}
-        disabled={isGameAlredyAdded.value}
-        {...{ mainGameNr, game, loading, requestGame, ...validationSlice }}
+    <>
+      <div
+        class={`fixed inset-0 top-12 bg-dark -z-1 transition-opacity duration-200 ${game ? 'opacity-60' : 'opacity-0'}`}
       />
-      {game && validationSlice.isApproved ? (
-        <div class={'w-full mx-auto mt-[10%] max-w-230'}>
-          <PostFillingForm userId={props.userId} game={game} approveIds={validationSlice.approveIds} />
-          <button
-            onClick={() => (isSecondStep.value = false)}
-            class={` w-46 h-11 mx-auto sm:(ml-auto mr-2 mt-2 mb-4) text-center bg-primary  border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg ${
-              isGameAlredyAdded.value ? 'opacity-50 cursor-default' : 'hover:bg-secondary'
-            } transition-all duration-300 easy-in`}
-          >
-            Back
-          </button>
-        </div>
-      ) : (
-        <></>
-      )}
-    </Screens>
+      <Screens isSecondScreen={isSecondStep.value}>
+        <FirstScreen
+          onContinue={() => (isSecondStep.value = true)}
+          disabled={isGameAlredyAdded.value}
+          {...{ mainGameNr, game, loading, requestGame, ...validationSlice }}
+        />
+        {game && validationSlice.isApproved && (
+          <SecondScreen
+            onBack={() => (isSecondStep.value = false)}
+            userId={props.userId}
+            game={game}
+            approveIds={validationSlice.approveIds}
+          />
+        )}
+      </Screens>
+    </>
   )
 }
 

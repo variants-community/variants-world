@@ -1,4 +1,4 @@
-import { GameInputStatus } from 'components/landing/GameInput'
+import { GameInputStatus } from 'components/landing/first/GameInput'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
 

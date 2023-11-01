@@ -1,7 +1,6 @@
 import type { CGABotGameDetails } from 'cgabot'
+import type { CreatePostDetails, PostForCard } from 'db/prisma/queries'
 import type { CreateRouteResponseDataInterface } from 'pages/api/posts/create'
-import type { PostDetails } from 'services/post-details-validator-new'
-import type { PostForCard } from 'db/prisma/queries'
 
 export const fetchGameById = async (gameNr: number, signal?: AbortSignal) => {
   const response = await fetch(`/api/game/${gameNr}`, { method: 'get', signal })
@@ -12,10 +11,10 @@ export const fetchGameById = async (gameNr: number, signal?: AbortSignal) => {
   }
 }
 
-export const postGameToCreatePost = async (postDetails: PostDetails): Promise<CreateRouteResponseDataInterface> => {
+export const postGameToCreatePost = async (details: CreatePostDetails): Promise<CreateRouteResponseDataInterface> => {
   const response = await fetch('/api/posts/create', {
     method: 'post',
-    body: JSON.stringify(postDetails)
+    body: JSON.stringify(details)
   })
 
   const data = (await response.json()) as CreateRouteResponseDataInterface

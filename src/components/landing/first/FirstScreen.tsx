@@ -35,7 +35,7 @@ const FirstScreen = (props: Props) => (
              group flex-col justify-evenly overflow-hidden ${props.game ? '!h-0 mt-0 p-0 !opacity-0' : ''}`}
       tabIndex={props.game ? -1 : 0}
     >
-      <img src="/assets/images/forum-10.png" class="h-18" />
+      <img src="/assets/images/forum.png" class="h-18" />
       Explore posts
     </a>
 

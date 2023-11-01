@@ -14,7 +14,6 @@
       "db/*": ["src/db/*"],
       "layouts/*": ["src/layouts/*"],
       "pages/*": ["src/pages/*"],
-      "services/*": ["src/services/*"],
       "utils/*": ["src/utils/*"],
     }
   }

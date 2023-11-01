@@ -31,12 +31,7 @@ const LoginForm = () => {
 
       <div class="flex flex-row justify-between">
         <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          class="w-[200px] bg-dark border border-text rounded outline-none"
-        />
+        <input id="password" name="password" class="w-[200px] bg-dark border border-text rounded outline-none" />
       </div>
       <div class="flex justify-end">
         <button class="border border-gray-800 px-2 rounded">login</button>

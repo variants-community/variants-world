@@ -2,6 +2,7 @@
 import { getPostById } from 'db/prisma/queries'
 import { getUser } from 'db/supabase/auth'
 import AdminSettings from 'components/AdminSettings'
+import BackButton from 'components/BackButton'
 import Comments from 'components/comments'
 import GameInfo from 'components/GameInfo'
 import GamePicture from 'components/GamePicture'
@@ -31,7 +32,7 @@ const userIsAuthor = user.id === post?.author.id
       <section class="container mx-auto">
         <div id="card" class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
           <div class={'flex flex-row items-center h-8'}>  
-            <a class="flex whitespace-nowrap" href="/posts">Back to all posts</a>
+              <BackButton value='Back to all posts' href='/posts' client:load/>
             {post.PostDetails && <PresentUsers postId={post.id} user={user} client:idle />}
           </div>
           <div class="flex lg:flex-row  flex-col gap-[10px]">

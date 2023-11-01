@@ -28,6 +28,17 @@ const FirstScreen = (props: Props) => (
       invalid={props.disabled}
     />
 
+    <a
+      href="/posts"
+      class={`mt-16 opacity-0 animate-postfade animate-delay-600 animate-duration-500 hover:text-white transition-colors ease-linear
+             w-52 h-42 bg-dark border border-border-light rounded-xl p-3 flex items-center justify-center text-lg font-semibold
+             group flex-col justify-evenly overflow-hidden ${props.game ? '!h-0 mt-0 p-0 !opacity-0' : ''}`}
+      tabIndex={props.game ? -1 : 0}
+    >
+      <img src="/assets/images/forum-10.png" class="h-18" />
+      Explore posts
+    </a>
+
     {props.game && (
       <div class="animate-fadefast flex flex-col items-center">
         <Picture

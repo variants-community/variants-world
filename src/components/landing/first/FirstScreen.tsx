@@ -2,6 +2,7 @@ import { GameInputsGroup } from 'components/landing/first/GameInputsGroup'
 import { LandingSearch } from 'components/landing/first/LandingSearch'
 import { LandingTitle } from 'components/landing/first/LandingTitle'
 import { Picture } from 'components/common/Picture'
+import { Violations } from 'components/landing/first/Violations'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import PostTags from 'components/PostTags'
 import type { CGABotGameDetails } from 'cgabot'
@@ -14,6 +15,7 @@ type Props = {
   mainGameNr: number | undefined
   requestGame: (gameNr: number | undefined) => void
   loading: boolean
+  violations?: string[]
 } & ReturnType<typeof useGameValidation>
 
 const FirstScreen = (props: Props) => (
@@ -59,6 +61,7 @@ const FirstScreen = (props: Props) => (
           approveIdsState={props.approveIdsState}
           changeApproveId={props.changeApproveId}
         />
+        <Violations violations={props.violations} />
         {props.isApproved && (
           <button
             onClick={props.onContinue}

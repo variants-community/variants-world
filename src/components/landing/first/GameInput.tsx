@@ -5,7 +5,8 @@ import CrossIcon from 'components/icons/CrossIcon'
 export enum GameInputStatus {
   Default,
   Valid,
-  Invalid
+  Invalid,
+  Warning
 }
 
 type Props = {
@@ -43,5 +44,7 @@ const StatusIcon = ({ status }: { status: GameInputStatus }) => {
       return <CheckMarkIcon class="mt-3.7 h-3.7 max-w-3.7 fill-green" />
     case GameInputStatus.Invalid:
       return <CrossIcon class="mt-3.7 h-3.7 max-w-3.7 fill-red" />
+    case GameInputStatus.Warning:
+      return <CheckMarkIcon class="mt-3.7 h-3.7 max-w-3.7 fill-yellow" />
   }
 }

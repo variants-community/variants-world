@@ -1,50 +1,76 @@
 import { GameInputStatus } from 'components/landing/first/GameInput'
+import { type GamesConfirmationRequest, type GamesConfirmationResponse, ValidationStatus } from 'utils/games-validation'
+import { useEffect } from 'preact/hooks'
+import { useSearch } from 'src/hooks/use-search'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
+
+const ValidationStatusMap: Record<ValidationStatus, GameInputStatus> = {
+  [ValidationStatus.Success]: GameInputStatus.Valid,
+  [ValidationStatus.Warning]: GameInputStatus.Warning,
+  [ValidationStatus.Failure]: GameInputStatus.Invalid
+}
+
+const fetchForValidation = async (details: GamesConfirmationRequest, signal?: AbortSignal) => {
+  const request: GamesConfirmationRequest = {
+    mainGame: `${details.mainGame}`,
+    confirmingGames: [...details.confirmingGames]
+  }
+  const response = await fetch(`/api/game/validate`, {
+    method: 'post',
+    body: JSON.stringify(request),
+    signal
+  })
+  return response.json()
+}
 
 export const useGameValidation = (game: CGABotGameDetails | undefined) => {
   const approveIds = useSignal<string[]>(new Array<string>(8).fill(''))
   const approveIdsState = useSignal<GameInputStatus[]>(new Array<GameInputStatus>(8).fill(GameInputStatus.Default))
   const isApproved = useSignal(false)
+  const { data: gamesConfirmationResponse, setQuery } = useSearch<
+    GamesConfirmationRequest | undefined,
+    GamesConfirmationResponse
+  >({
+    default: undefined,
+    onQuery: fetchForValidation
+  })
+
+  useEffect(() => {
+    if (gamesConfirmationResponse) {
+      const games = gamesConfirmationResponse.confirmingGames
+      for (let i = 0; i < games.length; i++) {
+        if (approveIds.value[i].length === 0) setApproveIdState(GameInputStatus.Default, i)
+        else setApproveIdState(ValidationStatusMap[games[i]], i)
+      }
+      isApproved.value =
+        approveIdsState.value.every(state => state === GameInputStatus.Valid || state === GameInputStatus.Warning) &&
+        gamesConfirmationResponse.violations.length === 0
+    }
+  }, [gamesConfirmationResponse])
 
   const setApproveId = (id: string, index: number) => {
     const temp = [...approveIds.value]
     temp[index] = id
     approveIds.value = temp
+    return temp
   }
 
   const setApproveIdState = (idState: GameInputStatus, index: number) => {
     const temp = [...approveIdsState.value]
     temp[index] = idState
     approveIdsState.value = temp
+    return temp
   }
 
   const changeApproveId = async (id: string, index: number) => {
     if (game) {
-      if (id.length === 0) {
-        setApproveId('', index)
-        setApproveIdState(GameInputStatus.Default, index)
-      } else {
-        if (!approveIds.value.includes(id)) {
-          const response = await fetch(`/api/game/${game.gameNr}/same-as/${id}`, {
-            method: 'get'
-          })
-
-          const isSame = (await response.json()) as boolean
-
-          if (isSame) {
-            setApproveIdState(GameInputStatus.Valid, index)
-          } else {
-            setApproveIdState(GameInputStatus.Invalid, index)
-          }
-        } else {
-          setApproveIdState(GameInputStatus.Invalid, index)
-        }
-        setApproveId(id, index)
-      }
+      const updatedIds = setApproveId(id, index)
+      setQuery({
+        mainGame: `${game.gameNr}`,
+        confirmingGames: [...updatedIds]
+      })
     }
-
-    isApproved.value = approveIdsState.value.every(state => state === GameInputStatus.Valid)
   }
 
   const clearApproveIds = () => {
@@ -57,6 +83,7 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
     approveIds: approveIds.value,
     approveIdsState: approveIdsState.value,
     changeApproveId,
-    clearApproveIds
+    clearApproveIds,
+    violations: gamesConfirmationResponse?.violations
   }
 }

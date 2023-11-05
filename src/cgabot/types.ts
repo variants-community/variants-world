@@ -15,6 +15,11 @@ export interface CGABotGameDetails {
   isBot2: string
   isBot3: string
   isBot4: string
+  resigned: boolean
+}
+
+export interface FullCGABotGameDetails extends CGABotGameDetails {
+  pgn4: string
 }
 
 export interface CGABotQ {

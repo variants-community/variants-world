@@ -119,28 +119,6 @@ export const validateGames = async (
       // for counting
       addGamePlayers(playersForAllGames, game)
 
-      if (withBots(game)) {
-        gamesViolations.push({ violation: GamesViolationEnum.NoBots, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
-      }
-
-      if (isAborted(game)) {
-        gamesViolations.push({ violation: GamesViolationEnum.NoAborts, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
-      }
-
-      // not work
-      if (haveResignations(game)) {
-        gamesViolations.push({ violation: GamesViolationEnum.NoResignations, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
-      }
-
-      // not work
-      if (withoutAuthor(game)) {
-        gamesViolations.push({ violation: GamesViolationEnum.AuthorParticipates, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
-      }
-
       // update max and min date
       const confirmimgGameDate = new Date(game.date)
       if (firstDate.getTime() - confirmimgGameDate.getTime() > 0) firstDate = confirmimgGameDate
@@ -180,12 +158,34 @@ export const validateGames = async (
           gamesViolations.push({ violation: GamesViolationEnum.Similarity, game: gameIndex })
         }
       }
+
+      if (withBots(game)) {
+        gamesViolations.push({ violation: GamesViolationEnum.NoBots, game: gameIndex })
+        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+      }
+
+      if (isAborted(game)) {
+        gamesViolations.push({ violation: GamesViolationEnum.NoAborts, game: gameIndex })
+        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+      }
+
+      if (haveResignations(game)) {
+        gamesViolations.push({ violation: GamesViolationEnum.NoResignations, game: gameIndex })
+        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+      }
+
+      // not work
+      if (withoutAuthor(game)) {
+        gamesViolations.push({ violation: GamesViolationEnum.AuthorParticipates, game: gameIndex })
+        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+      }
     }
     gameIndex++
   }
 
   // time between first and last games
-  if (Math.abs(lastDate.getTime() - firstDate.getTime()) < MIN_TIME_BETWEEN_GAMES)
+  const diff = Math.abs(lastDate.getTime() - firstDate.getTime())
+  if (diff < MIN_TIME_BETWEEN_GAMES && diff !== 0)
     commonViolations.push({
       message: `The testing games are played within a span of only ${convertTime(
         lastDate.getTime() - firstDate.getTime()
@@ -199,6 +199,11 @@ export const validateGames = async (
     })
 
   result.violations = createViolationList(gamesViolations, commonViolations)
+
+  console.log('result.confirmingGames: ', result.confirmingGames)
+  console.log('gamesViolations: \n', gamesViolations)
+  console.log('commonViolations: \n', commonViolations)
+  console.log('result.violations: \n', result.violations)
 
   return result
 }
@@ -221,7 +226,8 @@ const createViolationList = (gamesViolations: GamesViolations[], commonViolation
   for (const violationAsKey in violationsMap) {
     const enumKey = parseInt(violationAsKey) as GamesViolationEnum
     const value = violationsMap[enumKey]
-    if (value.length > 0) violations.push(gamesViolationMessages[enumKey](violationsMap[enumKey]))
+    console.log('violationsMap[enumKey]: ', value)
+    if (value.length > 0) violations.push(gamesViolationMessages[enumKey](value))
   }
 
   return violations
@@ -276,9 +282,7 @@ const isAborted = (game: CGABotGameDetails) => {
 }
 
 const haveResignations = (game: CGABotGameDetails) => {
-  console.warn(`haveResignations: NOT implemented ${game.gameNr}`)
-  return false
-  // return game.termination
+  return game.resigned
 }
 
 const withoutAuthor = (game: CGABotGameDetails) => {

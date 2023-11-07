@@ -146,3 +146,19 @@ const diffs = (s1: string, s2: string, caseSensitive: boolean) => {
   }
   return a[s2.length]
 }
+
+export function convertToHours(time: string | number): string {
+  const timeInSeconds = new Date(time).getTime() / 1000
+  const hours: number = Math.floor(timeInSeconds / 3600)
+  const minutes: number = Math.floor((timeInSeconds % 3600) / 60)
+
+  let result = ''
+
+  if (hours > 0) {
+    result += `${hours} hours `
+  }
+  if (minutes > 0) {
+    result += `${minutes} minutes `
+  }
+  return result.trim()
+}

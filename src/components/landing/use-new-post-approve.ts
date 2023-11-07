@@ -16,6 +16,13 @@ const ValidationStatusMap: Record<ValidationStatus, GameInputStatus> = {
   [ValidationStatus.Failure]: GameInputStatus.Invalid
 }
 
+export type ValidationDetails = {
+  timestamp: number
+  players: number
+  similarGames: number
+  finalGames: number
+}
+
 const fetchForValidation = async (details: GamesConfirmationRequest, signal?: AbortSignal) => {
   const request: GamesConfirmationRequest = {
     mainGame: `${details.mainGame}`,
@@ -55,7 +62,7 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
       }
       isApproved.value =
         approveIdsState.value.every(state => state === GameInputStatus.Valid || state === GameInputStatus.Warning) &&
-        gamesConfirmationResponse.violations.length === 0
+        violations.value.length === 0
     }
   }, [gamesConfirmationResponse])
 
@@ -94,6 +101,7 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
     approveIdsState: approveIdsState.value,
     changeApproveId,
     clearApproveIds,
-    violations: violations.value
+    violations: violations.value,
+    validationDetails: gamesConfirmationResponse?.details!
   }
 }

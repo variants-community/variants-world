@@ -1,6 +1,6 @@
 import { MAX_SIMILAR_GAME_COUNT, MIN_PLAYERS_COUNT, MIN_SIMILARITY, MIN_TIME_BETWEEN_GAMES } from 'src/config'
+import { convertToHours, similar } from 'utils/hepers'
 import { getGameDetailsById } from 'cgabot'
-import { similar } from 'utils/hepers'
 import type { CGABotGameDetails } from 'cgabot/types'
 
 enum CommonViolationEnum {
@@ -43,7 +43,7 @@ const commonViolationMessages: Record<
   [CommonViolationEnum.MinimalPlayers]: (value, limitation) =>
     `There are only ${value} unique players (required ${limitation})`,
   [CommonViolationEnum.MinimalTimeSpan]: value =>
-    `The testing games are played within a span of only ${convertTime(value)}`
+    `The testing games are played within a span of only ${convertToHours(value)}`
 }
 
 export enum ValidationStatus {
@@ -61,15 +61,21 @@ export interface GamesConfirmationResponse {
   confirmingGames: ValidationStatus[]
   violations: GamesViolations[]
   commonViolations: CommonViolations[]
+  details: {
+    timestamp: number
+    players: number
+    similarGames: number
+    finalGames: number
+  }
 }
 
-type CommonViolations = {
+export type CommonViolations = {
   violation: CommonViolationEnum
   value: string | number
   limitation: string | number
 }
 
-type GamesViolations = {
+export type GamesViolations = {
   violation: GamesViolationEnum
   game: number
 }
@@ -93,7 +99,13 @@ export const validateGames = async (
       mainGame: ValidationStatus.Success,
       confirmingGames: [],
       violations: [],
-      commonViolations: []
+      commonViolations: [],
+      details: {
+        finalGames: 0,
+        similarGames: 0,
+        players: 0,
+        timestamp: 0
+      }
     }
   }
 
@@ -195,6 +207,8 @@ export const validateGames = async (
       limitation: MAX_SIMILAR_GAME_COUNT
     })
   }
+  result.details.similarGames = lowSimilarGamesCount
+  result.details.finalGames = 8 - lowSimilarGamesCount
 
   // time between first and last games
   const diff = Math.abs(lastDate.getTime() - firstDate.getTime())
@@ -204,14 +218,17 @@ export const validateGames = async (
       value: diff,
       limitation: MIN_TIME_BETWEEN_GAMES
     })
+  result.details.timestamp = diff
 
   // players count for all games
+
   if (playersForAllGames.size < MIN_PLAYERS_COUNT)
     commonViolations.push({
       violation: CommonViolationEnum.MinimalPlayers,
       value: playersForAllGames.size,
       limitation: MIN_PLAYERS_COUNT
     })
+  result.details.players = playersForAllGames.size
 
   return {
     ...result,
@@ -273,21 +290,6 @@ const addGamePlayers = (set: Set<number>, game: CGABotGameDetails) => {
 
 const withBots = (game: CGABotGameDetails) => {
   return game.isBot1 || game.isBot2 || game.isBot3 || game.isBot4
-}
-
-function convertTime(time: string | number): string {
-  const timeInSeconds = new Date(time).getTime() / 1000
-  const hours: number = Math.floor(timeInSeconds / 3600)
-  const minutes: number = Math.floor((timeInSeconds % 3600) / 60)
-
-  let result = ''
-  if (hours > 0) {
-    result += `${hours} hours `
-  }
-  if (minutes > 0) {
-    result += `${minutes} minutes `
-  }
-  return result.trim()
 }
 
 const isAborted = (game: CGABotGameDetails) => {

@@ -52,6 +52,7 @@ const Landing = (props: { userId: number }) => {
             userId={props.userId}
             game={game}
             approveIds={validationSlice.approveIds}
+            validationDetails={validationSlice.validationDetails}
           />
         )}
       </Screens>

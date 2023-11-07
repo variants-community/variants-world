@@ -51,10 +51,7 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
 
   useEffect(() => {
     if (gamesConfirmationResponse) {
-      violations.value = createViolationMessages(
-        gamesConfirmationResponse.violations,
-        gamesConfirmationResponse.commonViolations
-      )
+      violations.value = createViolationMessages(gamesConfirmationResponse, approveIds.value)
       const games = gamesConfirmationResponse.confirmingGames
       for (let i = 0; i < games.length; i++) {
         if (approveIds.value[i].length === 0) setApproveIdState(GameInputStatus.Default, i)

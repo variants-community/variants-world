@@ -12,6 +12,7 @@ enum CommonViolationEnum {
 enum GamesViolationEnum {
   NotFound,
   Similarity,
+  Identical,
   AuthorParticipates,
   NoBots,
   NoResignations,
@@ -19,6 +20,7 @@ enum GamesViolationEnum {
 }
 
 const gamesViolationMessages: Record<GamesViolationEnum, (gameNrs: number[]) => string> = {
+  [GamesViolationEnum.Identical]: gameNrs => `Games ${gameNrs} are identical`,
   [GamesViolationEnum.NotFound]: gameNrs => `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} not found`,
   [GamesViolationEnum.Similarity]: gameNrs =>
     `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} are not similar to the main version`,
@@ -155,6 +157,7 @@ export const validateGames = async (
       // (similar gameNr)
       if (allOtherGames.includes(`${game.gameNr}`)) {
         result.confirmingGames[gameIndex] = ValidationStatus.Failure
+        result.violations.push({ violation: GamesViolationEnum.Identical, game: gameIndex })
       } else {
         // absolutely simalar
         if (mainGameFen === gameFen) {
@@ -236,12 +239,19 @@ export const validateGames = async (
   } as GamesConfirmationResponse
 }
 
-export const createViolationMessages = (gamesViolations: GamesViolations[], commonViolations: CommonViolations[]) => {
+export const createViolationMessages = (res: GamesConfirmationResponse, confgirmingGameNrs: string[]) => {
   const violations: string[] = [
-    ...commonViolations.map(v => commonViolationMessages[v.violation](v.value, v.limitation))
+    ...res.commonViolations.map(v => commonViolationMessages[v.violation](v.value, v.limitation))
   ]
 
+  const identicalGames: Record<string, number[]> = {}
+
+  for (const g of confgirmingGameNrs) {
+    identicalGames[g] = []
+  }
+
   const violationsMap: Record<GamesViolationEnum, number[]> = {
+    [GamesViolationEnum.Identical]: [],
     [GamesViolationEnum.NotFound]: [],
     [GamesViolationEnum.Similarity]: [],
     [GamesViolationEnum.AuthorParticipates]: [],
@@ -250,14 +260,23 @@ export const createViolationMessages = (gamesViolations: GamesViolations[], comm
     [GamesViolationEnum.NoAborts]: []
   }
 
-  for (const v of gamesViolations) {
-    violationsMap[v.violation].push(v.game + 1)
+  for (const v of res.violations) {
+    if (v.violation === GamesViolationEnum.Identical) {
+      identicalGames[confgirmingGameNrs[v.game]].push(v.game + 1)
+    } else {
+      violationsMap[v.violation].push(v.game + 1)
+    }
   }
 
   for (const violationAsKey in violationsMap) {
     const enumKey = parseInt(violationAsKey) as GamesViolationEnum
     const value = violationsMap[enumKey]
     if (value.length > 0) violations.push(gamesViolationMessages[enumKey](value))
+  }
+
+  for (const g in identicalGames) {
+    const value = identicalGames[g]
+    if (value.length > 1) violations.push(gamesViolationMessages[GamesViolationEnum.Identical](identicalGames[g]))
   }
 
   return violations

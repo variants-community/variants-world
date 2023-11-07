@@ -15,7 +15,7 @@ type Props = {
   mainGameNr: number | undefined
   requestGame: (gameNr: number | undefined) => void
   loading: boolean
-  violations?: string[]
+  violations: string[]
 } & ReturnType<typeof useGameValidation>
 
 const FirstScreen = (props: Props) => (

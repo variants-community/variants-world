@@ -1,5 +1,10 @@
 import { GameInputStatus } from 'components/landing/first/GameInput'
-import { type GamesConfirmationRequest, type GamesConfirmationResponse, ValidationStatus } from 'utils/games-validation'
+import {
+  type GamesConfirmationRequest,
+  type GamesConfirmationResponse,
+  ValidationStatus,
+  createViolationMessages
+} from 'utils/games-validation'
 import { useEffect } from 'preact/hooks'
 import { useSearch } from 'src/hooks/use-search'
 import { useSignal } from '@preact/signals'
@@ -25,6 +30,7 @@ const fetchForValidation = async (details: GamesConfirmationRequest, signal?: Ab
 }
 
 export const useGameValidation = (game: CGABotGameDetails | undefined) => {
+  const violations = useSignal<string[]>([])
   const approveIds = useSignal<string[]>(new Array<string>(8).fill(''))
   const approveIdsState = useSignal<GameInputStatus[]>(new Array<GameInputStatus>(8).fill(GameInputStatus.Default))
   const isApproved = useSignal(false)
@@ -38,6 +44,10 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
 
   useEffect(() => {
     if (gamesConfirmationResponse) {
+      violations.value = createViolationMessages(
+        gamesConfirmationResponse.violations,
+        gamesConfirmationResponse.commonViolations
+      )
       const games = gamesConfirmationResponse.confirmingGames
       for (let i = 0; i < games.length; i++) {
         if (approveIds.value[i].length === 0) setApproveIdState(GameInputStatus.Default, i)
@@ -84,6 +94,6 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
     approveIdsState: approveIdsState.value,
     changeApproveId,
     clearApproveIds,
-    violations: gamesConfirmationResponse?.violations
+    violations: violations.value
   }
 }

@@ -49,6 +49,14 @@ enum UserRole {
   MEMBER
 }
 
+model Session {
+  cookie   String   @id
+  user     User     @relation("UserSessions", fields: [userId], references: [id])
+  userId   Int
+  date     DateTime
+  metadata String
+}
+
 model PostOnUserLikes {
   post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   user   User @relation(fields: [userId], references: [id])
@@ -61,12 +69,14 @@ model PostOnUserLikes {
 model User {
   id             Int               @id @default(autoincrement())
   name           String
+  profileUrl     String?
   email          String?
   role           UserRole          @default(MEMBER)
   comments       Comment[]
   voices         Voice[]
   posts          Post[]            @relation("UserPosts")
   UserLikedPosts PostOnUserLikes[]
+  Session        Session[]         @relation("UserSessions")
 }
 
 model Post {

@@ -1,0 +1,24 @@
+---
+import { states } from 'utils/auth'
+import { ulid } from 'ulidx'
+import shajs from 'sha.js'
+
+// ulid ~ 01F7DKCVCVDZN1Z5Q4FWANHHCC 
+const codeVerifier = ulid() + ulid() + ulid()
+const codeChallenge = shajs('sha256').update(codeVerifier).digest('base64url')
+const state = ulid()
+
+states.set(state, { codeChallenge, codeVerifier })
+
+const params = new URLSearchParams({
+  client_id: import.meta.env.OAUTH_CLIENT_ID,
+  redirect_uri: import.meta.env.OAUTH_CALLBACK,
+  response_type: 'code',
+  scope: 'openid profile',
+  state,
+  code_challenge: codeChallenge,
+  code_challenge_method: 'S256'
+})
+return Astro.redirect(`https://oauth.chess.com/authorize?${params}`)
+
+---

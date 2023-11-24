@@ -1,5 +1,6 @@
 type NavigationProps = {
   username?: string
+  profileUrl?: string | null
   path: string
 }
 
@@ -27,7 +28,11 @@ const Navigation = (props: NavigationProps) => {
       {props.username && (
         <div class={'flex flex-row gap-[10px]'}>
           {props.username}
-          <img src="/assets/images/user.png" alt={props.username} class={'h-6'} />
+          <img
+            src={props.profileUrl ?? '/assets/images/user.png'}
+            alt={props.username ?? 'Guest'}
+            class="h-7 rounded-md"
+          />
         </div>
       )}
     </nav>

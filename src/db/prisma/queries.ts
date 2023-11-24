@@ -140,7 +140,14 @@ export const searchFor = async (query: string) => {
     },
     include: {
       gamerules: true,
-      author: true,
+      author: {
+        select: {
+          id: true,
+          username: true,
+          role: true,
+          profileUrl: true
+        }
+      },
       comments: {
         where: {
           hidden: false
@@ -227,8 +234,8 @@ export const getUserRole = async (id: number) => {
 export interface User {
   id: number
   username: string
-  email: string | null
   role: UserRole
+  profileUrl: string | null
 }
 
 export interface PostForCard {

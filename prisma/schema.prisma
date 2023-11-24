@@ -68,9 +68,9 @@ model PostOnUserLikes {
 
 model User {
   id             Int               @id @default(autoincrement())
+  uuid           String
   username       String
   profileUrl     String?
-  email          String?
   role           UserRole          @default(MEMBER)
   comments       Comment[]
   voices         Voice[]

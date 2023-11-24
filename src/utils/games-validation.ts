@@ -1,5 +1,5 @@
 import { MAX_SIMILAR_GAME_COUNT, MIN_PLAYERS_COUNT, MIN_SIMILARITY, MIN_TIME_BETWEEN_GAMES } from 'src/config'
-import { convertToHours, similar } from 'utils/hepers'
+import { formatDuration, similar } from 'utils/hepers'
 import { getGameDetailsById } from 'cgabot'
 import type { CGABotGameDetails } from 'cgabot/types'
 
@@ -45,7 +45,7 @@ const commonViolationMessages: Record<
   [CommonViolationEnum.MinimalPlayers]: (value, limitation) =>
     `There are only ${value} unique players (required ${limitation})`,
   [CommonViolationEnum.MinimalTimeSpan]: value =>
-    `The testing games are played within a span of only ${convertToHours(value)}`
+    `The testing games are played within a span of only ${formatDuration(+value)}`
 }
 
 export enum ValidationStatus {

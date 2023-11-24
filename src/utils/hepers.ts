@@ -147,18 +147,14 @@ const diffs = (s1: string, s2: string, caseSensitive: boolean) => {
   return a[s2.length]
 }
 
-export function convertToHours(time: string | number): string {
-  const timeInSeconds = new Date(time).getTime() / 1000
-  const hours: number = Math.floor(timeInSeconds / 3600)
-  const minutes: number = Math.floor((timeInSeconds % 3600) / 60)
-
-  let result = ''
-
-  if (hours > 0) {
-    result += `${hours} hours `
-  }
-  if (minutes > 0) {
-    result += `${minutes} minutes `
-  }
-  return result.trim()
+export const formatDuration = (duration: number) => {
+  const minute = Math.trunc((duration /= 60e3) % 60)
+  const hour = Math.trunc((duration /= 60) % 24)
+  const day = Math.trunc((duration /= 24) % 7)
+  const week = Math.trunc(duration / 7)
+  const format = (time: number, unit: string) =>
+    !time ? '' : time.toString().endsWith('1') ? `${time} ${unit}` : `${time} ${unit}s`
+  return [format(week, 'week'), format(day, 'day'), format(hour, 'hour'), format(minute, 'minute')]
+    .filter(Boolean)
+    .join(' ')
 }

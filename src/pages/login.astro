@@ -16,8 +16,8 @@ if (token && expires) {
 
     if (user && user.refreshToken) {
       if (new Date(expires) < new Date()) {
-        const userInfo = await refreshUserInfo({
-          grant_type: 'authorization_code',
+        const [userInfo] = await refreshUserInfo({
+          grant_type: 'refresh_token',
           client_id: import.meta.env.OAUTH_CLIENT_ID,
           redirect_uri: 'http://localhost:3000/callback',
           code: user.refreshToken,

@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import type { Database } from 'db/supabase/types'
 
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
-// const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 
 // eslint-disable-next-line import/no-mutable-exports
 let supabase: ReturnType<typeof createClient<Database>>
@@ -11,7 +11,29 @@ if (!import.meta.env.SSR) {
     token?: string
     expires?: string // TODO
   }
-  supabase = createClient<Database>(supabaseUrl, token ?? '')
+  supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false
+    }
+  })
+  const json = token?.split('.')?.[1]
+  if (json) {
+    const id = JSON.parse(atob(json)).id
+    const result = await supabase.auth.signInWithPassword({
+      email: `${id}@variants.world`,
+      password: token.split('.')[2]
+    })
+    const ses = await supabase.auth.getSession()
+
+    console.log(ses.data.session)
+    if (result.data.session) {
+      console.log('OK')
+    } else {
+      console.error('Unable to sign in')
+    }
+  } else {
+    throw new TypeError('No cookies found! Please refresh the page.')
+  }
 } else {
   supabase = undefined as unknown as ReturnType<typeof createClient<Database>>
 }

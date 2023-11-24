@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable camelcase */
 import { z } from 'astro/zod'
 import crypto from 'crypto'
@@ -46,7 +47,7 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
 
   // Retrieve id_token and verify signature
   const profile = await verifyIdToken(id_token)
-  if (!profile) return
+  if (!profile) return [undefined]
 
   const id = Number(profile.user_id)
   const { preferred_username: username, picture: profileUrl } = profile
@@ -54,12 +55,13 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
   const payload: TokenPayloadType = { id, username, profileUrl }
 
   const cookie = jwt.sign(payload, import.meta.env.JWT_SECRET)
+  const { signature } = jwt.decode(cookie, { complete: true, json: true })!
 
   const expires = new Date()
   expires.setFullYear(expires.getFullYear() + 1)
   cookies.set('token', cookie, { expires })
-  cookies.set('expires', new Date(Date.now() + 60e3 * 60 * 24 * 7))
-  return { id, username, profileUrl, refreshToken }
+  cookies.set('expires', new Date(Date.now() + 60e3 * 60 * 24 * 7), { expires })
+  return [{ id, username, profileUrl, refreshToken }, signature] as const
 }
 
 // export const getMetadata = (req: Request) => {

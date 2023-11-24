@@ -16,7 +16,8 @@ type GameInfoProps = {
   type: GameType
   title: string
   rules: string[]
-  user: string
+  username: string
+  profileUrl?: string | null
   createdAt: Date
   description: string
   gameNr: number
@@ -75,7 +76,7 @@ const GameInfo = (props: GameInfoProps) => {
         />
       </div>
 
-      <PostUser user={props.user} />
+      <PostUser username={props.username} profileUrl={props.profileUrl} />
 
       {(editable.value.description.length > 0 || editing.value) && (
         <Description

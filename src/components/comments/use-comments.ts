@@ -33,7 +33,6 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
               if (parentUser.data) {
                 parent = {
                   User: {
-                    email: parentUser.data.email,
                     id: parentUser.data.id,
                     username: parentUser.data.username,
                     role: parentUser.data.role
@@ -59,7 +58,6 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                 createdAt: convertUTCDateToLocalDate(newComment.createdAt),
                 User: {
                   id: user.data.id,
-                  email: user.data.email,
                   username: user.data.username,
                   role: user.data.role
                 },

@@ -76,7 +76,7 @@ export const Votes = (props: VoicesProps) => {
       <ul class={'flex flex-col gap-2 mt-2 font-semibold overflow-y-scroll light-scrollbar'}>
         {props.voces.map(vote => (
           <li key={vote.testerId} class={'h-7 flex flex-row justify-between px-2 bg-dark darkborder rounded'}>
-            <span>{vote.tester?.name}</span>
+            <span>{vote.tester?.username}</span>
             <span class={'font-mono font-light'}>
               {vote.value === 'POSITIVE' ? 1 : vote.value === 'NEGATIVE' ? -1 : 0}
             </span>

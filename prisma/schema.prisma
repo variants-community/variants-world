@@ -68,7 +68,7 @@ model PostOnUserLikes {
 
 model User {
   id             Int               @id @default(autoincrement())
-  name           String
+  username       String
   profileUrl     String?
   email          String?
   role           UserRole          @default(MEMBER)
@@ -77,6 +77,7 @@ model User {
   posts          Post[]            @relation("UserPosts")
   UserLikedPosts PostOnUserLikes[]
   Session        Session[]         @relation("UserSessions")
+  refreshToken   String?
 }
 
 model Post {

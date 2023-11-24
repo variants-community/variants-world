@@ -45,7 +45,7 @@ const PostCard = (props: PostCardProps) => {
           </div>
           <div class={'flex flex-wrap justify-between'}>
             <div class={'flex justify-between items-center'}>
-              <PostUser user={props.post.author.name} />
+              <PostUser user={props.post.author.username} />
             </div>
 
             <div class={'sm:w-38 flex justify-end items-center sm:justify-end ml-auto gap-3 sm:gap-5'}>

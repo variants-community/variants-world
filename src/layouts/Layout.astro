@@ -3,11 +3,11 @@ import 'styles/font.css'
 import 'virtual:windi.css'
 import { ViewTransitions } from 'astro:transitions'
 import Navigation from "components/Navigation"
-import type { AuthentificatedUser } from 'db/supabase/auth'
+import type { TokenPayloadType } from 'utils/auth'
 
 type LayoutProps = {
   title: string
-	user?: AuthentificatedUser
+	user?: TokenPayloadType
 }
 
 const { title, user} = Astro.props as LayoutProps

@@ -35,7 +35,7 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                   User: {
                     email: parentUser.data.email,
                     id: parentUser.data.id,
-                    name: parentUser.data.name,
+                    username: parentUser.data.username,
                     role: parentUser.data.role
                   },
                   content: parentComment.data.content,
@@ -52,6 +52,7 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
 
           if (user.data) {
             comments.value = [
+              // URGENT TODO
               ...comments.value,
               {
                 ...newComment,
@@ -59,7 +60,7 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                 User: {
                   id: user.data.id,
                   email: user.data.email,
-                  name: user.data.name,
+                  username: user.data.username,
                   role: user.data.role
                 },
                 parent

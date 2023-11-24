@@ -63,7 +63,7 @@ const CommentCard = (props: CommentCardProps) => {
       <div class={'w-[calc(100%-66px)] flex flex-col gap-2'}>
         <div class={'flex justify-between'}>
           <div>
-            <span class={'text-white font-semibold'}>{props.comment.User.name}</span>
+            <span class={'text-white font-semibold'}>{props.comment.User.username}</span>
           </div>
           <div class={'flex gap-3 flex-row-reverse'}>
             <span>{formatDate(props.comment.createdAt)}</span>
@@ -107,7 +107,7 @@ const CommentCard = (props: CommentCardProps) => {
               transition-colors duration-200 ${props.isHighlighted && '!bg-[#6f261b]'}`}
             >
               <QuoteIcon class={'min-w-4 w-4 h-3'} />
-              <span class={'font-bold'}>{props.comment.parent.User.name}:</span>
+              <span class={'font-bold'}>{props.comment.parent.User.username}:</span>
               <span class={'whitespace-nowrap overflow-hidden overflow-ellipsis'}>
                 {props.comment.parent.hidden ? <i>{'[comment deleted]'}&nbsp;</i> : props.comment.parent.content}
               </span>

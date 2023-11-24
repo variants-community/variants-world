@@ -1,17 +1,12 @@
 ---
 import { getPosts } from "db/prisma/queries"
-import { getUser } from "db/supabase/auth"
+
 import Layout from "layouts/Layout.astro"
 import PostsList from "components/posts/PostsList"
 
-const postsPromise = getPosts(0, 10)
-const user = await getUser(Astro.request)
+const { user } = Astro.locals
 
-if (!user) {
-  return Astro.redirect("/auth")
-}
-
-const posts = await postsPromise
+const posts = await getPosts(0, 10)
 
 ---
 

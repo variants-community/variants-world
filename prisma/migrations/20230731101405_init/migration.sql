@@ -1,3 +1,4 @@
+-- SQLBook: Code
 -- CreateEnum
 CREATE TYPE "VoteValue" AS ENUM ('POSITIVE', 'NEGATIVE', 'NEUTRAL');
 

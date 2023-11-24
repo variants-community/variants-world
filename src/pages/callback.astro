@@ -1,7 +1,6 @@
 ---
-import { getLocation, getMetadata, states } from 'utils/auth'
 import { prisma } from 'db/prisma/prisma'
-import { ulid } from 'ulidx'
+import { refreshUserInfo, states } from 'utils/auth'
 
 const code = Astro.url.searchParams.get('code')
 const state = Astro.url.searchParams.get('state')
@@ -11,38 +10,19 @@ if (!code || !state || !states.has(state)) return new Response(null, { status: 4
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const { codeVerifier } = states.get(state)!
 
-const params = new URLSearchParams({
-  grant_type: 'authorization_code',
-  client_id: import.meta.env.OAUTH_CLIENT_ID,
-  redirect_uri: 'http://localhost:3000/callback',
-  code,
-  code_verifier: codeVerifier
-})
-const response = await (
-  await fetch('https://oauth.chess.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: String(params)
-  })
-).json()
+const data = await refreshUserInfo(
+  {
+    grant_type: 'authorization_code',
+    client_id: import.meta.env.OAUTH_CLIENT_ID,
+    redirect_uri: 'http://localhost:3000/callback',
+    code,
+    code_verifier: codeVerifier
+  },
+  Astro.cookies
+)
+if (!data) return new Response(null, { status: 403 })
 
-if ('error' in response) return new Response(null, { status: 403 })
+await prisma.user.create({ data })
 
-const { id_token } = response
-
-const profile = JSON.parse(atob(id_token.split('.')[1]))
-
-const userId = Number(profile.user_id)
-const { preferred_username: name, picture: profileUrl } = profile
-
-const cookie = ulid()
-const date = new Date()
-const metadata = `${getMetadata(Astro.request)}; ${await getLocation(Astro.clientAddress)}`
-
-await prisma.user.upsert({
-  where: { id: userId },
-  update: { name, profileUrl },
-  create: { id: userId, name, profileUrl }
-})
-await prisma.session.create({ data: { cookie, date, metadata, userId } })
+return Astro.redirect('/')
 ---

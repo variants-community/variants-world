@@ -1,9 +1,9 @@
 import { usePresence } from 'components/presence/use-presence'
-import type { AuthentificatedUser } from 'db/supabase/auth'
+import type { TokenPayloadType } from 'utils/auth'
 
 type PresenceProps = {
   postId: number
-  user: AuthentificatedUser
+  user: TokenPayloadType
 }
 
 const PresentUsers = (props: PresenceProps) => {

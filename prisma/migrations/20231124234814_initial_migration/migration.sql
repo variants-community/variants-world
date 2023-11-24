@@ -37,9 +37,9 @@ CREATE TABLE "PostOnUserLikes" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
+    "uuid" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "profileUrl" TEXT,
-    "email" TEXT,
     "role" "UserRole" NOT NULL DEFAULT 'MEMBER',
     "refreshToken" TEXT,
 

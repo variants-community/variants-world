@@ -1,9 +1,8 @@
 ---
-import { TokenPayload, refreshUserInfo, states } from 'utils/auth'
+import { TokenPayload, myJWTVerifyAsync, refreshUserInfo, states } from 'utils/auth'
 import { ulid } from 'ulidx'
 // import { z } from 'astro/zod'
 import { prisma } from 'db/prisma/prisma'
-import jwt from 'jsonwebtoken'
 import shajs from 'sha.js'
 
 const token = Astro.cookies.get('token')?.value
@@ -11,7 +10,7 @@ const expires = Astro.cookies.get('expires')?.value
 
 if (token && expires) {
   try {
-    const tokenPayload = TokenPayload.parse(jwt.verify(token, import.meta.env.JWT_SECRET))
+    const tokenPayload = TokenPayload.parse(await myJWTVerifyAsync(token))
     const user = await prisma.user.findFirst({where: { id: tokenPayload.id }, select: {id: true, refreshToken: true}})
 
     if (user && user.refreshToken) {

@@ -13,23 +13,30 @@ if (!import.meta.env.SSR) {
   }
   supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
-      persistSession: false
+      persistSession: true,
+      autoRefreshToken: true
     }
   })
   const json = token?.split('.')?.[1]
   if (json) {
-    const id = JSON.parse(atob(json)).id
-    const result = await supabase.auth.signInWithPassword({
-      email: `${id}@variants.world`,
-      password: token.split('.')[2]
-    })
-    const ses = await supabase.auth.getSession()
-
-    console.log(ses.data.session)
-    if (result.data.session) {
-      console.log('OK')
+    const existingSession = await supabase.auth.getSession()
+    if (existingSession.data.session) {
+      // eslint-disable-next-line no-console
+      console.log('Successfully restored last session')
     } else {
-      console.error('Unable to sign in')
+      const id = JSON.parse(atob(json)).id
+      const result = await supabase.auth.signInWithPassword({
+        email: `${id}@variants.world`,
+        password: token.split('.')[2]
+      })
+
+      if (result.data.session) {
+        // eslint-disable-next-line no-console
+        console.log('Successfully logged in')
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('Failed to log in')
+      }
     }
   } else {
     throw new TypeError('No cookies found! Please refresh the page.')

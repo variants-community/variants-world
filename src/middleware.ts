@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { TokenPayload } from 'utils/auth'
+import { TokenPayload, myJWTVerifyAsync } from 'utils/auth'
 import { defineMiddleware } from 'astro:middleware'
-import jwt from 'jsonwebtoken'
 
 const AuthGuardRoutes = ['/', '/posts/*', '/api']
 
@@ -18,7 +17,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     try {
       if (!token || !expires) throw new TypeError('No valid cookies found')
 
-      context.locals.user = TokenPayload.parse(jwt.verify(token, import.meta.env.JWT_SECRET))
+      context.locals.user = TokenPayload.parse(await myJWTVerifyAsync(token))
     } catch {
       // Redirect to /login
       const url = new URL(context.url)

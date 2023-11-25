@@ -1,11 +1,15 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable camelcase */
+import * as jose from 'jose'
+import { createSecretKey } from 'crypto'
 import { z } from 'astro/zod'
-import crypto from 'crypto'
-import jwt from 'jsonwebtoken'
 import type { AstroCookies } from 'astro'
 
 export const states = new Map<string, { codeVerifier: string; codeChallenge: string }>()
+
+const JWTSecretKey = createSecretKey(import.meta.env.JWT_SECRET, 'utf-8')
+export const myJWTSignAsync = async (data: jose.JWTPayload) =>
+  await new jose.SignJWT(data).setProtectedHeader({ alg: 'HS256' }).sign(JWTSecretKey)
+export const myJWTVerifyAsync = async (token: string) => (await jose.jwtVerify(token, JWTSecretKey)).payload
 
 export const TokenPayload = z.object({
   id: z.number(),
@@ -16,12 +20,10 @@ export type TokenPayloadType = z.infer<typeof TokenPayload>
 
 export const verifyIdToken = async (idToken: string) => {
   try {
-    const key = (await (await fetch('https://oauth.chess.com/certs')).json())?.keys[0]
+    const JWKS = jose.createRemoteJWKSet(new URL('https://oauth.chess.com/certs'))
+    const { payload } = await jose.jwtVerify(idToken, JWKS)
 
-    const publicKey = crypto.createPublicKey({ key, format: 'jwk' })
-    const pem = publicKey.export({ type: 'pkcs1', format: 'pem' })
-
-    return jwt.verify(idToken, pem) as {
+    return payload as {
       preferred_username: string
       picture: string
       user_id: string
@@ -54,8 +56,8 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
 
   const payload: TokenPayloadType = { id, username, profileUrl }
 
-  const cookie = jwt.sign(payload, import.meta.env.JWT_SECRET)
-  const { signature } = jwt.decode(cookie, { complete: true, json: true })!
+  const cookie = await myJWTSignAsync(payload)
+  const signature = cookie.split('.')[3]
 
   const expires = new Date()
   expires.setFullYear(expires.getFullYear() + 1)

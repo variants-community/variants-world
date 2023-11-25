@@ -24,7 +24,7 @@
     "astro": "^3.2.3",
     "astro-windi": "^0.0.2",
     "dotenv": "^16.3.1",
-    "jsonwebtoken": "^9.0.2",
+    "jose": "^5.1.1",
     "preact": "^10.16.0",
     "react-device-detect": "^2.2.3",
     "react-query": "^3.39.3",
@@ -37,7 +37,6 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",
-    "@types/jsonwebtoken": "^9.0.5",
     "@types/sha.js": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

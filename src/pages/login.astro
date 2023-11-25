@@ -1,9 +1,7 @@
 ---
-import { TokenPayload, myJWTVerifyAsync, refreshUserInfo, states } from 'utils/auth'
-import { ulid } from 'ulidx'
-// import { z } from 'astro/zod'
+import { TokenPayload, getAbsoluteUrl, myJWTVerifyAsync, refreshUserInfo, sha256Base64UrlAsync, states } from 'utils/auth'
 import { prisma } from 'db/prisma/prisma'
-import shajs from 'sha.js'
+import { ulid } from 'ulidx'
 
 const token = Astro.cookies.get('token')?.value
 const expires = Astro.cookies.get('expires')?.value
@@ -18,7 +16,7 @@ if (token && expires) {
         const [userInfo] = await refreshUserInfo({
           grant_type: 'refresh_token',
           client_id: import.meta.env.OAUTH_CLIENT_ID,
-          redirect_uri: 'http://localhost:3000/callback',
+          redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
           code: user.refreshToken,
         }, Astro.cookies)
         
@@ -37,14 +35,15 @@ if (token && expires) {
 
 // ulid ~ 01F7DKCVCVDZN1Z5Q4FWANHHCC 
 const codeVerifier = ulid() + ulid() + ulid()
-const codeChallenge = shajs('sha256').update(codeVerifier).digest('base64url')
+const codeChallenge = await sha256Base64UrlAsync(codeVerifier)
+
 const state = ulid()
 
 states.set(state, { codeChallenge, codeVerifier })
 
 const params = new URLSearchParams({
   client_id: import.meta.env.OAUTH_CLIENT_ID,
-  redirect_uri: import.meta.env.OAUTH_CALLBACK,
+  redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
   response_type: 'code',
   scope: 'openid profile',
   state,

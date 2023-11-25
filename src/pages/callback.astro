@@ -1,6 +1,6 @@
 ---
+import { getAbsoluteUrl, refreshUserInfo, states } from 'utils/auth'
 import { prisma } from 'db/prisma/prisma'
-import { refreshUserInfo, states } from 'utils/auth'
 import { supabaseAdmin } from 'db/supabase/admin'
 
 const code = Astro.url.searchParams.get('code')
@@ -15,7 +15,7 @@ const [userInfo, signature] = await refreshUserInfo(
   {
     grant_type: 'authorization_code',
     client_id: import.meta.env.OAUTH_CLIENT_ID,
-    redirect_uri: 'http://localhost:3000/callback',
+    redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
     code,
     code_verifier: codeVerifier
   },

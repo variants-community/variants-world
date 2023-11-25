@@ -1,12 +1,14 @@
 /* eslint-disable camelcase */
 import * as jose from 'jose'
-import { createSecretKey } from 'crypto'
+import { createSHA256 } from 'hash-wasm'
 import { z } from 'astro/zod'
+import base64url from 'base64url'
 import type { AstroCookies } from 'astro'
 
 export const states = new Map<string, { codeVerifier: string; codeChallenge: string }>()
 
-const JWTSecretKey = createSecretKey(import.meta.env.JWT_SECRET, 'utf-8')
+const encoder = new TextEncoder()
+const JWTSecretKey = encoder.encode(import.meta.env.JWT_SECRET)
 export const myJWTSignAsync = async (data: jose.JWTPayload) =>
   await new jose.SignJWT(data).setProtectedHeader({ alg: 'HS256' }).sign(JWTSecretKey)
 export const myJWTVerifyAsync = async (token: string) => (await jose.jwtVerify(token, JWTSecretKey)).payload
@@ -18,6 +20,15 @@ export const TokenPayload = z.object({
 })
 export type TokenPayloadType = z.infer<typeof TokenPayload>
 
+// Hashes a text value using sha256 and encodes the result to base64url
+export const sha256Base64UrlAsync = async (text: string) => {
+  const hasher = await createSHA256()
+  const bin = hasher.update(text).digest('binary')
+  const base64 = btoa(String.fromCharCode(...bin))
+  return base64url.fromBase64(base64)
+}
+
+// Verifies signature of id_token
 export const verifyIdToken = async (idToken: string) => {
   try {
     const JWKS = jose.createRemoteJWKSet(new URL('https://oauth.chess.com/certs'))
@@ -36,6 +47,7 @@ export const verifyIdToken = async (idToken: string) => {
   }
 }
 
+// Obtains chesscom's token, verifies signature and retrieves profile info from id_token
 export const refreshUserInfo = async (params: Record<string, string>, cookies: AstroCookies) => {
   const response = await (
     await fetch('https://oauth.chess.com/token', {
@@ -66,15 +78,10 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
   return [{ id, username, profileUrl, refreshToken }, signature] as const
 }
 
-// export const getMetadata = (req: Request) => {
-//   const ua = req.headers.get('user-agent')
-//   if (!ua) return 'Unknown device'
-//   const agent = parser(ua)
-//   return `${agent.browser.name} ${agent.browser.version}, ${agent.os.name} ${agent.os.version}`
-// }
-
-// export const getLocation = async (ip: string) => {
-//   if (ip.startsWith('::')) ip = ''
-//   const location = await (await fetch(`http://www.geoplugin.net/json.gp?ip=${ip}`)).json()
-//   return `${location.geoplugin_city}, ${location.geoplugin_countryName}`
-// }
+// Turns a pathname into absolute url string
+export const getAbsoluteUrl = (baseURL: URL, pathname: string) => {
+  const target = new URL(baseURL)
+  target.pathname = pathname
+  target.search = ''
+  return target.href
+}

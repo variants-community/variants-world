@@ -66,6 +66,9 @@
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/unbound-method": "error"
   },
+  "settings": {
+    "import/ignore": ["node_modules"]
+  },
   "overrides": [
     {
       "files": ["*.astro"],
@@ -75,7 +78,8 @@
         "extraFileExtensions": [".astro"]
       },
       "rules": {
-        "prettier/prettier": "off"
+        "prettier/prettier": "off",
+        "camelcase": "off"
       }
     }
   ],

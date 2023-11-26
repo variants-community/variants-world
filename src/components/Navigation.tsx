@@ -1,5 +1,6 @@
 type NavigationProps = {
   username?: string
+  profileUrl?: string | null
   path: string
 }
 
@@ -7,10 +8,10 @@ const Navigation = (props: NavigationProps) => {
   return (
     <nav
       class={
-        'h-12 w-full fixed flex flex-row justify-between items-center bg-border-light px-[20px] sm:(static mb-[30px] rounded-xl border border-[2px] border-border-dark) shadow-dark'
+        'h-12 w-full fixed flex justify-between items-center bg-border-light px-[20px] sm:(static mb-[30px] border border-[2px] border-border-dark) shadow-dark'
       }
     >
-      <div class={'flex flex-row gap-5 sm:gap-10'}>
+      <div class={'flex gap-5 sm:gap-10'}>
         <a href={'/'} class={'text-white text-[28px]'} data-astro-reload={props.path === '/' ? '' : undefined}>
           Variants
         </a>
@@ -25,9 +26,13 @@ const Navigation = (props: NavigationProps) => {
         </a>
       </div>
       {props.username && (
-        <div class={'flex flex-row gap-[10px]'}>
+        <div class={'flex gap-[10px]'}>
           {props.username}
-          <img src="/assets/images/user.png" alt={props.username} class={'h-6'} />
+          <img
+            src={props.profileUrl ?? '/assets/images/user.png'}
+            alt={props.username ?? 'Guest'}
+            class="h-7 rounded-md"
+          />
         </div>
       )}
     </nav>

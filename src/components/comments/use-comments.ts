@@ -5,7 +5,7 @@ import { useSignal } from '@preact/signals'
 import type { ExtendedComment } from '.'
 
 export const useComments = (initComments: ExtendedComment[], postId: number) => {
-  const comments = useSignal(initComments)
+  const comments = useSignal<ExtendedComment[]>(initComments)
 
   useEffect(() => {
     const channel = supabase
@@ -33,10 +33,10 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
               if (parentUser.data) {
                 parent = {
                   User: {
-                    email: parentUser.data.email,
                     id: parentUser.data.id,
-                    name: parentUser.data.name,
-                    role: parentUser.data.role
+                    username: parentUser.data.username,
+                    role: parentUser.data.role,
+                    profileUrl: parentUser.data.profileUrl
                   },
                   content: parentComment.data.content,
                   createdAt: new Date(parentComment.data.createdAt),
@@ -44,26 +44,28 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                   // eslint-disable-next-line camelcase
                   parent_id: parentComment.data.parent_id,
                   postId: parentComment.data.postId,
-                  userId: parentComment.data.userId
-                } as ExtendedComment
+                  userId: parentComment.data.userId,
+                  hidden: false
+                } satisfies ExtendedComment
               }
             }
           }
 
           if (user.data) {
             comments.value = [
+              // URGENT TODO
               ...comments.value,
               {
                 ...newComment,
                 createdAt: convertUTCDateToLocalDate(newComment.createdAt),
                 User: {
                   id: user.data.id,
-                  email: user.data.email,
-                  name: user.data.name,
-                  role: user.data.role
+                  username: user.data.username,
+                  role: user.data.role,
+                  profileUrl: user.data.profileUrl
                 },
                 parent
-              }
+              } satisfies ExtendedComment
             ]
               .sort((first, second) =>
                 first.createdAt > second.createdAt ? -1 : first.createdAt < second.createdAt ? 1 : 0

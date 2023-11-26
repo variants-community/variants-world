@@ -5,10 +5,10 @@ type BackButtonProps = {
 
 const BackButton = (props: BackButtonProps) => (
   <a
-    class="flex text-center fill-text hover:fill-white hover:text-white items-center justify-between gap-2 whitespace-nowrap border border-border-dark bg-border-light shadow-dark rounded py-1.3 px-2 transition-all duration-300 ease-out"
+    class="flex text-center fill-text hover:(fill-white text-white) items-center justify-between gap-2 whitespace-nowrap border border-border-dark bg-border-light shadow-dark rounded-lg py-1.2 px-2.5 transition-colors duration-200 ease-out"
     href={props.href}
   >
-    <svg width="1em" height="1em" viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg">
+    <svg width="1em" height="1em" viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg" class="mb-0.5">
       <path
         id="Path"
         stroke="none"

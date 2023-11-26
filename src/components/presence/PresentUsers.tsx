@@ -1,9 +1,9 @@
 import { usePresence } from 'components/presence/use-presence'
-import type { AuthentificatedUser } from 'db/supabase/auth'
+import type { TokenPayloadType } from 'utils/auth'
 
 type PresenceProps = {
   postId: number
-  user: AuthentificatedUser
+  user: TokenPayloadType
 }
 
 const PresentUsers = (props: PresenceProps) => {
@@ -15,7 +15,7 @@ const PresentUsers = (props: PresenceProps) => {
           key={`${user.id}${i}`}
           class={`h-8 w-8 rounded-full ring-primary ring-3 shadow-dark
           ${i ? 'mr-[-5px]' : ''}`}
-          src="/assets/images/user.png"
+          src={props.user.profileUrl ?? '/assets/images/user.png'}
           title={user.username}
         />
       ))}

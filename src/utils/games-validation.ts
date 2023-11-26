@@ -1,5 +1,5 @@
 import { MAX_SIMILAR_GAME_COUNT, MIN_PLAYERS_COUNT, MIN_SIMILARITY, MIN_TIME_BETWEEN_GAMES } from 'src/config'
-import { convertToHours, similar } from 'utils/hepers'
+import { formatDuration, similar } from 'utils/hepers'
 import { getGameDetailsById } from 'cgabot'
 import type { CGABotGameDetails } from 'cgabot/types'
 
@@ -45,7 +45,7 @@ const commonViolationMessages: Record<
   [CommonViolationEnum.MinimalPlayers]: (value, limitation) =>
     `There are only ${value} unique players (required ${limitation})`,
   [CommonViolationEnum.MinimalTimeSpan]: value =>
-    `The testing games are played within a span of only ${convertToHours(value)}`
+    `The testing games are played within a span of only ${formatDuration(+value)}`
 }
 
 export enum ValidationStatus {
@@ -164,7 +164,7 @@ export const validateGames = async (
           result.confirmingGames[gameIndex] = ValidationStatus.Success
         }
         // simalar
-        else if (similar(mainGameFen, gameFen, false) < MIN_SIMILARITY) {
+        else if (similar(mainGameFen, gameFen, false) >= MIN_SIMILARITY) {
           if (lowSimilarGamesCount > MAX_SIMILAR_GAME_COUNT) {
             result.confirmingGames[gameIndex] = ValidationStatus.Failure
           } else {
@@ -301,10 +301,10 @@ const isSimilar = (value: string, i: number, array: string[]) => {
 }
 
 const addGamePlayers = (set: Set<number>, game: CGABotGameDetails) => {
-  set.add(game.uid1)
-  set.add(game.uid2)
-  set.add(game.uid3)
-  set.add(game.uid4)
+  game.uid1 && set.add(game.uid1)
+  game.uid2 && set.add(game.uid2)
+  game.uid3 && set.add(game.uid3)
+  game.uid4 && set.add(game.uid4)
 }
 
 const withBots = (game: CGABotGameDetails) => {

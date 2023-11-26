@@ -2,12 +2,12 @@ import { Classification } from 'components/AdminSettings/Classification'
 import { Notes } from 'components/AdminSettings/Notes'
 import { Votes } from 'components/AdminSettings/Votes'
 import { useAdminSettings } from 'components/AdminSettings/use-admin-settings'
-import type { AuthentificatedUser } from 'db/supabase/auth'
 import type { PostDetails } from 'db/prisma/queries'
+import type { TokenPayloadType } from 'utils/auth'
 
 type AdminSettingsProps = {
   details: PostDetails
-  user: AuthentificatedUser
+  user: TokenPayloadType
 }
 
 const AdminSettings = (props: AdminSettingsProps) => {

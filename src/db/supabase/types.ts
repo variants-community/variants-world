@@ -20,16 +20,51 @@ export interface Database {
           {
             foreignKeyName: '_GameRuleToPost_A_fkey'
             columns: ['A']
+            isOneToOne: false
             referencedRelation: 'GameRule'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: '_GameRuleToPost_B_fkey'
             columns: ['B']
+            isOneToOne: false
             referencedRelation: 'Post'
             referencedColumns: ['id']
           }
         ]
+      }
+      _prisma_migrations: {
+        Row: {
+          applied_steps_count: number
+          checksum: string
+          finished_at: string | null
+          id: string
+          logs: string | null
+          migration_name: string
+          rolled_back_at: string | null
+          started_at: string
+        }
+        Insert: {
+          applied_steps_count?: number
+          checksum: string
+          finished_at?: string | null
+          id: string
+          logs?: string | null
+          migration_name: string
+          rolled_back_at?: string | null
+          started_at?: string
+        }
+        Update: {
+          applied_steps_count?: number
+          checksum?: string
+          finished_at?: string | null
+          id?: string
+          logs?: string | null
+          migration_name?: string
+          rolled_back_at?: string | null
+          started_at?: string
+        }
+        Relationships: []
       }
       Comment: {
         Row: {
@@ -63,18 +98,21 @@ export interface Database {
           {
             foreignKeyName: 'Comment_parent_id_fkey'
             columns: ['parent_id']
+            isOneToOne: false
             referencedRelation: 'Comment'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'Comment_postId_fkey'
             columns: ['postId']
+            isOneToOne: false
             referencedRelation: 'Post'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'Comment_userId_fkey'
             columns: ['userId']
+            isOneToOne: false
             referencedRelation: 'User'
             referencedColumns: ['id']
           }
@@ -142,6 +180,7 @@ export interface Database {
           {
             foreignKeyName: 'Post_authorUserId_fkey'
             columns: ['authorUserId']
+            isOneToOne: false
             referencedRelation: 'User'
             referencedColumns: ['id']
           }
@@ -173,6 +212,7 @@ export interface Database {
           {
             foreignKeyName: 'PostDetails_postId_fkey'
             columns: ['postId']
+            isOneToOne: false
             referencedRelation: 'Post'
             referencedColumns: ['id']
           }
@@ -195,12 +235,43 @@ export interface Database {
           {
             foreignKeyName: 'PostOnUserLikes_postId_fkey'
             columns: ['postId']
+            isOneToOne: false
             referencedRelation: 'Post'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'PostOnUserLikes_userId_fkey'
             columns: ['userId']
+            isOneToOne: false
+            referencedRelation: 'User'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      Session: {
+        Row: {
+          cookie: string
+          date: string
+          metadata: string
+          userId: number
+        }
+        Insert: {
+          cookie: string
+          date: string
+          metadata: string
+          userId: number
+        }
+        Update: {
+          cookie?: string
+          date?: string
+          metadata?: string
+          userId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'Session_userId_fkey'
+            columns: ['userId']
+            isOneToOne: false
             referencedRelation: 'User'
             referencedColumns: ['id']
           }
@@ -208,22 +279,28 @@ export interface Database {
       }
       User: {
         Row: {
-          email: string | null
           id: number
-          name: string
+          profileUrl: string | null
+          refreshToken: string | null
           role: Database['public']['Enums']['UserRole']
+          username: string
+          uuid: string
         }
         Insert: {
-          email?: string | null
           id?: number
-          name: string
+          profileUrl?: string | null
+          refreshToken?: string | null
           role?: Database['public']['Enums']['UserRole']
+          username: string
+          uuid: string
         }
         Update: {
-          email?: string | null
           id?: number
-          name?: string
+          profileUrl?: string | null
+          refreshToken?: string | null
           role?: Database['public']['Enums']['UserRole']
+          username?: string
+          uuid?: string
         }
         Relationships: []
       }
@@ -250,12 +327,14 @@ export interface Database {
           {
             foreignKeyName: 'Voice_postDetailsId_fkey'
             columns: ['postDetailsId']
+            isOneToOne: false
             referencedRelation: 'PostDetails'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'Voice_testerId_fkey'
             columns: ['testerId']
+            isOneToOne: false
             referencedRelation: 'User'
             referencedColumns: ['id']
           }

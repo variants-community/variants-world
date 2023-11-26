@@ -1,0 +1,55 @@
+---
+import { TokenPayload, getAbsoluteUrl, myJWTVerifyAsync, refreshUserInfo, sha256Base64UrlAsync, states } from 'utils/auth'
+import { prisma } from 'db/prisma/prisma'
+import { ulid } from 'ulidx'
+
+const token = Astro.cookies.get('token')?.value
+const expires = Astro.cookies.get('expires')?.value
+
+if (token && expires) {
+  try {
+    const tokenPayload = TokenPayload.parse(await myJWTVerifyAsync(token))
+    const user = await prisma.user.findFirst({where: { id: tokenPayload.id }, select: {id: true, refreshToken: true}})
+
+    if (user && user.refreshToken) {
+      if (new Date(expires) < new Date()) {
+        const [userInfo] = await refreshUserInfo({
+          grant_type: 'refresh_token',
+          client_id: import.meta.env.OAUTH_CLIENT_ID,
+          redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
+          code: user.refreshToken,
+        }, Astro.cookies)
+        
+        if (!userInfo) return new Response(null, { status: 403 })
+        
+        const { id, ...data } = userInfo
+        prisma.user.update({ where: { id }, data })
+      }
+
+      return Astro.redirect(`/`)
+    }
+  } catch {
+    // Invalid token, retrieve new one
+  }
+}
+
+// ulid ~ 01F7DKCVCVDZN1Z5Q4FWANHHCC 
+const codeVerifier = ulid() + ulid() + ulid()
+const codeChallenge = await sha256Base64UrlAsync(codeVerifier)
+
+const state = ulid()
+
+states.set(state, { codeChallenge, codeVerifier })
+
+const params = new URLSearchParams({
+  client_id: import.meta.env.OAUTH_CLIENT_ID,
+  redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
+  response_type: 'code',
+  scope: 'openid profile',
+  state,
+  code_challenge: codeChallenge,
+  code_challenge_method: 'S256'
+})
+return Astro.redirect(`https://oauth.chess.com/authorize?${params}`)
+
+---

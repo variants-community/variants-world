@@ -1,13 +1,13 @@
 import { supabase } from 'db/supabase/supabase'
 import { useEffect, useState } from 'preact/hooks'
-import type { AuthentificatedUser } from 'db/supabase/auth'
 import type { RealtimePresenceState } from '@supabase/supabase-js'
+import type { TokenPayloadType } from 'utils/auth'
 
 const mapPresenceState = (state: RealtimePresenceState) => {
   return Object.keys(state)
     .map(presenceId => {
       const presences = state[presenceId] as unknown as {
-        user: AuthentificatedUser
+        user: TokenPayloadType
       }[]
 
       return presences.map(presence => presence.user)
@@ -15,8 +15,8 @@ const mapPresenceState = (state: RealtimePresenceState) => {
     .flat()
 }
 
-export const usePresence = (postId: number, user: AuthentificatedUser) => {
-  const [usersOnPost, setUsersOnPost] = useState<AuthentificatedUser[]>([])
+export const usePresence = (postId: number, user: TokenPayloadType) => {
+  const [usersOnPost, setUsersOnPost] = useState<TokenPayloadType[]>([])
 
   useEffect(() => {
     const channel = supabase

@@ -123,7 +123,7 @@ export const searchFor = async (query: string) => {
       OR: [
         { title: { search: searchText, mode: 'insensitive' } },
         { description: { search: searchText, mode: 'insensitive' } },
-        { author: { name: { search: searchText, mode: 'insensitive' } } },
+        { author: { username: { search: searchText, mode: 'insensitive' } } },
         {
           gamerules: {
             some: { name: { search: searchText, mode: 'insensitive' } }
@@ -140,7 +140,14 @@ export const searchFor = async (query: string) => {
     },
     include: {
       gamerules: true,
-      author: true,
+      author: {
+        select: {
+          id: true,
+          username: true,
+          role: true,
+          profileUrl: true
+        }
+      },
       comments: {
         where: {
           hidden: false
@@ -220,11 +227,15 @@ export const getPosts = async (skip: number, take = 5) => {
   return mapped
 }
 
+export const getUserRole = async (id: number) => {
+  return (await prisma.user.findFirstOrThrow({ where: { id }, select: { role: true } }))?.role
+}
+
 export interface User {
   id: number
-  name: string
-  email: string | null
+  username: string
   role: UserRole
+  profileUrl: string | null
 }
 
 export interface PostForCard {

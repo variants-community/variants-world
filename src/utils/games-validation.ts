@@ -164,7 +164,7 @@ export const validateGames = async (
           result.confirmingGames[gameIndex] = ValidationStatus.Success
         }
         // simalar
-        else if (similar(mainGameFen, gameFen, false) < MIN_SIMILARITY) {
+        else if (similar(mainGameFen, gameFen, false) >= MIN_SIMILARITY) {
           if (lowSimilarGamesCount > MAX_SIMILAR_GAME_COUNT) {
             result.confirmingGames[gameIndex] = ValidationStatus.Failure
           } else {

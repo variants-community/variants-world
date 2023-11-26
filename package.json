@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "dotenv -e .env.development -- astro dev",
-    "start": "astro dev --host",
+    "start": "dotenv -e .env.development -- astro dev --host",
     "build": "astro build",
     "preview": "dotenv -- deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
     "astro": "astro",

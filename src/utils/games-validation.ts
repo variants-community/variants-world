@@ -301,10 +301,10 @@ const isSimilar = (value: string, i: number, array: string[]) => {
 }
 
 const addGamePlayers = (set: Set<number>, game: CGABotGameDetails) => {
-  set.add(game.uid1)
-  set.add(game.uid2)
-  set.add(game.uid3)
-  set.add(game.uid4)
+  game.uid1 && set.add(game.uid1)
+  game.uid2 && set.add(game.uid2)
+  game.uid3 && set.add(game.uid3)
+  game.uid4 && set.add(game.uid4)
 }
 
 const withBots = (game: CGABotGameDetails) => {

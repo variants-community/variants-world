@@ -1,5 +1,6 @@
 import { supabase } from 'db/supabase/supabase'
-import type { User, Voice, VoteValue } from '@prisma/client'
+import type { User } from 'db/prisma/queries'
+import type { Voice, VoteValue } from '@prisma/client'
 
 export type VoiceExtended = Voice & ({ tester?: User } | undefined)
 

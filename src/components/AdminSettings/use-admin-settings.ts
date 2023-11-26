@@ -26,7 +26,6 @@ export const useAdminSettings = (details: PostDetails) => {
           filter: `postId=eq.${details.postId}`
         },
         payload => {
-          console.log(payload)
           const updated = payload.new as PostDetails
           setGameClassification(updated.gameClassification ?? undefined)
           setGameplayClassification(updated.gameplayClassification ?? undefined)
@@ -42,7 +41,6 @@ export const useAdminSettings = (details: PostDetails) => {
           filter: `postDetailsId=eq.${details.id}`
         },
         async payload => {
-          console.log(payload)
           const updated = payload.new as Voice
           const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
@@ -64,7 +62,6 @@ export const useAdminSettings = (details: PostDetails) => {
           filter: `postDetailsId=eq.${details.id}`
         },
         async payload => {
-          console.log(payload)
           const updated = payload.new as Voice
           const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
@@ -113,7 +110,6 @@ export const useAdminSettings = (details: PostDetails) => {
       })
       .eq('postId', details.postId)
   }
-  console.log('notes: ', notes)
   return {
     gameClassification,
     gameplayClassification,

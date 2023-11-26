@@ -77,7 +77,9 @@ export const useGameValidation = (game: CGABotGameDetails | undefined) => {
     return temp
   }
 
-  const changeApproveId = async (id: string, index: number) => {
+  const changeApproveId = async (input: string, index: number) => {
+    const match = input.match(/(game\/|#|^)(\d+)/)
+    const id = match ? match[2].slice(0, 9) : input
     if (game) {
       const updatedIds = setApproveId(id, index)
       setQuery({

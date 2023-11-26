@@ -11,7 +11,7 @@ import type { VoiceExtended } from 'components/AdminSettings/Votes'
 export const useAdminSettings = (details: PostDetails) => {
   const [gameClassification, setGameClassification] = useState(details.gameClassification ?? undefined)
   const [gameplayClassification, setGameplayClassification] = useState(details.gameplayClassification ?? undefined)
-  const [notes, setNotes] = useState<string | null>(details.notes)
+  const [notes, setNotes] = useState<string>(details.notes ?? '')
   const [votes, setVotes] = useState<VoiceExtended[] | []>(details.voices)
 
   useEffect(() => {
@@ -26,10 +26,11 @@ export const useAdminSettings = (details: PostDetails) => {
           filter: `postId=eq.${details.postId}`
         },
         payload => {
+          console.log(payload)
           const updated = payload.new as PostDetails
           setGameClassification(updated.gameClassification ?? undefined)
           setGameplayClassification(updated.gameplayClassification ?? undefined)
-          setNotes(updated.notes)
+          setNotes(updated.notes ?? '')
         }
       )
       .on(
@@ -38,9 +39,10 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'Voice',
-          filter: `postDetailsId=eq.${details.postId}`
+          filter: `postDetailsId=eq.${details.id}`
         },
         async payload => {
+          console.log(payload)
           const updated = payload.new as Voice
           const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
@@ -59,9 +61,10 @@ export const useAdminSettings = (details: PostDetails) => {
           event: 'INSERT',
           schema: 'public',
           table: 'Voice',
-          filter: `postDetailsId=eq.${details.postId}`
+          filter: `postDetailsId=eq.${details.id}`
         },
         async payload => {
+          console.log(payload)
           const updated = payload.new as Voice
           const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
@@ -110,7 +113,7 @@ export const useAdminSettings = (details: PostDetails) => {
       })
       .eq('postId', details.postId)
   }
-
+  console.log('notes: ', notes)
   return {
     gameClassification,
     gameplayClassification,

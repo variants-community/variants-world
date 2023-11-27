@@ -71,7 +71,7 @@ export const getPostById = async (postId: number) => {
       },
       PostDetails: {
         include: {
-          voices: {
+          votes: {
             include: {
               tester: true
             }
@@ -92,7 +92,7 @@ export const getPostDetailsById = async (postId: number) => {
       postId
     },
     include: {
-      voices: {
+      votes: {
         include: {
           tester: true
         }
@@ -262,7 +262,7 @@ export interface PostDetails {
   gameClassification: GameClassification | null
   gameplayClassification: GameplayClassification | null
   notes: string | null
-  voices: {
+  votes: {
     id: number
     postDetailsId: number
     tester: User

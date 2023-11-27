@@ -1,6 +1,6 @@
 import { Classification } from 'components/AdminSettings/Classification'
 import { Notes } from 'components/AdminSettings/Notes'
-import { Votes } from 'components/AdminSettings/Votes'
+import { VotingTool } from 'components/AdminSettings/VotingTool'
 import { useAdminSettings } from 'components/AdminSettings/use-admin-settings'
 import type { PostDetails } from 'db/prisma/queries'
 import type { TokenPayloadType } from 'utils/auth'
@@ -35,7 +35,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
         gameplayClassification={gameplayClassification}
         setGameplayClassification={setGameplayClassificationOnChange}
       />
-      <Votes voces={votes} testerId={props.user.id} postDetailsId={props.details.id} setVotes={setVotes} />
+      <VotingTool votes={votes} testerId={props.user.id} postDetailsId={props.details.id} setVotes={setVotes} />
       <Notes notes={notes} onChangeNotes={onChangeNotes} />
     </div>
   )

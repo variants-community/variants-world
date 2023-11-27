@@ -1,3 +1,4 @@
+import { beforeEach, expect } from 'vitest'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from 'db/supabase/types'
 
@@ -10,3 +11,13 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: false
   }
 })
+
+export const authenticate = () => {
+  return beforeEach(async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: 'test@variants.world',
+      password: 'test'
+    })
+    expect(error).toBeNull()
+  })
+}

@@ -69,7 +69,7 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
   const payload: TokenPayloadType = { id, username, profileUrl }
 
   const cookie = await myJWTSignAsync(payload)
-  const signature = cookie.split('.')[3]
+  const signature = cookie.split('.')[2]
 
   const expires = new Date()
   expires.setFullYear(expires.getFullYear() + 1)

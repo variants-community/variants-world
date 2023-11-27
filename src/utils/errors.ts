@@ -5,6 +5,10 @@ export const handlePrismaError = (e: Prisma.PrismaClientKnownRequestError) => {
   let errorMessage = ''
   if (e.code === 'P2002') {
     errorMessage = 'A post with this game already exists'
+  } else if (e.code === 'P2003') {
+    if (e.meta && String(e.meta.field_name).startsWith('Post_authorUserId_fkey')) {
+      errorMessage = 'User not found'
+    }
   } else {
     errorMessage = 'Unknow error.'
   }

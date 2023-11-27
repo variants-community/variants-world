@@ -79,7 +79,9 @@ export const useFormData = (gameData: GameData) => {
       const response = await postGameToCreatePost(data)
 
       if (response.confirmedGameId) {
-        window.location.replace(`/posts/${response.confirmedGameId}`)
+        self.location.replace(`/posts/${response.confirmedGameId}`)
+      } else if (response.error?.message === 'User not found') {
+        self.location.pathname = '/logout'
       } else {
         serverError.value = response.error?.message
       }

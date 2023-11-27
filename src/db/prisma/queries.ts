@@ -264,6 +264,8 @@ export interface PostDetails {
   notes: string | null
   voices: {
     id: number
+    uuid: string
+    refreshToken: string | null
     postDetailsId: number
     tester: User
     testerId: number

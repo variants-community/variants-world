@@ -1,4 +1,10 @@
 ---
+import { supabaseAdmin } from "db/supabase/admin"
+
+const token = Astro.cookies.get('token')?.value
+if (token)
+ supabaseAdmin.signOut(token)
+
 Astro.cookies.delete('token')
 Astro.cookies.delete('expires')
 

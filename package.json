@@ -7,6 +7,7 @@
     "start": "dotenv -e .env.development -- astro dev --host",
     "build": "astro build",
     "preview": "dotenv -e .env.production -- deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
+    "test": "dotenv -e .env.development -- vitest run",
     "astro": "astro",
     "gen:prisma": "rm -rf node_modules/.prisma; dotenv -e .env.development -- prisma generate --no-engine; PRISMA_OUTPUT=./generated deno run -A --unstable npm:prisma@5.4.1 generate --no-engine; cd prisma/generated/deno; cp edge.ts index.js",
     "gen:supabase": "supabase gen types typescript --project-id $(dotenv -e .env.development -p SUPABASE_PROJECT_ID) --schema public > ./src/db/supabase/types.ts; eslint --fix ./src/db/supabase/types.ts",
@@ -54,6 +55,7 @@
     "prettier": "^3.0.2",
     "prisma": "^5.4.1",
     "sass": "^1.69.0",
-    "supabase": "^1.100.1"
+    "supabase": "^1.100.1",
+    "vitest": "^0.34.6"
   }
 }

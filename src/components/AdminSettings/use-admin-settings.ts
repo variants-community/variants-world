@@ -5,14 +5,14 @@ import type { PostDetails } from 'db/prisma/queries'
 import { getValueFromEvent } from 'utils/hepers'
 
 import { supabase } from 'db/supabase/supabase'
-import type { GameClassification, GameplayClassification, Voice } from '@prisma/client'
-import type { VoiceExtended } from 'components/AdminSettings/Votes'
+import type { GameClassification, GameplayClassification, Vote } from '@prisma/client'
+import type { VoteExtended } from 'components/AdminSettings/VotingTool'
 
 export const useAdminSettings = (details: PostDetails) => {
   const [gameClassification, setGameClassification] = useState(details.gameClassification ?? undefined)
   const [gameplayClassification, setGameplayClassification] = useState(details.gameplayClassification ?? undefined)
   const [notes, setNotes] = useState<string>(details.notes ?? '')
-  const [votes, setVotes] = useState<VoiceExtended[] | []>(details.voices)
+  const [votes, setVotes] = useState<VoteExtended[] | []>(details.votes)
 
   useEffect(() => {
     const channel = supabase
@@ -26,7 +26,6 @@ export const useAdminSettings = (details: PostDetails) => {
           filter: `postId=eq.${details.postId}`
         },
         payload => {
-          console.log(payload)
           const updated = payload.new as PostDetails
           setGameClassification(updated.gameClassification ?? undefined)
           setGameplayClassification(updated.gameplayClassification ?? undefined)
@@ -38,20 +37,19 @@ export const useAdminSettings = (details: PostDetails) => {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'Voice',
+          table: 'Vote',
           filter: `postDetailsId=eq.${details.id}`
         },
         async payload => {
-          console.log(payload)
-          const updated = payload.new as Voice
+          const updated = payload.new as Vote
           const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
-          const voiceWithUser = { ...updated, tester: user.data }
+          const voteWithUser = { ...updated, tester: user.data }
 
           if (votes.length > 0) {
-            setVotes(votes.map(voice => (voice.id === voiceWithUser.id ? voiceWithUser : voice)) as VoiceExtended[])
+            setVotes(votes.map(vote => (vote.id === voteWithUser.id ? voteWithUser : vote)))
           } else {
-            setVotes([voiceWithUser as VoiceExtended])
+            setVotes([voteWithUser])
           }
         }
       )
@@ -60,16 +58,15 @@ export const useAdminSettings = (details: PostDetails) => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'Voice',
+          table: 'Vote',
           filter: `postDetailsId=eq.${details.id}`
         },
         async payload => {
-          console.log(payload)
-          const updated = payload.new as Voice
+          const updated = payload.new as Vote
           const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
 
-          const voiceWithUser = { ...updated, tester: user.data }
-          setVotes([...votes, voiceWithUser as VoiceExtended])
+          const voteWithUser = { ...updated, tester: user.data }
+          setVotes([...votes, voteWithUser])
         }
       )
       .subscribe()
@@ -113,7 +110,6 @@ export const useAdminSettings = (details: PostDetails) => {
       })
       .eq('postId', details.postId)
   }
-  console.log('notes: ', notes)
   return {
     gameClassification,
     gameplayClassification,

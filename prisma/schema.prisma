@@ -73,7 +73,7 @@ model User {
   profileUrl     String?
   role           UserRole          @default(MEMBER)
   comments       Comment[]
-  voices         Voice[]
+  votes          Voter[]
   posts          Post[]            @relation("UserPosts")
   UserLikedPosts PostOnUserLikes[]
   Session        Session[]         @relation("UserSessions")
@@ -121,14 +121,14 @@ model PostDetails {
   Post                   Post                    @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   postId                 Int                     @unique
   notes                  String?
-  voices                 Voice[]
+  votes                  Voter[]
   gameClassification     GameClassification?
   gameplayClassification GameplayClassification?
 }
 
-model Voice {
+model Voter {
   id            Int         @id @default(autoincrement())
-  value         VoteValue
+  valuee        VoteValue
   tester        User        @relation(fields: [testerId], references: [id])
   postDetails   PostDetails @relation(fields: [postDetailsId], references: [id], onDelete: Cascade)
   testerId      Int

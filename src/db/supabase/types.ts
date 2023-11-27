@@ -304,7 +304,7 @@ export interface Database {
         }
         Relationships: []
       }
-      Voice: {
+      Vote: {
         Row: {
           id: number
           postDetailsId: number
@@ -325,14 +325,14 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'Voice_postDetailsId_fkey'
+            foreignKeyName: 'Vote_postDetailsId_fkey'
             columns: ['postDetailsId']
             isOneToOne: false
             referencedRelation: 'PostDetails'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'Voice_testerId_fkey'
+            foreignKeyName: 'Vote_testerId_fkey'
             columns: ['testerId']
             isOneToOne: false
             referencedRelation: 'User'

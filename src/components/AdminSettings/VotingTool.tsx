@@ -1,19 +1,20 @@
 import { supabase } from 'db/supabase/supabase'
-import type { User, Voice, VoteValue } from '@prisma/client'
+import type { User } from 'db/prisma/queries'
+import type { Vote, VoteValue } from '@prisma/client'
 
-export type VoiceExtended = Voice & ({ tester?: User } | undefined)
+export type VoteExtended = Vote & ({ tester: User | null } | undefined)
 
-type VoicesProps = {
+type VotesProps = {
   postDetailsId: number
   testerId: number
-  voces: VoiceExtended[]
-  setVotes: (voces: VoiceExtended[]) => void
+  votes: VoteExtended[]
+  setVotes: (votes: VoteExtended[]) => void
 }
 
-export const Votes = (props: VoicesProps) => {
-  const onVoice = async (value: VoteValue) => {
+export const VotingTool = (props: VotesProps) => {
+  const onVote = async (value: VoteValue) => {
     await supabase
-      .from('Voice')
+      .from('Vote')
       .upsert(
         {
           value,
@@ -26,11 +27,11 @@ export const Votes = (props: VoicesProps) => {
   }
 
   const setVotes = (value: VoteValue) => {
-    const updated = props.voces.map(voice => (voice.testerId === props.testerId ? { ...voice, value } : voice))
+    const updated = props.votes.map(vote => (vote.testerId === props.testerId ? { ...vote, value } : vote))
     props.setVotes(updated)
   }
 
-  const testerVoice = props.voces.find(voice => voice.testerId === props.testerId)
+  const testerVote = props.votes.find(vote => vote.testerId === props.testerId)
 
   return (
     <div class={'flex flex-col'}>
@@ -40,10 +41,10 @@ export const Votes = (props: VoicesProps) => {
           <button
             onClick={async () => {
               setVotes('NEGATIVE')
-              onVoice('NEGATIVE')
+              onVote('NEGATIVE')
             }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
-              testerVoice && testerVoice.value === 'NEGATIVE' ? 'bg-primary' : 'hover:bg-primary'
+              testerVote && testerVote.value === 'NEGATIVE' ? 'bg-primary' : 'hover:bg-primary'
             }`}
           >
             -1
@@ -51,10 +52,10 @@ export const Votes = (props: VoicesProps) => {
           <button
             onClick={async () => {
               setVotes('NEUTRAL')
-              onVoice('NEUTRAL')
+              onVote('NEUTRAL')
             }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
-              testerVoice && testerVoice.value === 'NEUTRAL' ? 'bg-primary' : 'hover:bg-primary'
+              testerVote && testerVote.value === 'NEUTRAL' ? 'bg-primary' : 'hover:bg-primary'
             }`}
           >
             +0
@@ -62,10 +63,10 @@ export const Votes = (props: VoicesProps) => {
           <button
             onClick={async () => {
               setVotes('POSITIVE')
-              onVoice('POSITIVE')
+              onVote('POSITIVE')
             }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
-              testerVoice && testerVoice.value === 'POSITIVE' ? 'bg-primary' : 'hover:bg-primary'
+              testerVote && testerVote.value === 'POSITIVE' ? 'bg-primary' : 'hover:bg-primary'
             }`}
           >
             +1
@@ -74,7 +75,7 @@ export const Votes = (props: VoicesProps) => {
       </div>
 
       <ul class={'flex flex-col gap-2 mt-2 font-semibold overflow-y-scroll light-scrollbar'}>
-        {props.voces.map(vote => (
+        {props.votes.map(vote => (
           <li key={vote.testerId} class={'h-7 flex flex-row justify-between px-2 bg-dark darkborder rounded'}>
             <span>{vote.tester?.username}</span>
             <span class={'font-mono font-light'}>

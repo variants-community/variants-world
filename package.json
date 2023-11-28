@@ -16,7 +16,7 @@
     "migrate:dev": "dotenv -e .env.development -- prisma migrate deploy",
     "migrate:production": "dotenv -e .env.production -- prisma migrate deploy",
     "backup:prod": "dotenv -e .env.production -- supabase db dump --db-url=$DIRECT_DATABASE_URL -f backups/schema.sql --data-only",
-    "deploy": "npm run build; dotenv -- deployctl deploy -p variants-world --prod --include dist ./dist/server/entry.mjs;"
+    "deploy": "npm run build; dotenv -e .env.production -- deployctl deploy -p variants-world --prod --include dist ./dist/server/entry.mjs;"
   },
   "dependencies": {
     "@astrojs/deno": "^5.0.1",

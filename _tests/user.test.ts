@@ -1,8 +1,8 @@
-import { authenticate, supabase } from '../_tests/test-supabase'
+import { TEST_TESTER_ID, authenticateAsTester, supabase } from '../_tests/test-supabase'
 import { describe, expect, it } from 'vitest'
 
 describe('authenticated user', () => {
-  authenticate()
+  authenticateAsTester()
 
   /**
    * SELECT Policy:
@@ -11,7 +11,7 @@ describe('authenticated user', () => {
    */
 
   it('Allow reading its own refreshToken', async () => {
-    const { data, error } = await supabase.from('User').select('refreshToken').eq('username', 'Test').single()
+    const { data, error } = await supabase.from('User').select('refreshToken').eq('id', TEST_TESTER_ID).single()
     expect(error).toBeNull()
     expect(data?.refreshToken).toBe('test-token')
   })

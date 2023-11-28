@@ -10,6 +10,6 @@ const posts = await getPosts(0, 10)
 
 ---
 
-<Layout user={user}>
+<Layout user={user} title="Posts | Variants World">
   <PostsList userId={user.id} posts={posts} client:idle />
 </Layout>

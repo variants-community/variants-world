@@ -19,7 +19,7 @@ const userIsTester = role === 'TESTER'
 const userIsAuthor = user.id === post?.author.id
 ---
 
-<Layout user={user}>
+<Layout user={user} title={`${post ? `${post.type}: ${post.title}` : 'Not found'}`}>
   {
     post && (
       <section class="container mx-auto">

@@ -7,7 +7,7 @@ const { user } = Astro.locals
 
 ---
 
-<Layout user={user}>
+<Layout user={user} title="Variants World">
   <Stars />
   <Landing userId={user.id} client:idle />
 </Layout>

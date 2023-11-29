@@ -52,6 +52,9 @@ const layers = Array.from({ length: layersNum }, (_, nth) => ({
     opacity: 0
     animation-name: zoom, blink
     animation-timing-function: linear
+    @media (max-width: 640px)
+      animation-name: blink
+      animation-iteration-count: infinite !important
 
   .star
     width: 3px

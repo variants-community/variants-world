@@ -5,6 +5,7 @@ declare namespace App {
       id: number
       profileUrl: string
       username: string
+      guest?: true
     }
   }
 }

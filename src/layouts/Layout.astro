@@ -3,15 +3,16 @@ import 'styles/font.css'
 import 'virtual:windi.css'
 import { ViewTransitions } from 'astro:transitions'
 import Navigation from "components/Navigation"
-import type { TokenPayloadType } from 'utils/auth'
 
 type LayoutProps = {
   title: string
-	user?: TokenPayloadType
+	ogImage?: string
 }
 
-const { title, user} = Astro.props as LayoutProps
-const path = Astro.url.pathname
+const { title, ogImage } = Astro.props as LayoutProps
+const { pathname, href } = Astro.url
+
+const { user } = Astro.locals
 
 ---
 
@@ -23,10 +24,19 @@ const path = Astro.url.pathname
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<meta property="og:title" content={title} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={href} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:site_name" content="Variants World">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:site" content="Variants World">
+		<meta name="twitter:image" content={ogImage}>
+		<meta name="twitter:title" content={title}>
 		<ViewTransitions fallback="animate" />
 	</head>
 	<body class="bg-dark text-text overflow-y-auto! text-base">
-		<Navigation username={user?.username} path={path} profileUrl={user?.profileUrl}/>
+		<Navigation username={user?.username} path={pathname} profileUrl={user?.profileUrl} isGuest={user.guest} />
 		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll scroll-smooth pl-2 ">
 			<slot />
 		</div>

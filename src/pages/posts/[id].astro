@@ -6,6 +6,7 @@ import Comments from 'components/comments'
 import GameInfo from 'components/GameInfo'
 import GamePicture from 'components/GamePicture'
 import GameStatusCard from 'components/GameStatusCard'
+import GuestPostDetails from 'components/guest/guest-post'
 import Layout from 'layouts/Layout.astro'
 import PresentUsers from 'components/presence/PresentUsers'
 
@@ -15,58 +16,73 @@ const postId = parseInt(Astro.params.id!)
 const { user } = Astro.locals
 const [post, role] = await Promise.all([getPostById(postId), getUserRole(user.id)])
 
-const userIsTester = role === 'TESTER'
+const userIsTester = role === 'GUEST'
 const userIsAuthor = user.id === post?.author.id
+
+const title = `${post ? `${post.type}: ${post.title}` : 'Not found'}`
+const ogImage =
+  post && `https://og.variants.world/?type=${post.type}&title=${post.title}&status=${post.status}&fen=${post.fen}`
 ---
 
-<Layout user={user} title={`${post ? `${post.type}: ${post.title}` : 'Not found'}`}>
+<Layout title={title} ogImage={ogImage}>
   {
-    post && (
-      <section class="container mx-auto">
-        <div id="card" class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]">
-          <div class={'flex flex-row items-center h-8'}>  
-              <BackButton value='Back to all posts' href='/posts' client:load/>
-            {post.PostDetails && <PresentUsers postId={post.id} user={user} client:idle />}
-          </div>
-          <div class="flex lg:flex-row  flex-col gap-[10px]">
-            <GamePicture postId={post.id} userId={user.id} fen={post.fen} likes={post.UserLikedPosts} client:load />
-            <GameInfo
-              postId={post.id}
-              title={post.title}
-              type={post.type}
-              rules={['3min', 'Points', '5-check', '8th=QBRN']}
-              rules={post.gamerules.map(rule => rule.name)}
-              username={post.author.username}
-              profileUrl={post.author.profileUrl}
-              createdAt={post.createdAt}
-              description={post.description}
-              gameNr={post.gameNr}
-              displayEditBotton={userIsTester || userIsAuthor}
-              client:load={userIsTester || userIsAuthor}
-            />
-          </div>
+    post ? (
+      user.guest ? (
+        <GuestPostDetails postId={post.id} type={post.type} title={post.title} fen={post.fen} />
+      ) : (
+        <section class="container mx-auto">
+          <div
+            id="card"
+            class="flex flex-col mx-auto sm:mx-0 w-11/12 lg:w-auto sm:(w-125 mx-auto) mb-[40px] gap-[17px]"
+          >
+            <div class={'flex flex-row items-center h-8'}>
+              <BackButton value="Back to all posts" href="/posts" client:load />
+              {post.PostDetails && <PresentUsers postId={post.id} user={user} client:idle />}
+            </div>
+            <div class="flex lg:flex-row  flex-col gap-[10px]">
+              <GamePicture postId={post.id} userId={user.id} fen={post.fen} likes={post.UserLikedPosts} client:load />
+              <GameInfo
+                postId={post.id}
+                title={post.title}
+                type={post.type}
+                rules={['3min', 'Points', '5-check', '8th=QBRN']}
+                rules={post.gamerules.map(rule => rule.name)}
+                username={post.author.username}
+                profileUrl={post.author.profileUrl}
+                createdAt={post.createdAt}
+                description={post.description}
+                gameNr={post.gameNr}
+                displayEditBotton={userIsTester || userIsAuthor}
+                client:load={userIsTester || userIsAuthor}
+              />
+            </div>
 
-          {post.PostDetails && userIsTester && <AdminSettings user={user} details={post.PostDetails} client:load />}
-          {userIsTester ? (
-            <GameStatusCard
-              displayEditBotton
-              postId={post.id}
-              verdict={post.verdict}
-              status={post.status}
-              client:load
-            />
-          ) : (
-            <GameStatusCard postId={post.id} verdict={post.verdict} status={post.status} />
-          )}
-        </div>
-        <Comments
-          isUserTester={userIsTester}
-          userId={user.id}
-          postId={post.id}
-          comments={post.comments}
-          client:visible
-        />
-      </section>
+            {post.PostDetails && userIsTester && (
+              <AdminSettings user={user} details={post.PostDetails as never} client:load />
+            )}
+            {userIsTester ? (
+              <GameStatusCard
+                displayEditBotton
+                postId={post.id}
+                verdict={post.verdict}
+                status={post.status}
+                client:load
+              />
+            ) : (
+              <GameStatusCard postId={post.id} verdict={post.verdict} status={post.status} />
+            )}
+          </div>
+          <Comments
+            isUserTester={userIsTester}
+            userId={user.id}
+            postId={post.id}
+            comments={post.comments}
+            client:visible
+          />
+        </section>
+      )
+    ) : (
+      <div>Not Found</div>
     )
   }
 </Layout>

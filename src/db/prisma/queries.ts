@@ -228,6 +228,7 @@ export const getPosts = async (skip: number, take = 5) => {
 }
 
 export const getUserRole = async (id: number) => {
+  if (id === -1) return 'GUEST'
   return (await prisma.user.findFirstOrThrow({ where: { id }, select: { role: true } }))?.role
 }
 

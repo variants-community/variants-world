@@ -1,4 +1,5 @@
 ---
+import GuestLanding from 'components/guest/guest-landing'
 import Landing from 'components/landing/Landing'
 import Layout from 'layouts/Layout.astro'
 import Stars from 'components/Stars.astro'
@@ -7,7 +8,7 @@ const { user } = Astro.locals
 
 ---
 
-<Layout user={user} title="Variants World">
-  <Stars />
-  <Landing userId={user.id} client:idle />
+<Layout title="Variants World">
+  <Stars isGuest={user.guest} />
+  {user.guest ? <GuestLanding /> : <Landing userId={user.id} client:idle />}
 </Layout>

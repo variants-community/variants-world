@@ -2,6 +2,7 @@ type NavigationProps = {
   username?: string
   profileUrl?: string | null
   path: string
+  isGuest?: true
 }
 
 const Navigation = (props: NavigationProps) => {
@@ -16,17 +17,19 @@ const Navigation = (props: NavigationProps) => {
           Variants
         </a>
 
-        <a
-          href={'/posts'}
-          class={
-            'h-7 flex items-center px-[7px] bg-opacity-40 hover:(text-white bg-opacity-35) bg-gray text-[18px] align-middle rounded-md  transition-colors duration-300 ease-out'
-          }
-        >
-          Posts
-        </a>
+        {!props.isGuest && (
+          <a
+            href={'/posts'}
+            class={
+              'h-7 flex items-center px-[7px] bg-opacity-40 hover:(text-white bg-opacity-35) bg-gray text-[18px] align-middle rounded-md  transition-colors duration-300 ease-out'
+            }
+          >
+            Posts
+          </a>
+        )}
       </div>
       {props.username && (
-        <div class={'flex gap-[10px]'}>
+        <div class={'flex gap-2.5 items-center'}>
           {props.username}
           <img
             src={props.profileUrl ?? '/assets/images/user.png'}

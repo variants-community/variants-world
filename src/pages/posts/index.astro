@@ -1,15 +1,16 @@
 ---
-import { getPosts } from "db/prisma/queries"
-
-import Layout from "layouts/Layout.astro"
-import PostsList from "components/posts/PostsList"
+import { getAbsoluteUrl } from 'utils/auth'
+import { getPosts } from 'db/prisma/queries'
+import Layout from 'layouts/Layout.astro'
+import PostsList from 'components/posts/PostsList'
 
 const { user } = Astro.locals
 
-const posts = await getPosts(0, 10)
+if (user.guest) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
 
+const posts = await getPosts(0, 10)
 ---
 
-<Layout user={user} title="Posts | Variants World">
-  <PostsList userId={user.id} posts={posts} client:idle />
+<Layout title="Posts | Variants World">
+  {user.guest ? <div>Hello Mr. Guest</div> : <PostsList userId={user.id} posts={posts} client:idle />}
 </Layout>

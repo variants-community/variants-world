@@ -83,7 +83,12 @@ export type GamesViolations = {
 }
 
 export const validateGames = async (
-  confirmationRequest: GamesConfirmationRequest
+  confirmationRequest: GamesConfirmationRequest,
+  author: {
+    id: number
+    profileUrl: string
+    username: string
+  }
 ): Promise<GamesConfirmationResponse | undefined> => {
   // validation result
   let result: GamesConfirmationResponse
@@ -194,8 +199,7 @@ export const validateGames = async (
         result.confirmingGames[gameIndex] = ValidationStatus.Failure
       }
 
-      // not work
-      if (withoutAuthor(game)) {
+      if (withoutAuthor(game, author.id)) {
         result.violations.push({ violation: GamesViolationEnum.AuthorParticipates, game: gameIndex })
         result.confirmingGames[gameIndex] = ValidationStatus.Failure
       }
@@ -278,7 +282,6 @@ export const createViolationMessages = (res: GamesConfirmationResponse, confgirm
     const value = identicalGames[g]
     if (value.length > 1) violations.push(gamesViolationMessages[GamesViolationEnum.Identical](identicalGames[g]))
   }
-
   return violations
 }
 
@@ -319,7 +322,6 @@ const haveResignations = (game: CGABotGameDetails) => {
   return game.resigned
 }
 
-const withoutAuthor = (game: CGABotGameDetails) => {
-  console.warn(`withoutAuthor: NOT implemented ${game.gameNr}`)
-  return false
+const withoutAuthor = (game: CGABotGameDetails, authorId: number) => {
+  return !(game.uid1 === authorId || game.uid2 === authorId || game.uid3 === authorId || game.uid4 === authorId)
 }

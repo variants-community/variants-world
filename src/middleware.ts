@@ -2,7 +2,7 @@
 import { TokenPayload, myJWTVerifyAsync } from 'utils/auth'
 import { defineMiddleware } from 'astro:middleware'
 
-const AuthGuardRoutes = ['/', '/posts/*', '/api']
+const AuthGuardRoutes = ['/', '/posts/*', '/api/*']
 
 export const onRequest = defineMiddleware(async (context, next) => {
   if (

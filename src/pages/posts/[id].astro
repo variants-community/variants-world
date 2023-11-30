@@ -16,7 +16,7 @@ const postId = parseInt(Astro.params.id!)
 const { user } = Astro.locals
 const [post, role] = await Promise.all([getPostById(postId), getUserRole(user.id)])
 
-const userIsTester = role === 'GUEST'
+const userIsTester = role === 'TESTER'
 const userIsAuthor = user.id === post?.author.id
 
 const title = `${post ? `${post.type}: ${post.title}` : 'Not found'}`

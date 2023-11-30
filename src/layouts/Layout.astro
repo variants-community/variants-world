@@ -16,12 +16,13 @@ const { user } = Astro.locals
 
 ---
 
-<html lang="en">
+<html lang="en" translate="no">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/png" href="/favicon/logo_512.png" />
 		<link rel="manifest" href="/manifest.json" />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="google" content="notranslate">
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta property="og:title" content={title} />

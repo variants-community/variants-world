@@ -8,7 +8,7 @@ const { user } = Astro.locals
 
 ---
 
-<Layout title="Variants World">
+<Layout title="Variants World" ogImage={'/assets/images/poster.png'}>
   <Stars isGuest={user.guest} />
   {user.guest ? <GuestLanding /> : <Landing userId={user.id} client:idle />}
 </Layout>

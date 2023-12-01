@@ -23,7 +23,7 @@ const [userInfo, signature] = await refreshUserInfo(
   },
   Astro.cookies
 )
-if (!userInfo) return new Response(null, { status: 403 })
+if (!userInfo) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
 
 
 const exists = await prisma.user.findFirst({ where: { id: userInfo.id }, select: { uuid: true } })

@@ -9,8 +9,8 @@ import type { GameType } from '@prisma/client'
 
 type GameData = {
   userId: number
-  game: CGABotGameDetails
-  approveIds: string[]
+  mainGame: CGABotGameDetails
+  confirmingGameNrs: string[]
 }
 
 export const useFormData = (gameData: GameData) => {
@@ -18,7 +18,7 @@ export const useFormData = (gameData: GameData) => {
   const serverError = useSignal<string | undefined>(undefined)
 
   useEffect(() => {
-    validateTitle(gameData.game.q.title)
+    validateTitle(gameData.mainGame.q.title)
   }, [])
 
   const validateTitle = async (title: string) => {
@@ -41,7 +41,7 @@ export const useFormData = (gameData: GameData) => {
   }
 
   const formData = useSignal({
-    title: gameData.game.q.title,
+    title: gameData.mainGame.q.title,
     type: 'NCV' as GameType,
     description: ''
   })
@@ -71,8 +71,8 @@ export const useFormData = (gameData: GameData) => {
           title: formData.value.title,
           type: formData.value.type
         },
-        gameNr: gameData.game.gameNr.toString(),
-        approveIds: gameData.approveIds,
+        gameNr: gameData.mainGame.gameNr.toString(),
+        confirmingGameNrs: gameData.confirmingGameNrs,
         userId: gameData.userId
       }
 

@@ -6,26 +6,25 @@ import { Violations } from 'components/landing/first/Violations'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import PostTags from 'components/PostTags'
 import type { CGABotGameDetails } from 'cgabot'
-import type { useGameValidation } from 'components/landing/use-new-post-approve'
+import type { useNewPostValidation } from 'components/landing/use-new-post-validation'
 
 type Props = {
   onContinue: () => void
-  game?: CGABotGameDetails
+  mainGame?: CGABotGameDetails
   disabled: boolean
   mainGameNr: number | undefined
   requestGame: (gameNr: number | undefined) => void
   loading: boolean
-  violations: string[]
-} & ReturnType<typeof useGameValidation>
+} & ReturnType<typeof useNewPostValidation>
 
 const FirstScreen = (props: Props) => (
   <div class={`max-w-230 flex flex-col mx-auto items-center pb-10 transition-opacity duration-1000`}>
-    <LandingTitle collapsed={!!props.game} />
+    <LandingTitle collapsed={!!props.mainGame} />
 
     <LandingSearch
       value={props.mainGameNr}
       onChange={props.requestGame}
-      collapsed={!!props.game}
+      collapsed={!!props.mainGame}
       loading={props.loading}
       invalid={props.disabled}
     />
@@ -34,22 +33,22 @@ const FirstScreen = (props: Props) => (
       href="/posts"
       class={`mt-16 opacity-0 animate-postfade animate-delay-600 animate-duration-500 hover:text-white transition-colors ease-linear
              w-52 h-42 bg-dark border border-border-light rounded-xl p-3 flex items-center justify-center text-lg font-semibold
-             group flex-col justify-evenly overflow-hidden ${props.game ? '!h-0 mt-0 p-0 !opacity-0' : ''}`}
-      tabIndex={props.game ? -1 : 0}
+             group flex-col justify-evenly overflow-hidden ${props.mainGame ? '!h-0 mt-0 p-0 !opacity-0' : ''}`}
+      tabIndex={props.mainGame ? -1 : 0}
     >
       <img src="/assets/images/forum.png" class="h-18" />
       Explore posts
     </a>
 
-    {props.game && (
+    {props.mainGame && (
       <div class="animate-fadefast flex flex-col items-center">
         <Picture
-          fen={props.game.q.startFen}
+          fen={props.mainGame.q.startFen}
           class={`mt-[35px] w-11/12 sm:(w-[450px] h-[450px]) bg-dark rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
         />
         <div class={'sm:w-[450px] mt-[14px]'}>
           <PostTags
-            rules={[props.game.q.timeControl, ...mapRuleVariantsToString(props.game.q.ruleVariants)]}
+            rules={[props.mainGame.q.timeControl, ...mapRuleVariantsToString(props.mainGame.q.ruleVariants)]}
             class="text-secondary !bg-border-light !border-[0.4px] shadow-dark"
             iconsclass="fill-secondary"
             ulclass="justify-center"
@@ -57,12 +56,11 @@ const FirstScreen = (props: Props) => (
         </div>
         <GameInputsGroup
           disabled={props.disabled}
-          approveIds={props.approveIds}
-          approveIdsState={props.approveIdsState}
-          changeApproveId={props.changeApproveId}
+          inputsPayload={props.inputsPayload}
+          setConfirmingGameNr={props.setConfirmingGameNr}
         />
         <Violations violations={props.violations} />
-        {props.isApproved && (
+        {props.isAllValidated && (
           <button
             onClick={props.onContinue}
             class={` w-46 h-11 mx-auto sm:(ml-auto mr-2 mt-2 mb-4) text-center bg-primary  border border-border-dark shadow-dark font-[600] text-white text-lg rounded-lg ${

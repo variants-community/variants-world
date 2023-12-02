@@ -1,22 +1,20 @@
-import { GameInput, GameInputStatus } from 'components/landing/first/GameInput'
+import { GameInput } from 'components/landing/first/GameInput'
+import type { InputPayload } from 'components/landing/use-new-post-validation'
 
 export const GameInputsGroup = (props: {
   disabled: boolean
-  approveIds: string[]
-  approveIdsState: GameInputStatus[]
-  changeApproveId: (id: string, index: number) => void
+  inputsPayload: InputPayload[]
+  setConfirmingGameNr: (id: string, index: number) => void
 }) => (
   <div class={'flex flex-wrap gap-5 mt-12 mx-auto justify-center mb-10'}>
-    {props.approveIds.map((value, index) => {
+    {props.inputsPayload.map(({ gameNr, status }, index) => {
       return (
         <GameInput
           disabled={props.disabled}
-          status={props.approveIdsState[index]}
+          status={status}
           key={index}
-          value={value}
-          setValue={newValue => {
-            props.changeApproveId(newValue, index)
-          }}
+          value={gameNr}
+          setValue={value => props.setConfirmingGameNr(value, index)}
           placeholder={`game ${index + 2}`}
         />
       )

@@ -1,15 +1,15 @@
 import { MAX_SIMILAR_GAME_COUNT, MIN_PLAYERS_COUNT, MIN_SIMILARITY, MIN_TIME_BETWEEN_GAMES } from 'src/config'
-import { formatDuration, similar } from 'utils/hepers'
 import { getGameDetailsById } from 'cgabot'
+import { similar } from 'utils/hepers'
 import type { CGABotGameDetails } from 'cgabot/types'
 
-enum CommonViolationEnum {
+export enum CommonViolationType {
   MaxSimilarGames,
   MinimalPlayers,
   MinimalTimeSpan
 }
 
-enum GamesViolationEnum {
+export enum GameViolationType {
   NotFound,
   Similarity,
   Identical,
@@ -19,49 +19,22 @@ enum GamesViolationEnum {
   NoAborts
 }
 
-const gamesViolationMessages: Record<GamesViolationEnum, (gameNrs: number[]) => string> = {
-  [GamesViolationEnum.Identical]: gameNrs => `Games ${gameNrs} are identical`,
-  [GamesViolationEnum.NotFound]: gameNrs => `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} not found`,
-  [GamesViolationEnum.Similarity]: gameNrs =>
-    `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} are not similar to the main version`,
-  [GamesViolationEnum.AuthorParticipates]: gameNrs =>
-    `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} ${
-      gameNrs.length > 1 ? 'were' : 'is'
-    } not held with the participation of the author`,
-  [GamesViolationEnum.NoBots]: gameNrs =>
-    `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} ${gameNrs.length > 1 ? 'were' : 'was'} played with bots`,
-  [GamesViolationEnum.NoResignations]: gameNrs =>
-    `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} have early resignations`,
-  [GamesViolationEnum.NoAborts]: gameNrs =>
-    `${gameNrs.length > 1 ? 'Games' : 'Game'} ${gameNrs} ${gameNrs.length > 1 ? 'are' : 'is'} aborted`
-}
-
-const commonViolationMessages: Record<
-  CommonViolationEnum,
-  (value: string | number, limitation: string | number) => string
-> = {
-  [CommonViolationEnum.MaxSimilarGames]: (value, limitation) =>
-    `At most ${limitation} testing games are allowed to have minor changes. (provided ${value})`,
-  [CommonViolationEnum.MinimalPlayers]: (value, limitation) =>
-    `There are only ${value} unique players (required ${limitation})`,
-  [CommonViolationEnum.MinimalTimeSpan]: value =>
-    `The testing games are played within a span of only ${formatDuration(+value)}`
-}
-
 export enum ValidationStatus {
+  Unknown,
   Success,
   Warning,
   Failure
 }
-export interface GamesConfirmationRequest {
-  mainGame: string
-  confirmingGames: string[]
+
+export interface ValidationRequest {
+  mainGameNr: string
+  confirmingGameNrs: string[]
 }
 
-export interface GamesConfirmationResponse {
-  mainGame: ValidationStatus
-  confirmingGames: ValidationStatus[]
-  violations: GamesViolations[]
+export interface ValidationResponse {
+  mainGameStatus: ValidationStatus
+  confirmingGameNrsStatus: ValidationStatus[]
+  gameViolations: GameViolations[]
   commonViolations: CommonViolations[]
   details: {
     timestamp: number
@@ -72,40 +45,40 @@ export interface GamesConfirmationResponse {
 }
 
 export type CommonViolations = {
-  violation: CommonViolationEnum
+  type: CommonViolationType
   value: string | number
   limitation: string | number
 }
 
-export type GamesViolations = {
-  violation: GamesViolationEnum
-  game: number
+export type GameViolations = {
+  type: GameViolationType
+  gameIndex: number
 }
 
 export const validateGames = async (
-  confirmationRequest: GamesConfirmationRequest,
+  validationRequest: ValidationRequest,
   author: {
     id: number
     profileUrl: string
     username: string
   }
-): Promise<GamesConfirmationResponse | undefined> => {
+): Promise<ValidationResponse | undefined> => {
   // validation result
-  let result: GamesConfirmationResponse
+  let result: ValidationResponse
 
   // violation for all games
   const commonViolations: CommonViolations[] = []
 
-  const mainGame = await getGameDetailsById(confirmationRequest.mainGame)
+  const mainGame = await getGameDetailsById(validationRequest.mainGameNr)
 
   // 404 if main game not found
   if (!mainGame) {
     return undefined
   } else {
     result = {
-      mainGame: ValidationStatus.Success,
-      confirmingGames: [],
-      violations: [],
+      mainGameStatus: ValidationStatus.Success,
+      confirmingGameNrsStatus: [],
+      gameViolations: [],
       commonViolations: [],
       details: {
         finalGames: 0,
@@ -117,22 +90,24 @@ export const validateGames = async (
   }
 
   // Confirming games first validation
-  const gamesOrUndefined = await Promise.all(confirmationRequest.confirmingGames.map(getGameDetailsById))
+  const gamesOrUndefined = await Promise.all(validationRequest.confirmingGameNrs.map(getGameDetailsById))
 
-  for (let i = 0; i < confirmationRequest.confirmingGames.length; i++) {
-    if (gamesOrUndefined[i]) {
-      result.confirmingGames.push(ValidationStatus.Success)
+  for (const [index, gameNr] of validationRequest.confirmingGameNrs.entries()) {
+    if (gamesOrUndefined[index]) {
+      result.confirmingGameNrsStatus.push(ValidationStatus.Success)
     } else {
-      if (confirmationRequest.confirmingGames[i].length > 0)
-        result.violations.push({ violation: GamesViolationEnum.NotFound, game: i })
-      result.confirmingGames.push(ValidationStatus.Failure)
+      if (gameNr) {
+        result.gameViolations.push({ type: GameViolationType.NotFound, gameIndex: index })
+        result.confirmingGameNrsStatus.push(ValidationStatus.Failure)
+      } else {
+        result.confirmingGameNrsStatus.push(ValidationStatus.Unknown)
+      }
     }
   }
 
   // validation values
   const mainGameFen = generateRowFen(mainGame.q.startFen)
   const playersForAllGames = new Set<number>()
-  let gameIndex = 0
   let lowSimilarGamesCount = 0
 
   let firstDate = new Date(mainGame.endDate)
@@ -141,7 +116,7 @@ export const validateGames = async (
   // for counting
   addGamePlayers(playersForAllGames, mainGame)
 
-  for (const game of gamesOrUndefined) {
+  for (const [gameIndex, game] of gamesOrUndefined.entries()) {
     if (game) {
       const gameFen = generateRowFen(game.q.startFen)
 
@@ -155,61 +130,60 @@ export const validateGames = async (
 
       // all games without current
       const allOtherGames = [
-        ...confirmationRequest.confirmingGames.filter((g, i) => i !== gameIndex),
-        confirmationRequest.mainGame
+        ...validationRequest.confirmingGameNrs.filter((g, i) => i !== gameIndex),
+        validationRequest.mainGameNr
       ]
 
       // (similar gameNr)
       if (allOtherGames.includes(`${game.gameNr}`)) {
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
-        result.violations.push({ violation: GamesViolationEnum.Identical, game: gameIndex })
+        result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
+        result.gameViolations.push({ type: GameViolationType.Identical, gameIndex })
       } else {
         // absolutely simalar
         if (mainGameFen === gameFen) {
-          result.confirmingGames[gameIndex] = ValidationStatus.Success
+          result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Success
         }
         // simalar
         else if (similar(mainGameFen, gameFen, false) >= MIN_SIMILARITY) {
           if (lowSimilarGamesCount > MAX_SIMILAR_GAME_COUNT) {
-            result.confirmingGames[gameIndex] = ValidationStatus.Failure
+            result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
           } else {
-            result.confirmingGames[gameIndex] = ValidationStatus.Warning
+            result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Warning
           }
           lowSimilarGamesCount++
         }
         // invalid game
         else {
-          result.confirmingGames[gameIndex] = ValidationStatus.Failure
-          result.violations.push({ violation: GamesViolationEnum.Similarity, game: gameIndex })
+          result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
+          result.gameViolations.push({ type: GameViolationType.Similarity, gameIndex })
         }
       }
 
       if (withBots(game)) {
-        result.violations.push({ violation: GamesViolationEnum.NoBots, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+        result.gameViolations.push({ type: GameViolationType.NoBots, gameIndex })
+        result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
       }
 
       if (isAborted(game)) {
-        result.violations.push({ violation: GamesViolationEnum.NoAborts, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+        result.gameViolations.push({ type: GameViolationType.NoAborts, gameIndex })
+        result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
       }
 
       if (haveResignations(game)) {
-        result.violations.push({ violation: GamesViolationEnum.NoResignations, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+        result.gameViolations.push({ type: GameViolationType.NoResignations, gameIndex })
+        result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
       }
 
       if (withoutAuthor(game, author.id)) {
-        result.violations.push({ violation: GamesViolationEnum.AuthorParticipates, game: gameIndex })
-        result.confirmingGames[gameIndex] = ValidationStatus.Failure
+        result.gameViolations.push({ type: GameViolationType.AuthorParticipates, gameIndex })
+        result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
       }
     }
-    gameIndex++
   }
 
   if (lowSimilarGamesCount > MAX_SIMILAR_GAME_COUNT) {
     commonViolations.push({
-      violation: CommonViolationEnum.MaxSimilarGames,
+      type: CommonViolationType.MaxSimilarGames,
       value: lowSimilarGamesCount,
       limitation: MAX_SIMILAR_GAME_COUNT
     })
@@ -221,7 +195,7 @@ export const validateGames = async (
   const diff = Math.abs(lastDate.getTime() - firstDate.getTime())
   if (diff < MIN_TIME_BETWEEN_GAMES && diff !== 0)
     commonViolations.push({
-      violation: CommonViolationEnum.MinimalTimeSpan,
+      type: CommonViolationType.MinimalTimeSpan,
       value: diff,
       limitation: MIN_TIME_BETWEEN_GAMES
     })
@@ -231,7 +205,7 @@ export const validateGames = async (
 
   if (playersForAllGames.size < MIN_PLAYERS_COUNT)
     commonViolations.push({
-      violation: CommonViolationEnum.MinimalPlayers,
+      type: CommonViolationType.MinimalPlayers,
       value: playersForAllGames.size,
       limitation: MIN_PLAYERS_COUNT
     })
@@ -240,49 +214,7 @@ export const validateGames = async (
   return {
     ...result,
     commonViolations
-  } as GamesConfirmationResponse
-}
-
-export const createViolationMessages = (res: GamesConfirmationResponse, confgirmingGameNrs: string[]) => {
-  const violations: string[] = [
-    ...res.commonViolations.map(v => commonViolationMessages[v.violation](v.value, v.limitation))
-  ]
-
-  const identicalGames: Record<string, number[]> = {}
-
-  for (const g of confgirmingGameNrs) {
-    identicalGames[g] = []
-  }
-
-  const violationsMap: Record<GamesViolationEnum, number[]> = {
-    [GamesViolationEnum.Identical]: [],
-    [GamesViolationEnum.NotFound]: [],
-    [GamesViolationEnum.Similarity]: [],
-    [GamesViolationEnum.AuthorParticipates]: [],
-    [GamesViolationEnum.NoBots]: [],
-    [GamesViolationEnum.NoResignations]: [],
-    [GamesViolationEnum.NoAborts]: []
-  }
-
-  for (const v of res.violations) {
-    if (v.violation === GamesViolationEnum.Identical) {
-      identicalGames[confgirmingGameNrs[v.game]].push(v.game + 1)
-    } else {
-      violationsMap[v.violation].push(v.game + 1)
-    }
-  }
-
-  for (const violationAsKey in violationsMap) {
-    const enumKey = parseInt(violationAsKey) as GamesViolationEnum
-    const value = violationsMap[enumKey]
-    if (value.length > 0) violations.push(gamesViolationMessages[enumKey](value))
-  }
-
-  for (const g in identicalGames) {
-    const value = identicalGames[g]
-    if (value.length > 1) violations.push(gamesViolationMessages[GamesViolationEnum.Identical](identicalGames[g]))
-  }
-  return violations
+  } as ValidationResponse
 }
 
 const generateRowFen = (fen: string) =>
@@ -296,8 +228,6 @@ const generateRowFen = (fen: string) =>
 export const isValidSimilarity = (games: CGABotGameDetails[]) => {
   return games.map(game => generateRowFen(game.q.startFen)).every(isSimilar)
 }
-
-similar
 
 const isSimilar = (value: string, i: number, array: string[]) => {
   return value === array[0]

@@ -1,14 +1,14 @@
-import { type GamesConfirmationRequest, validateGames } from 'utils/games-validation'
+import { type ValidationRequest, validateGames } from 'utils/games-validation'
 import type { APIRoute } from 'astro'
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    const games = (await request.json()) as GamesConfirmationRequest
-    const validationDetails = await validateGames(games, locals.user)
+    const validationRequest = (await request.json()) as ValidationRequest
+    const validationDetails = await validateGames(validationRequest, locals.user)
 
     if (!validationDetails) return new Response(undefined, { status: 404 })
     return new Response(JSON.stringify(validationDetails), { status: 200 })
   } catch (err) {
-    return new Response(undefined, { status: 400 })
+    return new Response(undefined, { status: 403 })
   }
 }

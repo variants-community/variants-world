@@ -17,7 +17,7 @@ export const doesPostWithTitleExist = async (title: string) => (await prisma.pos
 export interface CreatePostDetails {
   userId: number
   gameNr: string
-  approveIds: string[]
+  confirmingGameNrs: string[]
   data: {
     description: string
     title: string
@@ -29,6 +29,7 @@ export const createPost = async (mainGame: CGABotGameDetails, postDetailsDTO: Cr
   const rules = mapRuleVariantsToString(mainGame.q.ruleVariants).map(rule => ({ name: rule }))
   const post = await prisma.post.create({
     data: {
+      // TODO: add confirmingGameNrs to db
       gameNr: mainGame.gameNr,
       fen: mainGame.q.startFen,
       title: postDetailsDTO.data.title,

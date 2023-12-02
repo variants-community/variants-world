@@ -5,13 +5,13 @@ import { MetRequirements } from 'components/landing/second/MetRequirements'
 import { Picture } from 'components/common/Picture'
 import { useFormData } from 'components/landing/second/use-form-data'
 import type { CGABotGameDetails } from 'cgabot'
-import type { ValidationDetails } from 'components/landing/use-new-post-approve'
+import type { ValidationDetails } from 'components/landing/use-new-post-validation'
 
 type Props = {
   onBack: () => void
   userId: number
-  game: CGABotGameDetails
-  approveIds: string[]
+  mainGame: CGABotGameDetails
+  confirmingGameNrs: string[]
   validationDetails: ValidationDetails
 }
 
@@ -26,7 +26,7 @@ const SecondScreen = (props: Props) => {
           <div class="flex flex-wrap gap-y-5 gap-x-10 justify-center">
             <Picture
               id={-1}
-              fen={props.game.q.startFen}
+              fen={props.mainGame.q.startFen}
               class={`w-40 h-40 bg-dark rounded-[12px] border border-[2px] border-border-dark shadow-dark`}
             />
             <MetRequirements validationDetails={props.validationDetails} />

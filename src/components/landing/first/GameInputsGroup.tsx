@@ -7,11 +7,12 @@ export const GameInputsGroup = (props: {
   setConfirmingGameNr: (id: string, index: number) => void
 }) => (
   <div class={'flex flex-wrap gap-5 mt-12 mx-auto justify-center mb-10'}>
-    {props.inputsPayload.map(({ gameNr, status }, index) => {
+    {props.inputsPayload.map(({ gameNr, status, loading }, index) => {
       return (
         <GameInput
           disabled={props.disabled}
           status={status}
+          loading={loading}
           key={index}
           value={gameNr}
           setValue={value => props.setConfirmingGameNr(value, index)}

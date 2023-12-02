@@ -2,6 +2,7 @@ import { ValidationStatus } from 'utils/games-validation'
 import { getValueFromEvent } from 'utils/hepers'
 import CheckMarkIcon from 'components/icons/CheckMarkIcon'
 import CrossIcon from 'components/icons/CrossIcon'
+import SpinnerIcon from 'components/icons/SpinnerIcon'
 // import WarningIcon from 'components/icons/WarningIcon'
 
 type Props = {
@@ -10,12 +11,13 @@ type Props = {
   value: string
   setValue: (value: string) => void
   status: ValidationStatus
+  loading: boolean
 }
 
 export const GameInput = (props: Props) => (
   <div class={`relative w-46 items-center ${props.disabled ? 'opacity-50' : ''} transition-all duration-300 easy-in`}>
     <div class="absolute left-4 text-3xl pointer-events-none">
-      <StatusIcon status={props.status} />
+      {props.loading ? <SpinnerIcon class="absolute mt-3.7 h-4 w-4" /> : <StatusIcon status={props.status} />}
     </div>
 
     <input

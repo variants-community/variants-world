@@ -12,6 +12,8 @@ type Props = {
   setValue: (value: string) => void
   status: ValidationStatus
   loading: boolean
+  onFocus: () => void
+  onBlur: () => void
 }
 
 export const GameInput = (props: Props) => (
@@ -25,6 +27,8 @@ export const GameInput = (props: Props) => (
       disabled={props.disabled}
       value={props.value}
       onInput={e => props.setValue(getValueFromEvent(e))}
+      onFocus={() => props.onFocus()}
+      onBlur={() => props.onBlur()}
       placeholder={props.placeholder}
       type="text"
     />

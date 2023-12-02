@@ -28,10 +28,17 @@ const commonViolationMessages: Record<
     `The testing games are played within a span of only ${formatDuration(+value)}`
 }
 
-export const createViolationMessages = (res: ValidationResponse, confirmingGameNrs: string[]) => {
+export const createViolationMessages = (
+  res: ValidationResponse,
+  confirmingGameNrs: string[],
+  activeGameIndex: number | undefined
+) => {
   if (!confirmingGameNrs.some(Boolean)) return []
 
-  const violations: string[] = res.commonViolations.map(v => commonViolationMessages[v.type](v.value, v.limitation))
+  const violations: { message: string; active: boolean }[] = res.commonViolations.map(v => ({
+    message: commonViolationMessages[v.type](v.value, v.limitation),
+    active: false
+  }))
 
   const identicalGames: Record<string, number[]> = {}
 
@@ -58,11 +65,19 @@ export const createViolationMessages = (res: ValidationResponse, confirmingGameN
   for (const violationAsKey of Object.keys(violationsMap)) {
     const enumKey = parseInt(violationAsKey) as GameViolationType
     const value = violationsMap[enumKey]
-    if (value.length) violations.push(gamesViolationMessages[enumKey](formatGameIndices(value)))
+    if (value.length)
+      violations.push({
+        message: gamesViolationMessages[enumKey](formatGameIndices(value)),
+        active: activeGameIndex === undefined ? false : value.includes(activeGameIndex + 2)
+      })
   }
 
   for (const identicalGameIndices of Object.values(identicalGames)) {
-    violations.push(gamesViolationMessages[GameViolationType.Identical](formatGameIndices(identicalGameIndices)))
+    console.log(identicalGameIndices, activeGameIndex)
+    violations.push({
+      message: gamesViolationMessages[GameViolationType.Identical](formatGameIndices(identicalGameIndices)),
+      active: activeGameIndex === undefined ? false : identicalGameIndices.includes(activeGameIndex + 2)
+    })
   }
   return violations
 }

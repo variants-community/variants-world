@@ -1,7 +1,8 @@
 import CrossIcon from 'components/icons/CrossIcon'
 
 type ViolationsProps = {
-  violations?: string[]
+  violations?: { message: string; active: boolean }[]
+  activeExists: boolean
 }
 
 export const Violations = (props: ViolationsProps) => {
@@ -9,10 +10,15 @@ export const Violations = (props: ViolationsProps) => {
     <>
       {props.violations && (
         <div class="text-red">
-          {props.violations.map((violation, i) => (
-            <div class="flex flex-row gap-1.5 font-semibold">
-              <CrossIcon key={i} class="fill-red w-2" />
-              <span>{violation}</span>
+          {props.violations.map(({ message, active }, i) => (
+            <div
+              key={i}
+              class={`flex flex-row gap-1.5 font-semibold w-fit transition-opacity ${
+                !props.activeExists || active ? '' : 'opacity-50'
+              }`}
+            >
+              <CrossIcon class="fill-red w-2" />
+              <span>{message}</span>
             </div>
           ))}
         </div>

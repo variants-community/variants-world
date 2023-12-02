@@ -29,6 +29,7 @@ export type InputPayload = { gameNr: string; status: ValidationStatus; loading: 
 
 export const useNewPostValidation = (mainGame: CGABotGameDetails | undefined) => {
   const confirmingGameNrs = useSignal<string[]>(Array.from({ length: 8 }, () => ''))
+  const activeGameIndex = useSignal<number | undefined>(undefined)
   const { signal: validationResponse, setQuery: setValidationRequest } = useSearch({
     default: undefined as ValidationRequest | undefined,
     onQuery: sendValidationRequest
@@ -38,7 +39,11 @@ export const useNewPostValidation = (mainGame: CGABotGameDetails | undefined) =>
     () =>
       validationResponse.value &&
       mainGame &&
-      createViolationMessages(validationResponse.value, [`${mainGame.gameNr}`, ...confirmingGameNrs.peek()])
+      createViolationMessages(
+        validationResponse.value,
+        [`${mainGame.gameNr}`, ...confirmingGameNrs.peek()],
+        activeGameIndex.value
+      )
   )
 
   const inputsPayload = useComputed(() =>
@@ -89,6 +94,7 @@ export const useNewPostValidation = (mainGame: CGABotGameDetails | undefined) =>
     inputsPayload: inputsPayload.value,
     setConfirmingGameNr,
     violations: violations.value,
-    validationDetails: validationResponse.value?.details
+    validationDetails: validationResponse.value?.details,
+    activeGameIndex
   }
 }

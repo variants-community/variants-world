@@ -58,8 +58,9 @@ const FirstScreen = (props: Props) => (
           disabled={props.disabled}
           inputsPayload={props.inputsPayload}
           setConfirmingGameNr={props.setConfirmingGameNr}
+          activeGameIndex={props.activeGameIndex}
         />
-        <Violations violations={props.violations} />
+        <Violations violations={props.violations} activeExists={props.activeGameIndex.value !== undefined} />
         {props.isAllValidated && (
           <button
             onClick={props.onContinue}

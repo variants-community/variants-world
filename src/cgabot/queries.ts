@@ -18,14 +18,15 @@ export const getGameDetailsById = async (requestedGameNr: string): Promise<CGABo
         gameNr, date, gameType, termination, abortedBy, plies, uid1, uid2, uid3, uid4,
         endDate, isBot1, isBot2, isBot3, isBot4, q, pgn4
       } = (await response.json()) as FullCGABotGameDetails
-      const { startFen, ruleVariants, timeControl, title } = q
+      const { startFen, ruleVariants, timeControl, title, wasListedGame } = q
 
       const movesString = getMovesOnly(pgn4)
       const resigned = !!movesString && /(^|\t)R($|\t)]/.test(movesString)
+      const isListed = typeof wasListedGame === 'number'
 
       //prettier-ignore
       const result = {
-        gameNr, date, gameType, termination, abortedBy, plies, uid1, uid2, uid3, uid4, resigned,
+        gameNr, date, gameType, termination, abortedBy, plies, uid1, uid2, uid3, uid4, resigned, isListed,
         endDate, isBot1, isBot2, isBot3, isBot4, q: { startFen, ruleVariants, timeControl, title }
       } satisfies CGABotGameDetails
 

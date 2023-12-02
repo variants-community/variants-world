@@ -13,7 +13,8 @@ const gamesViolationMessages: Record<GameViolationType, (listIs: string) => stri
   [GameViolationType.AuthorParticipates]: listIs => `${listIs} played without the author of submission`,
   [GameViolationType.NoBots]: listIs => `${listIs} played with bots`,
   [GameViolationType.NoResignations]: listIs => `${listIs} have early resignations`,
-  [GameViolationType.NoAborts]: listIs => `${listIs} aborted`
+  [GameViolationType.NoAborts]: listIs => `${listIs} aborted`,
+  [GameViolationType.NoListed]: listIs => `${listIs} of already a listed variant`
 }
 
 const commonViolationMessages: Record<
@@ -49,7 +50,8 @@ export const createViolationMessages = (
     [GameViolationType.AuthorParticipates]: [],
     [GameViolationType.NoBots]: [],
     [GameViolationType.NoResignations]: [],
-    [GameViolationType.NoAborts]: []
+    [GameViolationType.NoAborts]: [],
+    [GameViolationType.NoListed]: []
   }
 
   for (const { type, gameIndex } of res.gameViolations) {

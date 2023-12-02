@@ -16,7 +16,8 @@ export enum GameViolationType {
   AuthorParticipates,
   NoBots,
   NoResignations,
-  NoAborts
+  NoAborts,
+  NoListed
 }
 
 export enum ValidationStatus {
@@ -176,6 +177,11 @@ export const validateGames = async (
 
       if (withoutAuthor(game, author.id)) {
         result.gameViolations.push({ type: GameViolationType.AuthorParticipates, gameIndex })
+        result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
+      }
+
+      if (game.isListed) {
+        result.gameViolations.push({ type: GameViolationType.NoListed, gameIndex })
         result.confirmingGameNrsStatus[gameIndex] = ValidationStatus.Failure
       }
     }

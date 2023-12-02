@@ -152,8 +152,7 @@ export const formatDuration = (duration: number) => {
   const hour = Math.trunc((duration /= 60) % 24)
   const day = Math.trunc((duration /= 24) % 7)
   const week = Math.trunc(duration / 7)
-  const format = (time: number, unit: string) =>
-    !time ? '' : time.toString().endsWith('1') ? `${time} ${unit}` : `${time} ${unit}s`
+  const format = (time: number, unit: string) => (!time ? '' : `${time} ${unit}${time === 1 ? '' : 's'}`)
   return [format(week, 'week'), format(day, 'day'), format(hour, 'hour'), format(minute, 'minute')]
     .filter(Boolean)
     .join(' ')

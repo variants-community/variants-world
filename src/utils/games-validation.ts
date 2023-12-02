@@ -89,6 +89,9 @@ export const validateGames = async (
     }
   }
 
+  // Extend games array with the main game, to validate it as well
+  validationRequest.confirmingGameNrs.unshift(validationRequest.mainGameNr)
+
   // Confirming games first validation
   const gamesOrUndefined = await Promise.all(validationRequest.confirmingGameNrs.map(getGameDetailsById))
 
@@ -129,10 +132,7 @@ export const validateGames = async (
       else if (lastDate.getTime() - confirmimgGameDate.getTime() < 0) lastDate = confirmimgGameDate
 
       // all games without current
-      const allOtherGames = [
-        ...validationRequest.confirmingGameNrs.filter((g, i) => i !== gameIndex),
-        validationRequest.mainGameNr
-      ]
+      const allOtherGames = validationRequest.confirmingGameNrs.filter((g, i) => i !== gameIndex)
 
       // (similar gameNr)
       if (allOtherGames.includes(`${game.gameNr}`)) {

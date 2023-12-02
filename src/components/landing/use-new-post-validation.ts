@@ -34,13 +34,16 @@ export const useNewPostValidation = (mainGame: CGABotGameDetails | undefined) =>
   })
 
   const violations = useComputed(
-    () => validationResponse.value && createViolationMessages(validationResponse.value, confirmingGameNrs.peek())
+    () =>
+      validationResponse.value &&
+      mainGame &&
+      createViolationMessages(validationResponse.value, [`${mainGame.gameNr}`, ...confirmingGameNrs.peek()])
   )
 
   const inputsPayload = useComputed(() =>
     confirmingGameNrs.value.map((gameNr, index) => ({
       gameNr,
-      status: validationResponse.value?.confirmingGameNrsStatus[index] ?? ValidationStatus.Unknown
+      status: validationResponse.value?.confirmingGameNrsStatus[index + 1] ?? ValidationStatus.Unknown
     }))
   )
 

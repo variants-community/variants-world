@@ -49,9 +49,9 @@ export const createViolationMessages = (res: ValidationResponse, confirmingGameN
     if (type === GameViolationType.Identical) {
       const gameNr = confirmingGameNrs[gameIndex]
       if (!identicalGames[gameNr]) identicalGames[gameNr] = []
-      identicalGames[gameNr].push(gameIndex + 2)
+      identicalGames[gameNr].push(gameIndex + 1)
     } else {
-      violationsMap[type].push(gameIndex + 2)
+      violationsMap[type].push(gameIndex + 1)
     }
   }
 

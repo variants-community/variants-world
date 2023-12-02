@@ -8,7 +8,7 @@ const state = Astro.url.searchParams.get('state')
 
 if (Astro.url.searchParams.has('error')) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-if (!code || !state || !states.has(state)) return new Response(null, { status: 403 })
+if (!code || !state || !states.has(state)) return Response.redirect(getAbsoluteUrl(Astro.url, '/login'))
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const { codeVerifier } = states.get(state)!

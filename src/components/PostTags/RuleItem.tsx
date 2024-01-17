@@ -3,10 +3,10 @@ type RuleItemProps = {
   class?: string
 }
 
-const RULE_ITEM_MAX_SIZE = 40
+const RULE_ITEM_MAX_SIZE = 50
 
 const minimize = (ruleName: string) => {
-  return ruleName.length > RULE_ITEM_MAX_SIZE ? `${ruleName.substring(0, RULE_ITEM_MAX_SIZE)}...` : ruleName
+  return ruleName.length > RULE_ITEM_MAX_SIZE ? `${ruleName.substring(0, RULE_ITEM_MAX_SIZE - 10)}...` : ruleName
 }
 
 export const RuleItem = (props: RuleItemProps) => {

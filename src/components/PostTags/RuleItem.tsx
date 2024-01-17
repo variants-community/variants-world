@@ -5,8 +5,14 @@ type RuleItemProps = {
 
 const RULE_ITEM_MAX_SIZE = 50
 
-const minimize = (ruleName: string) => {
-  return ruleName.length > RULE_ITEM_MAX_SIZE ? `${ruleName.substring(0, RULE_ITEM_MAX_SIZE - 10)}...` : ruleName
+const minimizeRule = (ruleName: string) => {
+  if (ruleName.length > RULE_ITEM_MAX_SIZE) {
+    let min = ruleName.substring(0, RULE_ITEM_MAX_SIZE - 10)
+    if (min.endsWith(',')) {
+      min = ruleName.substring(0, RULE_ITEM_MAX_SIZE - 11)
+    }
+    return `${min}...`
+  } else return ruleName
 }
 
 export const RuleItem = (props: RuleItemProps) => {
@@ -18,7 +24,7 @@ export const RuleItem = (props: RuleItemProps) => {
         data-tooltip={props.ruleName.length > RULE_ITEM_MAX_SIZE ? props.ruleName : undefined}
         data-tooltip-position="bottom"
       >
-        {minimize(props.ruleName)}
+        {minimizeRule(props.ruleName)}
       </span>
     </li>
   )

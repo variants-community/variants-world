@@ -76,7 +76,11 @@ export const useAdminSettings = (details: PostDetails) => {
         },
         async payload => {
           const updated = payload.new as Vote
-          const user = await supabase.from('User').select('*').eq('id', updated.testerId).single()
+          const user = await supabase
+            .from('User')
+            .select('id, username, role, profileUrl')
+            .eq('id', updated.testerId)
+            .single()
 
           const voteWithUser = { ...updated, tester: user.data }
           setVotes([...votes, voteWithUser])

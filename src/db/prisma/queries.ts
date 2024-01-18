@@ -64,17 +64,38 @@ export const getPostById = async (postId: number) => {
         include: {
           parent: {
             include: {
-              User: true
+              User: {
+                select: {
+                  id: true,
+                  username: true,
+                  role: true,
+                  profileUrl: true
+                }
+              }
             }
           },
-          User: true
+          User: {
+            select: {
+              id: true,
+              username: true,
+              role: true,
+              profileUrl: true
+            }
+          }
         }
       },
       PostDetails: {
         include: {
           votes: {
             include: {
-              tester: true
+              tester: {
+                select: {
+                  id: true,
+                  username: true,
+                  role: true,
+                  profileUrl: true
+                }
+              }
             }
           }
         }
@@ -95,7 +116,14 @@ export const getPostDetailsById = async (postId: number) => {
     include: {
       votes: {
         include: {
-          tester: true
+          tester: {
+            select: {
+              id: true,
+              username: true,
+              role: true,
+              profileUrl: true
+            }
+          }
         }
       }
     }

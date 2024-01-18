@@ -1,8 +1,14 @@
-import { TEST_POST_DETAILS_ID, TEST_TESTER_ID, authenticateAsTester, supabase } from '../_tests/test-supabase'
+import {
+  TEST_MEMBER_ID,
+  TEST_POST_DETAILS_ID,
+  TEST_TESTER_ID,
+  authenticateAsTester,
+  supabase
+} from '../_tests/test-supabase'
 import { describe, expect, it } from 'vitest'
 import type { VoteValue } from '@prisma/client'
 
-describe('authenticated user', () => {
+describe('authenticated tester', () => {
   authenticateAsTester()
 
   /**
@@ -14,18 +20,6 @@ describe('authenticated user', () => {
    * )
    *
    */
-
-  it('Allow tester reading his own vote', async () => {
-    const { data, error } = await supabase.from('Vote').select('value').eq('testerId', TEST_TESTER_ID).single()
-    expect(error).toBeNull()
-    expect(data?.value).toBeTypeOf('string')
-  })
-
-  it('Restrict tester reading others votes', async () => {
-    const { data, error } = await supabase.from('Vote').select('value').eq('testerId', 50645954).single()
-    expect(error).toBeDefined()
-    expect(data).toBeNull()
-  })
 
   const value: VoteValue = 'NEUTRAL'
   it('Allow tester insert/update vote', async () => {
@@ -39,5 +33,37 @@ describe('authenticated user', () => {
 
     expect(error).toBeNull()
     expect(data).toBeNull()
+  })
+
+  it('Allow tester reading his own vote', async () => {
+    const { data, error } = await supabase.from('Vote').select('value').eq('testerId', TEST_TESTER_ID).single()
+    expect(error).toBeNull()
+    expect(data?.value).toBeTypeOf('string')
+  })
+
+  it('Restrict tester reading others votes', async () => {
+    const { data, error } = await supabase.from('Vote').select('value').eq('testerId', 50645954).single()
+    expect(error).toBeDefined()
+    expect(data).toBeNull()
+  })
+
+  it('Allow tester delete vote', async () => {
+    const { error } = await supabase
+      .from('Vote')
+      .delete()
+      .eq('testerId', TEST_TESTER_ID)
+      .eq('postDetailsId', TEST_POST_DETAILS_ID)
+
+    expect(error).toBeNull()
+  })
+
+  it('Restric tester delete not his own vote', async () => {
+    const { error } = await supabase
+      .from('Vote')
+      .delete()
+      .eq('testerId', TEST_MEMBER_ID)
+      .eq('postDetailsId', TEST_POST_DETAILS_ID)
+
+    expect(error).toBeDefined()
   })
 })

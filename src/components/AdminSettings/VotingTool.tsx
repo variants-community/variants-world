@@ -26,6 +26,11 @@ export const VotingTool = (props: VotesProps) => {
       .eq('testerId', props.testerId)
   }
 
+  const removeVote = async () => {
+    props.setVotes(props.votes.filter(v => v.testerId !== props.testerId))
+    await supabase.from('Vote').delete().eq('testerId', props.testerId).eq('postDetailsId', props.postDetailsId)
+  }
+
   const setVotes = (value: VoteValue) => {
     const updated = props.votes.map(vote => (vote.testerId === props.testerId ? { ...vote, value } : vote))
     props.setVotes(updated)
@@ -40,8 +45,12 @@ export const VotingTool = (props: VotesProps) => {
         <div class={'flex flex-row gap-1 text-white text-[14px] transition-all duration-300'}>
           <button
             onClick={async () => {
-              setVotes('NEGATIVE')
-              onVote('NEGATIVE')
+              if (testerVote?.value === 'NEGATIVE') {
+                removeVote()
+              } else {
+                setVotes('NEGATIVE')
+                onVote('NEGATIVE')
+              }
             }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVote && testerVote.value === 'NEGATIVE' ? 'bg-primary' : 'hover:bg-primary'
@@ -51,8 +60,12 @@ export const VotingTool = (props: VotesProps) => {
           </button>
           <button
             onClick={async () => {
-              setVotes('NEUTRAL')
-              onVote('NEUTRAL')
+              if (testerVote?.value === 'NEUTRAL') {
+                removeVote()
+              } else {
+                setVotes('NEUTRAL')
+                onVote('NEUTRAL')
+              }
             }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVote && testerVote.value === 'NEUTRAL' ? 'bg-primary' : 'hover:bg-primary'
@@ -62,8 +75,12 @@ export const VotingTool = (props: VotesProps) => {
           </button>
           <button
             onClick={async () => {
-              setVotes('POSITIVE')
-              onVote('POSITIVE')
+              if (testerVote?.value === 'POSITIVE') {
+                removeVote()
+              } else {
+                setVotes('POSITIVE')
+                onVote('POSITIVE')
+              }
             }}
             class={`w-7 py-1 bg-border-light border border-primary rounded ${
               testerVote && testerVote.value === 'POSITIVE' ? 'bg-primary' : 'hover:bg-primary'

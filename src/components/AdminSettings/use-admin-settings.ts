@@ -56,6 +56,19 @@ export const useAdminSettings = (details: PostDetails) => {
       .on(
         'postgres_changes',
         {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'Vote',
+          filter: `postDetailsId=eq.${details.id}`
+        },
+        async payload => {
+          const deleted = payload.old as Vote
+          setVotes(votes.filter(v => v.id !== deleted.id))
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
           event: 'INSERT',
           schema: 'public',
           table: 'Vote',

@@ -33,7 +33,7 @@ export const fetchPosts = async (query: Query) => {
     if (query.page !== undefined && query.limit !== undefined) {
       response = await fetch(`/api/posts?page=${query.page}&limit=${query.limit}`, { method: 'get' })
     } else if (query.searchText) {
-      response = await fetch(`/api/posts?searchText=${query.searchText}`, {
+      response = await fetch(`/api/posts?searchText=${encodeURIComponent(query.searchText)}`, {
         method: 'get'
       })
     } else {

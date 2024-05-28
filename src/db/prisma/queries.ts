@@ -132,8 +132,17 @@ export const getPostDetailsById = async (postId: number) => {
   return details
 }
 
+// inplace solution for 'searchFor'
+const replaceAll = (target: string, toBeReplaced: string, replacement: string, ignore?: boolean) => {
+  return target.replace(
+    // eslint-disable-next-line no-useless-escape
+    new RegExp(toBeReplaced.replace(/([\/\,\!\\\^\$\{\}\[\]\(\).\*\+\?\|\<\>\-\&])/g, '\\$&'), ignore ? 'gi' : 'g'),
+    typeof replacement == 'string' ? replacement.replace(/\$/g, '$$$$') : replacement
+  )
+}
+
 export const searchFor = async (query: string) => {
-  const words = query.toLocaleLowerCase().split(/(\s+)/)
+  const words = replaceAll(replaceAll(query.toLocaleLowerCase(), ':', ''), '|', '').split(/(\s+)/)
 
   const statuses: GameStatus[] = []
 

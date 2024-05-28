@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig, passthroughImageService } from 'astro/config'
 import preact from '@astrojs/preact'
 import windi from 'astro-windi'
 
@@ -9,5 +9,8 @@ export default defineConfig({
   integrations: [preact(), windi()],
   output: 'server',
   server: { port: 3000 },
-  adapter: deno()
+  adapter: deno(),
+  image: {
+    service: passthroughImageService()
+  }
 })

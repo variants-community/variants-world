@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config'
 import preact from '@astrojs/preact'
 import windi from 'astro-windi'
 
-import deno from '@astrojs/deno'
+import deno from '@deno/astro-adapter'
 
 // https://astro.build/config
 export default defineConfig({

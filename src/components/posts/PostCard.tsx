@@ -25,7 +25,7 @@ const PostCard = (props: PostCardProps) => {
         <Picture
           fen={props.post.fen}
           id={props.post.id}
-          class={'max-w-80 mx-auto w-full sm:(w-55 h-55 min-w-55) rounded-l-xl bg-border-light'}
+          class={'max-w-82 mx-auto w-full sm:(w-55 h-55 min-w-55) bg-border-light'}
         />
         <div class={'w-full flex flex-col justify-between p-3 sm:p-5 '}>
           <div class={'flex flex-col gap-2 mb-2 sm:(gap-3 mb-7 mb-0)'}>

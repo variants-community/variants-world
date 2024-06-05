@@ -25,13 +25,13 @@ const PostCard = (props: PostCardProps) => {
         <Picture
           fen={props.post.fen}
           id={props.post.id}
-          class={'max-w-80 mx-auto w-full sm:(w-55 h-55 min-w-55) rounded-l-xl bg-border-light'}
+          class={'max-w-82 mx-auto w-full sm:(w-55 h-55 min-w-55) bg-border-light'}
         />
         <div class={'w-full flex flex-col justify-between p-3 sm:p-5 '}>
           <div class={'flex flex-col gap-2 mb-2 sm:(gap-3 mb-7 mb-0)'}>
-            <div class={'flex justify-between'}>
+            <div class={'relative flex justify-between'}>
               <PostTitle card postId={props.post.id} type={props.post.type} title={props.post.title} />
-              <div class={'hidden sm:block'}>
+              <div class={'absolute right-0 top-[-14px] hidden sm:block'}>
                 <TimePassed from={props.post.createdAt} />
               </div>
             </div>
@@ -39,7 +39,7 @@ const PostCard = (props: PostCardProps) => {
             <PostTags
               rules={props.post.gamerules.map(rule => rule.name)}
               class="text-text bg-dark border border-1 border-border-dark"
-              ulclass="!sm:h-7 !text-sm !sm:text-sm !gap-1 !sm:gap-[10px]"
+              ulclass="!sm:h-7 !text-sm !sm:text-sm !gap-[6px] !md:gap-[10px] !sm:gap-[4px]"
               iconsclass="fill-text"
             />
           </div>

@@ -42,7 +42,7 @@ const PostTitle = (props: PostTitleProps) => {
           class={'w-full bg-dark rounded outline-none text-xl text-3xl darkborder'}
         />
       ) : (
-        <h1 class={'w-full text-xl sm:text-3xl overflow-hidden overflow-ellipsis whitespace-nowrap'}>{props.title}</h1>
+        <h1 class={'w-full text-xl md:text-3xl sm:text-2xl text-nowrap'}>{props.title}</h1>
       )}
     </div>
   )

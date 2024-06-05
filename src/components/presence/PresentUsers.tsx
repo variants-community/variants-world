@@ -30,7 +30,7 @@ type PresencePopupProps = {
 
 const PresentUsersPopup = ({ username }: PresencePopupProps) => {
   return (
-    <div class="absolute bottom-[-40px] px-2 py-1 rounded-md shadow bg-border-light border-1 border-border-dark opacity-0 group-hover:opacity-[100%] pointer-events-none transition-all duration-100 easy-in z-1">
+    <div class="absolute right-0 bottom-[-40px] px-2 py-1 rounded-md shadow bg-border-light border-1 border-border-dark opacity-0 group-hover:opacity-[100%] pointer-events-none transition-all duration-100 easy-in z-1">
       <span>{username}</span>
     </div>
   )

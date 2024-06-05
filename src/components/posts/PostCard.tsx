@@ -29,9 +29,9 @@ const PostCard = (props: PostCardProps) => {
         />
         <div class={'w-full flex flex-col justify-between p-3 sm:p-5 '}>
           <div class={'flex flex-col gap-2 mb-2 sm:(gap-3 mb-7 mb-0)'}>
-            <div class={'flex justify-between'}>
+            <div class={'relative flex justify-between'}>
               <PostTitle card postId={props.post.id} type={props.post.type} title={props.post.title} />
-              <div class={'hidden sm:block'}>
+              <div class={'absolute right-0 top-[-14px] hidden sm:block'}>
                 <TimePassed from={props.post.createdAt} />
               </div>
             </div>

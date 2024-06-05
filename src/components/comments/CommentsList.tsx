@@ -66,10 +66,10 @@ const CommentCard = (props: CommentCardProps) => {
             <span class={'text-white font-semibold'}>{props.comment.User.username}</span>
           </div>
           <div class={'flex gap-3 flex-row-reverse'}>
-            <span>{formatDate(props.comment.createdAt)}</span>
+            <span class="whitespace-nowrap ">{formatDate(props.comment.createdAt)}</span>
             <button
               class={
-                'hover:text-secondary opacity-0 pointer-events-none transform transition-opacity duration-100 group-hover:(opacity-100 pointer-events-auto)'
+                'hidden sm:block hover:text-secondary sm:opacity-0 pointer-events-none transform transition-opacity duration-100 sm:group-hover:(opacity-100 pointer-events-auto)'
               }
               onClick={() => props.reply()}
             >
@@ -81,7 +81,7 @@ const CommentCard = (props: CommentCardProps) => {
                 window.location.hash = `#comment-${props.comment.id}`
               }}
               class={
-                'hover:text-secondary opacity-0 pointer-events-none transform transition-opacity duration-100 group-hover:(opacity-100 pointer-events-auto)'
+                'hidden sm:block hover:text-secondary sm:opacity-0 pointer-events-none transform transition-opacity duration-100 sm:group-hover:(opacity-100 pointer-events-auto)'
               }
             >
               share
@@ -89,7 +89,7 @@ const CommentCard = (props: CommentCardProps) => {
             {props.isUserTester && (
               <button
                 class={
-                  'hover:text-secondary opacity-0 pointer-events-none transform transition-opacity duration-100 group-hover:(opacity-100 pointer-events-auto)'
+                  'hidden sm:block hover:text-secondary sm:opacity-0 pointer-events-none transform transition-opacity duration-100 sm:group-hover:(opacity-100 pointer-events-auto)'
                 }
                 onClick={() => props.remove()}
               >
@@ -115,6 +115,25 @@ const CommentCard = (props: CommentCardProps) => {
           )}
 
           <p class={'text-lg whitespace-pre-wrap'}>{props.comment.content}</p>
+        </div>
+        <div class="flex ml-auto gap-2 text-secondary">
+          <button class={'sm:hidden'} onClick={() => props.reply()}>
+            reply
+          </button>
+          <button
+            onClick={() => {
+              props.highlight(props.comment.id)
+              window.location.hash = `#comment-${props.comment.id}`
+            }}
+            class={'sm:hidden'}
+          >
+            share
+          </button>
+          {props.isUserTester && (
+            <button class={'sm:hidden'} onClick={() => props.remove()}>
+              remove
+            </button>
+          )}
         </div>
       </div>
     </div>

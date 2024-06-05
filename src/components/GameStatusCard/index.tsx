@@ -32,7 +32,7 @@ const GameStatusCard = (props: PostResolutionProps) => {
       )} shadow-dark rounded-xl`}
       style={{ viewTransitionName: 'card-status' }}
     >
-      <Bubbles class="ml-12 mt-8 mb-6 mr-0" color={statusToColor(editable.value.status)} />
+      <Bubbles class="hidden sm:block ml-12 mt-8 mb-6 mr-0" color={statusToColor(editable.value.status)} />
       <div class={'w-full mb-auto px-3'}>
         <StatusName
           isEditMode={editing.value}
@@ -45,7 +45,10 @@ const GameStatusCard = (props: PostResolutionProps) => {
           onChange={verdict => (editable.value.verdict = verdict)}
         />
       </div>
-      <Bubbles class="mr-12 mt-8 mb-6 transform scale-x-inverse" color={statusToColor(editable.value.status)} />
+      <Bubbles
+        class="hidden sm:block mr-12 mt-8 mb-6 transform scale-x-inverse"
+        color={statusToColor(editable.value.status)}
+      />
       {props.displayEditBotton && (
         <div class={'absolute bottom-0 right-1.5'}>
           <EditButton

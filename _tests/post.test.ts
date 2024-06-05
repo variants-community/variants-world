@@ -43,4 +43,13 @@ describe('authenticated member', () => {
     expect(error).toBeDefined()
     expect(data).toBeNull()
   })
+
+  it('Restrict authors edit not his posts', async () => {
+    const { error } = await supabase
+      .from('Post')
+      .update({ title: 'PROBLEMS Test Post (do not delete) PROBLEMS' })
+      .eq('id', TEST_POST_DETAILS_ID)
+      .single()
+    expect(error).toBeDefined()
+  })
 })

@@ -3,18 +3,26 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    types: [opened, synchronize, labeled]
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
+    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'deploy-preview' }}
+    environment: Preview
     permissions:
       id-token: write
       contents: read
 
     steps:
+      - name: Remove trigger label
+        if: ${{ github.event.label.name == 'deploy-preview' }}
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: 'deploy-preview'
+
       - name: Clone repository
         uses: actions/checkout@v4
 
@@ -49,10 +57,14 @@ jobs:
 
       - name: Install dependencies
         env:
+          PRISMA_OUTPUT: ${{ vars.PRISMA_OUTPUT }}
+        run: pnpm i
+
+      - name: Build project
+        env:
           SUPABASE_PROJECT_ID: ${{ vars.SUPABASE_PROJECT_ID }}
           PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY }}
-          PRISMA_OUTPUT: ${{ vars.PRISMA_OUTPUT }}
           CGABOT_URL: ${{ vars.CGABOT_URL }}
 
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -61,9 +73,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
           CGABOT_API_TOKEN: ${{ secrets.CGABOT_API_TOKEN }}
-        run: pnpm i
-
-      - name: Build project
         run: pnpm build
 
       - name: Upload to Deno Deploy

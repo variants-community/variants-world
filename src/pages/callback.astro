@@ -16,7 +16,7 @@ const { codeVerifier } = states.get(state)!
 const [userInfo, signature] = await refreshUserInfo(
   {
     grant_type: 'authorization_code',
-    client_id: import.meta.env.OAUTH_CLIENT_ID,
+    client_id: OAUTH_CLIENT_ID,
     redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
     code,
     code_verifier: codeVerifier

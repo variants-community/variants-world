@@ -3,14 +3,14 @@ on:
   push:
     branches: [main]
   pull_request:
-    types: [opened, synchronize, labeled]
+    types: [opened, synchronize, labeled, converted_to_draft, ready_for_review]
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
-    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'deploy-preview' }}
+    if: ${{ !github.event.pull_request.draft && (github.event.action != 'labeled' || github.event.label.name == 'deploy-preview') }}
     environment: Preview
     permissions:
       id-token: write

@@ -15,10 +15,10 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
 
     steps:
       - name: Remove trigger label
-        if: ${{ github.event.label.name == 'deploy-preview' }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: 'deploy-preview'

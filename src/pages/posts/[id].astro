@@ -21,7 +21,7 @@ const userIsAuthor = user.id === post?.author.id
 
 const title = `${post ? `${post.type}: ${post.title}` : 'Not found'}`
 const ogImage =
-  post && `https://og.variants.world/?type=${post.type}&title=${post.title}&status=${post.status}&fen=${post.fen}`
+  post && `https://og.variants.world/?type=${post.type}&title=${post.title}&status=${post.status}&fen=${encodeURIComponent(post.fen)}`
 ---
 
 <Layout title={title} ogImage={ogImage}>

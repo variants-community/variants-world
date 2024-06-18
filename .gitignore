@@ -14,10 +14,12 @@ pnpm-debug.log*
 
 
 # environment variables
-.env
-.env.*
+*.local
 
 # macOS-specific files
 .DS_Store
 
 prisma/generated/
+
+# supabase typescript types
+src/db/supabase/types.ts 

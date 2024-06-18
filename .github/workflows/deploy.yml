@@ -17,6 +17,9 @@ jobs:
       contents: read
       pull-requests: write
 
+    env:
+      VW_ENV: prod
+
     steps:
       - name: Remove trigger label
         if: ${{ github.event.action == 'labeled' }}

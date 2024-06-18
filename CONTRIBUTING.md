@@ -6,6 +6,12 @@ Install the dependencies:
 pnpm i
 ```
 
+Start database:
+
+```sh
+pnpm supa
+```
+
 Run the dev server:
 
 ```sh

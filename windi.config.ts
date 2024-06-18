@@ -127,6 +127,8 @@ export default defineConfig({
   plugins: [],
   safelist: 'text-yellow text-blue text-green fill-blue fill-yellow fill-red fill-green',
   shortcuts: {
+    'tag-key': 'pl-1.5 pr-[5px] bg-gray text-text rounded-l text-nowrap select-none pointer-events-none	',
+    'tag-val': 'pr-1.5 bg-gray text-white rounded-r text-nowrap select-none pointer-events-none	',
     darkborder: 'border border-[2px] border-border-dark',
     'transition-title': {
       transitionProperty: 'height, margin-top, opacity, margin-bottom, font-size',

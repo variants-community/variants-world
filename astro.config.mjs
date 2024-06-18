@@ -9,6 +9,12 @@ export default defineConfig({
   integrations: [preact(), windi()],
   output: 'server',
   server: { port: 3000 },
+  vite: {
+    esbuild: {
+      jsx: 'automatic',
+      jsxImportSource: 'preact'
+    }
+  },
   adapter: deno(),
   image: {
     service: passthroughImageService()

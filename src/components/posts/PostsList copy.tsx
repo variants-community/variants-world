@@ -1,13 +1,14 @@
-import { fetchPosts } from 'utils/fetch-queries'
+// import { fetchPosts } from 'utils/fetch-queries'
 import { useScrolLoading } from 'components/posts/use-scroll-loading'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/posts/PostCard'
-import PostsSearch from 'components/posts/AdvancedPostsSearch'
-import type { PostForCard } from 'db/prisma/queries'
+import PostsSearch from 'components/posts/PostsSearch'
+import type { PostForCard, SearhHintDetails } from 'db/prisma/queries'
 
 type PostsListProps = {
   userId: number
   posts: PostForCard[]
+  searchDetails: SearhHintDetails
 }
 
 const PostsList = (props: PostsListProps) => {
@@ -21,15 +22,15 @@ const PostsList = (props: PostsListProps) => {
     default: '',
     onQuery: async newQuery => {
       if (newQuery.length > 0) {
-        return fetchPosts({ searchText: newQuery })
+        console.log('search for: [', newQuery, ']')
+        // return fetchPosts({ searchText: newQuery })
       }
     }
   })
 
   return (
     <div class="mx-auto container pb-12">
-      {/* <AdvancedPostsSearch /> */}
-      <PostsSearch query={query} setQuery={setQuery} searchDetails={{ usernames: ['gleb', 'qilp', 'kek'] }} />
+      <PostsSearch query={query} setQuery={setQuery} searchDetails={props.searchDetails} />
 
       <div class="flex flex-col gap-8">
         {(query.length > 0 ? foundPosts : posts)?.map(post => (

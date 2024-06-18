@@ -270,6 +270,20 @@ export const getUserRole = async (id: number) => {
   return (await prisma.user.findFirstOrThrow({ where: { id }, select: { role: true } }))?.role
 }
 
+export interface SearhHintDetails {
+  usernames: string[]
+}
+export const getSearchDetails = async (): Promise<SearhHintDetails> => {
+  // const usernames = await prisma.user.findMany({ select: { username: true } })
+  const details = await prisma.$queryRaw<User[]>`
+  select username from "User"
+  `
+  console.log('details: ', details)
+  return {
+    usernames: details.map(u => u.username)
+  }
+}
+
 export interface User {
   id: number
   username: string

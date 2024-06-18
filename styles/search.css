@@ -1,0 +1,48 @@
+/* [contenteditable] {padding:12px; background:#eee; } */
+
+[data-placeholder]:empty:before{
+  content: attr(data-placeholder);
+  color: #888;
+}
+
+.preachjs-calendar {
+
+  }
+
+  .preachjs-calendar--header {
+    @apply flex flex-row gap-1
+  }
+
+  .preachjs-calendar--grid {
+
+  }
+
+  .preachjs-calendar--grid-header {
+
+  }
+
+  .preachjs-calendar--grid-body {
+    @apply font-mono text-base select-none
+  }
+
+  .preachjs-calendar--grid-cell-disabled  {
+    @apply bg-border-light !cursor-default
+  }  
+
+  .preachjs-calendar--grid-cell-disabled > button {
+    @apply cursor-default
+  }  
+
+
+
+  .preachjs-calendar--grid-cell {
+    @apply p-1
+  }
+
+  .preachjs-calendar--grid-cell.active {
+        @apply bg-gray rounded text-white
+  }
+
+  .preachjs-calendar--grid-cell:hover:not(.preachjs-calendar--grid-cell-disabled) {
+    @apply bg-gray rounded text-white
+  }

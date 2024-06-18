@@ -25,13 +25,12 @@ const [userInfo, signature] = await refreshUserInfo(
 )
 if (!userInfo) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-
 const exists = await prisma.user.findFirst({ where: { id: userInfo.id }, select: { uuid: true } })
 if (!exists) {
   const newUser = await supabaseAdmin.createUser({
     email: `${userInfo.id}@variants.world`,
     password: signature,
-    email_confirm: true,
+    email_confirm: true
   })
   const uuid = newUser.data.user?.id
   if (!uuid) {
@@ -44,14 +43,29 @@ if (!exists) {
   console.log('User created!')
 } else {
   const { id, ...data } = userInfo
-  await Promise.all([
-    prisma.user.update({ data: { ...data, uuid: exists.uuid }, where: { id } }),
-    supabaseAdmin.updateUserById(exists.uuid, {
-      email: `${id}@variants.world`,
-      password: signature
-    })
-  ])
-  console.log('User updated!')
+  const { data: existInSupabaseAuth } = await supabaseAdmin.getUserById(exists.uuid)
+
+  if (existInSupabaseAuth.user) {
+    await Promise.all([
+      prisma.user.update({ data: { ...data, uuid: exists.uuid }, where: { id } }),
+      supabaseAdmin.updateUserById(exists.uuid, {
+        email: `${id}@variants.world`,
+        password: signature
+      })
+    ])
+    console.log('User updated!')
+  } else {
+    const {data: userInSupabaseAuth} = await supabaseAdmin.createUser({
+        email: `${userInfo.id}@variants.world`,
+        password: signature,
+        email_confirm: true
+      })
+
+    if (userInSupabaseAuth.user) {
+      await prisma.user.update({ data: { ...userInfo, uuid: userInSupabaseAuth.user.id }, where: { id } })
+    }
+    console.log('User founded, but created in supa!')
+  }
 }
 
 return Astro.redirect('/')

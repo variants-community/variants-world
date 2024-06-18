@@ -1,0 +1,30 @@
+name: Supa-backup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0' # Every Sunday
+
+jobs:
+  run_db_backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      supabase_db_url: ${{ secrets.DIRECT_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Backup data
+        run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
+
+      - name: Save Backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-data
+          path: data.sql

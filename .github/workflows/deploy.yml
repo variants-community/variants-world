@@ -17,9 +17,6 @@ jobs:
       contents: read
       pull-requests: write
 
-    env:
-      VW_ENV: prod
-
     steps:
       - name: Remove trigger label
         if: ${{ github.event.action == 'labeled' }}
@@ -66,6 +63,7 @@ jobs:
 
       - name: Build project
         env:
+          VW_ENV: prod
           SUPABASE_PROJECT_ID: ${{ vars.SUPABASE_PROJECT_ID }}
           PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY }}

@@ -15,6 +15,7 @@
       "layouts/*": ["src/layouts/*"],
       "pages/*": ["src/pages/*"],
       "utils/*": ["src/utils/*"],
+      "actions/*": ["src/actions/*"],
     }
   }
 }

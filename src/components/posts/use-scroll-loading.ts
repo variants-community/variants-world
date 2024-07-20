@@ -1,7 +1,7 @@
-import { fetchPosts } from 'utils/fetch-queries'
+import { actions } from 'astro:actions'
 import { getTotalPostsCount } from 'db/supabase/queries'
 import { useEffect, useState } from 'preact/hooks'
-import type { PostForCard } from 'db/prisma/queries'
+import type { PostForCard } from 'db/prisma/types'
 
 const POSTS_PER_PAGE = 10
 
@@ -20,7 +20,7 @@ export const useScrolLoading = (initialPosts: PostForCard[]) => {
   useEffect(() => {
     if (isLoadNeed && posts.length < totalCount) {
       // eslint-disable-next-line github/no-then
-      fetchPosts({ page: currentPage, limit: POSTS_PER_PAGE }).then(fethedPosts => {
+      actions.getPosts({ page: currentPage, limit: POSTS_PER_PAGE }).then(fethedPosts => {
         setPosts(prev => [...prev, ...fethedPosts])
         setCurrentPage(prev => prev + 1)
         setIsLoadNeed(false)

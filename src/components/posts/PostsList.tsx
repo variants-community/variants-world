@@ -1,9 +1,9 @@
-import { fetchPosts } from 'utils/fetch-queries'
+import { actions } from 'astro:actions'
 import { useScrolLoading } from 'components/posts/use-scroll-loading'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/posts/PostCard'
 import PostsSearch from 'components/posts/PostsSearch'
-import type { PostForCard } from 'db/prisma/queries'
+import type { PostForCard } from 'db/prisma/types'
 
 type PostsListProps = {
   userId: number
@@ -21,7 +21,7 @@ const PostsList = (props: PostsListProps) => {
     default: '',
     onQuery: async newQuery => {
       if (newQuery.length > 0) {
-        return fetchPosts({ searchText: newQuery })
+        return actions.getFilteredPosts({ query: newQuery })
       }
     }
   })

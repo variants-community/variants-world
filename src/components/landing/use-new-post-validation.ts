@@ -1,9 +1,11 @@
-import { type ValidationRequest, type ValidationResponse, ValidationStatus } from 'utils/games-validation'
-import { createViolationMessages } from 'utils/game-violations'
+import { ValidationStatus } from 'utils/validation/types'
+import { actions } from 'astro:actions'
+import { createViolationMessages } from 'utils/validation/game-violations'
 import { useComputed, useSignal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { useSearch } from 'src/hooks/use-search'
 import type { CGABotGameDetails } from 'cgabot'
+import type { ValidateGamesPayload } from 'actions/types'
 
 export type ValidationDetails = {
   timestamp: number
@@ -12,27 +14,14 @@ export type ValidationDetails = {
   finalGames: number
 }
 
-const sendValidationRequest = async (details: ValidationRequest, abortSignal?: AbortSignal) => {
-  const request: ValidationRequest = {
-    mainGameNr: `${details.mainGameNr}`,
-    confirmingGameNrs: details.confirmingGameNrs
-  }
-  const response = await fetch(`/api/game/validate`, {
-    method: 'post',
-    body: JSON.stringify(request),
-    signal: abortSignal
-  })
-  return response.json() as Promise<ValidationResponse>
-}
-
 export type InputPayload = { gameNr: string; status: ValidationStatus; loading: boolean }
 
 export const useNewPostValidation = (mainGame: CGABotGameDetails | undefined) => {
   const confirmingGameNrs = useSignal<string[]>(Array.from({ length: 8 }, () => ''))
   const activeGameIndex = useSignal<number | undefined>(undefined)
   const { signal: validationResponse, setQuery: setValidationRequest } = useSearch({
-    default: undefined as ValidationRequest | undefined,
-    onQuery: sendValidationRequest
+    default: undefined as ValidateGamesPayload | undefined,
+    onQuery: actions.validateGames
   })
 
   const violations = useComputed(

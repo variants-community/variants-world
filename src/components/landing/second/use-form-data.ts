@@ -1,10 +1,9 @@
+import { actions } from 'astro:actions'
 import { descriptionValid } from 'utils/post-validation'
-import { postGameToCreatePost } from 'utils/fetch-queries'
 import { supabase } from 'db/supabase/supabase'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
-import type { CreatePostDetails } from 'db/prisma/queries'
 import type { GameType } from '@prisma/client'
 
 type GameData = {
@@ -65,25 +64,21 @@ export const useFormData = (gameData: GameData) => {
     await validateTitle(formData.value.title)
 
     if (errors.value.size === 0) {
-      const data: CreatePostDetails = {
-        data: {
-          description: formData.value.description,
-          title: formData.value.title,
-          type: formData.value.type
-        },
+      const response = await actions.createPost({
+        title: formData.value.title,
+        description: formData.value.description,
+        type: formData.value.type,
         gameNr: gameData.mainGame.gameNr.toString(),
         confirmingGameNrs: gameData.confirmingGameNrs,
         userId: gameData.userId
-      }
-
-      const response = await postGameToCreatePost(data)
+      })
 
       if (response.confirmedGameId) {
         self.location.replace(`/posts/${response.confirmedGameId}`)
-      } else if (response.error?.message === 'User not found') {
+      } else if (response.error === 'User not found') {
         self.location.pathname = '/logout'
       } else {
-        serverError.value = response.error?.message
+        serverError.value = response.error
       }
     }
   }

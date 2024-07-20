@@ -6,7 +6,7 @@ type AuthGuardRoute = { path: string; deep?: true; action?: 'redirect' | 'error'
 const AuthGuardRoutes: AuthGuardRoute[] = [
   { path: '/' },
   { path: '/posts', deep: true },
-  { path: '/api', deep: true, action: 'error' }
+  { path: '/_actions', deep: true, action: 'error' }
 ]
 
 export const onRequest = defineMiddleware(async (context, next) => {

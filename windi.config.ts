@@ -17,7 +17,7 @@ export const COLORS = {
   dark: 'var(--dark)',
   'border-dark': 'var(--border-dark)',
   'border-light': 'var(--border-light)'
-} as const satisfies NonNullable<FullConfig['theme']>['colors']
+} as const
 
 export default defineConfig({
   darkMode: 'class', // or 'media'

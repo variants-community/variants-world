@@ -1,17 +1,24 @@
+import { cl } from 'utils/hepers'
+import type { JSX } from 'preact/jsx-runtime'
+
 type PostUserProps = {
   username: string
   profileUrl?: string | null
+  children?: JSX.Element | false
 }
 
 const PostUser = (props: PostUserProps) => {
   return (
-    <div class={'flex flex-row items-center gap-2'}>
+    <div class={cl('flex flex-row items-center gap-2', props.children ? 'leading-[1.3]' : '')}>
       <img
         src={props.profileUrl ?? '/assets/images/user.png'}
         alt={props.username}
         class="h-5 w-5 sm:(h-6 w-6) rounded-md"
       />
-      <span class={'font-semibold'}>{props.username}</span>
+      <div>
+        <span class={'font-semibold'}>{props.username}</span>
+        {props.children}
+      </div>
     </div>
   )
 }

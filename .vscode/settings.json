@@ -12,5 +12,8 @@
   "vitest.commandLine": "pnpx vitest --",
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": ".github/workflows/deploy.yml"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
   }
 }

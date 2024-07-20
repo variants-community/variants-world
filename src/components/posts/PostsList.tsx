@@ -1,4 +1,7 @@
+import { type GalleryView, GalleryViewSwitch } from 'components/common/GalleryViewSwitch'
 import { actions } from 'astro:actions'
+import { cl } from 'utils/hepers'
+import { useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { useScrolLoading } from 'components/posts/use-scroll-loading'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/posts/PostCard'
@@ -11,7 +14,15 @@ type PostsListProps = {
 }
 
 const PostsList = (props: PostsListProps) => {
-  const { posts } = useScrolLoading(props.posts)
+  const { posts, forceLoad } = useScrolLoading({
+    initialPosts: props.posts,
+    POSTS_PER_PAGE: useComputed(() => (galleryView.value === 'large' ? 10 : 50))
+  })
+
+  const galleryView = useSignal<GalleryView>('large')
+  useSignalEffect(() => {
+    if (galleryView.value === 'compact') forceLoad()
+  })
 
   const {
     data: foundPosts,
@@ -28,11 +39,14 @@ const PostsList = (props: PostsListProps) => {
 
   return (
     <div class="mx-auto container pb-12">
-      <PostsSearch query={query} setQuery={setQuery} />
+      <div class="flex gap-x-3 mt-4 mb-10 lg:(mb-14 mt-0)">
+        <PostsSearch query={query} setQuery={setQuery} />
+        <GalleryViewSwitch signal={galleryView} />
+      </div>
 
-      <div class="flex flex-col gap-8">
+      <div class={useComputed(() => cl('flex flex-col', galleryView.value === 'large' ? 'gap-8' : 'gap-4'))}>
         {(query.length > 0 ? foundPosts : posts)?.map(post => (
-          <PostCard userId={props.userId} key={post.id} post={post} />
+          <PostCard userId={props.userId} key={post.id} post={post} view={galleryView} />
         ))}
       </div>
     </div>

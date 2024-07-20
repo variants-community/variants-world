@@ -3,6 +3,22 @@ import type { GameStatus } from '@prisma/client'
 
 export const getValueFromEvent = <Type = string>(e: Event) => (e.target as HTMLInputElement).value as Type
 
+export const cl = (...args: (string | false | undefined | null | Record<string, unknown>)[]) => {
+  let classlist = ''
+  for (const arg of args) {
+    if (!arg) continue
+    if (typeof arg === 'string') classlist += classlist ? ` ${arg}` : arg
+    else if (typeof arg === 'object') {
+      for (const key in arg) {
+        if ({}.hasOwnProperty.call(arg, key) && arg[key]) {
+          classlist += classlist ? ` ${key}` : key
+        }
+      }
+    }
+  }
+  return classlist
+}
+
 export const isIdValid = (gameNr: string): boolean => {
   return /^\d+$/.test(gameNr)
 }

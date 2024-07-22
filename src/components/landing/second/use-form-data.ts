@@ -1,7 +1,6 @@
 import { actions } from 'astro:actions'
-import { descriptionValid } from 'utils/post-validation'
+import { descriptionValid, titleValid } from 'utils/post-validation'
 import { supabase } from 'db/supabase/supabase'
-import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
 import type { GameType } from '@prisma/client'
@@ -16,15 +15,23 @@ export const useFormData = (gameData: GameData) => {
   const errors = useSignal<Set<string>>(new Set())
   const serverError = useSignal<string | undefined>(undefined)
 
-  useEffect(() => {
-    validateTitle(gameData.mainGame.q.title)
-  }, [])
-
   const validateTitle = async (title: string) => {
-    const { error } = await supabase.from('Post').select('title').eq('title', title.trim()).single()
     const temp = new Set(errors.value)
-    if (error) temp.delete('isOccupied')
-    else temp.add('isOccupied')
+    if (!title.trim().length) temp.add('noTitle')
+    else {
+      temp.delete('noTitle')
+      try {
+        titleValid(title)
+        temp.delete('invalidTitle')
+      } catch {
+        console.log('invalid title wttttd')
+        temp.add('invalidTitle')
+        const { error } = await supabase.from('Post').select('title').eq('title', title.trim()).single()
+        if (error) temp.delete('isOccupied')
+        else temp.add('isOccupied')
+      }
+    }
+
     errors.value = temp
   }
 
@@ -40,7 +47,7 @@ export const useFormData = (gameData: GameData) => {
   }
 
   const formData = useSignal({
-    title: gameData.mainGame.q.title,
+    title: '',
     type: 'NCV' as GameType,
     description: ''
   })

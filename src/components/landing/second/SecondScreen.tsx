@@ -36,8 +36,14 @@ const SecondScreen = (props: Props) => {
             label="Name"
             value={title}
             setValue={changeTitle}
-            invalid={errors.has('isOccupied')}
-            error="A post with this name already exists"
+            invalid={errors.has('isOccupied') || errors.has('noTitle') || errors.has('invalidTitle')}
+            error={
+              errors.has('noTitle')
+                ? 'Please enter a title'
+                : errors.has('invalidTitle')
+                  ? 'Title is too short'
+                  : 'A post with this title already exists'
+            }
             submit={submit}
           />
 

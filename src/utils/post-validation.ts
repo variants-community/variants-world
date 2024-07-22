@@ -6,7 +6,7 @@ export const descriptionValid = (description: string) => {
   if (description.trim().length < MIN_DESCRIPTION_LENGTH) throw new Error('Invalid description')
 }
 
-export const titleValid = async (title: string) => {
+export const titleValid = (title: string) => {
   if (title.trim().length < MIN_TITLE_LENGTH) throw new Error('Invalid title')
 }
 

@@ -1,5 +1,5 @@
 import { Screens } from 'components/landing/Screens'
-import { fetchGameById } from 'utils/fetch-queries'
+import { actions } from 'astro:actions'
 import { supabase } from 'db/supabase/supabase'
 import { useEffect } from 'preact/hooks'
 import { useNewPostValidation } from 'components/landing/use-new-post-validation'
@@ -17,7 +17,7 @@ const Landing = (props: { userId: number }) => {
     isFetching: loading,
     query: mainGameNr,
     setQuery: requestGame
-  } = useSearch<number | undefined, CGABotGameDetails>({ default: undefined, onQuery: fetchGameById })
+  } = useSearch<number | undefined, CGABotGameDetails>({ default: undefined, onQuery: actions.getGameDetails })
 
   const validationSlice = useNewPostValidation(mainGame)
 

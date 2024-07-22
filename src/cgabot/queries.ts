@@ -1,7 +1,7 @@
 import { CGABotToken, CGABotUrl, cache } from 'cgabot/config'
 import type { CGABotGameDetails, FullCGABotGameDetails } from 'cgabot/types'
 
-export const getGameDetailsById = async (requestedGameNr: string): Promise<CGABotGameDetails | undefined> => {
+export const getCgabotGameDetailsById = async (requestedGameNr: string): Promise<CGABotGameDetails | undefined> => {
   const fromCache = cache.get(requestedGameNr)
 
   if (fromCache) {
@@ -10,7 +10,14 @@ export const getGameDetailsById = async (requestedGameNr: string): Promise<CGABo
   }
 
   try {
-    const response = await fetch(`${CGABotUrl}/game/${requestedGameNr}?${new URLSearchParams({ token: CGABotToken })}`)
+    const response = await fetch(
+      `${CGABotUrl}/game/${requestedGameNr}?${new URLSearchParams({ token: CGABotToken })}`
+      // eslint-disable-next-line github/no-then
+    ).catch(e => {
+      // eslint-disable-next-line no-console
+      console.error('Cgabot Error:', e.message)
+      return undefined
+    })
 
     if (response && response.status === 200) {
       // prettier-ignore

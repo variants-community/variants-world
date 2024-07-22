@@ -1,6 +1,6 @@
 ---
+import { actions } from 'astro:actions'
 import { getAbsoluteUrl } from 'utils/auth'
-import { getPosts } from 'db/prisma/queries'
 import Layout from 'layouts/Layout.astro'
 import PostsList from 'components/posts/PostsList'
 
@@ -8,7 +8,7 @@ const { user } = Astro.locals
 
 if (user.guest) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-const posts = await getPosts(0, 10)
+const posts = await actions.getPosts({ page: 0, limit: 10 })
 ---
 
 <Layout title="Posts | Variants World">

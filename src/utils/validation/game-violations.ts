@@ -1,6 +1,6 @@
 // Used on client only
 
-import { CommonViolationType, GameViolationType, type ValidationResponse } from 'utils/games-validation'
+import { CommonViolationType, GameViolationType, type ValidationResponse } from 'utils/validation/types'
 import { formatDuration } from 'utils/hepers'
 
 const formatGameIndices = (indices: number[]) =>

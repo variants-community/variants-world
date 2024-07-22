@@ -1,4 +1,4 @@
-import { ValidationStatus } from 'utils/games-validation'
+import { ValidationStatus } from 'utils/validation/types'
 import { getValueFromEvent } from 'utils/hepers'
 import CheckMarkIcon from 'components/icons/CheckMarkIcon'
 import CrossIcon from 'components/icons/CrossIcon'

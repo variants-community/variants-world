@@ -10,6 +10,9 @@ export default defineConfig({
   output: 'server',
   server: { port: 3000 },
   adapter: deno(),
+  experimental: {
+    actions: true
+  },
   image: {
     service: passthroughImageService()
   }

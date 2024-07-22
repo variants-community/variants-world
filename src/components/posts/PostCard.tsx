@@ -1,18 +1,19 @@
 import { Picture } from 'components/common/Picture'
+import { type Signal } from '@preact/signals'
 import { TimePassed } from 'components/GameInfo/TimePassed'
+import { cl } from 'utils/hepers'
 import CommentIcon from 'components/icons/CommentIcon'
 import Likes from 'components/likes'
 import PostTags from 'components/PostTags'
 import PostTitle from 'components/PostTitle'
 import PostUser from 'components/PostUser'
-import StatusIcon from 'components/icons/StatusIcon'
-import type { Color } from 'windi.config'
-import type { GameStatus } from '@prisma/client'
-import type { PostForCard } from 'db/prisma/queries'
+import type { GalleryView } from 'components/common/GalleryViewSwitch'
+import type { PostForCard } from 'db/prisma/types'
 
 type PostCardProps = {
   post: PostForCard
   userId: number
+  view: Signal<GalleryView>
 }
 
 const PostCard = (props: PostCardProps) => {
@@ -25,33 +26,67 @@ const PostCard = (props: PostCardProps) => {
         <Picture
           fen={props.post.fen}
           id={props.post.id}
-          class={'max-w-82 mx-auto w-full sm:(w-55 h-55 min-w-55) bg-border-light'}
+          class={cl(
+            'mx-auto bg-border-light transition-[width,height] duration-100 max-w-82 w-full',
+            props.view.value === 'large' ? 'sm:(w-55 h-55 min-w-55)' : 'sm:(w-16 h-16 min-w-16)'
+          )}
         />
-        <div class={'w-full flex flex-col justify-between p-3 sm:p-5 '}>
-          <div class={'flex flex-col gap-2 mb-2 sm:(gap-3 mb-7 mb-0)'}>
+        <div
+          class={cl(
+            'w-full grid transition-[padding] duration-100',
+            props.view.value === 'large' ? 'grid-rows-[1fr,auto] p-3 sm:p-5' : 'grid-cols-[1fr,auto] py-2 px-4'
+          )}
+        >
+          <div
+            class={cl(
+              'flex gap-2 flex-col w-full',
+              props.view.value === 'large' ? 'mb-2 sm:(gap-3 mb-7 mb-0)' : 'pt-1.5'
+            )}
+          >
             <div class={'relative flex justify-between'}>
-              <PostTitle card postId={props.post.id} type={props.post.type} title={props.post.title} />
-              <div class={'absolute right-0 top-[-14px] hidden sm:block'}>
-                <TimePassed from={props.post.createdAt} />
-              </div>
+              <PostTitle
+                card
+                postId={props.post.id}
+                type={props.post.type}
+                title={props.post.title}
+                view={props.view}
+                status={props.post.status}
+              />
+              {props.view.value === 'large' && (
+                <div class={cl('absolute hidden sm:block right-0 top-[-14px]')}>
+                  <TimePassed from={props.post.createdAt} />
+                </div>
+              )}
             </div>
 
-            <PostTags
-              rules={props.post.gamerules.map(rule => rule.name)}
-              class="text-text bg-dark border border-1 border-border-dark"
-              ulclass="!sm:h-7 !text-sm !sm:text-sm !gap-[6px] !md:gap-[10px] !sm:gap-[4px]"
-              iconsclass="fill-text"
-            />
+            {props.view.value === 'large' && (
+              <PostTags
+                rules={props.post.gamerules.map(rule => rule.name)}
+                class="text-text bg-dark border border-1 border-border-dark"
+                ulclass="!sm:h-7 !text-sm !sm:text-sm !gap-[6px] !md:gap-[10px] !sm:gap-[4px]"
+                iconsclass="fill-text"
+              />
+            )}
           </div>
-          <div class={'flex flex-wrap justify-between'}>
-            <div class={'flex justify-between items-center'}>
-              <PostUser username={props.post.author.username} profileUrl={props.post.author.profileUrl} />
-            </div>
+          <div class={cl('flex justify-between gap-x-2', props.view.value === 'large' && 'flex-wrap items-center')}>
+            <PostUser username={props.post.author.username} profileUrl={props.post.author.profileUrl}>
+              {props.view.value === 'compact' && <TimePassed from={props.post.createdAt} />}
+            </PostUser>
 
-            <div class={'sm:w-38 flex justify-end items-center sm:justify-end ml-auto gap-3 sm:gap-5'}>
-              <StatusIndicator status={props.post.status} />
-              <Comments count={props.post.commentsCount} />
-              <Likes likes={props.post.likes} postId={props.post.id} userId={props.userId} />
+            <div
+              class={cl(
+                'flex justify-end items-center sm:justify-end',
+                props.view.value === 'large' ? 'sm:w-38 gap-3 sm:gap-5' : 'sm:w-22 gap-4'
+              )}
+            >
+              {/* <StatusIndicator status={props.post.status} /> */}
+              <Comments count={props.post.commentsCount} small={props.view.value === 'compact'} />
+              <Likes
+                likes={props.post.likes}
+                postId={props.post.id}
+                userId={props.userId}
+                small={props.view.value === 'compact'}
+              />
             </div>
           </div>
         </div>
@@ -60,24 +95,10 @@ const PostCard = (props: PostCardProps) => {
   )
 }
 
-const StatusIndicator = ({ status }: { status: GameStatus }) => {
-  const colors: Record<GameStatus, Color> = {
-    ACCEPTED: 'green',
-    DECLINED: 'red',
-    PENDING_REPLY: 'yellow',
-    UNDER_REVIEW: 'blue'
-  }
-  return (
-    <div class={'w-auto'}>
-      <StatusIcon class={`fill-${colors[status]}`} />
-    </div>
-  )
-}
-
-const Comments = ({ count }: { count: number }) => (
-  <div class={'flex justify-end items-center gap-2 text-[16px] sm:text-[22px]'}>
+const Comments = ({ count, small }: { count: number; small?: boolean }) => (
+  <div class={cl('flex justify-end items-center', small ? 'text-base gap-1.5' : 'text-[16px] sm:text-[22px] gap-2')}>
     <span>{count}</span>
-    <CommentIcon />
+    <CommentIcon class={small ? 'w-3.5 h-3.5' : undefined} />
   </div>
 )
 

@@ -1,5 +1,5 @@
-import { type Ref, useEffect, useRef } from 'preact/hooks'
 import { getValueFromEvent } from 'utils/hepers'
+import { useEffect, useRef } from 'preact/hooks'
 import SearchIcon from 'components/icons/SearchIcon'
 
 type SearhProps = {
@@ -8,7 +8,7 @@ type SearhProps = {
 }
 
 const PostsSearch = (props: SearhProps) => {
-  const ref = useRef<HTMLInputElement>()
+  const ref = useRef<HTMLInputElement>(null)
 
   const onQueryInput = async (e: Event) => {
     props.setQuery(getValueFromEvent<string>(e))
@@ -29,9 +29,9 @@ const PostsSearch = (props: SearhProps) => {
   }, [])
 
   return (
-    <div class={'relative w-11/12 mx-auto mt-4 mb-10 lg:(w-full mx-0 mb-14 mt-0)'}>
+    <div class={`relative w-11/12 mx-auto lg:(w-full mx-0)`}>
       <input
-        ref={ref as Ref<HTMLInputElement>}
+        ref={ref}
         value={props.query}
         onInput={onQueryInput}
         type="text"

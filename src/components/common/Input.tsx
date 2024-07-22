@@ -1,4 +1,4 @@
-import type { HTMLProps } from 'preact/compat'
+import { type HTMLProps } from 'preact/compat'
 
 export const Input = (props: { onEnter?: () => void; onCtrlEnter?: () => void } & HTMLProps<HTMLInputElement>) => {
   const onKeyDown = (e: KeyboardEvent) => {

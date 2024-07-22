@@ -3,10 +3,10 @@ import { prisma } from 'db/prisma/prisma'
 import type { PostForCard } from 'db/prisma/types'
 
 export const getPosts = defineAction({
-  input: z.object({ page: z.number(), limit: z.number() }),
-  handler: async ({ page, limit }) => {
+  input: z.object({ skip: z.number(), limit: z.number() }),
+  handler: async ({ skip, limit }) => {
     const posts = await prisma.post.findMany({
-      skip: page * limit,
+      skip,
       take: limit,
       include: {
         gamerules: true,

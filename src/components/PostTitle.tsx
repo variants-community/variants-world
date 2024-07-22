@@ -1,6 +1,10 @@
 import { Input } from 'components/common/Input'
-import { getValueFromEvent } from 'utils/hepers'
-import type { GameType } from '@prisma/client'
+import { type ReadonlySignal, useComputed } from '@preact/signals'
+import { cl, getValueFromEvent } from 'utils/hepers'
+import StatusIcon from 'components/icons/StatusIcon'
+import type { Color } from 'windi.config'
+import type { GalleryView } from 'components/common/GalleryViewSwitch'
+import type { GameStatus, GameType } from 'db/prisma/types'
 
 type PostTitleProps = {
   postId: number
@@ -11,6 +15,8 @@ type PostTitleProps = {
   type: string
   title: string
   card?: true
+  view?: ReadonlySignal<GalleryView>
+  status?: GameStatus
 }
 
 const PostTitle = (props: PostTitleProps) => {
@@ -20,18 +26,27 @@ const PostTitle = (props: PostTitleProps) => {
         <select
           value={props.type}
           onChange={e => props.onTypeChange?.(getValueFromEvent<GameType>(e))}
-          class=" py-1 px-2 sm:(py-2 px-1.5) text-white bg-dark darkborder rounded outline-none appearance-none text-xl sm:text-2xl leading-none text-center"
+          class="py-1 px-2 sm:(py-2 px-1.5) text-white bg-dark darkborder rounded outline-none appearance-none text-xl sm:text-2xl leading-none text-center"
         >
           <option value={'WOF'}>WoF</option>
           <option value={'NCV'}>NCV</option>
         </select>
       ) : (
         <h2
-          class={`flex bg-gray py-1 px-2 sm:(py-2 px-2.5) rounded text-xl sm:text-2xl leading-none ${
-            !props.card && 'cursor-default'
-          }`}
+          class={useComputed(() =>
+            cl(
+              'relative flex bg-gray py-1 px-2 sm:(py-2 px-2.5) rounded leading-none',
+              !props.card && 'cursor-default',
+              !props.view || props.view.value === 'large' ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'
+            )
+          )}
         >
           {props.type}
+          {props.status && (
+            <div class="absolute right-[-11px] top-[-8px]">
+              <StatusIndicator status={props.status} />
+            </div>
+          )}
         </h2>
       )}
       {props.isEditMode ? (
@@ -42,10 +57,35 @@ const PostTitle = (props: PostTitleProps) => {
           class={'w-full bg-dark rounded outline-none text-xl text-3xl darkborder'}
         />
       ) : (
-        <h1 class={'w-full text-xl md:text-3xl sm:text-2xl text-nowrap'}>{props.title}</h1>
+        <h1
+          class={useComputed(() =>
+            cl(
+              'w-full text-nowrap',
+              !props.view || props.view.value === 'large'
+                ? 'text-xl md:text-3xl sm:text-2xl'
+                : 'text-lg md:text-xl font-medium'
+            )
+          )}
+        >
+          {props.title}
+        </h1>
       )}
     </div>
   )
 }
 
 export default PostTitle
+
+const StatusIndicator = ({ status }: { status: GameStatus }) => {
+  const colors: Record<GameStatus, Color> = {
+    ACCEPTED: 'green',
+    DECLINED: 'red',
+    PENDING_REPLY: 'yellow',
+    UNDER_REVIEW: 'blue'
+  }
+  return (
+    <div class={'w-auto'}>
+      <StatusIcon class={`fill-${colors[status]}`} />
+    </div>
+  )
+}

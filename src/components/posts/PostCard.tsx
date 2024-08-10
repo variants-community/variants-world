@@ -33,14 +33,16 @@ const PostCard = (props: PostCardProps) => {
         />
         <div
           class={cl(
-            'w-full grid transition-[padding] duration-100',
-            props.view.value === 'large' ? 'grid-rows-[1fr,auto] p-3 sm:p-5' : 'grid-cols-[1fr,auto] py-2 px-4'
+            'w-full transition-[padding] duration-100 ',
+            props.view.value === 'large'
+              ? 'grid grid-rows-[1fr,auto] p-3 sm:p-5'
+              : 'flex gap-2 overflow-hidden pb-2 pt-3 px-3'
           )}
         >
           <div
             class={cl(
               'flex gap-2 flex-col w-full',
-              props.view.value === 'large' ? 'mb-2 sm:(gap-3 mb-7 mb-0)' : 'pt-1.5'
+              props.view.value === 'large' ? 'mb-2 sm:(gap-3 mb-7 mb-0)' : 'flex-1'
             )}
           >
             <div class={'relative flex justify-between'}>
@@ -68,7 +70,12 @@ const PostCard = (props: PostCardProps) => {
               />
             )}
           </div>
-          <div class={cl('flex justify-between gap-x-2', props.view.value === 'large' && 'flex-wrap items-center')}>
+          <div
+            class={cl(
+              'flex justify-between gap-x-2',
+              props.view.value === 'large' ? 'flex-wrap items-center' : 'sm:w-60'
+            )}
+          >
             <PostUser username={props.post.author.username} profileUrl={props.post.author.profileUrl}>
               {props.view.value === 'compact' && <TimePassed from={props.post.createdAt} />}
             </PostUser>
@@ -96,7 +103,7 @@ const PostCard = (props: PostCardProps) => {
 }
 
 const Comments = ({ count, small }: { count: number; small?: boolean }) => (
-  <div class={cl('flex justify-end items-center', small ? 'text-base gap-1.5' : 'text-[16px] sm:text-[22px] gap-2')}>
+  <div class={cl('flex justify-end items-center', small ? 'text-base gap-1.5' : 'text-base sm:text-2xl gap-2')}>
     <span>{count}</span>
     <CommentIcon class={small ? 'w-3.5 h-3.5' : undefined} />
   </div>

@@ -13,9 +13,9 @@ const PostUser = (props: PostUserProps) => {
       <img
         src={props.profileUrl ?? '/assets/images/user.png'}
         alt={props.username}
-        class="h-5 w-5 sm:(h-6 w-6) rounded-md"
+        class="min-h-5.5 min-w-5.5 h-5.5 w-5.5 sm:(h-6 w-6) rounded-md"
       />
-      <div>
+      <div class={`${props.children ? 'hidden sm:block ' : ''}`}>
         <span class={'font-semibold'}>{props.username}</span>
         {props.children}
       </div>

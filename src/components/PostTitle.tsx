@@ -58,12 +58,13 @@ const PostTitle = (props: PostTitleProps) => {
         />
       ) : (
         <h1
+          style="overflow-wrap: anywhere"
           class={useComputed(() =>
             cl(
-              'w-full text-nowrap',
+              'w-full text-nowrap leading-4',
               !props.view || props.view.value === 'large'
                 ? 'text-xl md:text-3xl sm:text-2xl'
-                : 'text-lg md:text-xl font-medium'
+                : 'break-words text-lg md:text-xl font-medium'
             )
           )}
         >

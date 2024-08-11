@@ -26,7 +26,7 @@ const Likes = (props: LikesProps) => {
       <span
         class={cl(
           'select-none',
-          props.small ? 'text-base' : 'text-xl sm:text-2xl',
+          props.small ? 'text-base' : 'text-base sm:text-2xl',
           isLiked ? 'text-red font-medium' : 'text-text'
         )}
       >

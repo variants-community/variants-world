@@ -124,7 +124,7 @@ export const getFormattedTimePassed = (createdAt: Date): string => {
 }
 
 export const getGamePictureUrl = (fen: string) => {
-  return `https://assets.variants.studio/image?quadratic&size=550&fen=${encodeURIComponent(fen)}`
+  return `https://assets.variants.world/image?quadratic&size=550&fen=${encodeURIComponent(fen)}`
 }
 
 export const similar = (first: string, second: string, caseSensitive = true) => {

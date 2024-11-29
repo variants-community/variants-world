@@ -32,7 +32,7 @@ const PostsList = (props: PostsListProps) => {
     default: '',
     onQuery: async newQuery => {
       if (newQuery.length > 0) {
-        return actions.getFilteredPosts({ query: newQuery })
+        return actions.getFilteredPosts.orThrow({ query: newQuery })
       }
     }
   })

@@ -17,7 +17,7 @@ const Landing = (props: { userId: number }) => {
     isFetching: loading,
     query: mainGameNr,
     setQuery: requestGame
-  } = useSearch<number | undefined, CGABotGameDetails>({ default: undefined, onQuery: actions.getGameDetails })
+  } = useSearch<number | undefined, CGABotGameDetails>({ default: undefined, onQuery: actions.getGameDetails.orThrow })
 
   const validationSlice = useNewPostValidation(mainGame)
 

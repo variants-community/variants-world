@@ -71,7 +71,7 @@ export const useFormData = (gameData: GameData) => {
     await validateTitle(formData.value.title)
 
     if (errors.value.size === 0) {
-      const response = await actions.createPost({
+      const response = await actions.createPost.orThrow({
         title: formData.value.title,
         description: formData.value.description,
         type: formData.value.type,

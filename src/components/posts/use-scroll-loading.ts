@@ -17,7 +17,7 @@ export const useScrolLoading = (props: { initialPosts: PostForCard[]; POSTS_PER_
 
   useEffect(() => {
     if (isLoadNeed && posts.length < totalCount) {
-      actions.getPosts({ skip: posts.length, limit: props.POSTS_PER_PAGE.value }).then(fethedPosts => {
+      actions.getPosts.orThrow({ skip: posts.length, limit: props.POSTS_PER_PAGE.value }).then(fethedPosts => {
         setPosts(prev => [...prev, ...fethedPosts])
         setIsLoadNeed(false)
       })

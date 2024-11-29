@@ -22,7 +22,7 @@ importers:
         version: 6.0.0(prisma@6.0.0)
       '@prisma/extension-accelerate':
         specifier: ^1.2.1
-        version: 1.2.1(@prisma/client@6.0.0(prisma@6.0.0))
+        version: 1.2.1(@prisma/client@5.14.0(prisma@5.14.0))
       '@supabase/supabase-js':
         specifier: ^2.46.2
         version: 2.46.2
@@ -3141,9 +3141,9 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  prisma@6.0.0:
-    resolution: {integrity: sha512-RX7KtbW7IoEByf7MR32JK1PkVYLVYFqeODTtiIX3cqekq1aKdsF3Eud4zp2sUShMLjvdb5Jow0LbUjRq5LVxPw==}
-    engines: {node: '>=18.18'}
+  prisma@5.14.0:
+    resolution: {integrity: sha512-gCNZco7y5XtjrnQYeDJTiVZmT/ncqCr5RY1/Cf8X2wgLRmyh9ayPAGBNziI4qEE4S6SxCH5omQLVo9lmURaJ/Q==}
+    engines: {node: '>=16.13'}
     hasBin: true
 
   prismjs@1.29.0:
@@ -4690,7 +4690,7 @@ snapshots:
       '@prisma/fetch-engine': 6.0.0
       '@prisma/get-platform': 6.0.0
 
-  '@prisma/extension-accelerate@1.2.1(@prisma/client@6.0.0(prisma@6.0.0))':
+  '@prisma/extension-accelerate@1.2.1(@prisma/client@5.14.0(prisma@5.14.0))':
     dependencies:
       '@prisma/client': 6.0.0(prisma@6.0.0)
 
@@ -7380,7 +7380,7 @@ snapshots:
 
   prettier@3.4.1: {}
 
-  prisma@6.0.0:
+  prisma@5.14.0:
     dependencies:
       '@prisma/engines': 6.0.0
     optionalDependencies:

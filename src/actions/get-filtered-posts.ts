@@ -1,4 +1,5 @@
-import { defineAction, z } from 'astro:actions'
+import { defineAction } from 'astro:actions'
+import { z } from 'astro:schema'
 import { prisma } from 'db/prisma/prisma'
 import type { GameStatus, PostForCard } from 'db/prisma/types'
 

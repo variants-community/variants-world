@@ -6,7 +6,7 @@ import PostsList from 'components/posts/PostsList'
 
 const { user } = Astro.locals
 
-if (user.guest) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
+if (user.guest) return Astro.redirect(getAbsoluteUrl(Astro.url, '/'))
 
 const posts = await actions.getPosts({ skip: 0, limit: 10 })
 ---

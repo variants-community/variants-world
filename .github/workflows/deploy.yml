@@ -1,7 +1,7 @@
 name: Deploy
 on:
   push:
-    branches: [main]
+    branches: [main, netlify]
   pull_request:
     types: [labeled]
 
@@ -79,9 +79,16 @@ jobs:
           CGABOT_API_TOKEN: ${{ secrets.CGABOT_API_TOKEN }}
         run: pnpm build
 
-      - name: Upload to Deno Deploy
-        uses: denoland/deployctl@v1
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
         with:
-          project: 'variants-world'
-          entrypoint: 'server/entry.mjs'
-          root: 'dist'
+          publish-dir: './dist'
+          production-branch: netlify
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Netlify Deploy"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

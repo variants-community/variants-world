@@ -16,7 +16,7 @@
     "postinstall": "pnpm postinstall:${VW_ENV:-dev}",
     "supa:start": "supabase start",
     "supa:gen:dev": "supabase gen types typescript --local > src/db/supabase/types.ts && eslint src/db/supabase/types.ts --fix",
-    "supa:gen:prod": "supabase gen types typescript --schema public --db-url \"$DIRECT_DATABASE_URL\" > src/db/supabase/types.ts && eslint src/db/supabase/types.ts --fix",
+    "supa:gen:prod": "supabase gen types typescript --schema public --project-id \"$SUPABASE_PROJECT_ID\" > src/db/supabase/types.ts && eslint src/db/supabase/types.ts --fix",
     "supa:gen": "pnpm supa:gen:${VW_ENV:-dev}",
     "supa:stop": "supabase stop",
     "supa": "pnpm supa:start && pnpm supa:gen",

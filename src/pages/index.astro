@@ -5,6 +5,7 @@ import Layout from 'layouts/Layout.astro'
 import Stars from 'components/Stars.astro'
 
 const { user } = Astro.locals
+Astro.response.headers.set('Cache-Tag', 'landing')
 
 ---
 

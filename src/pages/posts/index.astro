@@ -8,7 +8,7 @@ const { user } = Astro.locals
 
 if (user.guest) return Astro.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-const posts = await actions.getPosts.orThrow({ skip: 0, limit: 10 })
+const posts = await Astro.callAction(actions.getPosts.orThrow, { skip: 0, limit: 10 })
 ---
 
 <Layout title="Posts | Variants World">

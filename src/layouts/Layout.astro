@@ -3,7 +3,7 @@ import 'styles/font.css'
 import 'styles/tooltip.css'
 import 'virtual:windi.css'
 import { ViewTransitions } from 'astro:transitions'
-import Navigation from "components/Navigation"
+import Navigation from 'components/Navigation.astro'
 
 type LayoutProps = {
   title: string
@@ -38,7 +38,9 @@ const { user } = Astro.locals
 		<ViewTransitions fallback="animate" />
 	</head>
 	<body class="bg-dark text-text overflow-y-auto! text-base">
-		<Navigation username={user?.username} path={pathname} profileUrl={user?.profileUrl} isGuest={user.guest} />
+		<Navigation username={user?.username} path={pathname} profileUrl={user?.profileUrl} isGuest={user.guest} server:defer>
+      <Navigation path={pathname} isGuest={true} slot='fallback' />
+    </Navigation>
 		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll scroll-smooth pl-2 ">
 			<slot />
 		</div>

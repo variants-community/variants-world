@@ -6,9 +6,9 @@ import { supabaseAdmin } from 'db/supabase/admin'
 const code = Astro.url.searchParams.get('code')
 const state = Astro.url.searchParams.get('state')
 
-if (Astro.url.searchParams.has('error')) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
+if (Astro.url.searchParams.has('error')) return Astro.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-if (!code || !state || !states.has(state)) return Response.redirect(getAbsoluteUrl(Astro.url, '/login'))
+if (!code || !state || !states.has(state)) return Astro.redirect(getAbsoluteUrl(Astro.url, '/login'))
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const { codeVerifier } = states.get(state)!
@@ -23,7 +23,7 @@ const [userInfo, signature, exists] = await refreshUserInfo(
   },
   Astro.cookies
 )
-if (!userInfo) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
+if (!userInfo) return Astro.redirect(getAbsoluteUrl(Astro.url, '/'))
 
 if (!exists) {
   const newUser = await supabaseAdmin.createUser({

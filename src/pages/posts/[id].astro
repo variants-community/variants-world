@@ -57,7 +57,9 @@ const ogImage =
             </div>
 
             {post.PostDetails && userIsTester && (
-              <AdminSettings user={user} details={post.PostDetails as never} client:load />
+              <AdminSettings testerId={user.id} details={post.PostDetails} client:only='preact'>
+                <AdminSettings details={post.PostDetails} slot='fallback' />
+              </AdminSettings>
             )}
             {userIsTester ? (
               <GameStatusCard

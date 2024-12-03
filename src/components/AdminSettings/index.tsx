@@ -3,11 +3,10 @@ import { Notes } from 'components/AdminSettings/Notes'
 import { VotingTool } from 'components/AdminSettings/VotingTool'
 import { useAdminSettings } from 'components/AdminSettings/use-admin-settings'
 import type { PostDetails } from 'db/prisma/queries'
-import type { TokenPayloadType } from 'utils/auth'
 
 type AdminSettingsProps = {
   details: PostDetails
-  user: TokenPayloadType
+  testerId?: number
 }
 
 const AdminSettings = (props: AdminSettingsProps) => {
@@ -35,7 +34,7 @@ const AdminSettings = (props: AdminSettingsProps) => {
         gameplayClassification={gameplayClassification}
         setGameplayClassification={setGameplayClassificationOnChange}
       />
-      <VotingTool votes={votes} testerId={props.user.id} postDetailsId={props.details.id} setVotes={setVotes} />
+      <VotingTool votes={votes} testerId={props.testerId ?? -1} postDetailsId={props.details.id} setVotes={setVotes} />
       <Notes notes={notes} onChangeNotes={onChangeNotes} />
     </div>
   )

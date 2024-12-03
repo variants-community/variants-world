@@ -90,8 +90,6 @@ export interface PostDetails {
   notes: string | null
   votes: {
     id: number
-    uuid: string
-    refreshToken: string | null
     postDetailsId: number
     tester: UserForCard
     testerId: number

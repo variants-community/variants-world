@@ -27,6 +27,9 @@ const CommentsList = (props: CommentsProps) => (
           reply={() => props.onReply(c)}
           remove={async () => {
             await supabase.from('Comment').update({ hidden: true }).eq('id', c.id)
+
+            fetch(window.location.href)
+            fetch(new URL('/posts', window.location.href))
           }}
           highlight={props.highlight}
           isHighlighted={props.highlighted === c.id}

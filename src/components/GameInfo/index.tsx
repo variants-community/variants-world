@@ -31,6 +31,9 @@ const GameInfo = (props: GameInfoProps) => {
   }
   const { editable, update, editing } = useEditable(data, async value => {
     await supabase.from('Post').update(value).eq('id', props.postId)
+
+    fetch(window.location.href)
+    fetch(new URL('/posts', window.location.href))
   })
   usePostInfo(props.postId, update)
 

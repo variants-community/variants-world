@@ -1,8 +1,8 @@
 import { supabase } from 'db/supabase/supabase'
-import type { User } from 'db/prisma/queries'
+import type { UserForCard } from 'db/prisma/types'
 import type { Vote, VoteValue } from '@prisma/client'
 
-export type VoteExtended = Vote & ({ tester: User | null } | undefined)
+export type VoteExtended = Vote & ({ tester: UserForCard | null } | undefined)
 
 type VotesProps = {
   postDetailsId: number

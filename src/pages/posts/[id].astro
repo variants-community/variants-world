@@ -1,5 +1,5 @@
 ---
-import { getPostById, getUserRole } from 'db/prisma/queries'
+import { getPostById } from 'db/prisma/queries'
 import AdminSettings from 'components/AdminSettings'
 import BackButton from 'components/BackButton'
 import Comments from 'components/comments'
@@ -14,9 +14,9 @@ import PresentUsers from 'components/presence/PresentUsers'
 const postId = parseInt(Astro.params.id!)
 
 const { user } = Astro.locals
-const [post, role] = await Promise.all([getPostById(postId), getUserRole(user.id)])
+const post = await getPostById(postId)
 
-const userIsTester = role === 'TESTER'
+const userIsTester = user.role === 'TESTER'
 const userIsAuthor = user.id === post?.author.id
 
 const title = `${post ? `${post.type}: ${post.title}` : 'Not found'}`

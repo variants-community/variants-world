@@ -9,7 +9,7 @@ const expires = Astro.cookies.get('expires')?.value
 if (token && expires) {
   try {
     const tokenPayload = TokenPayload.parse(await myJWTVerifyAsync(token))
-    const user = await prisma.user.findFirst({where: { id: tokenPayload.id }, select: {id: true, refreshToken: true}})
+    const user = await prisma.user.findFirst({where: { id: tokenPayload.id }, select: {id: true, refreshToken: true, role: true}})
 
     if (user && user.refreshToken) {
       if (new Date(expires) < new Date()) {
@@ -18,7 +18,7 @@ if (token && expires) {
           client_id: import.meta.env.OAUTH_CLIENT_ID,
           redirect_uri: getAbsoluteUrl(Astro.url, '/callback'),
           code: user.refreshToken,
-        }, Astro.cookies)
+        }, Astro.cookies, user.role)
         
         if (!userInfo) return new Response(null, { status: 403 })
         

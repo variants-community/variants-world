@@ -82,11 +82,6 @@ export const getPostDetailsById = async (postId: number) => {
   return details
 }
 
-export const getUserRole = async (id: number) => {
-  if (id === -1) return 'GUEST'
-  return (await prisma.user.findFirstOrThrow({ where: { id }, select: { role: true } }))?.role
-}
-
 export interface PostDetails {
   id: number
   postId: number

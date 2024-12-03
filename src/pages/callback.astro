@@ -13,7 +13,7 @@ if (!code || !state || !states.has(state)) return Response.redirect(getAbsoluteU
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const { codeVerifier } = states.get(state)!
 
-const [userInfo, signature] = await refreshUserInfo(
+const [userInfo, signature, exists] = await refreshUserInfo(
   {
     grant_type: 'authorization_code',
     client_id: import.meta.env.OAUTH_CLIENT_ID,
@@ -25,7 +25,6 @@ const [userInfo, signature] = await refreshUserInfo(
 )
 if (!userInfo) return Response.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-const exists = await prisma.user.findFirst({ where: { id: userInfo.id }, select: { uuid: true } })
 if (!exists) {
   const newUser = await supabaseAdmin.createUser({
     email: `${userInfo.id}@variants.world`,

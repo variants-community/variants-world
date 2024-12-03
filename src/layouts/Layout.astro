@@ -39,7 +39,7 @@ const { user } = Astro.locals
 	</head>
 	<body class="bg-dark text-text overflow-y-auto! text-base">
 		<Navigation username={user?.username} path={pathname} profileUrl={user?.profileUrl} isGuest={user.guest} server:defer>
-      <Navigation path={pathname} isGuest={true} slot='fallback' />
+      <Navigation path={pathname} isGuest={user.guest} slot='fallback' />
     </Navigation>
 		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll scroll-smooth pl-2 ">
 			<slot />

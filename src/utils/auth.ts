@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import * as jose from 'jose'
+import { $Enums, type UserRole } from '@prisma/client'
 import { createSHA256 } from 'hash-wasm'
+import { prisma } from 'db/prisma/prisma'
 import { z } from 'astro/zod'
 import base64url from 'base64url'
 import type { AstroCookies } from 'astro'
@@ -16,7 +18,8 @@ export const myJWTVerifyAsync = async (token: string) => (await jose.jwtVerify(t
 export const TokenPayload = z.object({
   id: z.number(),
   profileUrl: z.string(),
-  username: z.string()
+  username: z.string(),
+  role: z.nativeEnum($Enums.UserRole)
 })
 export type TokenPayloadType = z.infer<typeof TokenPayload>
 
@@ -48,7 +51,7 @@ export const verifyIdToken = async (idToken: string) => {
 }
 
 // Obtains chesscom's token, verifies signature and retrieves profile info from id_token
-export const refreshUserInfo = async (params: Record<string, string>, cookies: AstroCookies) => {
+export const refreshUserInfo = async (params: Record<string, string>, cookies: AstroCookies, role?: UserRole) => {
   const response = await (
     await fetch('https://oauth.chess.com/token', {
       method: 'POST',
@@ -66,7 +69,10 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
   const id = Number(profile.user_id)
   const { preferred_username: username, picture: profileUrl } = profile
 
-  const payload: TokenPayloadType = { id, username, profileUrl }
+  const user = !role && (await prisma.user.findFirst({ where: { id }, select: { uuid: true, role: true } }))
+  role ??= (user && user.role) || 'MEMBER'
+
+  const payload: TokenPayloadType = { id, username, profileUrl, role }
 
   const cookie = await myJWTSignAsync(payload)
   const signature = cookie.split('.')[2]
@@ -75,7 +81,7 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
   expires.setFullYear(expires.getFullYear() + 1)
   cookies.set('token', cookie, { expires })
   cookies.set('expires', new Date(Date.now() + 60e3 * 60 * 24 * 7), { expires })
-  return [{ id, username, profileUrl, refreshToken }, signature] as const
+  return [{ id, username, profileUrl, refreshToken }, signature, user] as const
 }
 
 // Turns a pathname into absolute url string

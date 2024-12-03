@@ -8,4 +8,4 @@ export const MIN_SIMILARITY = 0.75
 export const MAX_SIMILAR_GAME_COUNT = 4
 
 export const DEFAULT_TTL = 2 // 2 seconds (max duration of db call)
-export const DEFAULT_SWR = 60 * 60 * 6 // 6 hours
+export const DEFAULT_SWR = 60 * 60 * 24 // 24 hours

@@ -22,6 +22,9 @@ export const removeLikeQuery = async (postId: number, userId: number) => {
     .eq('postId', postId)
     .eq('userId', userId)
 
+  fetch(window.location.href)
+  fetch(new URL('/posts', window.location.href))
+
   return error == null
 }
 
@@ -29,6 +32,9 @@ export const putLikeQuery = async (postId: number, userId: number) => {
   const { error } = await supabase
     .from('PostOnUserLikes')
     .insert({ postId, userId })
+
+  fetch(window.location.href)
+  fetch(new URL('/posts', window.location.href))
 
   return error == null
 }
@@ -54,6 +60,9 @@ export const addCommentQuery = async (
     // eslint-disable-next-line camelcase
     parent_id: replyToCommentId
   })
+
+  fetch(window.location.href)
+  fetch(new URL('/posts', window.location.href))
 
   return error == null
 }

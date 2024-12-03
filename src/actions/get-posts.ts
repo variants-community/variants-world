@@ -1,3 +1,4 @@
+import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { prisma } from 'db/prisma/prisma'
@@ -24,6 +25,10 @@ export const getPosts = defineAction({
       },
       orderBy: {
         createdAt: 'desc'
+      },
+      cacheStrategy: {
+        ttl: DEFAULT_TTL,
+        swr: DEFAULT_SWR
       }
     })
 

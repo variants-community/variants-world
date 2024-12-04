@@ -13,6 +13,8 @@ type LayoutProps = {
 const { title, ogImage } = Astro.props as LayoutProps
 const { pathname, href } = Astro.url
 
+Astro.response.headers.set('Cache-Control', 'private, max-age=0')
+
 const { user } = Astro.locals
 
 ---
@@ -38,9 +40,11 @@ const { user } = Astro.locals
 		<ViewTransitions fallback="animate" />
 	</head>
 	<body class="bg-dark text-text overflow-y-auto! text-base">
-		<Navigation username={user?.username} path={pathname} profileUrl={user?.profileUrl} isGuest={user.guest} server:defer>
-      <Navigation path={pathname} isGuest={user.guest} slot='fallback' />
-    </Navigation>
+		<div transition:persist>
+			<Navigation username={user?.username} path={pathname} profileUrl={user?.profileUrl} isGuest={user.guest} server:defer>
+				<Navigation path={pathname} isGuest={user.guest} slot='fallback' />
+			</Navigation>
+		</div>
 		<div id="app" class="absolute inset-0 top-12 pt-8 overflow-y-scroll scroll-smooth pl-2 ">
 			<slot />
 		</div>

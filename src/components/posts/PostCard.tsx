@@ -2,6 +2,7 @@ import { Picture } from 'components/common/Picture'
 import { type Signal } from '@preact/signals'
 import { TimePassed } from 'components/GameInfo/TimePassed'
 import { cl } from 'utils/hepers'
+import { prefetch } from 'astro:prefetch'
 import CommentIcon from 'components/icons/CommentIcon'
 import Likes from 'components/likes'
 import PostTags from 'components/PostTags'
@@ -22,6 +23,7 @@ const PostCard = (props: PostCardProps) => {
       <a
         href={`/posts/${props.post.id}`}
         class={`w-11/12 flex mx-auto rounded-xl darkborder bg-border-light overflow-hidden flex-col sm:flex-row`}
+        onMouseEnter={() => prefetch(`/posts/${props.post.id}`)}
       >
         <Picture
           fen={props.post.fen}

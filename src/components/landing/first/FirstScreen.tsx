@@ -35,6 +35,7 @@ const FirstScreen = (props: Props) => (
              w-52 h-42 bg-dark border border-border-light rounded-xl p-3 flex items-center justify-center text-lg font-semibold
              group flex-col justify-evenly overflow-hidden ${props.mainGame ? '!h-0 mt-0 p-0 !opacity-0' : ''}`}
       tabIndex={props.mainGame ? -1 : 0}
+      data-astro-prefetch="load"
     >
       <img src="/assets/images/forum.png" class="h-18" />
       Explore posts

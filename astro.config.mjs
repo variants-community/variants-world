@@ -13,6 +13,9 @@ export default defineConfig({
   experimental: {
     serverIslands: true
   },
+  prefetch: {
+    prefetchAll: false
+  },
   image: {
     service: passthroughImageService()
   }

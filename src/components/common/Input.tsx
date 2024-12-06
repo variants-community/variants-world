@@ -1,6 +1,8 @@
-import { type HTMLProps } from 'preact/compat'
+import type { JSX } from 'preact'
 
-export const Input = (props: { onEnter?: () => void; onCtrlEnter?: () => void } & HTMLProps<HTMLInputElement>) => {
+export const Input = (
+  props: { onEnter?: () => void; onCtrlEnter?: () => void; value?: string } & JSX.HTMLAttributes<HTMLInputElement>
+) => {
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.shiftKey || e.altKey || e.metaKey) return
     if (e.key === 'Enter') {
@@ -10,5 +12,5 @@ export const Input = (props: { onEnter?: () => void; onCtrlEnter?: () => void } 
     }
   }
 
-  return <input {...props} onKeyDown={e => void (onKeyDown(e), props.onKeyDown?.(e))} />
+  return <input {...props} onKeyDown={e => void onKeyDown(e)} />
 }

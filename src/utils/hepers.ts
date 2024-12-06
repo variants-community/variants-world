@@ -1,4 +1,5 @@
 import type { CGABotGameDetails } from 'cgabot'
+import type { GalleryView } from 'components/common/GalleryViewSwitch'
 import type { GameStatus } from '@prisma/client'
 
 export const getValueFromEvent = <Type = string>(e: Event) => (e.target as HTMLInputElement).value as Type
@@ -172,4 +173,23 @@ export const formatDuration = (duration: number) => {
   return [format(week, 'week'), format(day, 'day'), format(hour, 'hour'), format(minute, 'minute')]
     .filter(Boolean)
     .join(' ')
+}
+
+export type SmartHash = {
+  view?: GalleryView
+  num?: string
+}
+
+export const updateSearchHash = () => {
+  const keys: (keyof SmartHash)[] = ['view', 'num']
+
+  const hashes: string[] = []
+  for (const key of keys) {
+    const value = window.localStorage.getItem(key)
+    if (value) hashes.push(`${key}=${value}`)
+  }
+
+  const url = new URL(window.location.href)
+  url.search = hashes.length ? `?${hashes.join('&')}` : ''
+  window.history.replaceState({ ...history.state }, '', url)
 }

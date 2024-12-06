@@ -11,15 +11,17 @@ import type { PostForCard } from 'db/prisma/types'
 type PostsListProps = {
   userId: number
   posts: PostForCard[]
+  galleryView: GalleryView
 }
 
 const PostsList = (props: PostsListProps) => {
   const { posts, forceLoad } = useScrolLoading({
     initialPosts: props.posts,
-    POSTS_PER_PAGE: useComputed(() => (galleryView.value === 'large' ? 10 : 50))
+    POSTS_PER_PAGE: useComputed(() => (galleryView.value === 'compact' ? 50 : 10))
   })
 
-  const galleryView = useSignal<GalleryView>('large')
+  const galleryView = useSignal<GalleryView>(props.galleryView)
+
   useSignalEffect(() => {
     if (galleryView.value === 'compact') forceLoad()
   })
@@ -44,7 +46,7 @@ const PostsList = (props: PostsListProps) => {
         <GalleryViewSwitch signal={galleryView} />
       </div>
 
-      <div class={useComputed(() => cl('flex flex-col', galleryView.value === 'large' ? 'gap-8' : 'gap-4'))}>
+      <div class={useComputed(() => cl('flex flex-col', galleryView.value === 'compact' ? 'gap-4' : 'gap-8'))}>
         {(query.length > 0 ? foundPosts : posts)?.map(post => (
           <PostCard userId={props.userId} key={post.id} post={post} view={galleryView} />
         ))}

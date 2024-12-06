@@ -1,7 +1,7 @@
 import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { defineAction } from 'astro:actions'
-import { z } from 'astro:schema'
 import { prisma } from 'db/prisma/prisma'
+import { z } from 'astro:schema'
 import type { PostForCard } from 'db/prisma/types'
 
 export const getPosts = defineAction({

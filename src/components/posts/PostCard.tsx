@@ -2,6 +2,7 @@ import { Picture } from 'components/common/Picture'
 import { type Signal } from '@preact/signals'
 import { TimePassed } from 'components/GameInfo/TimePassed'
 import { cl } from 'utils/hepers'
+import { navigate } from 'astro:transitions/client'
 import { prefetch } from 'astro:prefetch'
 import CommentIcon from 'components/icons/CommentIcon'
 import Likes from 'components/likes'
@@ -18,33 +19,41 @@ type PostCardProps = {
 }
 
 const PostCard = (props: PostCardProps) => {
+  const link = `/posts/${props.post.id}`
+
+  const onClick = async (e: MouseEvent) => {
+    e.preventDefault()
+    navigate(link, { state: { from: location.pathname } })
+  }
+
   return (
     <>
       <a
-        href={`/posts/${props.post.id}`}
+        href={link}
         class={`w-11/12 flex mx-auto rounded-xl darkborder bg-border-light overflow-hidden flex-col sm:flex-row`}
-        onMouseEnter={() => prefetch(`/posts/${props.post.id}`)}
+        onMouseEnter={() => prefetch(link)}
+        onClick={onClick}
       >
         <Picture
           fen={props.post.fen}
           id={props.post.id}
           class={cl(
             'mx-auto bg-border-light transition-[width,height] duration-100 max-w-82 w-full',
-            props.view.value === 'large' ? 'sm:(w-55 h-55 min-w-55)' : 'sm:(w-16 h-16 min-w-16)'
+            props.view.value === 'compact' ? 'sm:(w-16 h-16 min-w-16)' : 'sm:(w-55 h-55 min-w-55)'
           )}
         />
         <div
           class={cl(
             'w-full transition-[padding] duration-100 ',
-            props.view.value === 'large'
-              ? 'grid grid-rows-[1fr,auto] p-3 sm:p-5'
-              : 'flex gap-2 overflow-hidden pb-2 pt-3 px-3'
+            props.view.value === 'compact'
+              ? 'flex gap-2 overflow-hidden pb-2 pt-3 px-3'
+              : 'grid grid-rows-[1fr,auto] p-3 sm:p-5'
           )}
         >
           <div
             class={cl(
               'flex gap-2 flex-col w-full',
-              props.view.value === 'large' ? 'mb-2 sm:(gap-3 mb-7 mb-0)' : 'flex-1'
+              props.view.value === 'compact' ? 'flex-1' : 'mb-2 sm:(gap-3 mb-7 mb-0)'
             )}
           >
             <div class={'relative flex justify-between'}>
@@ -56,14 +65,14 @@ const PostCard = (props: PostCardProps) => {
                 view={props.view}
                 status={props.post.status}
               />
-              {props.view.value === 'large' && (
+              {props.view.value !== 'compact' && (
                 <div class={cl('absolute hidden sm:block right-0 top-[-14px]')}>
                   <TimePassed from={props.post.createdAt} />
                 </div>
               )}
             </div>
 
-            {props.view.value === 'large' && (
+            {props.view.value !== 'compact' && (
               <PostTags
                 rules={props.post.gamerules.map(rule => rule.name)}
                 class="text-text bg-dark border border-1 border-border-dark"
@@ -75,7 +84,7 @@ const PostCard = (props: PostCardProps) => {
           <div
             class={cl(
               'flex justify-between gap-x-2',
-              props.view.value === 'large' ? 'flex-wrap items-center' : 'sm:w-60'
+              props.view.value === 'compact' ? 'sm:w-60' : 'flex-wrap items-center'
             )}
           >
             <PostUser username={props.post.author.username} profileUrl={props.post.author.profileUrl}>
@@ -85,7 +94,7 @@ const PostCard = (props: PostCardProps) => {
             <div
               class={cl(
                 'flex justify-end items-center sm:justify-end',
-                props.view.value === 'large' ? 'sm:w-38 gap-3 sm:gap-5' : 'sm:w-22 gap-4'
+                props.view.value === 'compact' ? 'sm:w-22 gap-4' : 'sm:w-38 gap-3 sm:gap-5'
               )}
             >
               {/* <StatusIndicator status={props.post.status} /> */}

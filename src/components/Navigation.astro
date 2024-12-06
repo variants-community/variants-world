@@ -10,7 +10,8 @@ const { path, username, profileUrl, isGuest } = Astro.props
 ---
 
 <nav
-  class={'h-12 w-full fixed flex justify-between items-center bg-border-light px-[20px] sm:(static mb-[30px] border border-[2px] border-border-dark) shadow-dark'}
+  class={'h-12 w-full fixed flex justify-between items-center bg-border-light px-[20px] sm:(mb-[30px] border border-[2px] border-border-dark) shadow-dark z-1000'}
+  style={{ viewTransitionName: 'nav' }}
 >
   <div class={'flex gap-5 sm:gap-10'}>
     <a href={path === '/' ? '' : '/'} class={'text-white text-[28px]'} data-astro-reload>Variants</a>

@@ -11,3 +11,7 @@ declare namespace App {
     } & ({ guest: true; role?: undefined } | { guest?: undefined; role: 'MEMBER' | 'TESTER' })
   }
 }
+
+interface Window {
+  from: string
+}

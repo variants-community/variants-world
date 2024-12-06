@@ -37,6 +37,14 @@ const { user } = Astro.locals
 		<meta name="twitter:site" content="Variants World">
 		<meta name="twitter:image" content={ogImage}>
 		<meta name="twitter:title" content={title}>
+		<script is:inline>
+			document.addEventListener('astro:after-swap', (e) => {
+				document.querySelector('#app').scrollTo({ top: window.history.state.scrollY || 0, behavior: 'instant' })
+			})
+			document.addEventListener('astro:page-load', () => {
+				document.querySelector('#app').addEventListener('scroll', e => window.scrollY = e.currentTarget.scrollTop)
+			})
+		</script>
 		<ViewTransitions fallback="animate" />
 	</head>
 	<body class="bg-dark text-text overflow-y-auto! text-base">
@@ -74,6 +82,9 @@ const { user } = Astro.locals
 	::view-transition-old(root),
 	::view-transition-new(root)
 		animation-duration: 100ms
+
+	::view-transition-group(nav)
+		z-index: 1000
 
 	body
 		--primary: #AE4939

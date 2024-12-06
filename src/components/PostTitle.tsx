@@ -37,7 +37,7 @@ const PostTitle = (props: PostTitleProps) => {
             cl(
               'relative flex bg-gray py-1 px-2 sm:(py-2 px-2.5) rounded leading-none',
               !props.card && 'cursor-default',
-              !props.view || props.view.value === 'large' ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'
+              !props.view || props.view.value === 'compact' ? 'text-base sm:text-lg' : 'text-xl sm:text-2xl'
             )
           )}
         >
@@ -62,9 +62,9 @@ const PostTitle = (props: PostTitleProps) => {
           class={useComputed(() =>
             cl(
               'w-full text-nowrap leading-4',
-              !props.view || props.view.value === 'large'
-                ? 'text-xl md:text-3xl sm:text-2xl'
-                : 'break-words text-lg md:text-xl font-medium'
+              !props.view || props.view.value === 'compact'
+                ? 'break-words text-lg md:text-xl font-medium'
+                : 'text-xl md:text-3xl sm:text-2xl'
             )
           )}
         >

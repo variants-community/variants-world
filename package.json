@@ -44,20 +44,20 @@
     "ulidx": "^2.4.1"
   },
   "devDependencies": {
+    "@types/node": "^22.10.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "dotenv-cli": "^7.4.4",
     "eslint": "^8.44.0",
     "eslint-plugin-astro": "^0.29.0",
     "eslint-plugin-autofix": "^1.1.0",
     "eslint-plugin-github": "^4.9.2",
     "eslint-plugin-no-relative-import-paths": "^1.5.2",
-    "@types/node": "^22.10.1",
-    "dotenv-cli": "^7.4.4",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "prettier": "^3.4.1",
     "prisma": "5.14.0",
     "sass": "^1.81.0",
-    "supabase": "^1.223.10",
+    "supabase": "^2.0.0",
     "vitest": "^2.1.6"
   }
 }

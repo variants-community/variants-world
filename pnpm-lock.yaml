@@ -100,8 +100,8 @@ importers:
         specifier: ^1.81.0
         version: 1.81.0
       supabase:
-        specifier: ^1.223.10
-        version: 1.223.10
+        specifier: ^2.0.0
+        version: 2.0.0
       vitest:
         specifier: ^2.1.6
         version: 2.1.6(@types/node@22.10.1)(sass@1.81.0)
@@ -3453,8 +3453,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  supabase@1.223.10:
-    resolution: {integrity: sha512-a5Wi562n0eiV3w359qiCjewyVad688Z3+JHdvLybdlITrwvNIcR6QYqRR6EzjKY5V/sNCqC+5sNf40wDYAYcHg==}
+  supabase@2.0.0:
+    resolution: {integrity: sha512-2Z42hoKgmjMjFMo3pVdVvV8nIDly/ac/v4ZcHSdDJohf+2Y+/OJ1sHGoIvm6v3N4dAGKe3SCovS3+HYFGL1L7w==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -5214,7 +5214,7 @@ snapshots:
 
   agent-base@7.1.1:
     dependencies:
-      debug: 4.3.5
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -6236,7 +6236,7 @@ snapshots:
 
   foreground-child@3.2.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
   formdata-polyfill@4.0.10:
@@ -6488,7 +6488,7 @@ snapshots:
   https-proxy-agent@7.0.5:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.5
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -7808,7 +7808,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  supabase@1.223.10:
+  supabase@2.0.0:
     dependencies:
       bin-links: 5.0.0
       https-proxy-agent: 7.0.5

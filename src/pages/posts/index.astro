@@ -11,7 +11,7 @@ if (user.guest) return Astro.redirect(getAbsoluteUrl(Astro.url, '/'))
 
 const galleryView = Astro.url.searchParams.get('view') as GalleryView
 const num = Number(Astro.url.searchParams.get('num')) || (galleryView === 'compact' ? 50 : 10)
-const posts = await Astro.callAction(actions.getPosts.orThrow, { skip: 0, limit: num })
+const posts = await Astro.callAction(actions.getPosts.orThrow, { skip: 0, limit: Math.min(num, 100) })
 ---
 
 <Layout title="Posts | Variants World">

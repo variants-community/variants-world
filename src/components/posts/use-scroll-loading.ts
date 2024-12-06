@@ -1,6 +1,7 @@
 /* eslint-disable github/no-then */
 import { actions } from 'astro:actions'
 import { getTotalPostsCount } from 'db/supabase/queries'
+import { updateSearchHash } from 'utils/hepers'
 import { useEffect, useState } from 'preact/hooks'
 import type { PostForCard } from 'db/prisma/types'
 import type { ReadonlySignal } from '@preact/signals'
@@ -18,6 +19,8 @@ export const useScrolLoading = (props: { initialPosts: PostForCard[]; POSTS_PER_
   useEffect(() => {
     if (isLoadNeed && posts.length < totalCount) {
       actions.getPosts.orThrow({ skip: posts.length, limit: props.POSTS_PER_PAGE.value }).then(fethedPosts => {
+        window.localStorage.setItem('num', String(fethedPosts.length + posts.length))
+        updateSearchHash()
         setPosts(prev => [...prev, ...fethedPosts])
         setIsLoadNeed(false)
       })

@@ -56,11 +56,15 @@ const ogImage =
               />
             </div>
 
-            {post.PostDetails && userIsTester && (
-              <AdminSettings testerId={user.id} details={post.PostDetails} client:only='preact'>
-                <AdminSettings details={post.PostDetails} slot='fallback' />
-              </AdminSettings>
-            )}
+            {post.PostDetails &&
+              userIsTester &&
+              (import.meta.env.DEV ? (
+                <AdminSettings testerId={user.id} details={post.PostDetails} client:load />
+              ) : (
+                <AdminSettings testerId={user.id} details={post.PostDetails} client:only='preact'>
+                  <AdminSettings details={post.PostDetails} slot='fallback' />
+                </AdminSettings>
+              ))}
             {userIsTester ? (
               <GameStatusCard
                 displayEditBotton

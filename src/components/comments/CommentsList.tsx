@@ -1,6 +1,6 @@
-import { type Ref, useMemo, useRef } from 'preact/hooks'
-import { formatDate } from 'utils/hepers'
+import { formatDate, invalidatePrefetch } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
+import { useMemo, useRef } from 'preact/hooks'
 import QuoteIcon from 'components/icons/QuoteIcon'
 import type { Comment } from '@prisma/client'
 import type { ExtendedComment } from 'components/comments/index'
@@ -27,9 +27,7 @@ const CommentsList = (props: CommentsProps) => (
           reply={() => props.onReply(c)}
           remove={async () => {
             await supabase.from('Comment').update({ hidden: true }).eq('id', c.id)
-
-            fetch(window.location.href)
-            fetch(new URL('/posts', window.location.href))
+            invalidatePrefetch()
           }}
           highlight={props.highlight}
           isHighlighted={props.highlighted === c.id}
@@ -48,7 +46,7 @@ type CommentCardProps = {
 }
 
 const CommentCard = (props: CommentCardProps) => {
-  const ref = useRef<HTMLDivElement>()
+  const ref = useRef<HTMLDivElement>(null)
 
   useMemo(
     () => props.isHighlighted && ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
@@ -57,7 +55,7 @@ const CommentCard = (props: CommentCardProps) => {
 
   return (
     <div
-      ref={ref as Ref<HTMLDivElement>}
+      ref={ref}
       id={`comment-${props.comment.id}`}
       class={`w-11/12 flex bg-border-light mx-auto sm:w-125 lg:w-full p-4 gap-4 border-1 border-border-dark rounded-xl
       group filter transition-colors duration-200 ${props.isHighlighted && '!bg-[#7e3024]'}`}

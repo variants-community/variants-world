@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { invalidatePrefetch } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 
 export const isPostLikedByUserQuery = async (
@@ -22,8 +23,7 @@ export const removeLikeQuery = async (postId: number, userId: number) => {
     .eq('postId', postId)
     .eq('userId', userId)
 
-  fetch(window.location.href)
-  fetch(new URL('/posts', window.location.href))
+  invalidatePrefetch()
 
   return error == null
 }
@@ -33,8 +33,7 @@ export const putLikeQuery = async (postId: number, userId: number) => {
     .from('PostOnUserLikes')
     .insert({ postId, userId })
 
-  fetch(window.location.href)
-  fetch(new URL('/posts', window.location.href))
+  invalidatePrefetch()
 
   return error == null
 }
@@ -61,8 +60,7 @@ export const addCommentQuery = async (
     parent_id: replyToCommentId
   })
 
-  fetch(window.location.href)
-  fetch(new URL('/posts', window.location.href))
+  invalidatePrefetch()
 
   return error == null
 }

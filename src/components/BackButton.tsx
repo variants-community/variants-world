@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'preact/hooks'
+import { updatePrefetch } from 'utils/hepers'
+import { useCallback, useEffect, useRef } from 'preact/hooks'
 
 type BackButtonProps = {
   href: string
@@ -14,27 +15,16 @@ const BackButton = (props: BackButtonProps) => {
   }
 
   const timestamp = useRef(Date.now())
+  const update = useCallback(() => updatePrefetch(props.href, timestamp), [props.href, timestamp])
 
-  const updatePrefetch = () => {
-    const { from, search } = window.history.state
-    const href = from === props.href ? from + (search ?? '') : props.href
-    const prefetched = document.head.querySelector(`[rel="prefetch"][href="${href}"]`)
-    if (prefetched && Date.now() - timestamp.current < 30_000) return
-    const prefetch = document.createElement('link')
-    prefetch.rel = 'prefetch'
-    prefetch.href = href
-    document.head.appendChild(prefetch)
-    timestamp.current = Date.now()
-  }
-
-  useEffect(updatePrefetch, [])
+  useEffect(update, [])
 
   return (
     <a
       class="flex text-center fill-text hover:(fill-white text-white) items-center justify-between gap-2 whitespace-nowrap border border-border-dark bg-border-light shadow-dark rounded-lg py-1.2 px-2.5 transition-colors duration-200 ease-out"
       href={props.href}
       onClick={onClick}
-      onMouseEnter={updatePrefetch}
+      onMouseEnter={update}
       data-astro-prefetch="hover"
     >
       <svg width="1em" height="1em" viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg" class="mb-0.5">

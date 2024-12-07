@@ -1,7 +1,7 @@
 import { EditButton } from 'components/EditButton'
 import { StatusName } from 'components/GameStatusCard/StatusName'
 import { Verdict } from 'components/GameStatusCard/Verdict'
-import { statusToColor } from 'utils/hepers'
+import { invalidatePrefetch, statusToColor } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 import { useEditable } from 'components/common/use-editable'
 import { usePostStatus } from 'components/GameStatusCard/use-post-status'
@@ -22,6 +22,7 @@ const GameStatusCard = (props: PostResolutionProps) => {
   }
   const { editable, update, editing } = useEditable(data, async value => {
     await supabase.from('Post').update(value).eq('id', props.postId)
+    invalidatePrefetch()
   })
   usePostStatus(props.postId, update)
 

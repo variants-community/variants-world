@@ -1,6 +1,7 @@
 import type { CGABotGameDetails } from 'cgabot'
 import type { GalleryView } from 'components/common/GalleryViewSwitch'
 import type { GameStatus } from '@prisma/client'
+import type { MutableRef } from 'preact/hooks'
 
 export const getValueFromEvent = <Type = string>(e: Event) => (e.target as HTMLInputElement).value as Type
 
@@ -192,4 +193,27 @@ export const updateSearchHash = () => {
   const url = new URL(window.location.href)
   url.search = hashes.length ? `?${hashes.join('&')}` : ''
   window.history.replaceState({ ...history.state }, '', url)
+}
+
+export const updatePrefetch = (link: string, timestamp?: MutableRef<number>) => {
+  const { from, search } = window.history.state
+  const href = from === link ? from + (search ?? '') : link
+  const prefetched = document.head.querySelector(`[rel="prefetch"][href="${href}"]`)
+  console.log('prefetched', !!prefetched)
+  if (prefetched && (!timestamp || Date.now() - timestamp.current < 30_000)) return
+  const prefetch = document.createElement('link')
+  prefetch.rel = 'prefetch'
+  prefetch.href = href
+  document.head.appendChild(prefetch)
+  if (timestamp) timestamp.current = Date.now()
+}
+
+export const invalidatePrefetch = async () => {
+  fetch(window.location.href)
+  const link = '/posts'
+  const { from, search } = window.history.state
+  const href = from === link ? from + (search ?? '') : link
+  document.head.querySelector(`[rel="prefetch"][href="${href}"]`)?.remove()
+  await fetch(new URL(href, window.location.href))
+  updatePrefetch(href)
 }

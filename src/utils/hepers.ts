@@ -199,7 +199,6 @@ export const updatePrefetch = (link: string, timestamp?: MutableRef<number>) => 
   const { from, search } = window.history.state
   const href = from === link ? from + (search ?? '') : link
   const prefetched = document.head.querySelector(`[rel="prefetch"][href="${href}"]`)
-  console.log('prefetched', !!prefetched)
   if (prefetched && (!timestamp || Date.now() - timestamp.current < 30_000)) return
   const prefetch = document.createElement('link')
   prefetch.rel = 'prefetch'
@@ -214,6 +213,7 @@ export const invalidatePrefetch = async () => {
   const { from, search } = window.history.state
   const href = from === link ? from + (search ?? '') : link
   document.head.querySelector(`[rel="prefetch"][href="${href}"]`)?.remove()
+  await fetch(new URL(href, window.location.href))
   await fetch(new URL(href, window.location.href))
   updatePrefetch(href)
 }

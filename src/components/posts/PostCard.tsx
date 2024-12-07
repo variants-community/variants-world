@@ -23,7 +23,7 @@ const PostCard = (props: PostCardProps) => {
 
   const onClick = async (e: MouseEvent) => {
     e.preventDefault()
-    navigate(link, { state: { from: location.pathname } })
+    navigate(link, { state: { from: location.pathname, search: location.search } })
   }
 
   return (

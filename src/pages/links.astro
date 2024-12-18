@@ -1,0 +1,13 @@
+---
+import Layout from 'layouts/Layout.astro'
+---
+
+<Layout title='Variants World' ogImage={'/assets/images/poster.png'}>
+  {
+    Array.from({ length: 1_000 }, (_, i) => (
+      <a href={`/posts/${i + 1}`} class='text-primary hover:text-white'>
+        {i + 1}
+      </a>
+    ))
+  }
+</Layout>

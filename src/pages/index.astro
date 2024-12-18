@@ -12,4 +12,5 @@ Astro.response.headers.set('VWTag', 'landing')
 <Layout title="Variants World" ogImage={'/assets/images/poster.png'}>
   <Stars isGuest={user.guest} />
   {user.guest ? <GuestLanding /> : <Landing userId={user.id} client:idle />}
+  <a href='/links' class='text-transparent pointer-events-none'>Links</a>
 </Layout>

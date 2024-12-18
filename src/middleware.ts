@@ -47,6 +47,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
         }
       }
     }
+  } else {
+    context.locals.user = {
+      id: -1,
+      profileUrl: 'https://www.chess.com/bundles/web/images/user-image.svg',
+      username: 'Guest',
+      guest: true
+    }
   }
 
   return await next()

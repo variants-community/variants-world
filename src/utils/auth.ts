@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import * as jose from 'jose'
-import { $Enums, type UserRole } from '@prisma/client'
+import { type UserRole } from '@prisma/client'
 import { createSHA256 } from 'hash-wasm'
 import { prisma } from 'db/prisma/prisma'
 import { z } from 'astro/zod'
@@ -19,7 +19,7 @@ export const TokenPayload = z.object({
   id: z.number(),
   profileUrl: z.string(),
   username: z.string(),
-  role: z.nativeEnum($Enums.UserRole)
+  role: z.enum(['TESTER', 'MEMBER'])
 })
 export type TokenPayloadType = z.infer<typeof TokenPayload>
 

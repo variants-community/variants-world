@@ -46,7 +46,7 @@ export const createPost = defineAction({
 
       return { confirmedGameId: post.id }
     } catch (e) {
-      let message = 'Unknow error'
+      let message = 'Whoopsie! CGA is having a coffee break now. Please protest on the forum.'
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') message = 'A post with this game already exists'
         else if (e.code === 'P2003' && e.meta && String(e.meta.field_name).startsWith('Post_authorUserId_fkey'))

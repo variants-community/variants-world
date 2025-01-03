@@ -1,4 +1,5 @@
 import type { CGABotGameDetails } from 'cgabot'
+import type { Color } from 'windi.config'
 import type { GalleryView } from 'components/common/GalleryViewSwitch'
 import type { GameStatus } from '@prisma/client'
 import type { MutableRef } from 'preact/hooks'
@@ -54,7 +55,7 @@ export const statusToString = (status: GameStatus): string => {
   }
 }
 
-export const statusToColor = (status: GameStatus): string => {
+export const statusToColor = (status: GameStatus): Color => {
   switch (status) {
     case 'ACCEPTED':
       return 'green'
@@ -179,10 +180,11 @@ export const formatDuration = (duration: number) => {
 export type SmartHash = {
   view?: GalleryView
   num?: string
+  status?: GameStatus
 }
 
 export const updateSearchHash = () => {
-  const keys: (keyof SmartHash)[] = ['view', 'num']
+  const keys: (keyof SmartHash)[] = ['view', 'num', 'status']
 
   const hashes: string[] = []
   for (const key of keys) {

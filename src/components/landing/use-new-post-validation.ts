@@ -21,7 +21,7 @@ export const useNewPostValidation = (mainGame: CGABotGameDetails | undefined) =>
   const activeGameIndex = useSignal<number | undefined>(undefined)
   const { signal: validationResponse, setQuery: setValidationRequest } = useSearch({
     default: undefined as ValidateGamesPayload | undefined,
-    onQuery: actions.validateGames.orThrow
+    onQuery: async query => actions.validateGames.orThrow(query)
   })
 
   const violations = useComputed(

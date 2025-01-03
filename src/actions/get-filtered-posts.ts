@@ -1,12 +1,18 @@
+import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { defineAction } from 'astro:actions'
-import { z } from 'astro:schema'
 import { prisma } from 'db/prisma/prisma'
+import { z } from 'astro:schema'
 import type { GameStatus, PostForCard } from 'db/prisma/types'
 
 export const getFilteredPosts = defineAction({
-  input: z.object({ query: z.string() }),
-  handler: async ({ query }) => {
-    const words = replaceAll(replaceAll(query.toLocaleLowerCase(), ':', ''), '|', '').split(/(\s+)/)
+  input: z.object({
+    page: z.number(),
+    size: z.number(),
+    search: z.string(),
+    status: z.enum(['UNDER_REVIEW', 'ACCEPTED', 'DECLINED', 'PENDING_REPLY']).optional()
+  }),
+  handler: async ({ page, size, search, status }) => {
+    const words = replaceAll(replaceAll(search.toLocaleLowerCase(), ':', ''), '|', '').split(/(\s+)/)
 
     const statuses: GameStatus[] = []
 
@@ -18,26 +24,34 @@ export const getFilteredPosts = defineAction({
     }
 
     const searchText = words.filter(e => e.trim().length > 0).join('|')
-    if (!searchText) return []
+    // if (!searchText && !status) return []
 
     const posts = await prisma.post.findMany({
+      skip: size * (page - 1),
+      take: size,
       where: {
-        OR: [
-          { title: { search: searchText, mode: 'insensitive' } },
-          { description: { search: searchText, mode: 'insensitive' } },
-          { author: { username: { search: searchText, mode: 'insensitive' } } },
-          {
-            gamerules: {
-              some: { name: { search: searchText, mode: 'insensitive' } }
-            }
-          },
-          {
-            comments: {
-              some: { content: { search: searchText, mode: 'insensitive' } }
-            }
-          },
-          { verdict: { search: searchText } },
-          { status: { in: statuses } }
+        AND: [
+          searchText
+            ? {
+                OR: [
+                  { title: { search: searchText, mode: 'insensitive' } },
+                  { description: { search: searchText, mode: 'insensitive' } },
+                  { author: { username: { search: searchText, mode: 'insensitive' } } },
+                  {
+                    gamerules: {
+                      some: { name: { search: searchText, mode: 'insensitive' } }
+                    }
+                  },
+                  {
+                    comments: {
+                      some: { content: { search: searchText, mode: 'insensitive' } }
+                    }
+                  },
+                  { verdict: { search: searchText } }
+                ]
+              }
+            : {},
+          status ? { status } : {}
         ]
       },
       include: {
@@ -61,7 +75,11 @@ export const getFilteredPosts = defineAction({
         UserLikedPosts: true
       },
       orderBy: {
-        createdAt: 'asc'
+        createdAt: 'desc'
+      },
+      cacheStrategy: {
+        ttl: DEFAULT_TTL,
+        swr: DEFAULT_SWR
       }
     })
 

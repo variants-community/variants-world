@@ -2,6 +2,7 @@ import { type GalleryView, GalleryViewSwitch } from 'components/common/GalleryVi
 import { actions } from 'astro:actions'
 import { cl, statusToColor, statusToString, updateSearchHash } from 'utils/hepers'
 import { useComputed, useSignal, useSignalEffect } from '@preact/signals'
+import { useRef } from 'preact/hooks'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/posts/PostCard'
 import PostsSearch from 'components/posts/PostsSearch'
@@ -17,9 +18,12 @@ const PostsList = (props: PostsListProps) => {
   const galleryView = useSignal<GalleryView>(props.galleryView)
   const STATUSES = useComputed<GameStatus[]>(() => ['UNDER_REVIEW', 'ACCEPTED', 'DECLINED', 'PENDING_REPLY'])
 
+  const loadTimer = useRef(0)
   useSignalEffect(() => {
-    console.log('galleryView.value', galleryView.value)
-    if (galleryView.value === 'compact') forceLoad()
+    if (galleryView.value === 'compact') {
+      self.clearTimeout(loadTimer.current)
+      loadTimer.current = self.setTimeout(forceLoad, 100)
+    }
   })
 
   const {

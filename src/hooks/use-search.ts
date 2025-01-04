@@ -72,6 +72,7 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
         isFetching.value = false
         pagination.value = { ...pendingPagination.value }
       })
+      setTimeout(handleScroll)
     } catch (e) {
       throw e
       // Request canceled

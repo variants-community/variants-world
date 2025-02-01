@@ -1,8 +1,8 @@
 import { type GalleryView, GalleryViewSwitch } from 'components/common/GalleryViewSwitch'
 import { actions } from 'astro:actions'
-import { cl, statusToColor, statusToString, updateSearchHash } from 'utils/hepers'
-import { useComputed, useSignal, useSignalEffect } from '@preact/signals'
-import { useRef } from 'preact/hooks'
+import { cl, statusToColor, statusToString } from 'utils/hepers'
+import { useComputed, useSignal } from '@preact/signals'
+import { useEffect } from 'preact/hooks'
 import { useSearch } from 'src/hooks/use-search'
 import PostCard from 'components/posts/PostCard'
 import PostsSearch from 'components/posts/PostsSearch'
@@ -18,13 +18,7 @@ const PostsList = (props: PostsListProps) => {
   const galleryView = useSignal<GalleryView>(props.galleryView)
   const STATUSES = useComputed<GameStatus[]>(() => ['UNDER_REVIEW', 'ACCEPTED', 'DECLINED', 'PENDING_REPLY'])
 
-  const loadTimer = useRef(0)
-  useSignalEffect(() => {
-    if (galleryView.value === 'compact') {
-      self.clearTimeout(loadTimer.current)
-      loadTimer.current = self.setTimeout(forceLoad, 100)
-    }
-  })
+  useEffect(() => forceLoad(), [galleryView.value])
 
   const {
     data: foundPosts,
@@ -40,7 +34,7 @@ const PostsList = (props: PostsListProps) => {
         return actions.getFilteredPosts.orThrow({ ...newQuery, page, size })
       }
     },
-    pagination: { page: 1, size: 4 }
+    pagination: { page: 1, size: 1 }
   })
 
   return (
@@ -58,9 +52,7 @@ const PostsList = (props: PostsListProps) => {
             )}
             onMouseDown={async () => {
               const newStatus = query.status === status ? undefined : status
-              if (newStatus) window.localStorage.setItem('status', newStatus)
-              else window.localStorage.removeItem('status')
-              updateSearchHash()
+              document.cookie = `status=${newStatus}; path=/; SameSite=Strict`
               setQuery({ search: query.search ?? '', status: newStatus })
             }}
           >

@@ -55,11 +55,13 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
   const pagination = useSignal({ start: props.pagination?.page ?? 1, end: props.pagination?.page ?? 1 })
   const pendingPagination = useSignal({ start: props.pagination?.page ?? 1, end: props.pagination?.page ?? 1 })
 
+  const loadTimer = useRef(0)
   const loadPages = async (payload: { page: number; size: number }) => {
     if (!query.value) return
     isFetching.value = true
     if (controller.current) controller.current.abort()
     controller.current = new AbortController()
+    self.clearTimeout(loadTimer.current)
     try {
       const newData = await props.onQuery(query.value, controller.current.signal, payload)
       batch(() => {
@@ -72,7 +74,8 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
         isFetching.value = false
         pagination.value = { ...pendingPagination.value }
       })
-      setTimeout(handleScroll)
+      if (loadTimer.current === -1) return
+      loadTimer.current = self.setTimeout(handleScroll)
     } catch (e) {
       throw e
       // Request canceled
@@ -80,6 +83,7 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
   }
 
   const handleScroll = () => {
+    console.log('handleScroll omg')
     const app = document.querySelector('#app')
     if (!app || isEndReached.value) return
     const { scrollTop, scrollHeight } = app
@@ -102,7 +106,10 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
     if (!app) return
     app.addEventListener('scroll', handleScroll)
     return () => {
+      console.error('STOPPPPP')
       app.removeEventListener('scroll', handleScroll)
+      self.clearTimeout(loadTimer.current)
+      loadTimer.current = -1
     }
   }, [])
 

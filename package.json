@@ -7,7 +7,7 @@
     "dev:prod": "dotenv -e .env.production.local -- astro dev --mode prod",
     "start": "astro dev --host",
     "build": "astro build",
-    "preview": "dotenv -e .env.production.local -- deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
+    "preview": "dotenv -e .env.production.local -- deno run --allow-net --allow-read --allow-env --unstable-kv --no-lock ./dist/server/entry.mjs",
     "test:dev": "dotenv -e .env -- vitest run",
     "astro": "astro",
     "prisma:dev": "rm -rf node_modules/.prisma; prisma generate && mkdir -p prisma/generated/deno && touch prisma/generated/deno/index.js",

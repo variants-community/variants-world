@@ -1,4 +1,3 @@
-import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { edgeCache } from 'utils/cache'
 import { prisma } from 'db/prisma/prisma'
 import type { GameClassification, GameplayClassification, VoteValue } from '@prisma/client'
@@ -57,10 +56,6 @@ export const getPostById = async (postId: number) => {
       },
       gamerules: true,
       UserLikedPosts: true
-    },
-    cacheStrategy: {
-      ttl: DEFAULT_TTL,
-      swr: DEFAULT_SWR
     }
   })
 

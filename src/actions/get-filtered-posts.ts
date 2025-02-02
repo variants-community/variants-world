@@ -16,7 +16,7 @@ export const getFilteredPosts = defineAction({
     const cacheKey = `${page}-${size}-${search}-${status}-${postId}`
     const cached = edgeCache.get<{ posts: PostForCard[]; page: number; pageEnd?: number }>(cacheKey)
     if (cached) {
-      console.error('CACHE HIT')
+      console.error('HIT')
       return cached
     }
     console.error('CACHE MISS')

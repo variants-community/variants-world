@@ -1,3 +1,4 @@
+import { actions } from 'astro:actions'
 import { formatDate, invalidatePrefetch } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 import { useMemo, useRef } from 'preact/hooks'
@@ -27,6 +28,7 @@ const CommentsList = (props: CommentsProps) => (
           reply={() => props.onReply(c)}
           remove={async () => {
             await supabase.from('Comment').update({ hidden: true }).eq('id', c.id)
+            await actions.invalidate(['posts', `post-${c.postId}`])
             invalidatePrefetch()
           }}
           highlight={props.highlight}

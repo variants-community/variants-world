@@ -2,16 +2,23 @@ import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { defineAction } from 'astro:actions'
 import { prisma } from 'db/prisma/prisma'
 import { z } from 'astro:schema'
-import type { GameStatus, PostForCard } from 'db/prisma/types'
+import type { GameStatus, PostForCard, Prisma } from 'db/prisma/types'
+
+const cache = new Map<string, { posts: PostForCard[]; page: number; pageEnd?: number }>()
 
 export const getFilteredPosts = defineAction({
   input: z.object({
     page: z.number(),
     size: z.number(),
     search: z.string(),
-    status: z.enum(['UNDER_REVIEW', 'ACCEPTED', 'DECLINED', 'PENDING_REPLY']).optional()
+    status: z.enum(['UNDER_REVIEW', 'ACCEPTED', 'DECLINED', 'PENDING_REPLY']).optional(),
+    postId: z.number().optional()
   }),
-  handler: async ({ page, size, search, status }) => {
+  handler: async ({ page, size, search, status, postId }) => {
+    const cacheKey = `${page}-${size}-${search}-${status}-${postId}`
+    const cached = cache.get(cacheKey)
+    if (cached) return cached
+    console.error('CACHE MISS')
     const words = replaceAll(replaceAll(search.toLocaleLowerCase(), ':', ''), '|', '').split(/(\s+)/)
 
     const statuses: GameStatus[] = []
@@ -26,34 +33,54 @@ export const getFilteredPosts = defineAction({
     const searchText = words.filter(e => e.trim().length > 0).join('|')
     // if (!searchText && !status) return []
 
+    const where = {
+      AND: [
+        searchText
+          ? {
+              OR: [
+                { title: { search: searchText, mode: 'insensitive' } },
+                { description: { search: searchText, mode: 'insensitive' } },
+                { author: { username: { search: searchText, mode: 'insensitive' } } },
+                {
+                  gamerules: {
+                    some: { name: { search: searchText, mode: 'insensitive' } }
+                  }
+                },
+                {
+                  comments: {
+                    some: { content: { search: searchText, mode: 'insensitive' } }
+                  }
+                },
+                { verdict: { search: searchText } }
+              ]
+            }
+          : {},
+        status ? { status } : {}
+      ]
+    } satisfies Prisma.PostWhereInput
+
+    let pageEnd: number | undefined = undefined
+    if (postId) {
+      const post = await prisma.post.findUnique({
+        where: { id: postId },
+        select: { createdAt: true }
+      })
+      if (post) {
+        const count = await prisma.post.count({
+          where: {
+            AND: [...where.AND, { createdAt: { gt: post.createdAt } }]
+          }
+        })
+        page = Math.trunc(count / size) + 1
+        if (count % size > size / 2) pageEnd = page + 1
+        console.log({ newPage: page })
+      }
+    }
+
     const posts = await prisma.post.findMany({
       skip: size * (page - 1),
-      take: size,
-      where: {
-        AND: [
-          searchText
-            ? {
-                OR: [
-                  { title: { search: searchText, mode: 'insensitive' } },
-                  { description: { search: searchText, mode: 'insensitive' } },
-                  { author: { username: { search: searchText, mode: 'insensitive' } } },
-                  {
-                    gamerules: {
-                      some: { name: { search: searchText, mode: 'insensitive' } }
-                    }
-                  },
-                  {
-                    comments: {
-                      some: { content: { search: searchText, mode: 'insensitive' } }
-                    }
-                  },
-                  { verdict: { search: searchText } }
-                ]
-              }
-            : {},
-          status ? { status } : {}
-        ]
-      },
+      take: pageEnd ? size * 2 : size,
+      where,
       include: {
         gamerules: true,
         author: {
@@ -101,7 +128,8 @@ export const getFilteredPosts = defineAction({
       fen: p.fen
     }))
 
-    return mapped
+    cache.set(cacheKey, { posts: mapped, page })
+    return { posts: mapped, page, pageEnd }
   }
 })
 

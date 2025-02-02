@@ -57,6 +57,7 @@ const PostCard = (props: PostCardProps) => {
             )}
           >
             <div class={'relative flex justify-between'}>
+              {'page' in props.post && props.post.page}
               <PostTitle
                 card
                 postId={props.post.id}

@@ -183,19 +183,19 @@ export type SmartHash = {
   status?: GameStatus
 }
 
-export const updateSearchHash = () => {
-  const keys: (keyof SmartHash)[] = ['view', 'num', 'status']
+// export const updateSearchHash = () => {
+//   const keys: (keyof SmartHash)[] = ['view', 'num', 'status']
 
-  const hashes: string[] = []
-  for (const key of keys) {
-    const value = window.localStorage.getItem(key)
-    if (value) hashes.push(`${key}=${value}`)
-  }
+//   const hashes: string[] = []
+//   for (const key of keys) {
+//     const value = window.localStorage.getItem(key)
+//     if (value) hashes.push(`${key}=${value}`)
+//   }
 
-  const url = new URL(window.location.href)
-  url.search = hashes.length ? `?${hashes.join('&')}` : ''
-  window.history.replaceState({ ...history.state }, '', url)
-}
+//   const url = new URL(window.location.href)
+//   url.search = hashes.length ? `?${hashes.join('&')}` : ''
+//   window.history.replaceState({ ...history.state }, '', url)
+// }
 
 export const updatePrefetch = (link: string, timestamp?: MutableRef<number>) => {
   const { from, search } = window.history.state
@@ -218,4 +218,12 @@ export const invalidatePrefetch = async () => {
   await fetch(new URL(href, window.location.href))
   await fetch(new URL(href, window.location.href))
   updatePrefetch(href)
+}
+
+export const getPostNumberFromUrl = (href?: string | null) => {
+  if (!href) return
+  const url = new URL(href)
+  const match = url.pathname.match(/\/posts\/([0-9]+)/)?.[1]
+  if (!match) return
+  return Number(match)
 }

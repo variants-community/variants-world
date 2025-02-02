@@ -12,14 +12,31 @@ type PostsListProps = {
   userId: number
   posts: PostForCard[]
   galleryView: GalleryView
+  size: number
+  page: number
+  pageEnd?: number
+  status?: GameStatus
+  search?: string
+  focusedPostId?: number
 }
 
 const PostsList = (props: PostsListProps) => {
   const galleryView = useSignal<GalleryView>(props.galleryView)
   const STATUSES = useComputed<GameStatus[]>(() => ['UNDER_REVIEW', 'ACCEPTED', 'DECLINED', 'PENDING_REPLY'])
 
-  useEffect(() => forceLoad(), [galleryView.value])
+  useEffect(() => {
+    if (props.focusedPostId)
+      document
+        .querySelector(`[href="/posts/${props.focusedPostId}"]`)
+        ?.scrollIntoView({ behavior: 'instant', block: 'start' })
+  }, [])
 
+  useEffect(() => {
+    const timer = self.setTimeout(forceLoad, 100)
+    return () => self.clearTimeout(timer)
+  }, [galleryView.value])
+
+  console.log({ title: props.search })
   const {
     data: foundPosts,
     query,
@@ -27,20 +44,26 @@ const PostsList = (props: PostsListProps) => {
     forceLoad
   } = useSearch({
     data: props.posts,
-    default: { search: '', status: undefined } as { search: string; status?: GameStatus },
+    default: { search: props.search ?? '', status: props.status ?? undefined },
     onQuery: async (newQuery, _, { page, size }) => {
       console.warn('OOOOooofff', { newQuery, page, size })
       if (newQuery) {
-        return actions.getFilteredPosts.orThrow({ ...newQuery, page, size })
+        return (await actions.getFilteredPosts.orThrow({ ...newQuery, page, size })).posts
       }
     },
-    pagination: { page: 1, size: 1 }
+    pagination: { page: props.page, size: props.size, pageEnd: props.pageEnd }
   })
 
   return (
     <div class="mx-auto container pb-12">
       <div class="flex gap-x-3 mt-4 lg:mt-0 mb-4">
-        <PostsSearch query={query.search ?? ''} setQuery={async search => setQuery({ search, status: query.status })} />
+        <PostsSearch
+          query={query.search ?? ''}
+          setQuery={search => {
+            document.cookie = `search=${search ?? ''}; path=/; SameSite=Strict`
+            setQuery({ search, status: query.status })
+          }}
+        />
         <GalleryViewSwitch signal={galleryView} />
       </div>
       <div class="mb-10 lg:mb-8 flex gap-x-3 px-5">
@@ -50,9 +73,9 @@ const PostsList = (props: PostsListProps) => {
               'flex items-center gap-x-1.5 bg-dark darkborder shadow-lightSmall px-2.5 py-1 rounded-lg cursor-pointer select-none',
               query.status === status ? `text-${statusToColor(status)} shadow-lightSmallHover` : 'text-text'
             )}
-            onMouseDown={async () => {
+            onMouseDown={() => {
               const newStatus = query.status === status ? undefined : status
-              document.cookie = `status=${newStatus}; path=/; SameSite=Strict`
+              document.cookie = `status=${newStatus ?? ''}; path=/; SameSite=Strict`
               setQuery({ search: query.search ?? '', status: newStatus })
             }}
           >
@@ -64,6 +87,7 @@ const PostsList = (props: PostsListProps) => {
 
       <div class={useComputed(() => cl('flex flex-col', galleryView.value === 'compact' ? 'gap-4' : 'gap-8'))}>
         {foundPosts?.map(post => <PostCard userId={props.userId} key={post.id} post={post} view={galleryView} />)}
+        {/* <div class="h-screen" /> */}
       </div>
     </div>
   )

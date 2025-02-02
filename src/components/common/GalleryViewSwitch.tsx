@@ -1,5 +1,5 @@
 import { type Signal, useComputed } from '@preact/signals'
-import { cl, updateSearchHash } from 'utils/hepers'
+import { cl } from 'utils/hepers'
 import CompactListIcon from 'components/icons/CompactListIcon'
 import LargeListIcon from 'components/icons/LargeListIcon'
 
@@ -17,8 +17,7 @@ export const GalleryViewSwitch = (props: { signal: Signal<GalleryView> }) => {
 
   const onChange = (value: GalleryView) => {
     props.signal.value = value
-    window.localStorage.setItem('view', value)
-    updateSearchHash()
+    document.cookie = `view=${value}; path=/; SameSite=Strict`
   }
 
   return (

@@ -1,19 +1,50 @@
 ---
 import { actions } from 'astro:actions'
 import { getAbsoluteUrl } from 'utils/auth'
+import { getPostNumberFromUrl as getPostIdFromUrl } from 'utils/hepers'
+import { prisma } from 'db/prisma/prisma'
 import Layout from 'layouts/Layout.astro'
 import PostsList from 'components/posts/PostsList'
 import type { GalleryView } from 'components/common/GalleryViewSwitch'
+import type { GameStatus } from 'db/prisma/types'
 
 const { user } = Astro.locals
 
 if (user.guest) return Astro.redirect(getAbsoluteUrl(Astro.url, '/'))
 
-const galleryView = Astro.url.searchParams.get('view') as GalleryView
-const num = 4 // Number(Astro.url.searchParams.get('num')) || (galleryView === 'compact' ? 50 : 10)
-const posts = await Astro.callAction(actions.getPosts.orThrow, { skip: 0, limit: Math.min(num, 100) })
+const postId = getPostIdFromUrl(Astro.request.headers.get('referer'))
+const galleryView = (Astro.cookies.get('view')?.value ?? '') as GalleryView
+const search = Astro.cookies.get('search')?.value ?? ''
+const status = (Astro.cookies.get('status')?.value || undefined) as GameStatus | undefined
+// get the number posts to get back to.... set "skip" and "limit" accordingly.
+const size = 10
+console.log({ search, status })
+const { posts, page, pageEnd } = await Astro.callAction(actions.getFilteredPosts.orThrow, {
+  page: 1,
+  size,
+  search,
+  status,
+  postId
+})
 ---
 
-<Layout title="Posts | Variants World">
-  {user.guest ? <div>Hello Mr. Guest</div> : <PostsList userId={user.id} posts={posts} galleryView={galleryView ?? ''} client:idle />}
+<Layout title='Posts | Variants World'>
+  {
+    user.guest ? (
+      <div>Hello Mr. Guest</div>
+    ) : (
+      <PostsList
+        userId={user.id}
+        posts={posts}
+        galleryView={galleryView ?? ''}
+        size={size}
+        page={page}
+        pageEnd={pageEnd}
+        status={status}
+        search={search}
+        focusedPostId={postId}
+        client:idle
+      />
+    )
+  }
 </Layout>

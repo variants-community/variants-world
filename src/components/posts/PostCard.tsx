@@ -57,7 +57,6 @@ const PostCard = (props: PostCardProps) => {
             )}
           >
             <div class={'relative flex justify-between'}>
-              {'page' in props.post && props.post.page}
               <PostTitle
                 card
                 postId={props.post.id}
@@ -67,7 +66,7 @@ const PostCard = (props: PostCardProps) => {
                 status={props.post.status}
               />
               {props.view.value !== 'compact' && (
-                <div class={cl('absolute hidden sm:block right-0 top-[-14px]')}>
+                <div class={cl('absolute hidden sm:block right-0 top-[-8px]')}>
                   <TimePassed from={props.post.createdAt} />
                 </div>
               )}

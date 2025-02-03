@@ -88,7 +88,7 @@ const PostsList = (props: PostsListProps) => {
 
       <div class={useComputed(() => cl('flex flex-col', galleryView.value === 'compact' ? 'gap-4' : 'gap-8'))}>
         {foundPosts?.map(post => <PostCard userId={props.userId} key={post.id} post={post} view={galleryView} />)}
-        <div class={cl(isEndReached ? 'h-0' : 'h-screen')} />
+        <div class={cl(isEndReached ? 'h-0' : 'h-[calc(95dvh-6rem)]')} />
       </div>
     </div>
   )

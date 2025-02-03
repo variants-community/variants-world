@@ -7,12 +7,12 @@ type BackButtonProps = {
 }
 
 const BackButton = (props: BackButtonProps) => {
-  const onClick = (e: MouseEvent) => {
-    if (window.history.state.from === props.href) {
-      e.preventDefault()
-      window.history.back()
-    }
-  }
+  // const onClick = (e: MouseEvent) => {
+  //   if (window.history.state.from === props.href) {
+  //     e.preventDefault()
+  //     window.history.back()
+  //   }
+  // }
 
   const timestamp = useRef(Date.now())
   const update = useCallback(() => updatePrefetch(props.href, timestamp), [props.href, timestamp])
@@ -23,7 +23,7 @@ const BackButton = (props: BackButtonProps) => {
     <a
       class="flex text-center fill-text hover:(fill-white text-white) items-center justify-between gap-2 whitespace-nowrap border border-border-dark bg-border-light shadow-dark rounded-lg py-1.2 px-2.5 transition-colors duration-200 ease-out"
       href={props.href}
-      onClick={onClick}
+      // onClick={onClick}
       onMouseEnter={update}
       data-astro-prefetch="hover"
     >

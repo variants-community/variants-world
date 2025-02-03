@@ -3,7 +3,11 @@ import { prisma } from 'db/prisma/prisma'
 import type { GameClassification, GameplayClassification, VoteValue } from '@prisma/client'
 import type { UserForCard } from 'db/prisma/types'
 
+const cache = new Map<number, Awaited<ReturnType<typeof getPostById>>>()
 export const getPostById = async (postId: number) => {
+  const cached = cache.get(postId) as never
+  if (cached) return cached
+
   const post = await prisma.post.findFirst({
     where: {
       id: postId
@@ -60,6 +64,7 @@ export const getPostById = async (postId: number) => {
     }
   })
 
+  cache.set(postId, post)
   return post
 }
 

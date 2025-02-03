@@ -9,7 +9,7 @@ export class EdgeCache<K extends string | number, T> {
 
   async #initialize() {
     if (globalThis.Deno) {
-      this.#kv = await globalThis.Deno.openKv(':memory:')
+      this.#kv = await globalThis.Deno.openKv(import.meta.env.DEV ? ':memory:' : undefined)
     } else {
       const stream = new TransformStream()
       const writer = stream.writable.getWriter()

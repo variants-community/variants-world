@@ -32,6 +32,7 @@ const PostCard = (props: PostCardProps) => {
         href={link}
         class={`w-11/12 flex mx-auto rounded-xl darkborder bg-border-light overflow-hidden flex-col sm:flex-row`}
         onMouseEnter={() => prefetch(link)}
+        onMouseDown={e => e.currentTarget.click()}
         onClick={onClick}
       >
         <Picture

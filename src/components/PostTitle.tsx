@@ -1,8 +1,7 @@
 import { Input } from 'components/common/Input'
 import { type ReadonlySignal, useComputed } from '@preact/signals'
+import { StatusIndicator } from 'components/posts/StatusIndicator'
 import { cl, getValueFromEvent } from 'utils/hepers'
-import StatusIcon from 'components/icons/StatusIcon'
-import type { Color } from 'windi.config'
 import type { GalleryView } from 'components/common/GalleryViewSwitch'
 import type { GameStatus, GameType } from 'db/prisma/types'
 
@@ -76,17 +75,3 @@ const PostTitle = (props: PostTitleProps) => {
 }
 
 export default PostTitle
-
-const StatusIndicator = ({ status }: { status: GameStatus }) => {
-  const colors: Record<GameStatus, Color> = {
-    ACCEPTED: 'green',
-    DECLINED: 'red',
-    PENDING_REPLY: 'yellow',
-    UNDER_REVIEW: 'blue'
-  }
-  return (
-    <div class={'w-auto'}>
-      <StatusIcon class={`fill-${colors[status]}`} />
-    </div>
-  )
-}

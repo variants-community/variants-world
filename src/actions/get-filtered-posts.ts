@@ -1,4 +1,3 @@
-import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { defineAction } from 'astro:actions'
 import { edgeCache } from 'utils/cache'
 import { prisma } from 'db/prisma/prisma'
@@ -105,10 +104,6 @@ export const getFilteredPosts = defineAction({
       },
       orderBy: {
         createdAt: 'desc'
-      },
-      cacheStrategy: {
-        ttl: DEFAULT_TTL,
-        swr: DEFAULT_SWR
       }
     })
 

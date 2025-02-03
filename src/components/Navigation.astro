@@ -1,40 +1,66 @@
 ---
+import { GitHub } from 'components/icons/GitHub'
+import { Star } from 'components/icons/Star'
+import { actions } from 'astro:actions'
+
 interface Props {
   username?: string
   profileUrl?: string | null
-  path: string
   isGuest?: true
 }
 
-const { path, username, profileUrl, isGuest } = Astro.props
+const { username, profileUrl, isGuest } = Astro.props
+
+const stars = await Astro.callAction(actions.starsWebhook.orThrow, {})
 ---
 
 <nav
-  class={'h-12 w-full fixed flex justify-between items-center bg-border-light px-[20px] sm:(mb-[30px] border border-[2px] border-border-dark) shadow-dark z-1000'}
+  class='h-12 w-full fixed flex justify-between items-center bg-border-light px-[20px] sm:(mb-[30px] border border-[2px] border-border-dark) shadow-dark z-1000'
   style={{ viewTransitionName: 'nav' }}
 >
   <div class={'flex gap-5 sm:gap-10'}>
-    <a href={path === '/' ? '' : '/'} class={'text-white text-[28px]'} data-astro-reload>Variants</a>
+    <a href='/' class='text-white text-[28px]'>
+      Variants<span class='text-base ml-0.5'>.world</span>
+    </a>
 
     {
       !isGuest && (
         <a
           href={'/posts'}
-          class={
-            'h-7 flex items-center px-[7px] bg-opacity-40 hover:(text-white bg-opacity-35) bg-gray text-[18px] align-middle rounded-md  transition-colors duration-300 ease-out'
-          }
+          class='h-7 flex items-center px-[7px] hover:(text-white) font-medium bg-border-light text-[18px] align-middle transition-colors duration-300 ease-out'
         >
           Posts
         </a>
       )
     }
   </div>
-  {
-    username && (
-      <div class={'flex gap-2.5 items-center'}>
-        {username}
-        <img src={profileUrl ?? '/assets/images/user.png'} alt={username ?? 'Guest'} class='h-7 rounded-md' />
-      </div>
-    )
-  }
+
+  <div class='flex items-center'>
+    <a
+      class='mr-4 group flex items-center hover:(text-white) transition-colors duration-300 ease-out before:whitespace-nowrap'
+      href='https://github.com/variants-community/variants-world'
+      data-tooltip="We're Open Source!"
+      data-tooltip-position='bottom'
+    >
+      <GitHub class='w-5 h-5' />
+    </a>
+
+    <a
+      class='mr-20 flex items-center mt-0.5 hover:(text-white) transition-colors duration-300 ease-out'
+      href='https://github.com/variants-community/variants-world/stargazers'
+      data-tooltip='Stars'
+      data-tooltip-position='bottom'
+    >
+      <Star class='w-4 h-4 mr-1' />
+      {stars}
+    </a>
+    {
+      username && (
+        <div class={'flex gap-2.5 items-center'}>
+          {username}
+          <img src={profileUrl ?? '/assets/images/user.png'} alt={username ?? 'Guest'} class='h-7 rounded-md' />
+        </div>
+      )
+    }
+  </div>
 </nav>

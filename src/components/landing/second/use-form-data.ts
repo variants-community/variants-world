@@ -81,11 +81,6 @@ export const useFormData = (gameData: GameData) => {
       })
 
       if (response.confirmedGameId) {
-        try {
-          await fetch(new URL('/posts', window.location.href))
-        } catch {
-          /* empty */
-        }
         self.location.replace(`/posts/${response.confirmedGameId}`)
       } else if (response.error === 'User not found') {
         self.location.pathname = '/logout'

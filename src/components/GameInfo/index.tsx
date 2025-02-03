@@ -2,6 +2,7 @@ import { Description } from 'components/GameInfo/Description'
 import { EditButton } from 'components/EditButton'
 import { LinkToVariant } from 'components/GameInfo/LinkToVariant'
 import { TimePassed } from 'components/GameInfo/TimePassed'
+import { actions } from 'astro:actions'
 import { invalidatePrefetch } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 import { useEditable } from 'components/common/use-editable'
@@ -32,6 +33,7 @@ const GameInfo = (props: GameInfoProps) => {
   }
   const { editable, update, editing } = useEditable(data, async value => {
     await supabase.from('Post').update(value).eq('id', props.postId)
+    await actions.invalidate(['posts', `post-${props.postId}`])
     invalidatePrefetch()
   })
   usePostInfo(props.postId, update)

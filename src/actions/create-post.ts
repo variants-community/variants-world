@@ -2,6 +2,7 @@ import { type GameType } from 'db/prisma/types'
 import { createPostPayloadSchema } from 'actions/types'
 import { defineAction } from 'astro:actions'
 import { descriptionValid, doesGameExist, titleValid } from 'utils/post-validation'
+import { edgeCache } from 'utils/cache'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import Prisma, { prisma } from 'db/prisma/prisma'
 
@@ -44,6 +45,7 @@ export const createPost = defineAction({
         select: { id: true }
       })
 
+      await edgeCache.invalidate(['posts'])
       return { confirmedGameId: post.id }
     } catch (e) {
       let message = 'Whoopsie! CGA is having a coffee break now. Please protest on the forum.'

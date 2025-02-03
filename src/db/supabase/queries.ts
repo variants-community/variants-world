@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { actions } from 'astro:actions'
 import { invalidatePrefetch } from 'utils/hepers'
 import { supabase } from 'db/supabase/supabase'
 
@@ -23,6 +24,7 @@ export const removeLikeQuery = async (postId: number, userId: number) => {
     .eq('postId', postId)
     .eq('userId', userId)
 
+  await actions.invalidate(['posts', `post-${postId}`])
   invalidatePrefetch()
 
   return error == null
@@ -33,6 +35,7 @@ export const putLikeQuery = async (postId: number, userId: number) => {
     .from('PostOnUserLikes')
     .insert({ postId, userId })
 
+  await actions.invalidate(['posts', `post-${postId}`])
   invalidatePrefetch()
 
   return error == null
@@ -60,6 +63,7 @@ export const addCommentQuery = async (
     parent_id: replyToCommentId
   })
 
+  await actions.invalidate(['posts', `post-${postId}`])
   invalidatePrefetch()
 
   return error == null

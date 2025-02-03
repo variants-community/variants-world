@@ -1,7 +1,7 @@
 ---
 import { GitHub } from 'components/icons/GitHub'
 import { Star } from 'components/icons/Star'
-import { actions } from 'astro:actions'
+import { getStars } from 'db/prisma/queries'
 
 interface Props {
   username?: string
@@ -11,7 +11,7 @@ interface Props {
 
 const { username, profileUrl, isGuest } = Astro.props
 
-const stars = await Astro.callAction(actions.starsWebhook.orThrow, {})
+const stars = await getStars()
 ---
 
 <nav

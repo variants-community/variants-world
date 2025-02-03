@@ -128,7 +128,7 @@ model PostDetails {
 
 model Vote {
   id            Int         @id @default(autoincrement())
-  value        VoteValue
+  value         VoteValue
   tester        User        @relation(fields: [testerId], references: [id])
   postDetails   PostDetails @relation(fields: [postDetailsId], references: [id], onDelete: Cascade)
   testerId      Int
@@ -141,6 +141,11 @@ model GameRule {
   id    Int    @id @default(autoincrement())
   name  String @unique
   posts Post[]
+}
+
+model System {
+  id Int @id @default(autoincrement())
+  stars Int
 }
 
 // Passing | allowPassing | true

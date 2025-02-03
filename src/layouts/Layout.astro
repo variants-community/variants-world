@@ -39,10 +39,20 @@ const { user } = Astro.locals
 		<meta name="twitter:title" content={title}>
 		<script is:inline>
 			document.addEventListener('astro:after-swap', (e) => {
-				document.querySelector('#app').scrollTo({ top: window.history.state.scrollY || 0, behavior: 'instant' })
+				const app = document.querySelector('#app')
+				if (!app) {
+					console.warn('app not found (scroll)')
+					return
+				}
+				app.scrollTo({ top: window.history.state.scrollY || 0, behavior: 'instant' })
 			})
 			document.addEventListener('astro:page-load', () => {
-				document.querySelector('#app').addEventListener('scroll', e => window.scrollY = e.currentTarget.scrollTop)
+				const app = document.querySelector('#app')
+				if (!app) {
+					console.warn('app not found (subscribe to scroll)')
+					return
+				}
+				app.addEventListener('scroll', e => window.scrollY = e.currentTarget.scrollTop)
 			})
 		</script>
 		<ViewTransitions fallback="animate" />

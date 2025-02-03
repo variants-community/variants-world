@@ -154,6 +154,7 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
     query: query.value,
     setQuery: changeQuery,
     forceLoad: handleScroll,
+    isEndReached: isEndReached.value,
     isFetching: isFetching.value
   }
 }

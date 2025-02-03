@@ -210,13 +210,10 @@ export const updatePrefetch = (link: string, timestamp?: MutableRef<number>) => 
 }
 
 export const invalidatePrefetch = async () => {
-  fetch(window.location.href)
   const link = '/posts'
   const { from, search } = window.history.state
   const href = from === link ? from + (search ?? '') : link
   document.head.querySelector(`[rel="prefetch"][href="${href}"]`)?.remove()
-  await fetch(new URL(href, window.location.href))
-  await fetch(new URL(href, window.location.href))
   updatePrefetch(href)
 }
 

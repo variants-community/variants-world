@@ -1,10 +1,9 @@
 import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
 import { defineAction } from 'astro:actions'
+import { edgeCache } from 'utils/cache'
 import { prisma } from 'db/prisma/prisma'
 import { z } from 'astro:schema'
 import type { GameStatus, PostForCard, Prisma } from 'db/prisma/types'
-
-const cache = new Map<string, { posts: PostForCard[]; page: number; pageEnd?: number }>()
 
 export const getFilteredPosts = defineAction({
   input: z.object({
@@ -16,8 +15,11 @@ export const getFilteredPosts = defineAction({
   }),
   handler: async ({ page, size, search, status, postId }) => {
     const cacheKey = `${page}-${size}-${search}-${status}-${postId}`
-    const cached = cache.get(cacheKey)
-    if (cached) return cached
+    const cached = edgeCache.get<{ posts: PostForCard[]; page: number; pageEnd?: number }>(cacheKey)
+    if (cached) {
+      console.error('CACHE HIT')
+      return cached
+    }
     console.error('CACHE MISS')
     const words = replaceAll(replaceAll(search.toLocaleLowerCase(), ':', ''), '|', '').split(/(\s+)/)
 
@@ -128,7 +130,7 @@ export const getFilteredPosts = defineAction({
       fen: p.fen
     }))
 
-    cache.set(cacheKey, { posts: mapped, page })
+    edgeCache.set(cacheKey, { posts: mapped, page }, ['posts'])
     return { posts: mapped, page, pageEnd }
   }
 })

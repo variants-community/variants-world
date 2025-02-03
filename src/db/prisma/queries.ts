@@ -1,11 +1,11 @@
 import { DEFAULT_SWR, DEFAULT_TTL } from 'src/config'
+import { edgeCache } from 'utils/cache'
 import { prisma } from 'db/prisma/prisma'
 import type { GameClassification, GameplayClassification, VoteValue } from '@prisma/client'
 import type { UserForCard } from 'db/prisma/types'
 
-const cache = new Map<number, Awaited<ReturnType<typeof getPostById>>>()
 export const getPostById = async (postId: number) => {
-  const cached = cache.get(postId) as never
+  const cached = edgeCache.get<Awaited<ReturnType<typeof getPostById>>>(postId) as never
   if (cached) return cached
 
   const post = await prisma.post.findFirst({
@@ -64,7 +64,7 @@ export const getPostById = async (postId: number) => {
     }
   })
 
-  cache.set(postId, post)
+  edgeCache.set(postId, post, [`post-${postId}`])
   return post
 }
 

@@ -9,10 +9,12 @@ const AuthGuardRoutes: AuthGuardRoute[] = [
   { path: '/_actions', deep: true, action: 'error' }
 ]
 
+const WhitelistedRouted = ['/_actions/starsWebhook']
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url
   const route = AuthGuardRoutes.find(({ path, deep }) => pathname === path || (deep && pathname.startsWith(`${path}/`)))
-  if (route) {
+  if (route && !WhitelistedRouted.includes(pathname)) {
     const token = context.cookies.get('token')?.value
     const expires = context.cookies.get('expires')?.value
 

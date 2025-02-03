@@ -4,7 +4,7 @@ import { z } from 'astro:schema'
 export const starsWebhook = defineAction({
   input: z.any(),
   handler: async payload => {
-    console.log({ payload })
+    console.dir({ payload }, { depth: null })
     return 2
   }
 })

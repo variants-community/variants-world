@@ -77,6 +77,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
           CGABOT_API_TOKEN: ${{ secrets.CGABOT_API_TOKEN }}
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
         run: pnpm build
 
       - name: Upload to Deno Deploy

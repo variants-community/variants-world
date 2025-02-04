@@ -74,7 +74,7 @@ export const getFilteredPosts = defineAction({
         })
         page = Math.trunc(count / size) + 1
         if (count % size > size / 2) pageEnd = page + 1
-        console.log({ newPage: page })
+        console.log({ newPage: page, pageEnd })
       }
     }
 
@@ -125,7 +125,7 @@ export const getFilteredPosts = defineAction({
       fen: p.fen
     }))
 
-    edgeCache.set(cacheKey, { posts: mapped, page }, ['posts'])
+    edgeCache.set(cacheKey, { posts: mapped, page, pageEnd }, ['posts'])
     return { posts: mapped, page, pageEnd }
   }
 })

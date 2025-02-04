@@ -24,6 +24,7 @@ const BackButton = (props: BackButtonProps) => {
       class="flex text-center fill-text hover:(fill-white text-white) items-center justify-between gap-2 whitespace-nowrap border border-border-dark bg-border-light shadow-dark rounded-lg py-1.2 px-2.5 transition-colors duration-200 ease-out"
       href={props.href}
       // onClick={onClick}
+      onMouseDown={e => e.currentTarget.click()}
       onMouseEnter={update}
       data-astro-prefetch="hover"
     >

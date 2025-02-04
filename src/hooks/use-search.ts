@@ -23,7 +23,11 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
   const controller = useRef<AbortController>()
 
   const isFetching = useSignal(false)
-  const isEndReached = useSignal(false)
+  const isEndReached = useSignal(
+    props.pagination && Array.isArray(props.data)
+      ? props.data.length < props.pagination.size * (props.pagination.pageEnd ? 2 : 1)
+      : false
+  )
 
   const changeQuery = async (newQuery: V) => {
     query.value = newQuery

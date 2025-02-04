@@ -3,13 +3,16 @@ import { prisma } from 'db/prisma/prisma'
 import type { GameClassification, GameplayClassification, VoteValue } from '@prisma/client'
 import type { UserForCard } from 'db/prisma/types'
 
+
 export const getStars = async () => {
   const cached = edgeCache.get<number>('stars')
   if (cached !== undefined) return cached
   console.log('Fetching stars...')
   const stars = (await prisma.system.findFirst({ where: { id: 1 }, select: { stars: true } }))?.stars ?? 0
   edgeCache.set('stars', stars, ['stars'])
+  return stars
 }
+
 
 export const getPostById = async (postId: number) => {
   const cached = edgeCache.get<Awaited<ReturnType<typeof getPostById>>>(postId) as never

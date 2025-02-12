@@ -8,6 +8,7 @@ type LikesProps = {
   postId: number
   clickable?: boolean
   small?: boolean
+  medium?: boolean
 }
 
 const Likes = (props: LikesProps) => {
@@ -20,13 +21,13 @@ const Likes = (props: LikesProps) => {
       class={cl(
         'flex group items-center justify-end whitespace-nowrap cursor-pointer',
         props.clickable && 'bg-border-light rounded-full py-2 px-3.6 shadow-dark',
-        props.small ? 'gap-1.5' : 'gap-2'
+        props.small ? 'gap-1.5' : props.medium ? 'gap-1.5' : 'gap-2'
       )}
     >
       <span
         class={cl(
           'select-none',
-          props.small ? 'text-base' : 'text-base sm:text-2xl',
+          props.small ? 'text-base' : props.medium ? 'text-base sm:text-lg' : 'text-base sm:text-2xl',
           isLiked ? 'text-red font-medium' : 'text-text'
         )}
       >
@@ -36,7 +37,7 @@ const Likes = (props: LikesProps) => {
       <LikeIcon
         // class={props.clickable ? 'group-hover:fill-red transition-colors duration-100' : ''}
         isLiked={isLiked}
-        class={props.small ? 'w-3.5 h-3.5' : undefined}
+        class={props.small ? 'w-3.5 h-3.5' : props.medium ? 'w-4 h-4' : undefined}
       />
     </div>
   )

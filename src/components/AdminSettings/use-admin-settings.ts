@@ -1,8 +1,8 @@
+import { actions } from 'astro:actions'
+import { getValueFromEvent, invalidatePrefetch } from 'utils/hepers'
 import { useEffect, useState } from 'preact/hooks'
 
 import type { PostDetails } from 'db/prisma/queries'
-
-import { getValueFromEvent } from 'utils/hepers'
 
 import { supabase } from 'db/supabase/supabase'
 import type { GameClassification, GameplayClassification, Vote } from '@prisma/client'
@@ -106,6 +106,9 @@ export const useAdminSettings = (details: PostDetails) => {
         gameClassification: value ?? null
       })
       .eq('postId', details.postId)
+
+    await actions.invalidate([`post-${details.postId}`])
+    invalidatePrefetch()
   }
 
   const setGameplayClassificationOnChange = async (value: GameplayClassification) => {
@@ -116,6 +119,9 @@ export const useAdminSettings = (details: PostDetails) => {
         gameplayClassification: value
       })
       .eq('postId', details.postId)
+
+    await actions.invalidate([`post-${details.postId}`])
+    invalidatePrefetch()
   }
 
   const onChangeNotes = async (e: Event) => {
@@ -126,6 +132,9 @@ export const useAdminSettings = (details: PostDetails) => {
         notes: value
       })
       .eq('postId', details.postId)
+
+    await actions.invalidate([`post-${details.postId}`])
+    invalidatePrefetch()
   }
   return {
     gameClassification,

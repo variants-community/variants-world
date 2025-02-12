@@ -56,8 +56,8 @@ const PostsList = (props: PostsListProps) => {
   })
 
   return (
-    <div class="mx-auto container pb-12">
-      <div class="flex gap-x-3 mt-4 lg:mt-0 mb-4">
+    <div class="pb-12">
+      <div class="mx-auto container flex gap-x-3 mt-4 lg:mt-0 mb-4">
         <PostsSearch
           query={query.search ?? ''}
           setQuery={search => {
@@ -67,7 +67,7 @@ const PostsList = (props: PostsListProps) => {
         />
         <GalleryViewSwitch signal={galleryView} />
       </div>
-      <div class="mb-10 lg:mb-8 flex gap-x-3 px-5">
+      <div class="mx-auto container mb-10 lg:mb-8 flex gap-x-3 px-5">
         {STATUSES.value.map(status => (
           <div
             class={cl(
@@ -86,7 +86,16 @@ const PostsList = (props: PostsListProps) => {
         ))}
       </div>
 
-      <div class={useComputed(() => cl('flex flex-col', galleryView.value === 'compact' ? 'gap-4' : 'gap-8'))}>
+      <div
+        class={useComputed(() =>
+          cl(
+            galleryView.value === 'grid'
+              ? 'flex flex-wrap gap-4 sm:gap-6 max-w-12/12 lg:max-w-11/12 mx-auto justify-center'
+              : 'mx-auto container flex flex-col',
+            galleryView.value === 'compact' ? 'gap-4' : 'gap-8'
+          )
+        )}
+      >
         {foundPosts?.map(post => <PostCard userId={props.userId} key={post.id} post={post} view={galleryView} />)}
         <div class={cl(isEndReached ? 'h-0' : 'h-[calc(95dvh-6rem)]')} />
       </div>

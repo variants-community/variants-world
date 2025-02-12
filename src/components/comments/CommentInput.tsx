@@ -1,5 +1,5 @@
-import { type Ref, useEffect, useRef } from 'preact/hooks'
 import { getValueFromEvent } from 'utils/hepers'
+import { useEffect, useRef } from 'preact/hooks'
 import type { Comment } from '@prisma/client'
 import type { Signal } from '@preact/signals'
 
@@ -11,7 +11,7 @@ type CommentInputProps = {
 }
 
 const CommentInput = (props: CommentInputProps) => {
-  const ref = useRef<HTMLTextAreaElement>()
+  const ref = useRef<HTMLTextAreaElement>(null)
   const onKeyDown = (e: KeyboardEvent) => {
     switch (true) {
       case e.key === 'Enter' && e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey:
@@ -45,7 +45,7 @@ const CommentInput = (props: CommentInputProps) => {
           </div>
         )}
         <textarea
-          ref={ref as Ref<HTMLTextAreaElement>}
+          ref={ref}
           value={props.comment.value}
           onInput={e => (props.comment.value = getValueFromEvent(e))}
           onKeyDown={onKeyDown}

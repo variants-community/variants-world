@@ -1,5 +1,5 @@
 import { Input } from 'components/common/Input'
-import { type ReadonlySignal, useComputed } from '@preact/signals'
+import { type ReadonlySignal } from '@preact/signals'
 import { StatusIndicator } from 'components/posts/StatusIndicator'
 import { cl, getValueFromEvent } from 'utils/hepers'
 import type { GalleryView } from 'components/common/GalleryViewSwitch'
@@ -20,7 +20,12 @@ type PostTitleProps = {
 
 const PostTitle = (props: PostTitleProps) => {
   return (
-    <div class={'flex flex-row items-center w-full text-white gap-2 sm:gap-4 font-semibold'}>
+    <div
+      class={cl(
+        'flex items-center w-full text-white font-semibold',
+        props.view?.value === 'grid' ? 'gap-2' : 'gap-3 sm:gap-4'
+      )}
+    >
       {props.isEditMode ? (
         <select
           value={props.type}
@@ -32,17 +37,21 @@ const PostTitle = (props: PostTitleProps) => {
         </select>
       ) : (
         <h2
-          class={useComputed(() =>
-            cl(
-              'relative flex bg-gray py-1 px-2 sm:(py-2 px-2.5) rounded leading-none',
-              !props.card && 'cursor-default',
-              !props.view || props.view.value === 'compact' ? 'text-base sm:text-lg' : 'text-xl sm:text-2xl'
-            )
+          class={cl(
+            'relative flex bg-gray py-1 px-2 sm:(py-2 px-2.5) rounded leading-none',
+            !props.card && 'cursor-default',
+            !props.view || props.view.value === 'compact' ? 'text-base sm:text-lg' : 'text-xl sm:text-2xl',
+            props.view?.value === 'grid' && 'text-base sm:text-lg'
           )}
         >
           {props.type}
           {props.status && (
-            <div class="absolute right-[-11px] top-[-8px]">
+            <div
+              class={cl(
+                'absolute',
+                props.view?.value === 'grid' ? 'right-[-8px] bottom-[-8px]' : 'right-[-11px] top-[-8px]'
+              )}
+            >
               <StatusIndicator status={props.status} />
             </div>
           )}
@@ -57,14 +66,13 @@ const PostTitle = (props: PostTitleProps) => {
         />
       ) : (
         <h1
-          style="overflow-wrap: anywhere"
-          class={useComputed(() =>
-            cl(
-              'w-full text-nowrap leading-4',
-              !props.view || props.view.value === 'compact'
-                ? 'break-words text-lg md:text-xl font-medium'
-                : 'text-xl md:text-3xl sm:text-2xl'
-            )
+          class={cl(
+            'w-full text-nowrap',
+            !props.view || props.view.value === 'compact'
+              ? 'break-words text-lg md:text-xl font-medium leading-6'
+              : props.view.value === 'grid'
+                ? 'overflow-hidden whitespace-nowrap text-ellipsis text-lg md:text-xl font-medium leading-6'
+                : 'text-xl md:text-3xl sm:text-2xl leading-6'
           )}
         >
           {props.title}

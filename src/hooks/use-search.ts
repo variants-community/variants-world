@@ -154,7 +154,7 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
 
   return {
     signal: data,
-    data: data.value,
+    data: data.value as T | undefined,
     query: query.value,
     setQuery: changeQuery,
     forceLoad: handleScroll,

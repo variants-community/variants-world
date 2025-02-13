@@ -5,7 +5,7 @@ export const TimePassed = ({ from }: { from: Date }) => (
     class={
       'items-center before:(pointer-events-none opacity-0 whitespace-nowrap !duration-0 transition-opacity !block) after:(pointer-events-none opacity-0 whitespace-nowrap !duration-0 transition-opacity !block) hover:before:(opacity-100 delay-300) hover:after:(opacity-100 delay-300)'
     }
-    data-tooltip={new Date().toLocaleString('en-US', {
+    data-tooltip={from.toLocaleString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',

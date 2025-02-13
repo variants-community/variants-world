@@ -22,7 +22,7 @@ type GameInfoProps = {
   profileUrl?: string | null
   createdAt: Date
   description: string
-  gameNr: number
+  gameNrs: number[]
 }
 
 const GameInfo = (props: GameInfoProps) => {
@@ -91,7 +91,11 @@ const GameInfo = (props: GameInfoProps) => {
       )}
 
       <div class={'flex flex-row justify-end mt-auto'}>
-        <LinkToVariant value={`https://www.chess.com/variants/game/${props.gameNr}`} />
+        {props.gameNrs.map((gameNr, i) => (
+          <LinkToVariant value={`https://www.chess.com/variants/game/${gameNr}`}>
+            {props.gameNrs.length > 1 ? i + 1 : 'Try this variant'}
+          </LinkToVariant>
+        ))}
       </div>
     </div>
   )

@@ -25,8 +25,8 @@ export const createPost = defineAction({
 
       const post = await prisma.post.create({
         data: {
-          // TODO: add confirmingGameNrs to db
           gameNr: game.gameNr,
+          gameNrs: payload.confirmingGameNrs.map(Number),
           fen: game.q.startFen,
           title: payload.title,
           authorUserId: payload.userId,

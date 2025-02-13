@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 import type { GameClassification, GameplayClassification } from '@prisma/client'
 
 const gameClassification: { label: string; value?: GameClassification }[] = [
@@ -25,46 +25,36 @@ type ClassificationProps = {
   setGameplayClassification: (value: GameplayClassification) => void
 }
 
-const kek = (status?: GameplayClassification) => {
-  if (status === 'FIRST_POSITIVE') {
-    return { firtsRule: true, secondRule: false }
-  } else if (status === 'FIRST_NEGATIVE') {
-    return { firtsRule: false, secondRule: true }
-  } else if (status === 'SECOND_POSITIVE') {
-    return { firtsRule: true, secondRule: true }
-  } else if (status === 'SECOND_NEGATIVE') {
-    return { firtsRule: false, secondRule: false }
-  } else return { firtsRule: true, secondRule: true }
+const ClassificationRules: Record<GameplayClassification, { firstRule: boolean; secondRule: boolean }> = {
+  FIRST_POSITIVE: { firstRule: true, secondRule: false },
+  FIRST_NEGATIVE: { firstRule: false, secondRule: true },
+  SECOND_POSITIVE: { firstRule: true, secondRule: true },
+  SECOND_NEGATIVE: { firstRule: false, secondRule: false }
 }
 
 export const Classification = (props: ClassificationProps) => {
-  const [firstRule, setFirstRule] = useState<boolean>(kek(props.gameplayClassification).firtsRule)
-  const [secondRule, setSecondRule] = useState<boolean>(kek(props.gameplayClassification).secondRule)
+  const rules = ClassificationRules[props.gameplayClassification ?? 'SECOND_POSITIVE']
+  const [firstRule, setFirstRule] = useState<boolean>(rules.firstRule)
+  const [secondRule, setSecondRule] = useState<boolean>(rules.secondRule)
 
-  useEffect(() => {
-    if (firstRule) {
-      if (secondRule) {
-        props.setGameplayClassification('SECOND_POSITIVE')
-      } else {
-        props.setGameplayClassification('FIRST_POSITIVE')
-      }
+  const updateClassification = (first: boolean, second: boolean) => {
+    if (first) {
+      if (second) props.setGameplayClassification('SECOND_POSITIVE')
+      else props.setGameplayClassification('FIRST_POSITIVE')
     } else {
-      if (secondRule) {
-        props.setGameplayClassification('FIRST_NEGATIVE')
-      } else {
-        props.setGameplayClassification('SECOND_NEGATIVE')
-      }
+      if (second) props.setGameplayClassification('FIRST_NEGATIVE')
+      else props.setGameplayClassification('SECOND_NEGATIVE')
     }
-  }, [firstRule, secondRule])
-
-  const handlerFirstRule = (e: Event) => {
-    const isChecked = (e.target as HTMLInputElement).checked
-    setFirstRule(isChecked)
   }
 
-  const handlerSecondRule = (e: Event) => {
-    const isChecked = (e.target as HTMLInputElement).checked
-    setSecondRule(isChecked)
+  const handlerFirstRule = () => {
+    updateClassification(!firstRule, secondRule)
+    setFirstRule(x => !x)
+  }
+
+  const handlerSecondRule = () => {
+    updateClassification(firstRule, !secondRule)
+    setSecondRule(x => !x)
   }
 
   return (

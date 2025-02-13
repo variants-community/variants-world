@@ -15,7 +15,7 @@ type CommentsProps = {
 }
 
 const CommentsList = (props: CommentsProps) => (
-  <div class={'flex flex-col gap-[20px] mb-[40px]'}>
+  <div class={'flex flex-col gap-[0.4rem] mb-[40px]'}>
     <h2 class={'w-11/12 sm:w-125 lg:w-full mx-auto text-4xl font-bold text-text'}>Discussion</h2>
     {props.comments
       .sort((first, second) => first.createdAt.getTime() - second.createdAt.getTime())
@@ -59,7 +59,7 @@ const CommentCard = (props: CommentCardProps) => {
     <div
       ref={ref}
       id={`comment-${props.comment.id}`}
-      class={`w-11/12 flex bg-border-light mx-auto sm:w-125 lg:w-full p-4 gap-4 border-1 border-border-dark rounded-xl
+      class={`w-11/12 flex bg-border-light mx-auto sm:w-125 lg:w-full p-4 pb-2 gap-4 border-1 border-border-dark rounded-xl
       group filter transition-colors duration-200 ${props.isHighlighted && '!bg-[#7e3024]'}`}
     >
       <img src={props.comment.User.profileUrl ?? '/assets/images/user.png'} class={'h-12 rounded-md'} />

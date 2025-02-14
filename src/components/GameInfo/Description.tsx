@@ -1,4 +1,5 @@
 import { getValueFromEvent } from 'utils/hepers'
+import { highlightLinks } from 'utils/formatters'
 
 type DescriptionProps = {
   isEditMode: boolean
@@ -18,7 +19,9 @@ export const Description = (props: DescriptionProps) => (
         class={'h-full bg-dark outline-none rounded resize-none darkborder p-1'}
       />
     ) : (
-      <p className={'light-scrollbar break-words whitespace-pre-wrap overflow-y-auto h-full'}>{props.value}</p>
+      <p className={'light-scrollbar break-words whitespace-pre-wrap overflow-y-auto h-full pt-1 leading-[1.2rem]'}>
+        {highlightLinks(props.value)}
+      </p>
     )}
   </div>
 )

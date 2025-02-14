@@ -16,7 +16,11 @@ export const COLORS = {
   white: 'var(--white)',
   dark: 'var(--dark)',
   'border-dark': 'var(--border-dark)',
-  'border-light': 'var(--border-light)'
+  'border-light': 'var(--border-light)',
+  'link-game': '#588E2B',
+  'link-post': '#AE4939',
+  'link-user': '#AE4939',
+  link: '#5B91D6'
 } as const
 
 export default defineConfig({
@@ -148,7 +152,8 @@ export default defineConfig({
       '&::placeholder': {
         transition: 'color 200ms cubic-bezier(0.28, 0.54, 0.49, 0.88)'
       }
-    }
+    },
+    link: 'text-link bg-link text-sm px-2 py-0.75 rounded-md !bg-opacity-20 font-medium hover:!bg-opacity-30 transition-colors duration-75 ease-expo leading-[1.4rem]'
   }
 })
 

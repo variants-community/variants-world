@@ -14,7 +14,7 @@ const CommentInput = (props: CommentInputProps) => {
   const ref = useRef<HTMLTextAreaElement>(null)
   const onKeyDown = (e: KeyboardEvent) => {
     switch (true) {
-      case e.key === 'Enter' && e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey:
+      case e.key === 'Enter' && !e.altKey && (e.metaKey || e.ctrlKey) && !e.shiftKey:
         props.postComment()
         break
       case e.key === 'Escape' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey:

@@ -1,5 +1,6 @@
 import { actions } from 'astro:actions'
 import { formatDate, invalidatePrefetch } from 'utils/hepers'
+import { highlightLinks } from 'utils/formatters'
 import { supabase } from 'db/supabase/supabase'
 import { useMemo, useRef } from 'preact/hooks'
 import QuoteIcon from 'components/icons/QuoteIcon'
@@ -54,6 +55,8 @@ const CommentCard = (props: CommentCardProps) => {
     () => props.isHighlighted && ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
     [props.isHighlighted]
   )
+
+  const commentParts = useMemo(() => highlightLinks(props.comment.content), [props.comment.content])
 
   return (
     <div
@@ -117,7 +120,7 @@ const CommentCard = (props: CommentCardProps) => {
             </div>
           )}
 
-          <p class={'text-lg whitespace-pre-wrap'}>{props.comment.content}</p>
+          <p class={'text-lg whitespace-pre-wrap'}>{commentParts}</p>
         </div>
         <div class="flex ml-auto gap-2 text-secondary">
           <button class={'sm:hidden'} onClick={() => props.reply()}>

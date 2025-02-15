@@ -1,6 +1,5 @@
 import { Description } from 'components/GameInfo/Description'
 import { EditButton } from 'components/EditButton'
-import { LinkToVariant } from 'components/GameInfo/LinkToVariant'
 import { TimePassed } from 'components/GameInfo/TimePassed'
 import { actions } from 'astro:actions'
 import { invalidatePrefetch } from 'utils/hepers'
@@ -90,12 +89,22 @@ const GameInfo = (props: GameInfoProps) => {
         />
       )}
 
-      <div class={'flex flex-row justify-end mt-auto'}>
-        {props.gameNrs.map((gameNr, i) => (
-          <LinkToVariant value={`https://www.chess.com/variants/game/${gameNr}`}>
-            {props.gameNrs.length > 1 ? i + 1 : 'Try this variant'}
-          </LinkToVariant>
-        ))}
+      <div class={'flex justify-end gap-x-1.5'}>
+        {props.gameNrs.length > 1 &&
+          props.gameNrs.map((gameNr, i) => (
+            <a
+              href={`https://www.chess.com/variants/game/${gameNr}`}
+              class={'h-7 text-center content-center bg-gray text-text flex-1 rounded font-semibold text-[14px]'}
+            >
+              {i + 1}
+            </a>
+          ))}
+        <a
+          href={`https://www.chess.com/variants/game/${props.gameNrs[0]}`}
+          class={'h-7 flex items-center bg-primary px-8 rounded text-white font-semibold text-[14px]'}
+        >
+          Try this variant
+        </a>
       </div>
     </div>
   )

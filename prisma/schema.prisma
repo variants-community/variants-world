@@ -47,6 +47,7 @@ enum GameStatus {
 enum UserRole {
   TESTER
   MEMBER
+  LOCKED
 }
 
 model Session {

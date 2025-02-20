@@ -1,5 +1,12 @@
 import { TokenPayload, myJWTVerifyAsync } from 'utils/auth'
 import { defineMiddleware } from 'astro:middleware'
+import { prisma } from 'db/prisma/prisma'
+
+let lockedUsers: number[] = []
+await prisma.user
+  .findMany({ where: { role: 'LOCKED' }, select: { id: true } })
+  // eslint-disable-next-line github/no-then
+  .then(users => (lockedUsers = users.map(user => user.id)))
 
 type AuthGuardRoute = { path: string; deep?: true; action?: 'redirect' | 'error' }
 
@@ -22,6 +29,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
       if (!token || !expires) throw new TypeError('No valid cookies found')
 
       context.locals.user = TokenPayload.parse(await myJWTVerifyAsync(token))
+      if (lockedUsers.includes(context.locals.user.id)) {
+        const url = new URL(context.url)
+        url.pathname = '/locked'
+        url.search = ''
+        return Response.redirect(url, 302)
+      }
     } catch {
       switch (route.action) {
         // Instantly redirect to login page

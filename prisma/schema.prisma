@@ -47,7 +47,6 @@ enum GameStatus {
 enum UserRole {
   TESTER
   MEMBER
-  LOCKED
 }
 
 model Session {
@@ -79,6 +78,7 @@ model User {
   UserLikedPosts PostOnUserLikes[]
   Session        Session[]         @relation("UserSessions")
   refreshToken   String?
+  lockedUntil    DateTime?
 }
 
 model Post {

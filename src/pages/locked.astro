@@ -1,7 +1,11 @@
 ---
 import Layout from 'layouts/Layout.astro'
+
+const until = Astro.url.searchParams.get('until')
 ---
 
 <Layout title='Locked'>
-  <h1 class="text-center text-4xl">Checkmate, Mr Abuser</h1>
+  <div class="min-h-screen flex sm:items-center justify-center">
+    <h1 class="mx-4 sm:mx-6 sm:mx-8 md:mx-10 mb-64 text-center text-xl sm:text-3xl md:text-4xl">Sorry, your spaceship in the variants world has been captured by the Futer69 Piracy.<br class="hidden md:inline" /> No appeal can be considered until<br class="inline sm:hidden" /> <span class="text-nowrap">{until}</span>.</h1>
+  </div>
 </Layout>

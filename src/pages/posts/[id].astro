@@ -47,6 +47,7 @@ const ogImage =
                 type={post.type}
                 rules={post.gamerules.map(rule => rule.name)}
                 username={post.author.username}
+                isUserLocked={!!post.author.lockedUntil}
                 profileUrl={post.author.profileUrl}
                 createdAt={post.createdAt}
                 description={post.description}

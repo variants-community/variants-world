@@ -7,7 +7,7 @@ import CommentsList from 'components/comments/CommentsList'
 import type { Comment, User } from '@prisma/client'
 
 export type ExtendedComment = Comment & {
-  User: Pick<User, 'id' | 'username' | 'role' | 'profileUrl'>
+  User: Pick<User, 'id' | 'username' | 'role' | 'profileUrl' | 'lockedUntil'>
   parent?: ExtendedComment | null
 }
 

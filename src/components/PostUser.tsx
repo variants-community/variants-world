@@ -3,6 +3,7 @@ import type { JSX } from 'preact/jsx-runtime'
 
 type PostUserProps = {
   username: string
+  isLocked: boolean
   profileUrl?: string | null
   children?: JSX.Element | false
 }
@@ -11,7 +12,7 @@ const PostUser = (props: PostUserProps) => {
   return (
     <div
       class={cl(
-        'flex flex-row items-center gap-2 overflow-hidden text-ellipsis',
+        'flex flex-row items-center gap-2 overflow-hidden text-ellipsis min-h-6',
         props.children ? 'leading-[1.3]' : ''
       )}
     >
@@ -24,6 +25,7 @@ const PostUser = (props: PostUserProps) => {
         <span class={'font-semibold'}>{props.username}</span>
         {props.children}
       </div>
+      {props.isLocked && <span class='opacity-50'>user is locked</span>}
     </div>
   )
 }

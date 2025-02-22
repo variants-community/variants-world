@@ -89,7 +89,8 @@ export const getFilteredPosts = defineAction({
             id: true,
             username: true,
             role: true,
-            profileUrl: true
+            profileUrl: true,
+            lockedUntil: true,
           }
         },
         comments: {

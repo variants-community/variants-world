@@ -105,7 +105,7 @@ const PostCard = (props: PostCardProps) => {
                   : 'flex flex-wrap items-center'
             )}
           >
-            <PostUser username={props.post.author.username} profileUrl={props.post.author.profileUrl}>
+            <PostUser isLocked={!!props.post.author.lockedUntil} username={props.post.author.username} profileUrl={props.post.author.profileUrl}>
               {props.view.value === 'compact' && <TimePassed from={props.post.createdAt} />}
             </PostUser>
 

@@ -6,6 +6,7 @@ export interface UserForCard {
   username: string
   role: UserRole
   profileUrl: string | null
+  lockedUntil: Date | null
 }
 
 export interface PostForCard {

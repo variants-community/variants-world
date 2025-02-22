@@ -18,6 +18,7 @@ type GameInfoProps = {
   title: string
   rules: string[]
   username: string
+  isUserLocked: boolean
   profileUrl?: string | null
   createdAt: Date
   description: string
@@ -79,7 +80,7 @@ const GameInfo = (props: GameInfoProps) => {
         />
       </div>
 
-      <PostUser username={props.username} profileUrl={props.profileUrl} />
+      <PostUser isLocked={props.isUserLocked} username={props.username} profileUrl={props.profileUrl} />
 
       {(editable.value.description.length > 0 || editing.value) && (
         <Description

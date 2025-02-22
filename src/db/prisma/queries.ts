@@ -32,7 +32,8 @@ export const getPostById = async (postId: number) => {
                   id: true,
                   username: true,
                   role: true,
-                  profileUrl: true
+                  profileUrl: true,
+                  lockedUntil: true
                 }
               }
             }
@@ -42,7 +43,8 @@ export const getPostById = async (postId: number) => {
               id: true,
               username: true,
               role: true,
-              profileUrl: true
+              profileUrl: true,
+              lockedUntil: true
             }
           }
         }

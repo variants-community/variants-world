@@ -68,8 +68,9 @@ const CommentCard = (props: CommentCardProps) => {
       <img src={props.comment.User.profileUrl ?? '/assets/images/user.png'} class={'h-12 rounded-md'} />
       <div class={'w-[calc(100%-66px)] flex flex-col gap-2'}>
         <div class={'flex justify-between'}>
-          <div>
+          <div class='flex sm:gap-2 flex-col sm:flex-row'>
             <span class={'text-white font-semibold'}>{props.comment.User.username}</span>
+            {!!props.comment.User.lockedUntil && <span class='opacity-50'>user is locked</span>} 
           </div>
           <div class={'flex gap-3 flex-row-reverse'}>
             <span class="whitespace-nowrap ">{formatDate(props.comment.createdAt)}</span>

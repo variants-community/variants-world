@@ -36,7 +36,8 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                     id: parentUser.data.id,
                     username: parentUser.data.username,
                     role: parentUser.data.role,
-                    profileUrl: parentUser.data.profileUrl
+                    profileUrl: parentUser.data.profileUrl,
+                    lockedUntil: parentUser.data.lockedUntil ? new Date(parentUser.data.lockedUntil) : null
                   },
                   content: parentComment.data.content,
                   createdAt: new Date(parentComment.data.createdAt),
@@ -62,7 +63,8 @@ export const useComments = (initComments: ExtendedComment[], postId: number) => 
                   id: user.data.id,
                   username: user.data.username,
                   role: user.data.role,
-                  profileUrl: user.data.profileUrl
+                  profileUrl: user.data.profileUrl,
+                  lockedUntil: user.data.lockedUntil ? new Date(user.data.lockedUntil) : null
                 },
                 parent
               } satisfies ExtendedComment

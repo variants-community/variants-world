@@ -3,6 +3,7 @@ import { formatDate, invalidatePrefetch } from 'utils/hepers'
 import { highlightLinks } from 'utils/formatters'
 import { supabase } from 'db/supabase/supabase'
 import { useMemo, useRef } from 'preact/hooks'
+import LockedIcon from 'components/icons/Locked'
 import QuoteIcon from 'components/icons/QuoteIcon'
 import type { Comment } from '@prisma/client'
 import type { ExtendedComment } from 'components/comments/index'
@@ -63,14 +64,18 @@ const CommentCard = (props: CommentCardProps) => {
       ref={ref}
       id={`comment-${props.comment.id}`}
       class={`w-11/12 flex bg-border-light mx-auto sm:w-125 lg:w-full p-4 pb-2 gap-4 border-1 border-border-dark rounded-xl
-      group filter transition-colors duration-200 ${props.isHighlighted && '!bg-[#7e3024]'}`}
+      group filter transition-colors duration-200 ${props.isHighlighted && '!bg-[#7e3024]'} ${props.comment.User.lockedUntil && 'opacity-60'}`}
     >
       <img src={props.comment.User.profileUrl ?? '/assets/images/user.png'} class={'h-12 rounded-md'} />
       <div class={'w-[calc(100%-66px)] flex flex-col gap-2'}>
         <div class={'flex justify-between'}>
-          <div class='flex sm:gap-2 flex-col sm:flex-row'>
+          <div class="flex">
             <span class={'text-white font-semibold'}>{props.comment.User.username}</span>
-            {!!props.comment.User.lockedUntil && <span class='opacity-50'>user is locked</span>} 
+            {props.comment.User.lockedUntil && (
+              <span class="mt-0.25 ml-1" data-tooltip="Locked" data-tooltip-position="bottom">
+                <LockedIcon />
+              </span>
+            )}
           </div>
           <div class={'flex gap-3 flex-row-reverse'}>
             <span class="whitespace-nowrap ">{formatDate(props.comment.createdAt)}</span>

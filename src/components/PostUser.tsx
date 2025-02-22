@@ -1,4 +1,5 @@
 import { cl } from 'utils/hepers'
+import LockedIcon from 'components/icons/Locked'
 import type { JSX } from 'preact/jsx-runtime'
 
 type PostUserProps = {
@@ -25,7 +26,11 @@ const PostUser = (props: PostUserProps) => {
         <span class={'font-semibold'}>{props.username}</span>
         {props.children}
       </div>
-      {props.isLocked && <span class='opacity-50'>user is locked</span>}
+      {props.isLocked && (
+        <span class="mt-0.25" data-tooltip="Locked" data-tooltip-position="right">
+          <LockedIcon class="-ml-1" />
+        </span>
+      )}
     </div>
   )
 }

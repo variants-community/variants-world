@@ -2,16 +2,16 @@ import { TokenPayload, myJWTVerifyAsync } from 'utils/auth'
 import { defineMiddleware } from 'astro:middleware'
 import { prisma } from 'db/prisma/prisma'
 
-let lockedUsers: {id: number, lockedUntil: Date}[] = []
-await prisma.user
-  .findMany({ where: { lockedUntil: {not: null} }, select: { id: true, lockedUntil: true } })
+export const LockedUsers = prisma.user
+  .findMany({ where: { lockedUntil: { not: null } }, select: { id: true, lockedUntil: true } })
   // eslint-disable-next-line github/no-then
-  .then(users => (lockedUsers = users.map(u => ({ id: u.id, lockedUntil: u.lockedUntil as Date}))))
+  .then(users => users.map(u => ({ id: u.id, lockedUntil: u.lockedUntil as Date })))
 
 type AuthGuardRoute = { path: string; deep?: true; action?: 'redirect' | 'error' }
 
 const AuthGuardRoutes: AuthGuardRoute[] = [
   { path: '/' },
+  { path: '/locked' },
   { path: '/posts', deep: true },
   { path: '/_actions', deep: true, action: 'error' }
 ]
@@ -29,23 +29,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
       if (!token || !expires) throw new TypeError('No valid cookies found')
 
       context.locals.user = TokenPayload.parse(await myJWTVerifyAsync(token))
-      const lockedUser = lockedUsers.find((u) => u.id === context.locals.user.id)
+
+      if (context.url.pathname === '/locked') return await next()
+      const lockedUser = (await LockedUsers).find(u => u.id === context.locals.user.id)
       if (lockedUser) {
-        const url = new URL(context.url)
-        url.pathname = '/locked'
-        url.search = ''
-        url.searchParams.append('until', formatLockedDate(lockedUser.lockedUntil))
-        return Response.redirect(url, 302)
+        return context.redirect('/locked', 302)
       }
     } catch {
       switch (route.action) {
         // Instantly redirect to login page
         case 'redirect': {
-          const url = new URL(context.url)
-          url.pathname = '/login'
           // TODO: pass redirect_url param so after logging in user is redirected to target page
-          url.search = ''
-          return Response.redirect(url, 302)
+          return context.redirect('/login', 302)
         }
 
         // Respond with an access-denied error
@@ -75,18 +70,3 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   return await next()
 })
-
-function formatLockedDate(date: Date) {
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-  
-  const month = months[date.getMonth()];
-  const day = date.getDate();
-  const year = date.getFullYear();
-  const hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-
-  return `${month} ${day}, ${year}, ${hours}:${minutes}`;
-}

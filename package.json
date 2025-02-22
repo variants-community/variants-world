@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "dev:prod": "dotenv -e .env.production.local -- astro dev --mode prod",
     "start": "astro dev --host",
-    "build": "astro build",
+    "build": "dotenv -e .env.production.local -- astro build",
     "preview": "dotenv -e .env.production.local -- deno run --allow-net --allow-read --allow-env --unstable-kv --no-lock ./dist/server/entry.mjs",
     "test:dev": "dotenv -e .env -- vitest run",
     "astro": "astro",

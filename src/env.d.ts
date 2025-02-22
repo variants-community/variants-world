@@ -8,7 +8,7 @@ declare namespace App {
       id: number
       profileUrl: string
       username: string
-    } & ({ guest: true; role?: undefined } | { guest?: undefined; role: 'MEMBER' | 'TESTER' | 'LOCKED' })
+    } & ({ guest: true; role?: undefined } | { guest?: undefined; role: 'MEMBER' | 'TESTER' })
   }
 }
 

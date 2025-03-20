@@ -1,0 +1,79 @@
+---
+import { Picture } from 'components/common/Picture'
+import { Scale } from 'components/icons/Scale'
+import { WofsData } from 'pages/wofs/wofs'
+import { actions } from 'astro:actions'
+import { cl } from 'utils/hepers'
+import Layout from 'layouts/Layout.astro'
+import PostUser from 'components/PostUser'
+
+const { user } = Astro.locals
+if (user.guest) return Astro.redirect('/')
+
+const gameDetails = await Promise.all(
+  WofsData.map(async wof => await Astro.callAction(actions.getGameDetails.orThrow, wof.gameNr))
+)
+---
+
+<Layout title='WoFs | Variants World'>
+  <h1 class='text-4xl text-center mb-8 text-white'>Wheel of Fortune Index</h1>
+
+  <p class="text-xl text-center mb-10 p-6 mx-1/10 border-y border-dotted border-gray">
+   <span class='text-primary'>Wheel of Fortune</span> is an arena rotation of quick, luck-based, fun and exciting games.
+    These games should usually be unbalanced and have a fast time control.
+    <br />
+    Explore the entire collection below!
+  </p>
+
+  <div class='flex flex-wrap gap-4 sm:gap-6 max-w-12/12 lg:max-w-11/12 mx-auto justify-center pb-12'>
+    {
+      gameDetails.map((game, i) =>
+        game ? (
+          <a
+            href={`https://www.chess.com/variants/game/${game.gameNr}`}
+            class={cl(
+              'relative flex rounded-xl darkborder bg-border-light overflow-hidden flex-col aspect-square w-58'
+            )}
+          >
+            <Picture
+              fen={game.q.startFen}
+              id={i}
+              class='mx-auto bg-border-light transition-[width,height] duration-100 w-full aspect-square'
+            />
+
+            <div class='w-full transition-[padding] duration-100 flex flex-col justify-between p-3 flex-1'>
+              <div
+                class={cl(
+                  'flex items-center w-full font-semibold mb-1',
+                  WofsData[i].disabled ? 'text-text' : 'text-white'
+                )}
+              >
+                <h2 class='w-full text-nowrap overflow-hidden whitespace-nowrap text-ellipsis text-lg md:text-xl font-medium leading-6'>
+                  {WofsData[i].title}
+                </h2>
+              </div>
+
+              <div class='justify-between gap-x-2 grid grid-cols-[1fr,auto]'>
+                <PostUser isLocked={false} username={WofsData[i].author} />
+
+                <div class='flex justify-end items-center sm:justify-end gap-1 pr-1 font-bold'>
+                  <Scale />
+                  <span>{WofsData[i].round}</span>
+                </div>
+              </div>
+            </div>
+
+            {WofsData[i].disabled && (
+              <div
+                class='absolute inset-0 opacity-50'
+                style='background-image: linear-gradient(47deg, var(--border-dark) 48%, var(--gray) 48%, var(--gray) 55%, var(--border-dark) 55%)'
+              />
+            )}
+          </a>
+        ) : (
+          <div>?</div>
+        )
+      )
+    }
+  </div>
+</Layout>

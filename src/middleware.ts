@@ -12,6 +12,7 @@ type AuthGuardRoute = { path: string; deep?: true; action?: 'redirect' | 'error'
 const AuthGuardRoutes: AuthGuardRoute[] = [
   { path: '/' },
   { path: '/locked' },
+  { path: '/wofs' },
   { path: '/posts', deep: true },
   { path: '/_actions', deep: true, action: 'error' }
 ]

@@ -22,6 +22,7 @@ type GameInfoProps = {
   profileUrl?: string | null
   createdAt: Date
   description: string
+  gameNr: number
   gameNrs: number[]
 }
 
@@ -101,7 +102,7 @@ const GameInfo = (props: GameInfoProps) => {
             </a>
           ))}
         <a
-          href={`https://www.chess.com/variants/game/${props.gameNrs[0]}`}
+          href={`https://www.chess.com/variants/game/${props.gameNr}`}
           class={'h-7 flex items-center bg-primary px-8 rounded text-white font-semibold text-[14px]'}
         >
           Try this variant

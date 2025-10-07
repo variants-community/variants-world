@@ -60,7 +60,9 @@ export const useSearch = <V, T>(props: UseSearchProps<V, T>) => {
         pendingPagination.value = { start: 1, end: 1 }
       })
       if (loadTimer.current === -1) return
-      loadTimer.current = self.setTimeout(handleScroll)
+      if (props.pagination) {
+        loadTimer.current = self.setTimeout(handleScroll)
+      }
     } catch (e) {
       // Request canceled
     }

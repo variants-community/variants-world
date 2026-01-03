@@ -4,21 +4,13 @@ import { defineAction } from 'astro:actions'
 import { descriptionValid, doesGameExist, titleValid } from 'utils/post-validation'
 import { mapRuleVariantsToString } from 'utils/game-rules-mapper'
 import { edgeCache } from 'utils/cache'
-import { ConvexHttpClient } from 'convex/browser'
-
-const convexUrl = import.meta.env.PUBLIC_CONVEX_URL
-
-const getConvexClient = () => {
-  if (!convexUrl) throw new Error('PUBLIC_CONVEX_URL not set')
-  return new ConvexHttpClient(convexUrl)
-}
+import { getConvexHttpClient, api } from 'src/lib/convex-client'
 
 export const createPost = defineAction({
   input: createPostPayloadSchema,
   handler: async payload => {
     try {
-      const convex = getConvexClient()
-      const { api } = await import('../../convex/_generated/api')
+      const convex = getConvexHttpClient()
 
       // Validate game exists
       const game = await doesGameExist(payload.gameNr)

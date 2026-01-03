@@ -1,18 +1,4 @@
-import { ConvexHttpClient } from "convex/browser";
-
-const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
-
-let httpClient: ConvexHttpClient | null = null;
-
-function getHttpClient(): ConvexHttpClient {
-  if (!convexUrl) {
-    throw new Error("PUBLIC_CONVEX_URL environment variable is not set");
-  }
-  if (!httpClient) {
-    httpClient = new ConvexHttpClient(convexUrl);
-  }
-  return httpClient;
-}
+import { getConvexHttpClient, api } from "src/lib/convex-client";
 
 export const createUser = async (params: {
   visibleId: number;
@@ -22,8 +8,7 @@ export const createUser = async (params: {
   role?: "TESTER" | "MEMBER";
   refreshToken?: string;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.users.create, params);
 };
 
@@ -36,8 +21,7 @@ export const updateUser = async (params: {
   lockedUntil?: number;
   uuid?: string;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.users.update, { ...params, id: params.id as any });
 };
 
@@ -54,8 +38,7 @@ export const createPost = async (params: {
   variantLink: string;
   verdict?: string;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.posts.create, { ...params, authorId: params.authorId as any });
 };
 
@@ -67,8 +50,7 @@ export const updatePost = async (params: {
   status?: "ACCEPTED" | "DECLINED" | "PENDING_REPLY" | "UNDER_REVIEW";
   verdict?: string;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.posts.update, { ...params, id: params.id as any });
 };
 
@@ -78,8 +60,7 @@ export const addComment = async (params: {
   userId: string;
   parentId?: string;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.comments.add, {
     content: params.content,
     postId: params.postId as any,
@@ -89,8 +70,7 @@ export const addComment = async (params: {
 };
 
 export const addLike = async (postId: string, userId: string) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.likes.add, {
     postId: postId as any,
     userId: userId as any,
@@ -98,8 +78,7 @@ export const addLike = async (postId: string, userId: string) => {
 };
 
 export const removeLike = async (postId: string, userId: string) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.likes.remove, {
     postId: postId as any,
     userId: userId as any,
@@ -107,20 +86,17 @@ export const removeLike = async (postId: string, userId: string) => {
 };
 
 export const updateStars = async (stars: number) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.system.updateStars, { stars });
 };
 
 export const getOrCreateGameRule = async (name: string) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.gameRules.getOrCreate, { name });
 };
 
 export const addGameRuleToPost = async (gameRuleId: string, postId: string) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.gameRules.addToPost, {
     gameRuleId: gameRuleId as any,
     postId: postId as any,
@@ -133,8 +109,7 @@ export const updatePostDetails = async (params: {
   gameClassification?: "MATERIALISTIC" | "TACTICAL" | "DYNAMIC" | "POSITIONAL" | "STRATEGIC" | "FORTUNE" | null;
   gameplayClassification?: "FIRST_POSITIVE" | "FIRST_NEGATIVE" | "SECOND_POSITIVE" | "SECOND_NEGATIVE" | null;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.postDetails.update, {
     ...params,
     postId: params.postId as any,
@@ -146,8 +121,7 @@ export const upsertVote = async (params: {
   testerId: string;
   postDetailsId: string;
 }) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.votes.upsert, {
     value: params.value,
     testerId: params.testerId as any,
@@ -156,8 +130,7 @@ export const upsertVote = async (params: {
 };
 
 export const removeVote = async (testerId: string, postDetailsId: string) => {
-  const client = getHttpClient();
-  const { api } = await import("../../../convex/_generated/api");
+  const client = getConvexHttpClient();
   return await client.mutation(api.votes.remove, {
     testerId: testerId as any,
     postDetailsId: postDetailsId as any,

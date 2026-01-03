@@ -1,14 +1,7 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { edgeCache } from 'utils/cache'
-import { ConvexHttpClient } from 'convex/browser'
-
-const convexUrl = import.meta.env.PUBLIC_CONVEX_URL
-
-const getConvexClient = () => {
-  if (!convexUrl) throw new Error('PUBLIC_CONVEX_URL not set')
-  return new ConvexHttpClient(convexUrl)
-}
+import { getConvexHttpClient, api } from 'src/lib/convex-client'
 
 export const getFilteredPosts = defineAction({
   input: z.object({
@@ -27,8 +20,7 @@ export const getFilteredPosts = defineAction({
     }
     console.error('CACHE MISS')
 
-    const convex = getConvexClient()
-    const { api } = await import('../../convex/_generated/api')
+    const convex = getConvexHttpClient()
 
     const result = await convex.query(api.posts.getFiltered, {
       page,

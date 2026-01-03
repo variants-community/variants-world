@@ -43,10 +43,21 @@ export const getByVisibleId = query({
       gameRuleLinks.map((link) => ctx.db.get(link.gameRuleId))
     );
 
-    const likes = await ctx.db
+    const rawLikes = await ctx.db
       .query("postLikes")
       .withIndex("by_post", (q) => q.eq("postId", post._id))
       .collect();
+    
+    // Enrich likes with user visibleId for frontend compatibility
+    const likes = await Promise.all(
+      rawLikes.map(async (like) => {
+        const user = await ctx.db.get(like.userId);
+        return {
+          ...like,
+          userId: user?.visibleId ?? 0, // Frontend expects userId as visibleId number
+        };
+      })
+    );
 
     // Get votes if postDetails exists
     let votes: Array<{

@@ -6,9 +6,22 @@ import LockedIcon from 'components/icons/Locked'
 import QuoteIcon from 'components/icons/QuoteIcon'
 import type { ExtendedComment } from 'components/comments/index'
 
+const invalidateCache = async (tags: string[]) => {
+  try {
+    await fetch('/_actions/invalidate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tags)
+    })
+  } catch (e) {
+    console.error('Failed to invalidate cache:', e)
+  }
+}
+
 type CommentsProps = {
   isUserTester: boolean
   comments: ExtendedComment[]
+  postId: string
   onReply: (comment: ExtendedComment) => void
   highlight: (id: string) => void
   highlighted?: string
@@ -34,6 +47,7 @@ const CommentsList = (props: CommentsProps) => (
             const convex = getConvexClient()
             const { api } = await import('../../../convex/_generated/api')
             await convex.mutation(api.comments.hide, { id: c.id as any })
+            await invalidateCache(['posts', `post-${props.postId}`])
           }}
           highlight={props.highlight}
           isHighlighted={!!props.highlighted && props.highlighted === c.id}

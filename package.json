@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@astrojs/preact": "^3.5.4",
+    "@convex-dev/presence": "^0.3.0",
     "@deno/astro-adapter": "^0.1.5",
     "@dino/github-webhook": "npm:@jsr/dino__github-webhook@^0.0.6",
     "@preact/signals": "^1.3.1",

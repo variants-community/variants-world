@@ -2,6 +2,18 @@ import { getConvexClient } from 'src/lib/convex-client'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 
+const invalidateCache = async (tags: string[]) => {
+  try {
+    await fetch('/_actions/invalidate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tags)
+    })
+  } catch (e) {
+    console.error('Failed to invalidate cache:', e)
+  }
+}
+
 export const useLikes = (
   likes: { visibleId: number }[],
   visibleUserId: number,
@@ -13,15 +25,19 @@ export const useLikes = (
   const convex = getConvexClient()
 
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined
+    let unsubscribeCount: (() => void) | undefined
+    let unsubscribeIsLiked: (() => void) | undefined
 
     const setupSubscription = async () => {
       const { api } = await import('../../../convex/_generated/api')
-      // Subscribe to likes count for realtime updates
       // postId can be either a Convex ID string or a numeric visibleId string
       const parsedPostId = Number(postId)
       const postIdArg = Number.isNaN(parsedPostId) ? postId : parsedPostId
-      unsubscribe = convex.onUpdate(
+      const parsedUserId = Number(userId)
+      const userIdArg = Number.isNaN(parsedUserId) ? userId : parsedUserId
+
+      // Subscribe to likes count for realtime updates
+      unsubscribeCount = convex.onUpdate(
         api.likes.getCount,
         { postId: postIdArg as any },
         (count: number) => {
@@ -30,14 +46,26 @@ export const useLikes = (
           }
         }
       )
+
+      // Subscribe to isLiked state for realtime updates
+      unsubscribeIsLiked = convex.onUpdate(
+        api.likes.isLikedByUser,
+        { postId: postIdArg as any, userId: userIdArg as any },
+        (liked: boolean) => {
+          if (typeof liked === 'boolean') {
+            isLiked.value = liked
+          }
+        }
+      )
     }
 
     setupSubscription()
 
     return () => {
-      unsubscribe?.()
+      unsubscribeCount?.()
+      unsubscribeIsLiked?.()
     }
-  }, [postId])
+  }, [postId, userId])
 
   const toogleLike = async () => {
     // for experience, we immediately change state
@@ -64,6 +92,8 @@ export const useLikes = (
         })
         isLiked.value = true
       }
+      // Invalidate cache for posts list and this specific post
+      await invalidateCache(['posts', `post-${postId}`])
     } catch (error) {
       // Revert on error
       isLiked.value = !isLiked.value

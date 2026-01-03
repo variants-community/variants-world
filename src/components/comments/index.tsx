@@ -6,6 +6,18 @@ import CommentInput from 'components/comments/CommentInput'
 import CommentsList from 'components/comments/CommentsList'
 import type { UserRole } from 'db/convex/types'
 
+const invalidateCache = async (tags: string[]) => {
+  try {
+    await fetch('/_actions/invalidate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tags)
+    })
+  } catch (e) {
+    console.error('Failed to invalidate cache:', e)
+  }
+}
+
 export type ExtendedComment = {
   id: string
   content: string
@@ -69,6 +81,8 @@ const Comments = (props: CommentsProps) => {
       })
       comment.value = ''
       reply.value = undefined
+      // Invalidate cache for posts list and this specific post
+      await invalidateCache(['posts', `post-${props.postId}`])
     }
   }
 
@@ -86,6 +100,7 @@ const Comments = (props: CommentsProps) => {
       <CommentsList
         isUserTester={props.isUserTester}
         comments={comments}
+        postId={props.postId}
         onReply={onReply}
         highlighted={highlighted.value}
         highlight={highlight}

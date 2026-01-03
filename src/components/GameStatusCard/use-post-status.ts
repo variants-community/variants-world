@@ -1,35 +1,41 @@
-import { supabase } from 'db/supabase/supabase'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useEffect } from 'preact/hooks'
-import type { GameStatus } from '@prisma/client'
+import type { GameStatus } from 'db/convex/types'
 
 type PostResolution = {
-  verdict: string
+  verdict: string | null
   status: GameStatus
 }
 
-export const usePostStatus = (postId: number, updateData: (data: PostResolution) => void) => {
+export const usePostStatus = (postId: string, updateData: (data: PostResolution) => void) => {
+  const convex = getConvexClient()
+
   useEffect(() => {
-    const channel = supabase
-      .channel('game-status-card')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'Post',
-          filter: `id=eq.${postId}`
-        },
-        payload => {
-          updateData({
-            status: payload.new.status,
-            verdict: payload.new.verdict
-          } as PostResolution)
+    let unsubscribe: (() => void) | undefined
+
+    const setupSubscription = async () => {
+      const { api } = await import('../../../convex/_generated/api')
+      // postId can be either a Convex ID string or a numeric visibleId string
+      const parsedPostId = Number(postId)
+      const postIdArg = Number.isNaN(parsedPostId) ? postId : parsedPostId
+      unsubscribe = convex.onUpdate(
+        api.posts.getById,
+        { id: postIdArg as any },
+        (post: any) => {
+          if (post) {
+            updateData({
+              status: post.status,
+              verdict: post.verdict
+            })
+          }
         }
       )
-      .subscribe()
+    }
+
+    setupSubscription()
 
     return () => {
-      supabase.removeChannel(channel)
+      unsubscribe?.()
     }
-  }, [supabase])
+  }, [postId])
 }

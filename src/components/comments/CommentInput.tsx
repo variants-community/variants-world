@@ -1,13 +1,13 @@
 import { getValueFromEvent } from 'utils/hepers'
 import { useEffect, useRef } from 'preact/hooks'
-import type { Comment } from '@prisma/client'
 import type { Signal } from '@preact/signals'
+import type { ExtendedComment } from 'components/comments/index'
 
 type CommentInputProps = {
   comment: Signal<string>
   postComment: () => void
   cancelReply: () => void
-  reply?: Comment
+  reply?: ExtendedComment
 }
 
 const CommentInput = (props: CommentInputProps) => {

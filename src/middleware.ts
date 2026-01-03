@@ -1,11 +1,10 @@
 import { TokenPayload, myJWTVerifyAsync } from 'utils/auth'
 import { defineMiddleware } from 'astro:middleware'
-import { prisma } from 'db/prisma/prisma'
+import { getLockedUsers } from 'db/convex/queries'
 
-export const LockedUsers = prisma.user
-  .findMany({ where: { lockedUntil: { not: null } }, select: { id: true, lockedUntil: true } })
-  // eslint-disable-next-line github/no-then
-  .then(users => users.map(u => ({ id: u.id, lockedUntil: u.lockedUntil as Date })))
+export const LockedUsers = getLockedUsers().then(users =>
+  users.map(u => ({ id: u.visibleId, lockedUntil: new Date(u.lockedUntil) }))
+)
 
 type AuthGuardRoute = { path: string; deep?: true; action?: 'redirect' | 'error' }
 

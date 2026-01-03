@@ -12,7 +12,9 @@ type LikesProps = {
 }
 
 const Likes = (props: LikesProps) => {
-  const { isLiked, likesCount, toogleLike } = useLikes(props.likes, props.userId, props.postId)
+  // Convert likes format for useLikes hook (userId -> visibleId)
+  const likesForHook = props.likes.map(l => ({ visibleId: l.userId }))
+  const { isLiked, likesCount, toogleLike } = useLikes(likesForHook, props.userId, String(props.postId), String(props.userId))
 
   return (
     <div

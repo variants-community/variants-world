@@ -1,34 +1,47 @@
 import { type Ref, useEffect, useRef } from 'preact/hooks'
-import { addCommentQuery } from 'db/supabase/queries'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useComments } from 'components/comments/use-comments'
 import { useSignal } from '@preact/signals'
 import CommentInput from 'components/comments/CommentInput'
 import CommentsList from 'components/comments/CommentsList'
-import type { Comment, User } from '@prisma/client'
+import type { UserRole } from 'db/convex/types'
 
-export type ExtendedComment = Comment & {
-  User: Pick<User, 'id' | 'username' | 'role' | 'profileUrl' | 'lockedUntil'>
+export type ExtendedComment = {
+  id: string
+  content: string
+  createdAt: Date
+  postId: string
+  userId: string
+  parent_id?: string
+  hidden: boolean
+  User: {
+    id: number
+    username: string
+    role: UserRole
+    profileUrl?: string | null
+    lockedUntil?: Date | null
+  } | null
   parent?: ExtendedComment | null
 }
 
 type CommentsProps = {
   isUserTester: boolean
   comments: ExtendedComment[]
-  postId: number
-  userId: number
+  postId: string
+  userId: string
 }
 
 const Comments = (props: CommentsProps) => {
   const timer = useRef<number>()
   const anchor = useRef<HTMLDivElement>()
   const comment = useSignal('')
-  const reply = useSignal<Comment | undefined>(undefined)
-  const highlighted = useSignal<number | undefined>(undefined)
+  const reply = useSignal<ExtendedComment | undefined>(undefined)
+  const highlighted = useSignal<string | undefined>(undefined)
 
   useEffect(() => {
     const onhashchange = () => {
-      const match = self.location.hash.match(/^#comment-(\d+)$/)
-      if (match) highlight(Number(match[1]))
+      const match = self.location.hash.match(/^#comment-(.+)$/)
+      if (match) highlight(match[1])
     }
     onhashchange()
     addEventListener('hashchange', onhashchange)
@@ -37,7 +50,7 @@ const Comments = (props: CommentsProps) => {
     }
   }, [])
 
-  const onReply = (sourceComment?: Comment) => {
+  const onReply = (sourceComment?: ExtendedComment) => {
     reply.value = sourceComment
     setTimeout(() => {
       anchor.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -46,13 +59,20 @@ const Comments = (props: CommentsProps) => {
 
   const postComment = async () => {
     if (comment.value) {
-      await addCommentQuery(comment.value, props.postId, props.userId, reply.value?.id)
+      const convex = getConvexClient()
+      const { api } = await import('../../../convex/_generated/api')
+      await convex.mutation(api.comments.add, {
+        content: comment.value,
+        postId: props.postId as any,
+        userId: props.userId as any,
+        parentId: reply.value?.id as any
+      })
       comment.value = ''
       reply.value = undefined
     }
   }
 
-  const highlight = (id: number) => {
+  const highlight = (id: string) => {
     self.clearTimeout(timer.current)
     highlighted.value = undefined
     timer.current = self.setTimeout(() => (highlighted.value = id))

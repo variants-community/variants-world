@@ -1,135 +1,128 @@
-/* eslint-disable prettier/prettier */
-import { actions } from 'astro:actions'
-import { invalidatePrefetch } from 'utils/hepers'
-import { supabase } from 'db/supabase/supabase'
+// Re-export from Convex for backwards compatibility
+// These functions now use Convex instead of Supabase
+
+import { ConvexHttpClient } from 'convex/browser'
+
+const convexUrl = import.meta.env.PUBLIC_CONVEX_URL
+
+const getConvexClient = () => {
+  if (!convexUrl) throw new Error('PUBLIC_CONVEX_URL not set')
+  return new ConvexHttpClient(convexUrl)
+}
+
+// Note: These functions now require Convex IDs (strings) instead of numeric IDs
+// The calling code needs to be updated to pass the correct ID types
 
 export const isPostLikedByUserQuery = async (
-  postId: number,
-  userId: number
-) => {
-  const { data } = await supabase
-    .from('PostOnUserLikes')
-    .select()
-    .eq('postId', postId)
-    .eq('userId', userId)
-    .single()
-
-  return data != null
+  postId: string,
+  userId: string
+): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.query(api.likes.isLikedByUser, { 
+    postId: postId as any, 
+    userId: userId as any 
+  })
 }
 
-export const removeLikeQuery = async (postId: number, userId: number) => {
-  const { error } = await supabase
-    .from('PostOnUserLikes')
-    .delete()
-    .eq('postId', postId)
-    .eq('userId', userId)
-
-  await actions.invalidate(['posts', `post-${postId}`])
-  invalidatePrefetch()
-
-  return error == null
+export const removeLikeQuery = async (postId: string, userId: string): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.mutation(api.likes.remove, { 
+    postId: postId as any, 
+    userId: userId as any 
+  })
 }
 
-export const putLikeQuery = async (postId: number, userId: number) => {
-  const { error } = await supabase
-    .from('PostOnUserLikes')
-    .insert({ postId, userId })
-
-  await actions.invalidate(['posts', `post-${postId}`])
-  invalidatePrefetch()
-
-  return error == null
+export const putLikeQuery = async (postId: string, userId: string): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  const result = await convex.mutation(api.likes.add, { 
+    postId: postId as any, 
+    userId: userId as any 
+  })
+  return result !== null
 }
 
-export const getLikesCountQuery = async (postId: number) => {
-  const { data } = await supabase
-    .from('PostOnUserLikes')
-    .select('*')
-    .eq('postId', postId)
-  return data ? data.length : 0
+export const getLikesCountQuery = async (postId: string): Promise<number> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.query(api.likes.getCount, { postId: postId as any })
 }
 
 export const addCommentQuery = async (
   content: string,
-  postId: number,
-  userId: number,
-  replyToCommentId?: number
-) => {
-  const { error } = await supabase.from('Comment').insert({
-    content,
-    postId,
-    userId,
-    // eslint-disable-next-line camelcase
-    parent_id: replyToCommentId
+  postId: string,
+  userId: string,
+  replyToCommentId?: string
+): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  try {
+    await convex.mutation(api.comments.add, {
+      content,
+      postId: postId as any,
+      userId: userId as any,
+      parentId: replyToCommentId as any
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+export const getTotalPostsCount = async (): Promise<number> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.query(api.posts.getTotalCount, {})
+}
+
+export const getGameRuleId = async (ruleName: string): Promise<string | undefined> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  const rule = await convex.query(api.gameRules.getByName, { name: ruleName })
+  return rule?._id
+}
+
+export const addGameRuleAndGetId = async (ruleName: string): Promise<string | undefined> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.mutation(api.gameRules.getOrCreate, { name: ruleName })
+}
+
+export const addGameRuleToPost = async (ruleId: string, postId: string): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  try {
+    await convex.mutation(api.gameRules.addToPost, { 
+      gameRuleId: ruleId as any, 
+      postId: postId as any 
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+export const removeGameRuleFromPost = async (ruleId: string, postId: string): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.mutation(api.gameRules.removeFromPost, { 
+    gameRuleId: ruleId as any, 
+    postId: postId as any 
   })
-
-  await actions.invalidate(['posts', `post-${postId}`])
-  invalidatePrefetch()
-
-  return error == null
-}
-
-export const getTotalPostsCount = async () => {
-  const { count } = await supabase
-    .from('Post')
-    .select('*', { count: 'exact', head: true })
-
-  return count ?? 0
-}
-
-export const getGameRuleId = async (ruleName: string) => {
-  const response = await supabase
-    .from('GameRule')
-    .select()
-    .eq('name', ruleName)
-    .single()
-
-  return response.error ? undefined : response.data.id
-}
-
-export const addGameRuleAndGetId = async (
-  ruleName: string
-): Promise<number | undefined> => {
-  const response = await supabase
-    .from('GameRule')
-    .insert({ name: ruleName })
-    .select()
-    .single()
-
-  return response.error ? undefined : response.data.id
-}
-
-export const addGameRuleToPost = async (ruleId: number, postId: number) => {
-  const { error } = await supabase
-    .from('_GameRuleToPost')
-    .insert({ A: ruleId, B: postId })
-
-  return error == null
-}
-
-export const removeGameRuleFromPost = async (
-  ruleId: number,
-  postId: number
-) => {
-  const { error } = await supabase
-    .from('_GameRuleToPost')
-    .delete()
-    .eq('A', ruleId)
-    .eq('B', postId)
-
-  return error == null
 }
 
 export const updatePostGameRule = async (
-  newRuleId: number,
-  oldRuleId: number,
-  postId: number
-) => {
-  const { error } = await supabase
-    .from('_GameRuleToPost')
-    .update({ A: newRuleId })
-    .eq('A', oldRuleId)
-    .eq('B', postId)
-
-  return error == null
+  newRuleId: string,
+  oldRuleId: string,
+  postId: string
+): Promise<boolean> => {
+  const convex = getConvexClient()
+  const { api } = await import('../../../convex/_generated/api')
+  return await convex.mutation(api.gameRules.updatePostRule, { 
+    newRuleId: newRuleId as any, 
+    oldRuleId: oldRuleId as any, 
+    postId: postId as any 
+  })
 }

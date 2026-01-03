@@ -1,9 +1,9 @@
 import { actions } from 'astro:actions'
 import { descriptionValid, titleValid } from 'utils/post-validation'
-import { supabase } from 'db/supabase/supabase'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useSignal } from '@preact/signals'
 import type { CGABotGameDetails } from 'cgabot'
-import type { GameType } from '@prisma/client'
+import type { GameType } from 'db/convex/types'
 
 type GameData = {
   userId: number
@@ -26,8 +26,10 @@ export const useFormData = (gameData: GameData) => {
       } catch {
         console.log('invalid title wttttd')
         temp.add('invalidTitle')
-        const { error } = await supabase.from('Post').select('title').eq('title', title.trim()).single()
-        if (error) temp.delete('isOccupied')
+        const convex = getConvexClient()
+        const { api } = await import('../../../../convex/_generated/api')
+        const count = await convex.query(api.posts.countByTitle, { title: title.trim() })
+        if (count === 0) temp.delete('isOccupied')
         else temp.add('isOccupied')
       }
     }

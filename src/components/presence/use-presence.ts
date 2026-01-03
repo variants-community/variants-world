@@ -1,49 +1,19 @@
-import { supabase } from 'db/supabase/supabase'
-import { useEffect, useState } from 'preact/hooks'
-import type { RealtimePresenceState } from '@supabase/supabase-js'
+import { useState } from 'preact/hooks'
 import type { TokenPayloadType } from 'utils/auth'
 
-const mapPresenceState = (state: RealtimePresenceState) => {
-  return Object.keys(state)
-    .map(presenceId => {
-      const presences = state[presenceId] as unknown as {
-        user: TokenPayloadType
-      }[]
+// Note: Convex doesn't have built-in presence like Supabase
+// This is a simplified version that just returns the current user
+// For full presence, you would need to implement a custom solution using Convex mutations/queries
 
-      return presences.map(presence => presence.user)
-    })
-    .flat()
-}
+export const usePresence = (postId: string, user: TokenPayloadType) => {
+  const [usersOnPost] = useState<TokenPayloadType[]>([user])
 
-export const usePresence = (postId: number, user: TokenPayloadType) => {
-  const [usersOnPost, setUsersOnPost] = useState<TokenPayloadType[]>([])
-
-  useEffect(() => {
-    const channel = supabase
-      .channel(`room-${postId}`, {
-        config: {
-          presence: { key: user.id.toString() }
-        }
-      })
-      .on('presence', { event: 'sync' }, () => {
-        const presenceState = channel.presenceState()
-        const users = mapPresenceState(presenceState)
-        setUsersOnPost(users)
-      })
-      .subscribe(async status => {
-        if (status === 'SUBSCRIBED') {
-          await channel.track({
-            user,
-            // eslint-disable-next-line camelcase
-            online_at: new Date().toISOString()
-          })
-        }
-      })
-
-    return () => {
-      channel.unsubscribe()
-    }
-  }, [user.id])
+  // TODO: Implement presence tracking with Convex if needed
+  // This would require:
+  // 1. A presence table in Convex
+  // 2. Mutations to track/untrack users
+  // 3. A query to get current users on a post
+  // 4. Periodic cleanup of stale presence records
 
   return {
     usersOnPost

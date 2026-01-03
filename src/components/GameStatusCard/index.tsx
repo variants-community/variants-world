@@ -1,18 +1,18 @@
 import { EditButton } from 'components/EditButton'
 import { StatusName } from 'components/GameStatusCard/StatusName'
 import { Verdict } from 'components/GameStatusCard/Verdict'
-import { actions } from 'astro:actions'
-import { invalidatePrefetch, statusToColor } from 'utils/hepers'
-import { supabase } from 'db/supabase/supabase'
+import { statusToColor } from 'utils/hepers'
 import { useEditable } from 'components/common/use-editable'
 import { usePostStatus } from 'components/GameStatusCard/use-post-status'
+import { getConvexClient } from 'src/lib/convex-client'
 import Bubbles from 'components/icons/Bubbles'
-import type { GameStatus } from '@prisma/client'
+import type { GameStatus } from 'db/convex/types'
 
 export type PostResolutionProps = {
   displayEditBotton?: boolean
   verdict: string | null
   postId: number
+  convexPostId: string
   status: GameStatus
 }
 
@@ -21,10 +21,14 @@ const GameStatusCard = (props: PostResolutionProps) => {
     status: props.status,
     verdict: props.verdict
   }
+  const convex = getConvexClient()
   const { editable, update, editing } = useEditable(data, async value => {
-    await supabase.from('Post').update(value).eq('id', props.postId)
-    await actions.invalidate(['posts', `post-${props.postId}`])
-    invalidatePrefetch()
+    const { api } = await import('../../../convex/_generated/api')
+    await convex.mutation(api.posts.update, {
+      id: props.convexPostId as any,
+      status: value.status,
+      verdict: value.verdict ?? undefined
+    })
   })
   usePostStatus(props.postId, update)
 

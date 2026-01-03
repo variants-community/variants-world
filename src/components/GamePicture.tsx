@@ -1,12 +1,12 @@
 import { Picture } from 'components/common/Picture'
 import Likes from 'components/likes'
-import type { PostOnUserLikes } from '@prisma/client'
 
 type GamePictureProps = {
-  likes: PostOnUserLikes[]
+  likes: { visibleId: number }[]
   fen: string
-  postId: number
-  userId: number
+  postId: string
+  userId: string
+  visibleUserId: number
 }
 
 const GamePicture = (props: GamePictureProps) => {

@@ -32,6 +32,11 @@ export class EdgeCache<K extends string | number, T> {
     return this.#cache.get(key) as R
   }
 
+  clear() {
+    this.#cache.clear()
+    this.#tags.clear()
+  }
+
   set(key: K, value: T, tags: string[]) {
     this.#cache.set(key, value)
     for (const tag of tags) {

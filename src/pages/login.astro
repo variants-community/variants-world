@@ -1,7 +1,13 @@
 ---
 import { TokenPayload, getAbsoluteUrl, myJWTVerifyAsync, refreshUserInfo, sha256Base64UrlAsync, states } from 'utils/auth'
-import { prisma } from 'db/prisma/prisma'
+import { ConvexHttpClient } from 'convex/browser'
 import { ulid } from 'ulidx'
+
+const convexUrl = import.meta.env.PUBLIC_CONVEX_URL
+const getConvexClient = () => {
+  if (!convexUrl) throw new Error('PUBLIC_CONVEX_URL not set')
+  return new ConvexHttpClient(convexUrl)
+}
 
 const token = Astro.cookies.get('token')?.value
 const expires = Astro.cookies.get('expires')?.value
@@ -9,9 +15,11 @@ const expires = Astro.cookies.get('expires')?.value
 if (token && expires) {
   try {
     const tokenPayload = TokenPayload.parse(await myJWTVerifyAsync(token))
-    const user = await prisma.user.findFirst({where: { id: tokenPayload.id }, select: {id: true, refreshToken: true, role: true}})
+    const convex = getConvexClient()
+    const { api } = await import('../../convex/_generated/api')
+    const user = await convex.query(api.users.getByVisibleId, { visibleId: tokenPayload.id })
 
-    if (user && user.refreshToken) {
+    if (user?.refreshToken) {
       if (new Date(expires) < new Date()) {
         const [userInfo] = await refreshUserInfo({
           grant_type: 'refresh_token',
@@ -22,8 +30,8 @@ if (token && expires) {
         
         if (!userInfo) return new Response(null, { status: 403 })
         
-        const { id, ...data } = userInfo
-        prisma.user.update({ where: { id }, data })
+        const { id: _id, ...data } = userInfo
+        await convex.mutation(api.users.update, { id: user._id, ...data })
       }
 
       return Astro.redirect(`/`)

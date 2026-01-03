@@ -1,26 +1,28 @@
-import { actions } from 'astro:actions'
-import { formatDate, invalidatePrefetch } from 'utils/hepers'
+import { formatDate } from 'utils/hepers'
 import { highlightLinks } from 'utils/formatters'
-import { supabase } from 'db/supabase/supabase'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useMemo, useRef } from 'preact/hooks'
 import LockedIcon from 'components/icons/Locked'
 import QuoteIcon from 'components/icons/QuoteIcon'
-import type { Comment } from '@prisma/client'
 import type { ExtendedComment } from 'components/comments/index'
 
 type CommentsProps = {
   isUserTester: boolean
   comments: ExtendedComment[]
-  onReply: (comment: Comment) => void
-  highlight: (id: number) => void
-  highlighted?: number
+  onReply: (comment: ExtendedComment) => void
+  highlight: (id: string) => void
+  highlighted?: string
 }
 
 const CommentsList = (props: CommentsProps) => (
   <div class={'flex flex-col gap-[0.4rem] mb-[40px]'}>
     <h2 class={'w-11/12 sm:w-125 lg:w-full mx-auto text-4xl font-bold text-text'}>Discussion</h2>
     {props.comments
-      .sort((first, second) => first.createdAt.getTime() - second.createdAt.getTime())
+      .sort((first, second) => {
+        const firstTime = typeof first.createdAt === 'number' ? first.createdAt : first.createdAt.getTime()
+        const secondTime = typeof second.createdAt === 'number' ? second.createdAt : second.createdAt.getTime()
+        return firstTime - secondTime
+      })
       .filter(c => !c.hidden)
       .map(c => (
         <CommentCard
@@ -29,12 +31,12 @@ const CommentsList = (props: CommentsProps) => (
           comment={c}
           reply={() => props.onReply(c)}
           remove={async () => {
-            await supabase.from('Comment').update({ hidden: true }).eq('id', c.id)
-            await actions.invalidate(['posts', `post-${c.postId}`])
-            invalidatePrefetch()
+            const convex = getConvexClient()
+            const { api } = await import('../../../convex/_generated/api')
+            await convex.mutation(api.comments.hide, { id: c.id as any })
           }}
           highlight={props.highlight}
-          isHighlighted={props.highlighted === c.id}
+          isHighlighted={!!props.highlighted && props.highlighted === c.id}
         />
       ))}
   </div>
@@ -45,7 +47,7 @@ type CommentCardProps = {
   comment: ExtendedComment
   reply: () => void
   remove: () => void
-  highlight: (id: number) => void
+  highlight: (id: string) => void
   isHighlighted: boolean
 }
 

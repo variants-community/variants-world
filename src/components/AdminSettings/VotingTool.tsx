@@ -1,34 +1,40 @@
-import { supabase } from 'db/supabase/supabase'
-import type { UserForCard } from 'db/prisma/types'
-import type { Vote, VoteValue } from '@prisma/client'
+import { getConvexClient } from 'src/lib/convex-client'
+import type { UserForCard, VoteValue } from 'db/convex/types'
 
-export type VoteExtended = Vote & ({ tester: UserForCard | null } | undefined)
+export type VoteExtended = {
+  _id: string
+  value: VoteValue
+  testerId: string
+  postDetailsId: string
+  tester: UserForCard | null
+}
 
 type VotesProps = {
-  postDetailsId: number
-  testerId: number
+  postDetailsId: string
+  testerId: string
   votes: VoteExtended[]
   setVotes: (votes: VoteExtended[]) => void
 }
 
 export const VotingTool = (props: VotesProps) => {
+  const convex = getConvexClient()
+
   const onVote = async (value: VoteValue) => {
-    await supabase
-      .from('Vote')
-      .upsert(
-        {
-          value,
-          postDetailsId: props.postDetailsId,
-          testerId: props.testerId
-        },
-        { onConflict: 'postDetailsId, testerId' }
-      )
-      .eq('testerId', props.testerId)
+    const { api } = await import('../../../convex/_generated/api')
+    await convex.mutation(api.votes.upsert, {
+      value,
+      postDetailsId: props.postDetailsId as any,
+      testerId: props.testerId as any
+    })
   }
 
   const removeVote = async () => {
     props.setVotes(props.votes.filter(v => v.testerId !== props.testerId))
-    await supabase.from('Vote').delete().eq('testerId', props.testerId).eq('postDetailsId', props.postDetailsId)
+    const { api } = await import('../../../convex/_generated/api')
+    await convex.mutation(api.votes.remove, {
+      testerId: props.testerId as any,
+      postDetailsId: props.postDetailsId as any
+    })
   }
 
   const setVotes = (value: VoteValue) => {

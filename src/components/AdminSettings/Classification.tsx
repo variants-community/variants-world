@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import type { GameClassification, GameplayClassification } from '@prisma/client'
+import type { GameClassification, GameplayClassification } from 'db/convex/types'
 
 const gameClassification: { label: string; value?: GameClassification }[] = [
   { label: 'Unknown', value: undefined },

@@ -1,6 +1,6 @@
 import { Screens } from 'components/landing/Screens'
 import { actions } from 'astro:actions'
-import { supabase } from 'db/supabase/supabase'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useEffect } from 'preact/hooks'
 import { useNewPostValidation } from 'components/landing/use-new-post-validation'
 import { useSearch } from 'src/hooks/use-search'
@@ -24,8 +24,10 @@ const Landing = (props: { userId: number }) => {
   useEffect(() => {
     if (mainGame) {
       const gameIsAlredyAdded = async (gameToBeValidated: CGABotGameDetails) => {
-        const { data } = await supabase.from('Post').select('gameNr').eq('gameNr', gameToBeValidated.gameNr).single()
-        return data !== null
+        const convex = getConvexClient()
+        const { api } = await import('../../../convex/_generated/api')
+        const count = await convex.query(api.posts.countByGameNr, { gameNr: gameToBeValidated.gameNr })
+        return count > 0
       }
 
       // eslint-disable-next-line github/no-then

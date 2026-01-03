@@ -1,98 +1,80 @@
-import { convertUTCDateToLocalDate } from 'utils/hepers'
-import { supabase } from 'db/supabase/supabase'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 import type { ExtendedComment } from '.'
 
-export const useComments = (initComments: ExtendedComment[], postId: number) => {
+export const useComments = (initComments: ExtendedComment[], postId: string) => {
   const comments = useSignal<ExtendedComment[]>(initComments)
+  const convex = getConvexClient()
 
   useEffect(() => {
-    const channel = supabase
-      .channel('comments')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'Comment',
-          filter: `postId=eq.${postId}`
-        },
-        async payload => {
-          const newComment = payload.new as ExtendedComment
-          let parent: ExtendedComment | null = null
+    let unsubscribe: (() => void) | undefined
 
-          const user = await supabase.from('User').select().eq('id', newComment.userId).single()
+    const setupSubscription = async () => {
+      const { api } = await import('../../../convex/_generated/api')
+      // Subscribe to comments query for realtime updates
+      // postId can be either a Convex ID string or a numeric visibleId string
+      // Try to parse as number, if NaN pass as string (Convex ID)
+      console.log('useComments postId:', postId, typeof postId)
+      const parsedPostId = Number(postId)
+      const postIdArg = Number.isNaN(parsedPostId) ? postId : parsedPostId
+      console.log('useComments postIdArg:', postIdArg, typeof postIdArg)
+      unsubscribe = convex.onUpdate(
+        api.comments.getByPost,
+        { postId: postIdArg as any },
+        (updatedComments: any[]) => {
+          console.log('Comments update received:', updatedComments?.length, updatedComments)
+          if (updatedComments && Array.isArray(updatedComments)) {
+            // Transform Convex comments to ExtendedComment format
+            // Note: Convex returns User (capitalized) not user
+            const transformed: ExtendedComment[] = updatedComments.map(c => ({
+              id: c._id,
+              content: c.content,
+              createdAt: new Date(c.createdAt),
+              postId: c.postId,
+              userId: c.userId,
+              parent_id: c.parentId,
+              hidden: c.hidden,
+              User: c.User ? {
+                id: c.User.id,
+                username: c.User.username,
+                role: c.User.role,
+                profileUrl: c.User.profileUrl,
+                lockedUntil: c.User.lockedUntil ? new Date(c.User.lockedUntil) : null
+              } : null,
+              parent: c.parent ? {
+                id: c.parent._id,
+                content: c.parent.content,
+                createdAt: new Date(c.parent.createdAt),
+                postId: c.parent.postId,
+                userId: c.parent.userId,
+                parent_id: c.parent.parentId,
+                hidden: c.parent.hidden,
+                User: c.parent.User ? {
+                  id: c.parent.User.id,
+                  username: c.parent.User.username,
+                  role: c.parent.User.role,
+                  profileUrl: c.parent.User.profileUrl,
+                  lockedUntil: c.parent.User.lockedUntil ? new Date(c.parent.User.lockedUntil) : null
+                } : null
+              } : null
+            }))
 
-          if (newComment.parent_id) {
-            const parentComment = await supabase.from('Comment').select().eq('id', newComment.parent_id).single()
-
-            if (parentComment.data) {
-              const parentUser = await supabase.from('User').select().eq('id', newComment.userId).single()
-
-              if (parentUser.data) {
-                parent = {
-                  User: {
-                    id: parentUser.data.id,
-                    username: parentUser.data.username,
-                    role: parentUser.data.role,
-                    profileUrl: parentUser.data.profileUrl,
-                    lockedUntil: parentUser.data.lockedUntil ? new Date(parentUser.data.lockedUntil) : null
-                  },
-                  content: parentComment.data.content,
-                  createdAt: new Date(parentComment.data.createdAt),
-                  id: parentComment.data.id,
-                  // eslint-disable-next-line camelcase
-                  parent_id: parentComment.data.parent_id,
-                  postId: parentComment.data.postId,
-                  userId: parentComment.data.userId,
-                  hidden: false
-                } satisfies ExtendedComment
-              }
-            }
-          }
-
-          if (user.data) {
-            comments.value = [
-              // URGENT TODO
-              ...comments.value,
-              {
-                ...newComment,
-                createdAt: convertUTCDateToLocalDate(newComment.createdAt),
-                User: {
-                  id: user.data.id,
-                  username: user.data.username,
-                  role: user.data.role,
-                  profileUrl: user.data.profileUrl,
-                  lockedUntil: user.data.lockedUntil ? new Date(user.data.lockedUntil) : null
-                },
-                parent
-              } satisfies ExtendedComment
-            ]
+            comments.value = transformed
               .sort((first, second) =>
                 first.createdAt > second.createdAt ? -1 : first.createdAt < second.createdAt ? 1 : 0
               )
-              .filter(c => !c.hidden)
           }
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'Comment',
-          filter: `postId=eq.${postId}`
-        },
-        async payload => {
-          comments.value = comments.value.filter(c => c.id !== payload.new.id && payload.new.hidden)
-        }
-      )
-      .subscribe()
-    return () => {
-      supabase.removeChannel(channel)
     }
-  }, [supabase, comments])
+
+    setupSubscription()
+
+    return () => {
+      unsubscribe?.()
+    }
+  }, [postId])
 
   return {
     comments: comments.value

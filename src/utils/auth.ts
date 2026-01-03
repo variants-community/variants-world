@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
 import * as jose from 'jose'
-import { type UserRole } from '@prisma/client'
+import type { UserRole } from 'db/convex/types'
 import { createSHA256 } from 'hash-wasm'
-import { prisma } from 'db/prisma/prisma'
 import { z } from 'astro/zod'
 import base64url from 'base64url'
 import type { AstroCookies } from 'astro'
@@ -69,8 +68,21 @@ export const refreshUserInfo = async (params: Record<string, string>, cookies: A
   const id = Number(profile.user_id)
   const { preferred_username: username, picture: profileUrl } = profile
 
-  const user = !role && (await prisma.user.findFirst({ where: { id }, select: { uuid: true, role: true } }))
-  role ??= (user && user.role) || 'MEMBER'
+  // Get user from Convex if role not provided
+  let user: { uuid?: string; role?: UserRole } | null = null
+  if (!role) {
+    const { ConvexHttpClient } = await import('convex/browser')
+    const { api } = await import('../../convex/_generated/api')
+    const convexUrl = import.meta.env.PUBLIC_CONVEX_URL
+    if (convexUrl) {
+      const convex = new ConvexHttpClient(convexUrl)
+      const convexUser = await convex.query(api.users.getByVisibleId, { visibleId: id })
+      if (convexUser) {
+        user = { uuid: convexUser.uuid, role: convexUser.role }
+      }
+    }
+  }
+  role ??= (user?.role) || 'MEMBER'
 
   const payload: TokenPayloadType = { id, username, profileUrl, role }
 

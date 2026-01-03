@@ -1,11 +1,11 @@
 import { useSignal } from '@preact/signals'
-import type { Comment } from '@prisma/client'
 import type { Ref } from 'preact/hooks'
+import type { ExtendedComment } from 'components/comments/index'
 
 export const useReply = (onReplyScrollTo: Ref<HTMLTextAreaElement>) => {
-  const reply = useSignal<Comment | undefined>(undefined)
+  const reply = useSignal<ExtendedComment | undefined>(undefined)
 
-  const onChangeReply = (comment?: Comment) => {
+  const onChangeReply = (comment?: ExtendedComment) => {
     reply.value = comment
 
     if (onReplyScrollTo.current !== null) {

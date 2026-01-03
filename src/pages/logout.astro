@@ -1,10 +1,5 @@
 ---
-import { supabaseAdmin } from "db/supabase/admin"
-
-const token = Astro.cookies.get('token')?.value
-if (token)
- supabaseAdmin.signOut(token)
-
+// No longer using Supabase Auth - just clear cookies
 Astro.cookies.delete('token')
 Astro.cookies.delete('expires')
 

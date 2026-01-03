@@ -1,19 +1,18 @@
 import { Description } from 'components/GameInfo/Description'
 import { EditButton } from 'components/EditButton'
 import { TimePassed } from 'components/GameInfo/TimePassed'
-import { actions } from 'astro:actions'
-import { invalidatePrefetch } from 'utils/hepers'
-import { supabase } from 'db/supabase/supabase'
 import { useEditable } from 'components/common/use-editable'
 import { usePostInfo } from 'components/GameInfo/use-post-info'
+import { getConvexClient } from 'src/lib/convex-client'
 import PostTags from 'components/PostTags'
 import PostTitle from 'components/PostTitle'
 import PostUser from 'components/PostUser'
-import type { GameType } from '@prisma/client'
+import type { GameType } from 'db/convex/types'
 
 type GameInfoProps = {
   displayEditBotton?: boolean
   postId: number
+  convexPostId: string
   type: GameType
   title: string
   rules: string[]
@@ -32,10 +31,13 @@ const GameInfo = (props: GameInfoProps) => {
     title: props.title,
     description: props.description
   }
+  const convex = getConvexClient()
   const { editable, update, editing } = useEditable(data, async value => {
-    await supabase.from('Post').update(value).eq('id', props.postId)
-    await actions.invalidate(['posts', `post-${props.postId}`])
-    invalidatePrefetch()
+    const { api } = await import('../../../convex/_generated/api')
+    await convex.mutation(api.posts.update, {
+      id: props.convexPostId as any,
+      ...value
+    })
   })
   usePostInfo(props.postId, update)
 

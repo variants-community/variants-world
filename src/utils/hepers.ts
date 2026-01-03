@@ -1,7 +1,7 @@
 import type { CGABotGameDetails } from 'cgabot'
 import type { Color } from 'windi.config'
 import type { GalleryView } from 'components/common/GalleryViewSwitch'
-import type { GameStatus } from '@prisma/client'
+import type { GameStatus } from 'db/convex/types'
 import type { MutableRef } from 'preact/hooks'
 
 export const getValueFromEvent = <Type = string>(e: Event) => (e.target as HTMLInputElement).value as Type
@@ -68,11 +68,12 @@ export const statusToColor = (status: GameStatus): Color => {
   }
 }
 
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: Date | number): string => {
+  const d = typeof date === 'number' ? new Date(date) : date
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const month = months[date.getMonth()]
-  const day = date.getDate()
-  const year = date.getFullYear()
+  const month = months[d.getMonth()]
+  const day = d.getDate()
+  const year = d.getFullYear()
 
   return `${month} ${day}, ${year}`
 }
@@ -90,7 +91,7 @@ export const formatLikesCount = (likes: number): string => {
   else return `${(likes / 1000000).toFixed(1)}M`
 }
 
-export const convertUTCDateToLocalDate = (utcDate: Date) => {
+export const convertUTCDateToLocalDate = (utcDate: Date | number) => {
   const date = new Date(utcDate)
   const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
 
@@ -102,9 +103,10 @@ export const convertUTCDateToLocalDate = (utcDate: Date) => {
   return newDate
 }
 
-export const getFormattedTimePassed = (createdAt: Date): string => {
+export const getFormattedTimePassed = (createdAt: Date | number): string => {
   const now = new Date()
-  const timePassed = now.getTime() - createdAt.getTime()
+  const createdAtTime = typeof createdAt === 'number' ? createdAt : createdAt.getTime()
+  const timePassed = now.getTime() - createdAtTime
   const millisecondsPerDay = 24 * 60 * 60 * 1000
 
   if (timePassed < millisecondsPerDay) {

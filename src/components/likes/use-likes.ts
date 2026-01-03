@@ -1,63 +1,74 @@
-import { getLikesCountQuery, putLikeQuery, removeLikeQuery } from 'db/supabase/queries'
-import { supabase } from 'db/supabase/supabase'
+import { getConvexClient } from 'src/lib/convex-client'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
 
-export const useLikes = (likes: { userId: number }[], userId: number, postId: number) => {
-  const isLiked = useSignal(likes.some(like => like.userId === userId))
+export const useLikes = (
+  likes: { visibleId: number }[],
+  visibleUserId: number,
+  postId: string,
+  userId: string
+) => {
+  const isLiked = useSignal(likes.some(like => like.visibleId === visibleUserId))
   const likesCount = useSignal(likes.length)
-
-  const updateLiksCount = async () => {
-    const count = await getLikesCountQuery(postId)
-    likesCount.value = count
-  }
+  const convex = getConvexClient()
 
   useEffect(() => {
-    const channel = supabase
-      .channel('likes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'PostOnUserLikes',
-          filter: `postId=eq.${postId}`
-        },
-        async () => {
-          await updateLiksCount()
+    let unsubscribe: (() => void) | undefined
+
+    const setupSubscription = async () => {
+      const { api } = await import('../../../convex/_generated/api')
+      // Subscribe to likes count for realtime updates
+      // postId can be either a Convex ID string or a numeric visibleId string
+      const parsedPostId = Number(postId)
+      const postIdArg = Number.isNaN(parsedPostId) ? postId : parsedPostId
+      unsubscribe = convex.onUpdate(
+        api.likes.getCount,
+        { postId: postIdArg as any },
+        (count: number) => {
+          if (typeof count === 'number') {
+            likesCount.value = count
+          }
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'DELETE',
-          schema: 'public',
-          table: 'PostOnUserLikes',
-          filter: `postId=eq.${postId}`
-        },
-        async () => {
-          await updateLiksCount()
-        }
-      )
-      .subscribe()
+    }
+
+    setupSubscription()
 
     return () => {
-      supabase.removeChannel(channel)
+      unsubscribe?.()
     }
-  }, [supabase])
+  }, [postId])
 
   const toogleLike = async () => {
-    // for expirience, we immediately change state
+    // for experience, we immediately change state
     // but after will be set correctly
     likesCount.value = isLiked.value ? likesCount.value - 1 : likesCount.value + 1
     isLiked.value = !isLiked.value
 
-    if (!isLiked.value) {
-      const ok = await removeLikeQuery(postId, userId)
-      isLiked.value = ok ? false : true
-    } else {
-      const ok = await putLikeQuery(postId, userId)
-      isLiked.value = ok
+    try {
+      const { api } = await import('../../../convex/_generated/api')
+      const parsedPostId = Number(postId)
+      const postIdArg = Number.isNaN(parsedPostId) ? postId : parsedPostId
+      const parsedUserId = Number(userId)
+      const userIdArg = Number.isNaN(parsedUserId) ? userId : parsedUserId
+      if (!isLiked.value) {
+        await convex.mutation(api.likes.remove, {
+          postId: postIdArg as any,
+          userId: userIdArg as any
+        })
+        isLiked.value = false
+      } else {
+        await convex.mutation(api.likes.add, {
+          postId: postIdArg as any,
+          userId: userIdArg as any
+        })
+        isLiked.value = true
+      }
+    } catch (error) {
+      // Revert on error
+      isLiked.value = !isLiked.value
+      likesCount.value = isLiked.value ? likesCount.value + 1 : likesCount.value - 1
+      console.error('Failed to toggle like:', error)
     }
   }
 

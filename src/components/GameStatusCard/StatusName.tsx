@@ -1,5 +1,5 @@
 import { getValueFromEvent, statusToString } from 'utils/hepers'
-import type { GameStatus } from '@prisma/client'
+import type { GameStatus } from 'db/convex/types'
 
 const statuses = [
   { label: 'Accepted', value: 'ACCEPTED' },

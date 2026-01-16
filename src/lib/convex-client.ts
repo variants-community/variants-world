@@ -7,12 +7,17 @@ const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
 let convexClient: ConvexClient | null = null;
 let convexHttpClient: ConvexHttpClient | null = null;
 
+const CONVEX_SETUP_MESSAGE = `
+PUBLIC_CONVEX_URL environment variable is not set.
+Check out the CONTRIBUTING.md file for more details.
+`;
+
 /**
  * Get a singleton ConvexClient for client-side reactive subscriptions
  */
 export function getConvexClient(): ConvexClient {
   if (!convexUrl) {
-    throw new Error("PUBLIC_CONVEX_URL environment variable is not set");
+    throw new Error(CONVEX_SETUP_MESSAGE);
   }
   
   if (!convexClient) {
@@ -27,7 +32,7 @@ export function getConvexClient(): ConvexClient {
  */
 export function getConvexHttpClient(): ConvexHttpClient {
   if (!convexUrl) {
-    throw new Error("PUBLIC_CONVEX_URL environment variable is not set");
+    throw new Error(CONVEX_SETUP_MESSAGE);
   }
   
   if (!convexHttpClient) {
@@ -42,7 +47,7 @@ export function getConvexHttpClient(): ConvexHttpClient {
  */
 export function createConvexClient(): ConvexClient {
   if (!convexUrl) {
-    throw new Error("PUBLIC_CONVEX_URL environment variable is not set");
+    throw new Error(CONVEX_SETUP_MESSAGE);
   }
   return new ConvexClient(convexUrl);
 }
@@ -52,7 +57,7 @@ export function createConvexClient(): ConvexClient {
  */
 export function createConvexHttpClient(): ConvexHttpClient {
   if (!convexUrl) {
-    throw new Error("PUBLIC_CONVEX_URL environment variable is not set");
+    throw new Error(CONVEX_SETUP_MESSAGE);
   }
   return new ConvexHttpClient(convexUrl);
 }
